@@ -53,12 +53,19 @@ LEFT_R32 = [("Germany", "Paraguay", "Germany"), ("France", "Sweden", "France"),
             ("Colombia", "Croatia", "Croatia"), ("Spain", "Austria", "Spain"),
             ("United States", "Bosnia and Herzegovina", "United States"), ("Belgium", "Czechia", "Belgium")]
 LEFT_R16, LEFT_QF, LEFT_SF = ["France", "Netherlands", "Spain", "Belgium"], ["France", "Spain"], "Spain"
+# Predicted scorelines, top-box--bottom-box order, parallel to the lists above.
+LEFT_R32_SC = ["1--0", "1--0", "0--1", "1--0", "1--1", "1--0", "1--0", "1--0"]
+LEFT_R16_SC = ["0--1", "0--1", "0--1", "0--1"]
+LEFT_QF_SC, LEFT_SF_SC = ["1--0", "1--0"], "0--1"
 RIGHT_R32 = [("Brazil", "Japan", "Brazil"), ("Ecuador", "Norway", "Norway"),
              ("Mexico", "Ivory Coast", "Mexico"), ("England", "Algeria", "England"),
              ("Argentina", "Uruguay", "Argentina"), ("Turkey", "Egypt", "Turkey"),
              ("Switzerland", "Iran", "Switzerland"), ("Portugal", "Senegal", "Portugal")]
 RIGHT_R16, RIGHT_QF, RIGHT_SF = ["Brazil", "England", "Argentina", "Portugal"], ["England", "Argentina"], "Argentina"
-CHAMPION = "Spain"
+RIGHT_R32_SC = ["1--0", "0--1", "1--0", "1--0", "1--0", "1--0", "1--0", "1--0"]
+RIGHT_R16_SC = ["1--0", "0--1", "1--0", "0--1"]
+RIGHT_QF_SC, RIGHT_SF_SC = ["0--1", "1--0"], "0--1"
+CHAMPION, FINAL_SC = "Spain", "1--0"
 
 YS, XS, BW, FW, FH = 0.64, 2.7, 2.0, 0.46, 0.30   # row, col, box width, flag w/h (cm)
 
@@ -144,15 +151,18 @@ def box(o, name, x, y, side, win=True, champ=False, seed=None):
                  r"font=\sffamily\tiny, text=gray!80] at (%.3f,%.3f){%s};" % (anc, sx, cy, seed))
 
 
-def connect(o, cy1, cy2, cxc, cxp):
+def connect(o, cy1, cy2, cxc, cxp, score=None):
     mid = (cxc + cxp) / 2; py = (cy1 + cy2) / 2
     for cy in (cy1, cy2):
         o.append(r"\draw[gray!50,line width=0.4pt](%.3f,%.3f)--(%.3f,%.3f);" % (cxc, cy, mid, cy))
     o.append(r"\draw[gray!50,line width=0.4pt](%.3f,%.3f)--(%.3f,%.3f);" % (mid, cy1, mid, cy2))
     o.append(r"\draw[gray!50,line width=0.4pt](%.3f,%.3f)--(%.3f,%.3f);" % (mid, py, cxp, py))
+    if score:                                           # predicted scoreline on the join
+        o.append(r"\node[inner sep=0.6pt, fill=white, font=\sffamily\tiny, "
+                 r"text=black] at (%.3f,%.3f){%s};" % (mid, py, score))
 
 
-def render_side(o, R32, R16, QF, SF, side):
+def render_side(o, R32, R16, QF, SF, sc32, sc16, scqf, scsf, side):
     sgn = 1 if side == "L" else -1
     x0 = 0.0 if side == "L" else 10 * XS
     ty = [(15 - i) * YS for i in range(16)]
@@ -161,17 +171,17 @@ def render_side(o, R32, R16, QF, SF, side):
     for j, (t, b, w) in enumerate(R32):
         box(o, t, cx[0], ty[2 * j], side, win=(t == w), seed=SEED[t])
         box(o, b, cx[0], ty[2 * j + 1], side, win=(b == w), seed=SEED[b])
-        connect(o, ty[2 * j], ty[2 * j + 1], cx[0] + sgn * BW, cx[1])
+        connect(o, ty[2 * j], ty[2 * j + 1], cx[0] + sgn * BW, cx[1], sc32[j])
     for j, (t, b, w) in enumerate(R32):
         box(o, w, cx[1], w32[j], side)
     for kk in range(4):
         box(o, R16[kk], cx[2], r16[kk], side)
-        connect(o, w32[2 * kk], w32[2 * kk + 1], cx[1] + sgn * BW, cx[2])
+        connect(o, w32[2 * kk], w32[2 * kk + 1], cx[1] + sgn * BW, cx[2], sc16[kk])
     for kk in range(2):
         box(o, QF[kk], cx[3], qf[kk], side)
-        connect(o, r16[2 * kk], r16[2 * kk + 1], cx[2] + sgn * BW, cx[3])
+        connect(o, r16[2 * kk], r16[2 * kk + 1], cx[2] + sgn * BW, cx[3], scqf[kk])
     box(o, SF, cx[4], sf[0], side)
-    connect(o, qf[0], qf[1], cx[3] + sgn * BW, cx[4])
+    connect(o, qf[0], qf[1], cx[3] + sgn * BW, cx[4], scsf)
     return cx[4], sf[0]
 
 
@@ -180,12 +190,16 @@ def main():
     for lab, d in [("ROUND OF 32", 0), ("R16", 1), ("QF", 2), ("SF", 3)]:
         for xx in (d * XS + BW / 2, 10 * XS - d * XS - BW / 2):
             o.append(r"\node[gray!65,font=\bfseries\scriptsize] at (%.2f,10.2){%s};" % (xx, lab))
-    lx, ly = render_side(o, LEFT_R32, LEFT_R16, LEFT_QF, LEFT_SF, "L")
-    rx, ry = render_side(o, RIGHT_R32, RIGHT_R16, RIGHT_QF, RIGHT_SF, "R")
+    lx, ly = render_side(o, LEFT_R32, LEFT_R16, LEFT_QF, LEFT_SF,
+                         LEFT_R32_SC, LEFT_R16_SC, LEFT_QF_SC, LEFT_SF_SC, "L")
+    rx, ry = render_side(o, RIGHT_R32, RIGHT_R16, RIGHT_QF, RIGHT_SF,
+                         RIGHT_R32_SC, RIGHT_R16_SC, RIGHT_QF_SC, RIGHT_SF_SC, "R")
     cx, cy = 5 * XS, ly + 1.7
     o.append(r"\node[gray!65,font=\bfseries\scriptsize] at (%.2f,10.2){FINAL};" % cx)
     o.append(r"\draw[gray!50,line width=0.4pt](%.3f,%.3f)--(%.3f,%.3f)--(%.3f,%.3f);" % (lx + BW, ly, cx, ly, cx, cy - 0.3))
     o.append(r"\draw[gray!50,line width=0.4pt](%.3f,%.3f)--(%.3f,%.3f)--(%.3f,%.3f);" % (rx - BW, ry, cx, ry, cx, cy - 0.3))
+    o.append(r"\node[inner sep=0.8pt, fill=white, font=\sffamily\scriptsize, text=black] at (%.3f,%.3f){%s};"
+             % (cx, ly + 0.42, FINAL_SC))   # final scoreline on the riser to CHAMPION
     box(o, CHAMPION, cx - BW / 2, cy, "L", champ=True)
     o.append(r"\node[font=\bfseries\footnotesize,text=orange!55!black] at (%.2f,%.2f){$\bigstar$ CHAMPION};" % (cx, cy + 0.5))
     o.append(r"\end{tikzpicture}")
