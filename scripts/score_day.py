@@ -85,6 +85,7 @@ def main():
     if not n:
         return
     write_header = not LEDGER.exists()
+    LEDGER.parent.mkdir(parents=True, exist_ok=True)
     with LEDGER.open("a", newline="") as f:
         w = csv.writer(f)
         if write_header:

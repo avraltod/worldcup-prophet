@@ -119,4 +119,6 @@ def eligible_targets(parsed, results_log, now_utc, maturity_hours=3):
         hg, ag = (m["ag"], m["hg"]) if rev else (m["hg"], m["ag"])
         targets[key] = [hg, ag]
         scored.append({"home": fh, "away": fa, "hg": hg, "ag": ag})
+    if holds:
+        return {}, holds, []
     return targets, holds, scored
