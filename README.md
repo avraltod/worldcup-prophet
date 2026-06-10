@@ -48,5 +48,6 @@ Poisson goal model, and optimizes picks under the pool's 3/2/1 scoring rule.
 
 ## Results tracking
 
-*Live results will be appended here during the tournament (2026-06-11 – 2026-07-19), compared
-against the locked predictions above.*
+<!-- LIVE-RESULTS:START -->
+_Live results will appear here once the tournament begins (2026-06-11)._
+<!-- LIVE-RESULTS:END -->
