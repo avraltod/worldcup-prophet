@@ -84,3 +84,39 @@ def fetch_dates(dates, opener=urllib.request.urlopen):
         with opener(f"{ESPN_URL}?dates={d}", timeout=30) as resp:
             rows += parse_scoreboard(json.loads(resp.read().decode()))
     return rows
+
+
+def eligible_targets(parsed, results_log, now_utc, maturity_hours=3):
+    """Decide what to publish. Returns (targets, holds, scored).
+      targets: {"<matchno>": [hg, ag]} oriented to the fixture, for record_update.py
+      scored:  [{"home","away","hg","ag"}] oriented to the fixture, for score_day.py
+      holds:   list of human-readable reasons; NON-EMPTY means hold everything.
+    Rules: ignore non-group pairings; skip already-recorded; silently exclude
+    matches not yet matured (kickoff within maturity_hours of now); for matured
+    group matches, HOLD on not-final / missing / out-of-bounds score."""
+    done = set(results_log.get("group", {}))
+    cutoff = now_utc - dt.timedelta(hours=maturity_hours)
+    targets, scored, holds = {}, [], []
+    for m in parsed:
+        fx = map_to_fixture(m["home"], m["away"])
+        if fx is None:
+            continue                      # not a group fixture -> not our concern
+        rownum, fh, fa, rev = fx
+        key = str(rownum)
+        if key in done:
+            continue                      # idempotent: already recorded
+        if m["kickoff"] > cutoff:
+            continue                      # not matured yet -> exclude silently
+        if not m["final"]:
+            holds.append(f"match {rownum} ({fh} v {fa}) matured but not FT")
+            continue
+        if m["hg"] is None or m["ag"] is None:
+            holds.append(f"match {rownum} ({fh} v {fa}) FT but missing score")
+            continue
+        if not (0 <= m["hg"] <= 19 and 0 <= m["ag"] <= 19):
+            holds.append(f"match {rownum} score out of bounds: {m['hg']}-{m['ag']}")
+            continue
+        hg, ag = (m["ag"], m["hg"]) if rev else (m["hg"], m["ag"])
+        targets[key] = [hg, ag]
+        scored.append({"home": fh, "away": fa, "hg": hg, "ag": ag})
+    return targets, holds, scored
