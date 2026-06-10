@@ -1,14 +1,16 @@
 # AVRAA'S PREDICTION
 ## FIFA World Cup 2026 · June 11 – July 19
 
-> **Champion: 🇪🇸 SPAIN** — beats Argentina 1-0 in the Final.  
+> **Champion: 🇪🇸 SPAIN** — beats Argentina 2-1 in the Final.  
 > Podium: 🥈 Argentina · 🥉 France · 4th England
 
 *Predictions locked before the June 11, 2026 kickoff (built June 7, Group K recalibrated to prediction-market prices, and a final pre-kickoff review of squad news that confirmed the entry). All kickoff times are Ulaanbaatar time (UTC+8). Write actual scores in the blank columns after each match.*
 
+> **Pre-kickoff revision — June 10, 2026.** The group scorelines were re-derived with a *realistic-scoreline* model (Poisson expected goals rounded to the likely result) that backtests better on 2018/2022 than the earlier EV-under-3/2/1 scoreline rule. Champion, bracket, and podium are unchanged. The original locked forecast is preserved, untouched, at git tag `prereg-2026`; this revised forecast is tagged `prereg-2026-rev2`. Both predate kickoff, so neither sees any result.
+
 ### How these picks were made (short version)
 
-1. **Group matches** — live bookmaker odds (bet365, FanDuel, Betfair, collected June 5–7) converted to fair probabilities, then a Poisson goal model picks the *expected-value-optimal scoreline* under the pool's 3/2/1 rule (3 exact, 2 result+goal-difference, 1 result). That's why most picks are one-goal results like 1-0 — the goal-difference tier rewards getting the margin right — with a 1-1 draw on the most evenly-matched games.
+1. **Group matches** — live bookmaker odds (bet365, FanDuel, Betfair, collected June 5–7) converted to fair probabilities, then a Poisson goal model fits each match's expected goals and rounds them to a *realistic scoreline* (favourites win 2-1 or 2-0, even games end level). Tested on the 2018 and 2022 World Cups this predicts actual scores better than gaming the 3/2/1 rule — more exact scores, closer goal totals — at no cost in pool points.
 2. **Knockout rounds** — World Football Elo ratings adjusted for confirmed injuries (Brazil without Rodrygo, Netherlands without Xavi Simons…) and host advantage (Mexico/USA at home).
 3. **200,000 Monte Carlo simulations** of the whole tournament stress-tested every bracket call — four picks were changed because the simulations showed a likelier name in that bracket slot.
 
@@ -44,12 +46,12 @@ Each team's qualification odds come from 100,000 simulations. The bars show the 
 
 | # | Date (UB) | Match | Pick | Exp. | Actual | Pts |
 |---|-----------|-------|:----:|:---:|:------:|:---:|
-| 1 | Jun 12 03:00 | Mexico – South Africa | **1-0** | 1.08 | ____ | __ |
+| 1 | Jun 12 03:00 | Mexico – South Africa | **2-1** | 1.02 | ____ | __ |
 | 2 | Jun 12 10:00 | South Korea – Czechia | **1-1** | 0.74 | ____ | __ |
-| 25 | Jun 19 00:00 | Czechia – South Africa | **1-0** | 0.84 | ____ | __ |
-| 28 | Jun 19 09:00 | Mexico – South Korea | **1-0** | 0.95 | ____ | __ |
-| 53 | Jun 25 09:00 | Czechia – Mexico | **0-1** | 0.90 | ____ | __ |
-| 54 | Jun 25 09:00 | South Africa – South Korea | **0-1** | 0.79 | ____ | __ |
+| 25 | Jun 19 00:00 | Czechia – South Africa | **2-1** | 0.79 | ____ | __ |
+| 28 | Jun 19 09:00 | Mexico – South Korea | **2-1** | 0.88 | ____ | __ |
+| 53 | Jun 25 09:00 | Czechia – Mexico | **1-2** | 0.84 | ____ | __ |
+| 54 | Jun 25 09:00 | South Africa – South Korea | **1-2** | 0.73 | ____ | __ |
 
 ### Group B — Swiss lock
 
@@ -72,12 +74,12 @@ Each team's qualification odds come from 100,000 simulations. The bars show the 
 
 | # | Date (UB) | Match | Pick | Exp. | Actual | Pts |
 |---|-----------|-------|:----:|:---:|:------:|:---:|
-| 3 | Jun 13 03:00 | Canada – Bosnia and Herzegovina | **1-0** | 0.90 | ____ | __ |
-| 8 | Jun 14 03:00 | Qatar – Switzerland | **0-1** | 1.08 | ____ | __ |
-| 26 | Jun 19 03:00 | Switzerland – Bosnia and Herzegovina | **1-0** | 1.03 | ____ | __ |
-| 27 | Jun 19 06:00 | Canada – Qatar | **1-0** | 1.12 | ____ | __ |
+| 3 | Jun 13 03:00 | Canada – Bosnia and Herzegovina | **2-1** | 0.87 | ____ | __ |
+| 8 | Jun 14 03:00 | Qatar – Switzerland | **1-2** | 1.06 | ____ | __ |
+| 26 | Jun 19 03:00 | Switzerland – Bosnia and Herzegovina | **2-1** | 0.97 | ____ | __ |
+| 27 | Jun 19 06:00 | Canada – Qatar | **2-1** | 1.06 | ____ | __ |
 | 51 | Jun 25 03:00 | Switzerland – Canada | **2-1** | 0.80 | ____ | __ |
-| 52 | Jun 25 03:00 | Bosnia and Herzegovina – Qatar | **1-0** | 0.95 | ____ | __ |
+| 52 | Jun 25 03:00 | Bosnia and Herzegovina – Qatar | **2-1** | 0.89 | ____ | __ |
 
 ### Group C — Selecao march
 
@@ -100,12 +102,12 @@ Each team's qualification odds come from 100,000 simulations. The bars show the 
 
 | # | Date (UB) | Match | Pick | Exp. | Actual | Pts |
 |---|-----------|-------|:----:|:---:|:------:|:---:|
-| 5 | Jun 14 09:00 | Haiti – Scotland | **0-1** | 1.00 | ____ | __ |
-| 7 | Jun 14 06:00 | Brazil – Morocco | **1-0** | 0.97 | ____ | __ |
+| 5 | Jun 14 09:00 | Haiti – Scotland | **1-2** | 0.99 | ____ | __ |
+| 7 | Jun 14 06:00 | Brazil – Morocco | **2-1** | 0.94 | ____ | __ |
 | 29 | Jun 20 09:00 | Brazil – Haiti | **2-0** | 1.37 | ____ | __ |
-| 30 | Jun 20 06:00 | Scotland – Morocco | **0-1** | 0.90 | ____ | __ |
-| 49 | Jun 25 06:00 | Scotland – Brazil | **0-1** | 1.05 | ____ | __ |
-| 50 | Jun 25 06:00 | Morocco – Haiti | **1-0** | 1.28 | ____ | __ |
+| 30 | Jun 20 06:00 | Scotland – Morocco | **1-2** | 0.84 | ____ | __ |
+| 49 | Jun 25 06:00 | Scotland – Brazil | **1-2** | 1.02 | ____ | __ |
+| 50 | Jun 25 06:00 | Morocco – Haiti | **2-0** | 1.22 | ____ | __ |
 
 ### Group D — Coin-flip group
 
@@ -128,12 +130,12 @@ Each team's qualification odds come from 100,000 simulations. The bars show the 
 
 | # | Date (UB) | Match | Pick | Exp. | Actual | Pts |
 |---|-----------|-------|:----:|:---:|:------:|:---:|
-| 4 | Jun 13 09:00 | United States – Paraguay | **1-0** | 0.86 | ____ | __ |
-| 6 | Jun 14 12:00 | Australia – Turkey | **0-1** | 0.94 | ____ | __ |
-| 31 | Jun 20 12:00 | Turkey – Paraguay | **1-0** | 0.82 | ____ | __ |
-| 32 | Jun 20 03:00 | United States – Australia | **1-0** | 0.95 | ____ | __ |
+| 4 | Jun 13 09:00 | United States – Paraguay | **2-1** | 0.81 | ____ | __ |
+| 6 | Jun 14 12:00 | Australia – Turkey | **1-2** | 0.87 | ____ | __ |
+| 31 | Jun 20 12:00 | Turkey – Paraguay | **2-1** | 0.75 | ____ | __ |
+| 32 | Jun 20 03:00 | United States – Australia | **2-1** | 0.89 | ____ | __ |
 | 59 | Jun 26 10:00 | Turkey – United States | **1-1** | 0.68 | ____ | __ |
-| 60 | Jun 26 10:00 | Paraguay – Australia | **1-0** | 0.85 | ____ | __ |
+| 60 | Jun 26 10:00 | Paraguay – Australia | **2-1** | 0.77 | ____ | __ |
 
 ### Group E — German efficiency
 
@@ -156,12 +158,12 @@ Each team's qualification odds come from 100,000 simulations. The bars show the 
 
 | # | Date (UB) | Match | Pick | Exp. | Actual | Pts |
 |---|-----------|-------|:----:|:---:|:------:|:---:|
-| 9 | Jun 15 07:00 | Ivory Coast – Ecuador | **0-1** | 0.83 | ____ | __ |
+| 9 | Jun 15 07:00 | Ivory Coast – Ecuador | **1-2** | 0.75 | ____ | __ |
 | 10 | Jun 15 01:00 | Germany – Curaçao | **3-0** | 1.32 | ____ | __ |
-| 33 | Jun 21 04:00 | Germany – Ivory Coast | **1-0** | 1.04 | ____ | __ |
-| 34 | Jun 21 08:00 | Ecuador – Curaçao | **2-0** | 1.15 | ____ | __ |
-| 55 | Jun 26 04:00 | Curaçao – Ivory Coast | **0-2** | 1.15 | ____ | __ |
-| 56 | Jun 26 04:00 | Ecuador – Germany | **0-1** | 0.95 | ____ | __ |
+| 33 | Jun 21 04:00 | Germany – Ivory Coast | **2-1** | 0.98 | ____ | __ |
+| 34 | Jun 21 08:00 | Ecuador – Curaçao | **2-1** | 1.09 | ____ | __ |
+| 55 | Jun 26 04:00 | Curaçao – Ivory Coast | **1-2** | 1.09 | ____ | __ |
+| 56 | Jun 26 04:00 | Ecuador – Germany | **1-2** | 0.91 | ____ | __ |
 
 ### Group F — Oranje cruise
 
@@ -184,12 +186,12 @@ Each team's qualification odds come from 100,000 simulations. The bars show the 
 
 | # | Date (UB) | Match | Pick | Exp. | Actual | Pts |
 |---|-----------|-------|:----:|:---:|:------:|:---:|
-| 11 | Jun 15 04:00 | Netherlands – Japan | **1-0** | 0.81 | ____ | __ |
-| 12 | Jun 15 10:00 | Sweden – Tunisia | **1-0** | 0.89 | ____ | __ |
-| 35 | Jun 21 01:00 | Netherlands – Sweden | **1-0** | 0.99 | ____ | __ |
-| 36 | Jun 21 12:00 | Tunisia – Japan | **0-1** | 0.94 | ____ | __ |
-| 57 | Jun 26 07:00 | Japan – Sweden | **1-0** | 0.77 | ____ | __ |
-| 58 | Jun 26 07:00 | Tunisia – Netherlands | **0-1** | 1.04 | ____ | __ |
+| 11 | Jun 15 04:00 | Netherlands – Japan | **2-1** | 0.79 | ____ | __ |
+| 12 | Jun 15 10:00 | Sweden – Tunisia | **2-1** | 0.82 | ____ | __ |
+| 35 | Jun 21 01:00 | Netherlands – Sweden | **2-1** | 0.96 | ____ | __ |
+| 36 | Jun 21 12:00 | Tunisia – Japan | **1-2** | 0.86 | ____ | __ |
+| 57 | Jun 26 07:00 | Japan – Sweden | **2-1** | 0.72 | ____ | __ |
+| 58 | Jun 26 07:00 | Tunisia – Netherlands | **1-2** | 0.98 | ____ | __ |
 
 ### Group G — Soft draw
 
@@ -212,12 +214,12 @@ Each team's qualification odds come from 100,000 simulations. The bars show the 
 
 | # | Date (UB) | Match | Pick | Exp. | Actual | Pts |
 |---|-----------|-------|:----:|:---:|:------:|:---:|
-| 15 | Jun 16 09:00 | Iran – New Zealand | **1-0** | 0.91 | ____ | __ |
-| 16 | Jun 16 03:00 | Belgium – Egypt | **1-0** | 0.96 | ____ | __ |
-| 39 | Jun 22 03:00 | Belgium – Iran | **1-0** | 1.06 | ____ | __ |
-| 40 | Jun 22 09:00 | New Zealand – Egypt | **0-1** | 1.00 | ____ | __ |
-| 63 | Jun 27 11:00 | Egypt – Iran | **1-0** | 0.83 | ____ | __ |
-| 64 | Jun 27 11:00 | New Zealand – Belgium | **0-2** | 1.12 | ____ | __ |
+| 15 | Jun 16 09:00 | Iran – New Zealand | **2-1** | 0.86 | ____ | __ |
+| 16 | Jun 16 03:00 | Belgium – Egypt | **2-1** | 0.93 | ____ | __ |
+| 39 | Jun 22 03:00 | Belgium – Iran | **2-1** | 1.02 | ____ | __ |
+| 40 | Jun 22 09:00 | New Zealand – Egypt | **1-2** | 0.92 | ____ | __ |
+| 63 | Jun 27 11:00 | Egypt – Iran | **2-1** | 0.75 | ____ | __ |
+| 64 | Jun 27 11:00 | New Zealand – Belgium | **1-2** | 1.08 | ____ | __ |
 
 ### Group H — Champion runway
 
@@ -240,12 +242,12 @@ Each team's qualification odds come from 100,000 simulations. The bars show the 
 
 | # | Date (UB) | Match | Pick | Exp. | Actual | Pts |
 |---|-----------|-------|:----:|:---:|:------:|:---:|
-| 13 | Jun 16 06:00 | Saudi Arabia – Uruguay | **0-1** | 1.02 | ____ | __ |
-| 14 | Jun 16 00:00 | Spain – Cape Verde | **2-0** | 1.22 | ____ | __ |
-| 37 | Jun 22 06:00 | Uruguay – Cape Verde | **1-0** | 1.08 | ____ | __ |
-| 38 | Jun 22 00:00 | Spain – Saudi Arabia | **2-0** | 1.18 | ____ | __ |
-| 65 | Jun 27 08:00 | Cape Verde – Saudi Arabia | **1-0** | 0.75 | ____ | __ |
-| 66 | Jun 27 08:00 | Uruguay – Spain | **0-1** | 0.98 | ____ | __ |
+| 13 | Jun 16 06:00 | Saudi Arabia – Uruguay | **1-2** | 0.97 | ____ | __ |
+| 14 | Jun 16 00:00 | Spain – Cape Verde | **3-0** | 1.18 | ____ | __ |
+| 37 | Jun 22 06:00 | Uruguay – Cape Verde | **2-1** | 1.02 | ____ | __ |
+| 38 | Jun 22 00:00 | Spain – Saudi Arabia | **3-1** | 1.12 | ____ | __ |
+| 65 | Jun 27 08:00 | Cape Verde – Saudi Arabia | **2-1** | 0.70 | ____ | __ |
+| 66 | Jun 27 08:00 | Uruguay – Spain | **1-2** | 0.92 | ____ | __ |
 
 ### Group I — Haaland arrives
 
@@ -268,12 +270,12 @@ Each team's qualification odds come from 100,000 simulations. The bars show the 
 
 | # | Date (UB) | Match | Pick | Exp. | Actual | Pts |
 |---|-----------|-------|:----:|:---:|:------:|:---:|
-| 17 | Jun 17 03:00 | France – Senegal | **1-0** | 1.02 | ____ | __ |
-| 18 | Jun 17 06:00 | Iraq – Norway | **0-2** | 1.12 | ____ | __ |
-| 41 | Jun 23 08:00 | Norway – Senegal | **1-0** | 0.88 | ____ | __ |
-| 42 | Jun 23 05:00 | France – Iraq | **2-0** | 1.35 | ____ | __ |
-| 61 | Jun 27 03:00 | Norway – France | **0-1** | 0.94 | ____ | __ |
-| 62 | Jun 27 03:00 | Senegal – Iraq | **2-0** | 1.11 | ____ | __ |
+| 17 | Jun 17 03:00 | France – Senegal | **2-1** | 0.95 | ____ | __ |
+| 18 | Jun 17 06:00 | Iraq – Norway | **1-3** | 1.07 | ____ | __ |
+| 41 | Jun 23 08:00 | Norway – Senegal | **2-1** | 0.82 | ____ | __ |
+| 42 | Jun 23 05:00 | France – Iraq | **3-0** | 1.31 | ____ | __ |
+| 61 | Jun 27 03:00 | Norway – France | **1-2** | 0.90 | ____ | __ |
+| 62 | Jun 27 03:00 | Senegal – Iraq | **3-1** | 1.07 | ____ | __ |
 
 ### Group J — Albiceleste glide
 
@@ -296,12 +298,12 @@ Each team's qualification odds come from 100,000 simulations. The bars show the 
 
 | # | Date (UB) | Match | Pick | Exp. | Actual | Pts |
 |---|-----------|-------|:----:|:---:|:------:|:---:|
-| 19 | Jun 17 09:00 | Argentina – Algeria | **1-0** | 1.08 | ____ | __ |
-| 20 | Jun 17 12:00 | Austria – Jordan | **1-0** | 1.07 | ____ | __ |
-| 43 | Jun 23 01:00 | Argentina – Austria | **2-0** | 1.15 | ____ | __ |
-| 44 | Jun 23 11:00 | Jordan – Algeria | **0-1** | 0.75 | ____ | __ |
-| 69 | Jun 28 10:00 | Algeria – Austria | **0-1** | 0.80 | ____ | __ |
-| 70 | Jun 28 10:00 | Jordan – Argentina | **0-2** | 1.22 | ____ | __ |
+| 19 | Jun 17 09:00 | Argentina – Algeria | **2-1** | 0.99 | ____ | __ |
+| 20 | Jun 17 12:00 | Austria – Jordan | **2-1** | 1.03 | ____ | __ |
+| 43 | Jun 23 01:00 | Argentina – Austria | **3-1** | 1.09 | ____ | __ |
+| 44 | Jun 23 11:00 | Jordan – Algeria | **1-2** | 0.70 | ____ | __ |
+| 69 | Jun 28 10:00 | Algeria – Austria | **1-2** | 0.75 | ____ | __ |
+| 70 | Jun 28 10:00 | Jordan – Argentina | **0-3** | 1.18 | ____ | __ |
 
 ### Group K — Market rewrite
 
@@ -314,7 +316,7 @@ Each team's qualification odds come from 100,000 simulations. The bars show the 
 | 🥉 Uzbekistan | 3% | 12% | 23% | **39%** | ████░░░░░░ |
 | ▫️ Congo DR | 2% | 8% | 18% | **29%** | ███░░░░░░░ |
 
-🔮 **Pick:** The group rewritten on deadline day. Raw Elo called Portugal–Colombia a dead tie; the prediction markets said Portugal 63% / Colombia 32% to win the group — so the model was recalibrated (140 Elo-equivalent points) and Portugal now tops it via a 1-0 in the head-to-head. This single call transforms Portugal's tournament from R32 exit to QF run. The biggest known sensitivity in the bracket.
+🔮 **Pick:** The group rewritten on deadline day. Raw Elo called Portugal–Colombia a dead tie; the prediction markets said Portugal 63% / Colombia 32% to win the group — so the model was recalibrated (140 Elo-equivalent points) and Portugal now tops it via a 2-1 in the head-to-head. This single call transforms Portugal's tournament from R32 exit to QF run. The biggest known sensitivity in the bracket.
 
 ⭐ **Star:** Cristiano Ronaldo (POR)  
 👀 **What to watch:** Colombia vs Portugal (MD3) — the call that flipped on market data  
@@ -324,12 +326,12 @@ Each team's qualification odds come from 100,000 simulations. The bars show the 
 
 | # | Date (UB) | Match | Pick | Exp. | Actual | Pts |
 |---|-----------|-------|:----:|:---:|:------:|:---:|
-| 23 | Jun 18 01:00 | Portugal – Congo DR | **1-0** | 1.08 | ____ | __ |
-| 24 | Jun 18 10:00 | Uzbekistan – Colombia | **0-1** | 1.06 | ____ | __ |
-| 47 | Jun 24 01:00 | Portugal – Uzbekistan | **2-0** | 1.12 | ____ | __ |
-| 48 | Jun 24 10:00 | Colombia – Congo DR | **2-0** | 1.18 | ____ | __ |
-| 71 | Jun 28 07:30 | Colombia – Portugal | **0-1** | 0.95 | ____ | __ |
-| 72 | Jun 28 07:30 | Congo DR – Uzbekistan | **0-1** | 0.75 | ____ | __ |
+| 23 | Jun 18 01:00 | Portugal – Congo DR | **2-1** | 1.05 | ____ | __ |
+| 24 | Jun 18 10:00 | Uzbekistan – Colombia | **1-2** | 1.02 | ____ | __ |
+| 47 | Jun 24 01:00 | Portugal – Uzbekistan | **3-1** | 1.07 | ____ | __ |
+| 48 | Jun 24 10:00 | Colombia – Congo DR | **3-1** | 1.12 | ____ | __ |
+| 71 | Jun 28 07:30 | Colombia – Portugal | **1-2** | 0.59 | ____ | __ |
+| 72 | Jun 28 07:30 | Congo DR – Uzbekistan | **1-2** | 0.70 | ____ | __ |
 
 ### Group L — Three Lions engine
 
@@ -352,12 +354,12 @@ Each team's qualification odds come from 100,000 simulations. The bars show the 
 
 | # | Date (UB) | Match | Pick | Exp. | Actual | Pts |
 |---|-----------|-------|:----:|:---:|:------:|:---:|
-| 21 | Jun 18 07:00 | Ghana – Panama | **1-0** | 0.84 | ____ | __ |
-| 22 | Jun 18 04:00 | England – Croatia | **1-0** | 0.94 | ____ | __ |
-| 45 | Jun 24 04:00 | England – Ghana | **2-0** | 1.37 | ____ | __ |
-| 46 | Jun 24 07:00 | Panama – Croatia | **0-1** | 0.99 | ____ | __ |
-| 67 | Jun 28 05:00 | Panama – England | **0-2** | 1.06 | ____ | __ |
-| 68 | Jun 28 05:00 | Croatia – Ghana | **2-0** | 1.29 | ____ | __ |
+| 21 | Jun 18 07:00 | Ghana – Panama | **2-1** | 0.81 | ____ | __ |
+| 22 | Jun 18 04:00 | England – Croatia | **2-1** | 0.90 | ____ | __ |
+| 45 | Jun 24 04:00 | England – Ghana | **3-0** | 1.34 | ____ | __ |
+| 46 | Jun 24 07:00 | Panama – Croatia | **1-2** | 0.95 | ____ | __ |
+| 67 | Jun 28 05:00 | Panama – England | **1-2** | 1.05 | ____ | __ |
+| 68 | Jun 28 05:00 | Croatia – Ghana | **3-0** | 1.26 | ____ | __ |
 
 * * *
 ## Knockout Bracket
@@ -366,22 +368,22 @@ Each team's qualification odds come from 100,000 simulations. The bars show the 
 
 | M# | Date (UB) | Match | Prediction | Advances | Exp. | Actual | Pts |
 |----|-----------|-------|:---------:|----------|:---:|:------:|:---:|
-| 73 | Jun 29 03:00 | South Korea – Canada | **0-1** | Canada | 0.85 | ____ | __ |
-| 74 | Jun 30 04:30 | Germany – Paraguay | **1-0** | Germany | 0.88 | ____ | __ |
-| 75 | Jun 30 09:00 | Netherlands – Morocco | **1-0** | Netherlands | 0.92 | ____ | __ |
-| 76 | Jun 30 01:00 | Brazil – Japan | **1-0** | Brazil | 0.83 | ____ | __ |
-| 77 | Jul 01 05:00 | France – Sweden | **1-0** | France | 1.37 | ____ | __ |
-| 78 | Jul 01 01:00 | Ecuador – Norway | **0-1** | Norway | 0.65 | ____ | __ |
-| 79 | Jul 01 09:00 | Mexico – Ivory Coast | **1-0** | Mexico | 1.14 | ____ | __ |
-| 80 | Jul 02 00:00 | England – Algeria | **1-0** | England | 1.23 | ____ | __ |
-| 81 | Jul 02 08:00 | United States – Bosnia and Herzegovina | **1-0** | United States | 1.04 | ____ | __ |
-| 82 | Jul 02 04:00 | Belgium – Czechia | **1-0** | Belgium | 0.95 | ____ | __ |
-| 83 | Jul 03 07:00 | Colombia – Croatia | **0-1** | Croatia | 0.71 | ____ | __ |
-| 84 | Jul 03 03:00 | Spain – Austria | **1-0** | Spain | 1.31 | ____ | __ |
-| 85 | Jul 03 11:00 | Switzerland – Iran | **1-0** | Switzerland | 0.94 | ____ | __ |
-| 86 | Jul 04 06:00 | Argentina – Uruguay | **1-0** | Argentina | 1.12 | ____ | __ |
-| 87 | Jul 04 09:30 | Portugal – Senegal | **1-0** | Portugal | 1.04 | ____ | __ |
-| 88 | Jul 04 02:00 | Turkey – Egypt | **1-0** | Turkey | 1.09 | ____ | __ |
+| 73 | Jun 29 03:00 | South Korea – Canada | **1-1 (pens)** | Canada | 0.70 | ____ | __ |
+| 74 | Jun 30 04:30 | Germany – Paraguay | **2-1** | Germany | 0.84 | ____ | __ |
+| 75 | Jun 30 09:00 | Netherlands – Morocco | **2-1** | Netherlands | 0.88 | ____ | __ |
+| 76 | Jun 30 01:00 | Brazil – Japan | **2-1** | Brazil | 0.79 | ____ | __ |
+| 77 | Jul 01 05:00 | France – Sweden | **2-0** | France | 1.30 | ____ | __ |
+| 78 | Jul 01 01:00 | Ecuador – Norway | **1-1 (pens)** | Norway | 0.72 | ____ | __ |
+| 79 | Jul 01 09:00 | Mexico – Ivory Coast | **2-0** | Mexico | 1.06 | ____ | __ |
+| 80 | Jul 02 00:00 | England – Algeria | **2-0** | England | 1.15 | ____ | __ |
+| 81 | Jul 02 08:00 | United States – Bosnia and Herzegovina | **2-1** | United States | 0.98 | ____ | __ |
+| 82 | Jul 02 04:00 | Belgium – Czechia | **2-1** | Belgium | 0.91 | ____ | __ |
+| 83 | Jul 03 07:00 | Colombia – Croatia | **1-1 (pens)** | Croatia | 0.68 | ____ | __ |
+| 84 | Jul 03 03:00 | Spain – Austria | **2-0** | Spain | 1.24 | ____ | __ |
+| 85 | Jul 03 11:00 | Switzerland – Iran | **2-1** | Switzerland | 0.90 | ____ | __ |
+| 86 | Jul 04 06:00 | Argentina – Uruguay | **2-1** | Argentina | 1.03 | ____ | __ |
+| 87 | Jul 04 09:30 | Portugal – Senegal | **2-1** | Portugal | 0.88 | ____ | __ |
+| 88 | Jul 04 02:00 | Turkey – Egypt | **2-1** | Turkey | 1.01 | ____ | __ |
 
 **Logic of this round:** every pick maximizes *slot emergence* — the probability the named team actually occupies and wins that bracket slot across 200,000 simulations — not just head-to-head strength. Three picks deliberately go against the head-to-head favorite: **Norway over Ecuador** (Norway's path to the slot is far more reliable, +4pp), **Croatia over Colombia** (England's dominance parks Croatia in this slot with high certainty), and the structural calls around Group D. Portugal's M87 emergence (50.7%) is the strongest slot claim in the entire bracket. Mexico at the Azteca and the USA in Arlington carry host bonuses.
 
@@ -389,14 +391,14 @@ Each team's qualification odds come from 100,000 simulations. The bars show the 
 
 | M# | Date (UB) | Match | Prediction | Advances | Exp. | Actual | Pts |
 |----|-----------|-------|:---------:|----------|:---:|:------:|:---:|
-| 89 | Jul 05 05:00 | Germany – France | **0-1** | France | 1.00 | ____ | __ |
-| 90 | Jul 05 01:00 | Canada – Netherlands | **0-1** | Netherlands | 0.90 | ____ | __ |
-| 91 | Jul 06 04:00 | Brazil – Norway | **1-0** | Brazil | 0.80 | ____ | __ |
-| 92 | Jul 06 08:00 | Mexico – England | **0-1** | England | 0.91 | ____ | __ |
-| 93 | Jul 07 03:00 | Croatia – Spain | **0-1** | Spain | 1.15 | ____ | __ |
-| 94 | Jul 07 08:00 | United States – Belgium | **0-1** | Belgium | 0.88 | ____ | __ |
-| 95 | Jul 08 00:00 | Argentina – Turkey | **1-0** | Argentina | 1.09 | ____ | __ |
-| 96 | Jul 08 04:00 | Switzerland – Portugal | **0-1** | Portugal | 1.00 | ____ | __ |
+| 89 | Jul 05 05:00 | Germany – France | **1-2** | France | 0.95 | ____ | __ |
+| 90 | Jul 05 01:00 | Canada – Netherlands | **1-2** | Netherlands | 0.93 | ____ | __ |
+| 91 | Jul 06 04:00 | Brazil – Norway | **2-1** | Brazil | 0.75 | ____ | __ |
+| 92 | Jul 06 08:00 | Mexico – England | **1-2** | England | 0.87 | ____ | __ |
+| 93 | Jul 07 03:00 | Croatia – Spain | **0-2** | Spain | 1.07 | ____ | __ |
+| 94 | Jul 07 08:00 | United States – Belgium | **1-2** | Belgium | 0.91 | ____ | __ |
+| 95 | Jul 08 00:00 | Argentina – Turkey | **2-1** | Argentina | 1.01 | ____ | __ |
+| 96 | Jul 08 04:00 | Switzerland – Portugal | **1-2** | Portugal | 0.84 | ____ | __ |
 
 **Key calls:** France ends Germany (Elo 2081 vs 1925 — a quarter-final-quality tie too early). **Belgium over the USA** was the simulations' biggest correction (+9.6pp): Belgium's soft path through Group G makes them far likelier to even be here than any Group D survivor. England eliminates host Mexico at the Azteca — atmosphere loses to Elo gap (2020 vs 1908). Brazil handles Haaland's Norway; Spain ends Croatia; Portugal beats Switzerland in the slot the market opened for him.
 
@@ -404,10 +406,10 @@ Each team's qualification odds come from 100,000 simulations. The bars show the 
 
 | M# | Date (UB) | Match | Prediction | Advances | Exp. | Actual | Pts |
 |----|-----------|-------|:---------:|----------|:---:|:------:|:---:|
-| 97 | Jul 10 04:00 | France – Netherlands | **1-0** | France | 0.98 | ____ | __ |
-| 98 | Jul 11 03:00 | Spain – Belgium | **1-0** | Spain | 1.25 | ____ | __ |
-| 99 | Jul 12 05:00 | Brazil – England | **0-1** | England | 0.80 | ____ | __ |
-| 100 | Jul 12 09:00 | Argentina – Portugal | **1-0** | Argentina | 0.81 | ____ | __ |
+| 97 | Jul 10 04:00 | France – Netherlands | **2-1** | France | 0.93 | ____ | __ |
+| 98 | Jul 11 03:00 | Spain – Belgium | **2-0** | Spain | 1.18 | ____ | __ |
+| 99 | Jul 12 05:00 | Brazil – England | **1-2** | England | 0.75 | ____ | __ |
+| 100 | Jul 12 09:00 | Argentina – Portugal | **2-1** | Argentina | 0.90 | ____ | __ |
 
 **Key calls:** France–Netherlands is the closest QF (56/19/25) — French depth decides it. Spain dispatches Belgium (71%). **England over Brazil** is the boldest call of the bracket: a 44/28 market edge for England plus Brazil's Rodrygo/Neymar injuries; this is where the sheet wins or loses its swagger. Argentina ends Portugal's run (38% vs 21% slot emergence) — Messi vs Ronaldo's heirs, one last time.
 
@@ -415,8 +417,8 @@ Each team's qualification odds come from 100,000 simulations. The bars show the 
 
 | M# | Date (UB) | Match | Prediction | Advances | Exp. | Actual | Pts |
 |----|-----------|-------|:---------:|----------|:---:|:------:|:---:|
-| 101 | Jul 15 03:00 | France – Spain | **0-1** | Spain | 0.85 | ____ | __ |
-| 102 | Jul 16 03:00 | England – Argentina | **0-1** | Argentina | 0.88 | ____ | __ |
+| 101 | Jul 15 03:00 | France – Spain | **1-2** | Spain | 0.81 | ____ | __ |
+| 102 | Jul 16 03:00 | England – Argentina | **1-2** | Argentina | 0.84 | ____ | __ |
 
 **Key calls:** Spain over France (48% vs 25% in the matchup) — the two best teams meet one round early; Spain's midfield control beats French transition. Argentina over England (50% vs 24%): tournament know-how against a team that historically blinks in semis.
 
@@ -424,7 +426,7 @@ Each team's qualification odds come from 100,000 simulations. The bars show the 
 
 | M# | Date (UB) | Match | Prediction | Advances | Exp. | Actual | Pts |
 |----|-----------|-------|:---------:|----------|:---:|:------:|:---:|
-| 103 | Jul 19 05:00 | France – England | **1-0** | France | 0.81 | ____ | __ |
+| 103 | Jul 19 05:00 | France – England | **2-1** | France | 0.77 | ____ | __ |
 
 **Why France:** the third-place game rewards squad depth and motivation management — France has more of both than England (45/27/28).
 
@@ -432,9 +434,9 @@ Each team's qualification odds come from 100,000 simulations. The bars show the 
 
 | M# | Date (UB) | Match | Prediction | Advances | Exp. | Actual | Pts |
 |----|-----------|-------|:---------:|----------|:---:|:------:|:---:|
-| 104 | Jul 20 03:00 | Spain – Argentina | **1-0** | SPAIN 🏆 | 0.78 | ____ | __ |
+| 104 | Jul 20 03:00 | Spain – Argentina | **2-1** | SPAIN 🏆 | 0.74 | ____ | __ |
 
-**Why Spain:** the most likely final (10.8% of all simulations — no other pairing scores higher) and the most likely champion (27.4%). Spain beats Argentina in 59% of simulated finals: the Elo gap (2160 vs 2113 adjusted), a younger core, and the deepest midfield in the tournament. Predicted score 1-0 — the modal scoreline at 13.2%. Honesty box: Spain still fails to win 72.6% of simulated tournaments; this is the best single bet, not a promise.
+**Why Spain:** the most likely final (10.8% of all simulations — no other pairing scores higher) and the most likely champion (27.4%). Spain beats Argentina in 59% of simulated finals: the Elo gap (2160 vs 2113 adjusted), a younger core, and the deepest midfield in the tournament. Predicted score 2-1 — Spain edges a tight, high-quality final. Honesty box: Spain still fails to win 72.6% of simulated tournaments; this is the best single bet, not a promise.
 
 * * *
 ## Tournament Diary — What Went Wrong & What We Learned
@@ -470,7 +472,7 @@ Each team's qualification odds come from 100,000 simulations. The bars show the 
 ### Methodology (for the curious)
 
 - **Odds → probabilities**: bookmaker margins stripped by normalising implied probabilities. Matchday-3 fixtures without published odds use Elo-based estimates.
-- **Poisson scorelines**: for each match, goal rates (λ-home, λ-away) are fitted to reproduce the market's win/draw/loss probabilities; the predicted score maximises expected points under the pool's 3/2/1 rule, P(exact) + P(result and goal difference) + P(result).
+- **Poisson scorelines**: for each match, goal rates (λ-home, λ-away) are fitted to reproduce the market's win/draw/loss probabilities; the predicted score is the rounded expected goals, with the predicted result preserved (the winner takes the higher score, even games stay level). This realistic readout out-predicts the points-optimal pick on the 2018/2022 backtest.
 - **Knockout model**: Elo win expectancy 1/(1+10^(−ΔElo/400)); injury adjustments Brazil −20, Netherlands −15, Japan −10, Croatia −10, Spain −5; hosts +40 (fading to +20 late).
 - **Slot-emergence optimisation**: knockout picks maximise P(team actually occupies and wins that bracket slot) across 200,000 simulated tournaments — not just head-to-head strength. This is why Croatia (27.5%) is picked over Portugal (25.1%) in M83: Portugal too often wins his group and never plays that match at all.
 - **Machine-learning risk check**: a Random Forest *and* XGBoost (gradient boosting) trained on 40,000 simulated tournaments agree (rank correlation 0.83) that getting **Group H right (Spain) is the single highest-leverage call** — SHAP says naming Spain as Group H winner is worth **+0.79 knockout points**, ~3× the weakest group call — because Spain's path runs 6 matches deep. Both models also agree that group results explain only **~50% of the bracket score**; the rest is knockout luck. The call to protect above all: Spain topping Group H.
