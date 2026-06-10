@@ -32,3 +32,12 @@ def test_map_to_fixture_matches_and_orients():
     r, fh, fa, rev = fr.map_to_fixture("South Africa", "Mexico")
     assert r == 1 and fh == "Mexico" and fa == "South Africa" and rev is True
     assert fr.map_to_fixture("Mars", "Venus") is None
+
+def test_parse_includes_event_id():
+    payload = {"events": [{"id": "633850", "date": "2026-06-11T19:00Z",
+        "competitions": [{
+            "status": {"type": {"state": "post", "completed": True, "detail": "FT"}},
+            "competitors": [
+                {"homeAway": "home", "team": {"displayName": "Mexico"}, "score": "2"},
+                {"homeAway": "away", "team": {"displayName": "South Africa"}, "score": "1"}]}]}]}
+    assert fr.parse_scoreboard(payload)[0]["event_id"] == "633850"

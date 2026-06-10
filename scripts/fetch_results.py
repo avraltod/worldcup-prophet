@@ -65,6 +65,7 @@ def parse_scoreboard(payload):
             "ag": _score(sides["away"]),
             "kickoff": dt.datetime.fromisoformat(ev["date"].replace("Z", "+00:00")),
             "final": final,
+            "event_id": ev.get("id"),
         })
     return out
 
