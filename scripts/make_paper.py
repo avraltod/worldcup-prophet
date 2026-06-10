@@ -25,6 +25,8 @@ preds = {p["row"]: p for p in json.loads((DATA / "group_predictions.json").read_
 sched = json.loads((DATA / "schedule_ub.json").read_text())
 GS, KS = sched["group"], sched["ko"]
 EV = {int(k): v for k, v in json.loads((DATA / "match_ev_all.json").read_text()).items()}  # expected pts per match
+# realistic scorelines (single source of truth, scripts/realistic_scores.py)
+REAL = {r["num"]: r for r in json.loads((DATA / "predictions_realistic.json").read_text())}
 
 # ---- predicted group tables ----
 tables = defaultdict(lambda: defaultdict(lambda: [0, 0, 0, 0]))  # grp -> team -> [pts, gd, gf, ga]
@@ -80,7 +82,7 @@ md = []
 md.append("# AVRAA'S PREDICTION")
 md.append("## FIFA World Cup 2026 · June 11 – July 19")
 md.append("")
-md.append("> **Champion: 🇪🇸 SPAIN** — beats Argentina 1-0 in the Final.  ")
+md.append("> **Champion: 🇪🇸 SPAIN** — beats Argentina 2-1 in the Final.  ")
 md.append("> Podium: 🥈 Argentina · 🥉 France · 4th England")
 md.append("")
 md.append("*Predictions locked before the June 11, 2026 kickoff (built June 7, Group K recalibrated to prediction-market prices, and a final pre-kickoff review of squad news that confirmed the entry). All kickoff times are Ulaanbaatar time (UTC+8). "
@@ -89,10 +91,10 @@ md.append("")
 md.append("### How these picks were made (short version)")
 md.append("")
 md.append("1. **Group matches** — live bookmaker odds (bet365, FanDuel, Betfair, collected June 5–7) "
-          "converted to fair probabilities, then a Poisson goal model picks the *expected-value-optimal "
-          "scoreline* under the pool's 3/2/1 rule (3 exact, 2 result+goal-difference, 1 result). That's why "
-          "most picks are one-goal results like 1-0 — the goal-difference tier rewards getting the margin "
-          "right — with a 1-1 draw on the most evenly-matched games.")
+          "converted to fair probabilities, then a Poisson goal model fits each match's expected goals and "
+          "rounds them to a *realistic scoreline* (favourites win 2-1 or 2-0, even games end level). Tested on "
+          "the 2018 and 2022 World Cups this predicts actual scores better than gaming the 3/2/1 rule — more "
+          "exact scores, closer goal totals — at no cost in pool points.")
 md.append("2. **Knockout rounds** — World Football Elo ratings adjusted for confirmed injuries "
           "(Brazil without Rodrygo, Netherlands without Xavi Simons…) and host advantage (Mexico/USA at home).")
 md.append("3. **200,000 Monte Carlo simulations** of the whole tournament stress-tested every bracket call — "
@@ -163,7 +165,9 @@ for rnd, matches in KO.items():
     md.append("")
     md.append("| M# | Date (UB) | Match | Prediction | Advances | Exp. | Actual | Pts |")
     md.append("|----|-----------|-------|:---------:|----------|:---:|:------:|:---:|")
-    for num, a, b, score, adv in matches:
+    for num, a, b, _score, adv in matches:
+        rr = REAL[num]                       # realistic scoreline from the canonical source
+        score = f"{rr['hg']}-{rr['ag']}" + (" (pens)" if rr["pen"] else "")
         md.append(f"| {num} | {KS[str(num)]} | {a} – {b} | **{score}** | {adv} | "
                   f"{EV.get(num, 0):.2f} | ____ | __ |")
     md.append("")
@@ -180,8 +184,9 @@ md.append("")
 md.append("- **Odds → probabilities**: bookmaker margins stripped by normalising implied probabilities. "
           "Matchday-3 fixtures without published odds use Elo-based estimates.")
 md.append("- **Poisson scorelines**: for each match, goal rates (λ-home, λ-away) are fitted to reproduce "
-          "the market's win/draw/loss probabilities; the predicted score maximises expected points under the "
-          "pool's 3/2/1 rule, P(exact) + P(result and goal difference) + P(result).")
+          "the market's win/draw/loss probabilities; the predicted score is the rounded expected goals, with "
+          "the predicted result preserved (the winner takes the higher score, even games stay level). This "
+          "realistic readout out-predicts the points-optimal pick on the 2018/2022 backtest.")
 md.append("- **Knockout model**: Elo win expectancy 1/(1+10^(−ΔElo/400)); injury adjustments "
           "Brazil −20, Netherlands −15, Japan −10, Croatia −10, Spain −5; hosts +40 (fading to +20 late).")
 md.append("- **Slot-emergence optimisation**: knockout picks maximise P(team actually occupies and wins "

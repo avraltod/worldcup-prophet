@@ -53,21 +53,23 @@ LEFT_R32 = [("Germany", "Paraguay", "Germany"), ("France", "Sweden", "France"),
             ("Colombia", "Croatia", "Croatia"), ("Spain", "Austria", "Spain"),
             ("United States", "Bosnia and Herzegovina", "United States"), ("Belgium", "Czechia", "Belgium")]
 LEFT_R16, LEFT_QF, LEFT_SF = ["France", "Netherlands", "Spain", "Belgium"], ["France", "Spain"], "Spain"
-# Predicted scorelines, top-box--bottom-box order, parallel to the lists above.
-LEFT_R32_SC = ["1--0", "1--0", "0--1", "1--0", "1--1", "1--0", "1--0", "1--0"]
-LEFT_R16_SC = ["0--1", "0--1", "0--1", "0--1"]
-LEFT_QF_SC, LEFT_SF_SC = ["1--0", "1--0"], "0--1"
+# Predicted scorelines (realistic: rounded expected goals, winner takes the
+# higher score, genuinely even ties stay level and are decided on penalties,
+# marked "(p)"). Top-box--bottom-box order, parallel to the lists above.
+LEFT_R32_SC = ["2--1", "2--0", r"1--1\,(p)", "2--1", r"1--1\,(p)", "2--0", "2--1", "2--1"]
+LEFT_R16_SC = ["1--2", "1--2", "0--2", "1--2"]
+LEFT_QF_SC, LEFT_SF_SC = ["2--1", "2--0"], "1--2"
 RIGHT_R32 = [("Brazil", "Japan", "Brazil"), ("Ecuador", "Norway", "Norway"),
              ("Mexico", "Ivory Coast", "Mexico"), ("England", "Algeria", "England"),
              ("Argentina", "Uruguay", "Argentina"), ("Turkey", "Egypt", "Turkey"),
              ("Switzerland", "Iran", "Switzerland"), ("Portugal", "Senegal", "Portugal")]
 RIGHT_R16, RIGHT_QF, RIGHT_SF = ["Brazil", "England", "Argentina", "Portugal"], ["England", "Argentina"], "Argentina"
-RIGHT_R32_SC = ["1--0", "0--1", "1--0", "1--0", "1--0", "1--0", "1--0", "1--0"]
-RIGHT_R16_SC = ["1--0", "0--1", "1--0", "0--1"]
-RIGHT_QF_SC, RIGHT_SF_SC = ["0--1", "1--0"], "0--1"
-CHAMPION, FINAL_SC = "Spain", "1--0"
+RIGHT_R32_SC = ["2--1", r"1--1\,(p)", "2--0", "2--0", "2--1", "2--1", "2--1", "2--1"]
+RIGHT_R16_SC = ["2--1", "1--2", "2--1", "1--2"]
+RIGHT_QF_SC, RIGHT_SF_SC = ["1--2", "2--1"], "1--2"
+CHAMPION, FINAL_SC = "Spain", "2--1"
 
-YS, XS, BW, FW, FH = 0.64, 2.7, 2.0, 0.46, 0.30   # row, col, box width, flag w/h (cm)
+YS, XS, BW, FW, FH = 0.64, 2.2, 1.4, 0.46, 0.30   # row, col, box width, flag w/h (cm)
 
 
 def parents(ys):

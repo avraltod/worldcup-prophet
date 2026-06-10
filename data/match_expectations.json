@@ -6,12 +6,12 @@
   "home": "Mexico",
   "away": "South Africa",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1484,
+  "p_exact": 0.0916,
   "p_outcome": 0.6718,
-  "ev_points": 1.081,
+  "ev_points": 0.855,
   "lh": 1.9,
   "la": 0.65,
   "probs_HDA": [
@@ -32,7 +32,7 @@
   ],
   "p_exact": 0.1352,
   "p_outcome": 0.3038,
-  "ev_points": 0.7428,
+  "ev_points": 0.5742,
   "lh": 1.05,
   "la": 1.0,
   "probs_HDA": [
@@ -48,12 +48,12 @@
   "home": "Czechia",
   "away": "South Africa",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1353,
+  "p_exact": 0.0868,
   "p_outcome": 0.4599,
-  "ev_points": 0.838,
+  "ev_points": 0.6334,
   "lh": 1.35,
   "la": 0.95,
   "probs_HDA": [
@@ -69,12 +69,12 @@
   "home": "Mexico",
   "away": "South Korea",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1631,
+  "p_exact": 0.0856,
   "p_outcome": 0.5245,
-  "ev_points": 0.9526,
+  "ev_points": 0.6957,
   "lh": 1.4,
   "la": 0.75,
   "probs_HDA": [
@@ -90,12 +90,12 @@
   "home": "Czechia",
   "away": "Mexico",
   "pick": [
-   0,
-   1
+   1,
+   2
   ],
-  "p_exact": 0.1476,
+  "p_exact": 0.0878,
   "p_outcome": 0.4985,
-  "ev_points": 0.9006,
+  "ev_points": 0.6741,
   "lh": 0.85,
   "la": 1.4,
   "probs_HDA": [
@@ -111,12 +111,12 @@
   "home": "South Africa",
   "away": "South Korea",
   "pick": [
-   0,
-   1
+   1,
+   2
   ],
-  "p_exact": 0.1398,
+  "p_exact": 0.0797,
   "p_outcome": 0.4172,
-  "ev_points": 0.7931,
+  "ev_points": 0.5766,
   "lh": 0.95,
   "la": 1.2,
   "probs_HDA": [
@@ -132,12 +132,12 @@
   "home": "Canada",
   "away": "Bosnia and Herzegovina",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1249,
+  "p_exact": 0.0949,
   "p_outcome": 0.5256,
-  "ev_points": 0.8978,
+  "ev_points": 0.7155,
   "lh": 1.6,
   "la": 0.95,
   "probs_HDA": [
@@ -153,12 +153,12 @@
   "home": "Qatar",
   "away": "Switzerland",
   "pick": [
-   0,
-   1
+   1,
+   2
   ],
-  "p_exact": 0.1178,
+  "p_exact": 0.0927,
   "p_outcome": 0.7256,
-  "ev_points": 1.0817,
+  "ev_points": 0.9111,
   "lh": 0.7,
   "la": 2.25,
   "probs_HDA": [
@@ -174,12 +174,12 @@
   "home": "Switzerland",
   "away": "Bosnia and Herzegovina",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1542,
+  "p_exact": 0.0918,
   "p_outcome": 0.6143,
-  "ev_points": 1.0346,
+  "ev_points": 0.7978,
   "lh": 1.7,
   "la": 0.7,
   "probs_HDA": [
@@ -195,12 +195,12 @@
   "home": "Canada",
   "away": "Qatar",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1411,
+  "p_exact": 0.0889,
   "p_outcome": 0.7235,
-  "ev_points": 1.1155,
+  "ev_points": 0.9014,
   "lh": 2.1,
   "la": 0.6,
   "probs_HDA": [
@@ -221,7 +221,7 @@
   ],
   "p_exact": 0.092,
   "p_outcome": 0.493,
-  "ev_points": 0.7973,
+  "ev_points": 0.677,
   "lh": 1.95,
   "la": 1.45,
   "probs_HDA": [
@@ -237,12 +237,12 @@
   "home": "Bosnia and Herzegovina",
   "away": "Qatar",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1504,
+  "p_exact": 0.0902,
   "p_outcome": 0.5381,
-  "ev_points": 0.9491,
+  "ev_points": 0.7186,
   "lh": 1.5,
   "la": 0.8,
   "probs_HDA": [
@@ -258,12 +258,12 @@
   "home": "Brazil",
   "away": "Morocco",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.13,
+  "p_exact": 0.0967,
   "p_outcome": 0.587,
-  "ev_points": 0.9708,
+  "ev_points": 0.7803,
   "lh": 1.75,
   "la": 0.85,
   "probs_HDA": [
@@ -279,12 +279,12 @@
   "home": "Haiti",
   "away": "Scotland",
   "pick": [
-   0,
-   1
+   1,
+   2
   ],
-  "p_exact": 0.1157,
+  "p_exact": 0.0983,
   "p_outcome": 0.6418,
-  "ev_points": 1.0037,
+  "ev_points": 0.8385,
   "lh": 0.85,
   "la": 2.0,
   "probs_HDA": [
@@ -300,12 +300,12 @@
   "home": "Scotland",
   "away": "Morocco",
   "pick": [
-   0,
-   1
+   1,
+   2
   ],
-  "p_exact": 0.1476,
+  "p_exact": 0.0878,
   "p_outcome": 0.4985,
-  "ev_points": 0.9006,
+  "ev_points": 0.6741,
   "lh": 0.85,
   "la": 1.4,
   "probs_HDA": [
@@ -326,7 +326,7 @@
   ],
   "p_exact": 0.2426,
   "p_outcome": 0.8642,
-  "ev_points": 1.3678,
+  "ev_points": 1.3495,
   "lh": 2.2,
   "la": 0.1,
   "probs_HDA": [
@@ -342,12 +342,12 @@
   "home": "Scotland",
   "away": "Brazil",
   "pick": [
-   0,
-   1
+   1,
+   2
   ],
-  "p_exact": 0.1247,
+  "p_exact": 0.0958,
   "p_outcome": 0.6766,
-  "ev_points": 1.0497,
+  "ev_points": 0.8683,
   "lh": 0.75,
   "la": 2.05,
   "probs_HDA": [
@@ -363,12 +363,12 @@
   "home": "Morocco",
   "away": "Haiti",
   "pick": [
-   1,
+   2,
    0
   ],
-  "p_exact": 0.2265,
+  "p_exact": 0.2096,
   "p_outcome": 0.7708,
-  "ev_points": 1.2805,
+  "ev_points": 1.1899,
   "lh": 1.85,
   "la": 0.25,
   "probs_HDA": [
@@ -384,12 +384,12 @@
   "home": "United States",
   "away": "Paraguay",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1423,
+  "p_exact": 0.0864,
   "p_outcome": 0.4721,
-  "ev_points": 0.8625,
+  "ev_points": 0.645,
   "lh": 1.35,
   "la": 0.9,
   "probs_HDA": [
@@ -405,12 +405,12 @@
   "home": "Australia",
   "away": "Turkey",
   "pick": [
-   0,
-   1
+   1,
+   2
   ],
-  "p_exact": 0.1528,
+  "p_exact": 0.0886,
   "p_outcome": 0.5249,
-  "ev_points": 0.9381,
+  "ev_points": 0.7022,
   "lh": 0.8,
   "la": 1.45,
   "probs_HDA": [
@@ -426,12 +426,12 @@
   "home": "Turkey",
   "away": "Paraguay",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1469,
+  "p_exact": 0.0794,
   "p_outcome": 0.4292,
-  "ev_points": 0.818,
+  "ev_points": 0.5879,
   "lh": 1.2,
   "la": 0.9,
   "probs_HDA": [
@@ -447,12 +447,12 @@
   "home": "United States",
   "away": "Australia",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1504,
+  "p_exact": 0.0902,
   "p_outcome": 0.5381,
-  "ev_points": 0.9491,
+  "ev_points": 0.7186,
   "lh": 1.5,
   "la": 0.8,
   "probs_HDA": [
@@ -473,7 +473,7 @@
   ],
   "p_exact": 0.1306,
   "p_outcome": 0.2766,
-  "ev_points": 0.6839,
+  "ev_points": 0.5379,
   "lh": 1.2,
   "la": 1.2,
   "probs_HDA": [
@@ -489,12 +489,12 @@
   "home": "Paraguay",
   "away": "Australia",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1636,
+  "p_exact": 0.0753,
   "p_outcome": 0.4388,
-  "ev_points": 0.8537,
+  "ev_points": 0.5893,
   "lh": 1.15,
   "la": 0.8,
   "probs_HDA": [
@@ -515,7 +515,7 @@
   ],
   "p_exact": 0.1828,
   "p_outcome": 0.9235,
-  "ev_points": 1.3197,
+  "ev_points": 1.289,
   "lh": 3.15,
   "la": 0.2,
   "probs_HDA": [
@@ -531,12 +531,12 @@
   "home": "Ivory Coast",
   "away": "Ecuador",
   "pick": [
-   0,
-   1
+   1,
+   2
   ],
-  "p_exact": 0.1556,
+  "p_exact": 0.0761,
   "p_outcome": 0.4264,
-  "ev_points": 0.8272,
+  "ev_points": 0.5785,
   "lh": 0.85,
   "la": 1.15,
   "probs_HDA": [
@@ -553,11 +553,11 @@
   "away": "Curaçao",
   "pick": [
    2,
-   0
+   1
   ],
-  "p_exact": 0.153,
+  "p_exact": 0.0841,
   "p_outcome": 0.7695,
-  "ev_points": 1.1511,
+  "ev_points": 0.9377,
   "lh": 2.3,
   "la": 0.55,
   "probs_HDA": [
@@ -573,12 +573,12 @@
   "home": "Germany",
   "away": "Ivory Coast",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.151,
+  "p_exact": 0.0925,
   "p_outcome": 0.6259,
-  "ev_points": 1.0413,
+  "ev_points": 0.8109,
   "lh": 1.75,
   "la": 0.7,
   "probs_HDA": [
@@ -594,12 +594,12 @@
   "home": "Ecuador",
   "away": "Germany",
   "pick": [
-   0,
-   1
+   1,
+   2
   ],
-  "p_exact": 0.1354,
+  "p_exact": 0.095,
   "p_outcome": 0.5632,
-  "ev_points": 0.954,
+  "ev_points": 0.7531,
   "lh": 0.85,
   "la": 1.65,
   "probs_HDA": [
@@ -615,12 +615,12 @@
   "home": "Curaçao",
   "away": "Ivory Coast",
   "pick": [
-   0,
+   1,
    2
   ],
-  "p_exact": 0.153,
+  "p_exact": 0.0841,
   "p_outcome": 0.7695,
-  "ev_points": 1.1511,
+  "ev_points": 0.9377,
   "lh": 0.55,
   "la": 2.3,
   "probs_HDA": [
@@ -636,12 +636,12 @@
   "home": "Netherlands",
   "away": "Japan",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1114,
+  "p_exact": 0.0919,
   "p_outcome": 0.4642,
-  "ev_points": 0.808,
+  "ev_points": 0.648,
   "lh": 1.5,
   "la": 1.1,
   "probs_HDA": [
@@ -657,12 +657,12 @@
   "home": "Sweden",
   "away": "Tunisia",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1496,
+  "p_exact": 0.0858,
   "p_outcome": 0.4847,
-  "ev_points": 0.8877,
+  "ev_points": 0.6563,
   "lh": 1.35,
   "la": 0.85,
   "probs_HDA": [
@@ -678,12 +678,12 @@
   "home": "Tunisia",
   "away": "Japan",
   "pick": [
-   0,
-   1
+   1,
+   2
   ],
-  "p_exact": 0.1653,
+  "p_exact": 0.0837,
   "p_outcome": 0.5106,
-  "ev_points": 0.9403,
+  "ev_points": 0.6779,
   "lh": 0.75,
   "la": 1.35,
   "probs_HDA": [
@@ -699,12 +699,12 @@
   "home": "Netherlands",
   "away": "Sweden",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1243,
+  "p_exact": 0.0978,
   "p_outcome": 0.6097,
-  "ev_points": 0.9854,
+  "ev_points": 0.8053,
   "lh": 1.85,
   "la": 0.85,
   "probs_HDA": [
@@ -720,12 +720,12 @@
   "home": "Tunisia",
   "away": "Netherlands",
   "pick": [
-   0,
-   1
+   1,
+   2
   ],
-  "p_exact": 0.151,
+  "p_exact": 0.0925,
   "p_outcome": 0.6259,
-  "ev_points": 1.0413,
+  "ev_points": 0.8109,
   "lh": 0.7,
   "la": 1.75,
   "probs_HDA": [
@@ -741,12 +741,12 @@
   "home": "Japan",
   "away": "Sweden",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.133,
+  "p_exact": 0.0798,
   "p_outcome": 0.4055,
-  "ev_points": 0.7689,
+  "ev_points": 0.5651,
   "lh": 1.2,
   "la": 1.0,
   "probs_HDA": [
@@ -762,12 +762,12 @@
   "home": "Belgium",
   "away": "Egypt",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.121,
+  "p_exact": 0.098,
   "p_outcome": 0.586,
-  "ev_points": 0.9562,
+  "ev_points": 0.7819,
   "lh": 1.8,
   "la": 0.9,
   "probs_HDA": [
@@ -783,12 +783,12 @@
   "home": "Iran",
   "away": "New Zealand",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1454,
+  "p_exact": 0.0896,
   "p_outcome": 0.512,
-  "ev_points": 0.9128,
+  "ev_points": 0.6912,
   "lh": 1.45,
   "la": 0.85,
   "probs_HDA": [
@@ -804,12 +804,12 @@
   "home": "New Zealand",
   "away": "Egypt",
   "pick": [
-   0,
-   1
+   1,
+   2
   ],
-  "p_exact": 0.1662,
+  "p_exact": 0.0873,
   "p_outcome": 0.5647,
-  "ev_points": 1.001,
+  "ev_points": 0.7392,
   "lh": 0.7,
   "la": 1.5,
   "probs_HDA": [
@@ -825,12 +825,12 @@
   "home": "Belgium",
   "away": "Iran",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1378,
+  "p_exact": 0.094,
   "p_outcome": 0.6692,
-  "ev_points": 1.0628,
+  "ev_points": 0.8573,
   "lh": 1.95,
   "la": 0.7,
   "probs_HDA": [
@@ -846,12 +846,12 @@
   "home": "New Zealand",
   "away": "Belgium",
   "pick": [
-   0,
+   1,
    2
   ],
-  "p_exact": 0.1364,
+  "p_exact": 0.0887,
   "p_outcome": 0.7616,
-  "ev_points": 1.1207,
+  "ev_points": 0.9389,
   "lh": 0.65,
   "la": 2.4,
   "probs_HDA": [
@@ -867,12 +867,12 @@
   "home": "Egypt",
   "away": "Iran",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1556,
+  "p_exact": 0.0761,
   "p_outcome": 0.4264,
-  "ev_points": 0.8272,
+  "ev_points": 0.5785,
   "lh": 1.15,
   "la": 0.85,
   "probs_HDA": [
@@ -888,12 +888,12 @@
   "home": "Spain",
   "away": "Cape Verde",
   "pick": [
-   2,
+   3,
    0
   ],
-  "p_exact": 0.1403,
+  "p_exact": 0.1357,
   "p_outcome": 0.8547,
-  "ev_points": 1.2168,
+  "ev_points": 1.1261,
   "lh": 2.9,
   "la": 0.5,
   "probs_HDA": [
@@ -909,12 +909,12 @@
   "home": "Saudi Arabia",
   "away": "Uruguay",
   "pick": [
-   0,
-   1
+   1,
+   2
   ],
-  "p_exact": 0.1436,
+  "p_exact": 0.0943,
   "p_outcome": 0.6127,
-  "ev_points": 1.0173,
+  "ev_points": 0.8013,
   "lh": 0.75,
   "la": 1.75,
   "probs_HDA": [
@@ -930,12 +930,12 @@
   "home": "Uruguay",
   "away": "Cape Verde",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1519,
+  "p_exact": 0.0913,
   "p_outcome": 0.6612,
-  "ev_points": 1.0765,
+  "ev_points": 0.8438,
   "lh": 1.85,
   "la": 0.65,
   "probs_HDA": [
@@ -951,12 +951,12 @@
   "home": "Spain",
   "away": "Saudi Arabia",
   "pick": [
-   2,
-   0
+   3,
+   1
   ],
-  "p_exact": 0.1308,
+  "p_exact": 0.0733,
   "p_outcome": 0.8252,
-  "ev_points": 1.1773,
+  "ev_points": 0.9717,
   "lh": 2.8,
   "la": 0.6,
   "probs_HDA": [
@@ -972,12 +972,12 @@
   "home": "Uruguay",
   "away": "Spain",
   "pick": [
-   0,
-   1
+   1,
+   2
   ],
-  "p_exact": 0.1554,
+  "p_exact": 0.0903,
   "p_outcome": 0.5642,
-  "ev_points": 0.9846,
+  "ev_points": 0.7449,
   "lh": 0.75,
   "la": 1.55,
   "probs_HDA": [
@@ -993,12 +993,12 @@
   "home": "Cape Verde",
   "away": "Saudi Arabia",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1265,
+  "p_exact": 0.0797,
   "p_outcome": 0.3942,
-  "ev_points": 0.7454,
+  "ev_points": 0.5535,
   "lh": 1.2,
   "la": 1.05,
   "probs_HDA": [
@@ -1014,12 +1014,12 @@
   "home": "France",
   "away": "Senegal",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1604,
+  "p_exact": 0.0898,
   "p_outcome": 0.5901,
-  "ev_points": 1.0192,
+  "ev_points": 0.7698,
   "lh": 1.6,
   "la": 0.7,
   "probs_HDA": [
@@ -1035,12 +1035,12 @@
   "home": "Iraq",
   "away": "Norway",
   "pick": [
-   0,
-   2
+   1,
+   3
   ],
-  "p_exact": 0.1247,
+  "p_exact": 0.0756,
   "p_outcome": 0.7796,
-  "ev_points": 1.124,
+  "ev_points": 0.9309,
   "lh": 0.7,
   "la": 2.6,
   "probs_HDA": [
@@ -1056,12 +1056,12 @@
   "home": "Norway",
   "away": "Senegal",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1404,
+  "p_exact": 0.0884,
   "p_outcome": 0.4859,
-  "ev_points": 0.8757,
+  "ev_points": 0.6627,
   "lh": 1.4,
   "la": 0.9,
   "probs_HDA": [
@@ -1077,12 +1077,12 @@
   "home": "France",
   "away": "Iraq",
   "pick": [
-   2,
+   3,
    0
   ],
-  "p_exact": 0.2052,
+  "p_exact": 0.1915,
   "p_outcome": 0.9105,
-  "ev_points": 1.3511,
+  "ev_points": 1.2935,
   "lh": 2.8,
   "la": 0.15,
   "probs_HDA": [
@@ -1098,12 +1098,12 @@
   "home": "Norway",
   "away": "France",
   "pick": [
-   0,
-   1
+   1,
+   2
   ],
-  "p_exact": 0.1381,
+  "p_exact": 0.0939,
   "p_outcome": 0.5508,
-  "ev_points": 0.9447,
+  "ev_points": 0.7386,
   "lh": 0.85,
   "la": 1.6,
   "probs_HDA": [
@@ -1119,12 +1119,12 @@
   "home": "Senegal",
   "away": "Iraq",
   "pick": [
-   2,
-   0
+   3,
+   1
   ],
-  "p_exact": 0.1172,
+  "p_exact": 0.0776,
   "p_outcome": 0.7758,
-  "ev_points": 1.1099,
+  "ev_points": 0.9311,
   "lh": 2.65,
   "la": 0.75,
   "probs_HDA": [
@@ -1140,12 +1140,12 @@
   "home": "Argentina",
   "away": "Algeria",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1739,
+  "p_exact": 0.0861,
   "p_outcome": 0.6295,
-  "ev_points": 1.0789,
+  "ev_points": 0.8017,
   "lh": 1.65,
   "la": 0.6,
   "probs_HDA": [
@@ -1161,12 +1161,12 @@
   "home": "Austria",
   "away": "Jordan",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1344,
+  "p_exact": 0.0941,
   "p_outcome": 0.6793,
-  "ev_points": 1.0669,
+  "ev_points": 0.8675,
   "lh": 2.0,
   "la": 0.7,
   "probs_HDA": [
@@ -1182,12 +1182,12 @@
   "home": "Jordan",
   "away": "Algeria",
   "pick": [
-   0,
-   1
+   1,
+   2
   ],
-  "p_exact": 0.1265,
+  "p_exact": 0.0797,
   "p_outcome": 0.3942,
-  "ev_points": 0.7454,
+  "ev_points": 0.5535,
   "lh": 1.05,
   "la": 1.2,
   "probs_HDA": [
@@ -1203,12 +1203,12 @@
   "home": "Argentina",
   "away": "Austria",
   "pick": [
-   2,
-   0
+   3,
+   1
   ],
-  "p_exact": 0.1295,
+  "p_exact": 0.0744,
   "p_outcome": 0.7969,
-  "ev_points": 1.1482,
+  "ev_points": 0.9456,
   "lh": 2.65,
   "la": 0.65,
   "probs_HDA": [
@@ -1224,12 +1224,12 @@
   "home": "Algeria",
   "away": "Austria",
   "pick": [
-   0,
-   1
+   1,
+   2
   ],
-  "p_exact": 0.1303,
+  "p_exact": 0.0847,
   "p_outcome": 0.434,
-  "ev_points": 0.7999,
+  "ev_points": 0.6034,
   "lh": 1.0,
   "la": 1.3,
   "probs_HDA": [
@@ -1246,11 +1246,11 @@
   "away": "Argentina",
   "pick": [
    0,
-   2
+   3
   ],
-  "p_exact": 0.1403,
+  "p_exact": 0.1357,
   "p_outcome": 0.8547,
-  "ev_points": 1.2168,
+  "ev_points": 1.1261,
   "lh": 0.5,
   "la": 2.9,
   "probs_HDA": [
@@ -1266,12 +1266,12 @@
   "home": "Portugal",
   "away": "Congo DR",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1211,
+  "p_exact": 0.0932,
   "p_outcome": 0.7169,
-  "ev_points": 1.0794,
+  "ev_points": 0.9033,
   "lh": 2.2,
   "la": 0.7,
   "probs_HDA": [
@@ -1287,12 +1287,12 @@
   "home": "Uzbekistan",
   "away": "Colombia",
   "pick": [
-   0,
-   1
+   1,
+   2
   ],
-  "p_exact": 0.1378,
+  "p_exact": 0.094,
   "p_outcome": 0.6692,
-  "ev_points": 1.0628,
+  "ev_points": 0.8573,
   "lh": 0.7,
   "la": 1.95,
   "probs_HDA": [
@@ -1308,12 +1308,12 @@
   "home": "Colombia",
   "away": "Congo DR",
   "pick": [
-   2,
-   0
+   3,
+   1
   ],
-  "p_exact": 0.1308,
+  "p_exact": 0.0733,
   "p_outcome": 0.8252,
-  "ev_points": 1.1773,
+  "ev_points": 0.9717,
   "lh": 2.8,
   "la": 0.6,
   "probs_HDA": [
@@ -1329,12 +1329,12 @@
   "home": "Portugal",
   "away": "Uzbekistan",
   "pick": [
-   2,
-   0
+   3,
+   1
   ],
-  "p_exact": 0.1247,
+  "p_exact": 0.0756,
   "p_outcome": 0.7796,
-  "ev_points": 1.124,
+  "ev_points": 0.9309,
   "lh": 2.6,
   "la": 0.7,
   "probs_HDA": [
@@ -1350,12 +1350,12 @@
   "home": "Colombia",
   "away": "Portugal",
   "pick": [
-   0,
-   1
+   1,
+   2
   ],
-  "p_exact": 0.1236,
+  "p_exact": 0.0974,
   "p_outcome": 0.5744,
-  "ev_points": 0.9482,
+  "ev_points": 0.7691,
   "lh": 0.9,
   "la": 1.75,
   "probs_HDA": [
@@ -1371,12 +1371,12 @@
   "home": "Congo DR",
   "away": "Uzbekistan",
   "pick": [
-   0,
-   1
+   1,
+   2
   ],
-  "p_exact": 0.1265,
+  "p_exact": 0.0797,
   "p_outcome": 0.3942,
-  "ev_points": 0.7454,
+  "ev_points": 0.5535,
   "lh": 1.05,
   "la": 1.2,
   "probs_HDA": [
@@ -1392,12 +1392,12 @@
   "home": "England",
   "away": "Croatia",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1381,
+  "p_exact": 0.0939,
   "p_outcome": 0.5508,
-  "ev_points": 0.9447,
+  "ev_points": 0.7386,
   "lh": 1.6,
   "la": 0.85,
   "probs_HDA": [
@@ -1413,12 +1413,12 @@
   "home": "Ghana",
   "away": "Panama",
   "pick": [
-   1,
-   0
+   2,
+   1
   ],
-  "p_exact": 0.1251,
+  "p_exact": 0.0907,
   "p_outcome": 0.4748,
-  "ev_points": 0.8405,
+  "ev_points": 0.6562,
   "lh": 1.45,
   "la": 1.0,
   "probs_HDA": [
@@ -1434,12 +1434,12 @@
   "home": "Panama",
   "away": "Croatia",
   "pick": [
-   0,
-   1
+   1,
+   2
   ],
-  "p_exact": 0.1366,
+  "p_exact": 0.0957,
   "p_outcome": 0.5998,
-  "ev_points": 0.9938,
+  "ev_points": 0.7911,
   "lh": 0.8,
   "la": 1.75,
   "probs_HDA": [
@@ -1455,12 +1455,12 @@
   "home": "England",
   "away": "Ghana",
   "pick": [
-   2,
+   3,
    0
   ],
-  "p_exact": 0.2157,
+  "p_exact": 0.2013,
   "p_outcome": 0.9194,
-  "ev_points": 1.3716,
+  "ev_points": 1.322,
   "lh": 2.8,
   "la": 0.1,
   "probs_HDA": [
@@ -1476,12 +1476,12 @@
   "home": "Panama",
   "away": "England",
   "pick": [
-   0,
+   1,
    2
   ],
-  "p_exact": 0.1174,
+  "p_exact": 0.0939,
   "p_outcome": 0.7274,
-  "ev_points": 1.0579,
+  "ev_points": 0.9153,
   "lh": 0.8,
   "la": 2.4,
   "probs_HDA": [
@@ -1497,12 +1497,12 @@
   "home": "Croatia",
   "away": "Ghana",
   "pick": [
-   2,
+   3,
    0
   ],
-  "p_exact": 0.1714,
+  "p_exact": 0.1657,
   "p_outcome": 0.8912,
-  "ev_points": 1.2894,
+  "ev_points": 1.2225,
   "lh": 2.9,
   "la": 0.3,
   "probs_HDA": [

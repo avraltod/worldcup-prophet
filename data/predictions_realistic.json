@@ -1,0 +1,1042 @@
+[
+ {
+  "num": 1,
+  "stage": "Group A",
+  "home": "Mexico",
+  "away": "South Africa",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 2,
+  "stage": "Group A",
+  "home": "South Korea",
+  "away": "Czechia",
+  "hg": 1,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 3,
+  "stage": "Group B",
+  "home": "Canada",
+  "away": "Bosnia and Herzegovina",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 4,
+  "stage": "Group D",
+  "home": "United States",
+  "away": "Paraguay",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 5,
+  "stage": "Group C",
+  "home": "Haiti",
+  "away": "Scotland",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 6,
+  "stage": "Group D",
+  "home": "Australia",
+  "away": "Turkey",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 7,
+  "stage": "Group C",
+  "home": "Brazil",
+  "away": "Morocco",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 8,
+  "stage": "Group B",
+  "home": "Qatar",
+  "away": "Switzerland",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 9,
+  "stage": "Group E",
+  "home": "Ivory Coast",
+  "away": "Ecuador",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 10,
+  "stage": "Group E",
+  "home": "Germany",
+  "away": "Curaçao",
+  "hg": 3,
+  "ag": 0,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 11,
+  "stage": "Group F",
+  "home": "Netherlands",
+  "away": "Japan",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 12,
+  "stage": "Group F",
+  "home": "Sweden",
+  "away": "Tunisia",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 13,
+  "stage": "Group H",
+  "home": "Saudi Arabia",
+  "away": "Uruguay",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 14,
+  "stage": "Group H",
+  "home": "Spain",
+  "away": "Cape Verde",
+  "hg": 3,
+  "ag": 0,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 15,
+  "stage": "Group G",
+  "home": "Iran",
+  "away": "New Zealand",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 16,
+  "stage": "Group G",
+  "home": "Belgium",
+  "away": "Egypt",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 17,
+  "stage": "Group I",
+  "home": "France",
+  "away": "Senegal",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 18,
+  "stage": "Group I",
+  "home": "Iraq",
+  "away": "Norway",
+  "hg": 1,
+  "ag": 3,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 19,
+  "stage": "Group J",
+  "home": "Argentina",
+  "away": "Algeria",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 20,
+  "stage": "Group J",
+  "home": "Austria",
+  "away": "Jordan",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 21,
+  "stage": "Group L",
+  "home": "Ghana",
+  "away": "Panama",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 22,
+  "stage": "Group L",
+  "home": "England",
+  "away": "Croatia",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 23,
+  "stage": "Group K",
+  "home": "Portugal",
+  "away": "Congo DR",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 24,
+  "stage": "Group K",
+  "home": "Uzbekistan",
+  "away": "Colombia",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 25,
+  "stage": "Group A",
+  "home": "Czechia",
+  "away": "South Africa",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 26,
+  "stage": "Group B",
+  "home": "Switzerland",
+  "away": "Bosnia and Herzegovina",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 27,
+  "stage": "Group B",
+  "home": "Canada",
+  "away": "Qatar",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 28,
+  "stage": "Group A",
+  "home": "Mexico",
+  "away": "South Korea",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 29,
+  "stage": "Group C",
+  "home": "Brazil",
+  "away": "Haiti",
+  "hg": 2,
+  "ag": 0,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 30,
+  "stage": "Group C",
+  "home": "Scotland",
+  "away": "Morocco",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 31,
+  "stage": "Group D",
+  "home": "Turkey",
+  "away": "Paraguay",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 32,
+  "stage": "Group D",
+  "home": "United States",
+  "away": "Australia",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 33,
+  "stage": "Group E",
+  "home": "Germany",
+  "away": "Ivory Coast",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 34,
+  "stage": "Group E",
+  "home": "Ecuador",
+  "away": "Curaçao",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 35,
+  "stage": "Group F",
+  "home": "Netherlands",
+  "away": "Sweden",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 36,
+  "stage": "Group F",
+  "home": "Tunisia",
+  "away": "Japan",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 37,
+  "stage": "Group H",
+  "home": "Uruguay",
+  "away": "Cape Verde",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 38,
+  "stage": "Group H",
+  "home": "Spain",
+  "away": "Saudi Arabia",
+  "hg": 3,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 39,
+  "stage": "Group G",
+  "home": "Belgium",
+  "away": "Iran",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 40,
+  "stage": "Group G",
+  "home": "New Zealand",
+  "away": "Egypt",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 41,
+  "stage": "Group I",
+  "home": "Norway",
+  "away": "Senegal",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 42,
+  "stage": "Group I",
+  "home": "France",
+  "away": "Iraq",
+  "hg": 3,
+  "ag": 0,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 43,
+  "stage": "Group J",
+  "home": "Argentina",
+  "away": "Austria",
+  "hg": 3,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 44,
+  "stage": "Group J",
+  "home": "Jordan",
+  "away": "Algeria",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 45,
+  "stage": "Group L",
+  "home": "England",
+  "away": "Ghana",
+  "hg": 3,
+  "ag": 0,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 46,
+  "stage": "Group L",
+  "home": "Panama",
+  "away": "Croatia",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 47,
+  "stage": "Group K",
+  "home": "Portugal",
+  "away": "Uzbekistan",
+  "hg": 3,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 48,
+  "stage": "Group K",
+  "home": "Colombia",
+  "away": "Congo DR",
+  "hg": 3,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 49,
+  "stage": "Group C",
+  "home": "Scotland",
+  "away": "Brazil",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 50,
+  "stage": "Group C",
+  "home": "Morocco",
+  "away": "Haiti",
+  "hg": 2,
+  "ag": 0,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 51,
+  "stage": "Group B",
+  "home": "Switzerland",
+  "away": "Canada",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 52,
+  "stage": "Group B",
+  "home": "Bosnia and Herzegovina",
+  "away": "Qatar",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 53,
+  "stage": "Group A",
+  "home": "Czechia",
+  "away": "Mexico",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 54,
+  "stage": "Group A",
+  "home": "South Africa",
+  "away": "South Korea",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 55,
+  "stage": "Group E",
+  "home": "Curaçao",
+  "away": "Ivory Coast",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 56,
+  "stage": "Group E",
+  "home": "Ecuador",
+  "away": "Germany",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 57,
+  "stage": "Group F",
+  "home": "Japan",
+  "away": "Sweden",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 58,
+  "stage": "Group F",
+  "home": "Tunisia",
+  "away": "Netherlands",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 59,
+  "stage": "Group D",
+  "home": "Turkey",
+  "away": "United States",
+  "hg": 1,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 60,
+  "stage": "Group D",
+  "home": "Paraguay",
+  "away": "Australia",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 61,
+  "stage": "Group I",
+  "home": "Norway",
+  "away": "France",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 62,
+  "stage": "Group I",
+  "home": "Senegal",
+  "away": "Iraq",
+  "hg": 3,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 63,
+  "stage": "Group G",
+  "home": "Egypt",
+  "away": "Iran",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 64,
+  "stage": "Group G",
+  "home": "New Zealand",
+  "away": "Belgium",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 65,
+  "stage": "Group H",
+  "home": "Cape Verde",
+  "away": "Saudi Arabia",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 66,
+  "stage": "Group H",
+  "home": "Uruguay",
+  "away": "Spain",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 67,
+  "stage": "Group L",
+  "home": "Panama",
+  "away": "England",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 68,
+  "stage": "Group L",
+  "home": "Croatia",
+  "away": "Ghana",
+  "hg": 3,
+  "ag": 0,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 69,
+  "stage": "Group J",
+  "home": "Algeria",
+  "away": "Austria",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 70,
+  "stage": "Group J",
+  "home": "Jordan",
+  "away": "Argentina",
+  "hg": 0,
+  "ag": 3,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 71,
+  "stage": "Group K",
+  "home": "Colombia",
+  "away": "Portugal",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 72,
+  "stage": "Group K",
+  "home": "Congo DR",
+  "away": "Uzbekistan",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": null
+ },
+ {
+  "num": 73,
+  "stage": "KO",
+  "home": "South Korea",
+  "away": "Canada",
+  "hg": 1,
+  "ag": 1,
+  "pen": true,
+  "adv": "Canada"
+ },
+ {
+  "num": 74,
+  "stage": "KO",
+  "home": "Germany",
+  "away": "Paraguay",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": "Germany"
+ },
+ {
+  "num": 75,
+  "stage": "KO",
+  "home": "Netherlands",
+  "away": "Morocco",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": "Netherlands"
+ },
+ {
+  "num": 76,
+  "stage": "KO",
+  "home": "Brazil",
+  "away": "Japan",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": "Brazil"
+ },
+ {
+  "num": 77,
+  "stage": "KO",
+  "home": "France",
+  "away": "Sweden",
+  "hg": 2,
+  "ag": 0,
+  "pen": false,
+  "adv": "France"
+ },
+ {
+  "num": 78,
+  "stage": "KO",
+  "home": "Ecuador",
+  "away": "Norway",
+  "hg": 1,
+  "ag": 1,
+  "pen": true,
+  "adv": "Norway"
+ },
+ {
+  "num": 79,
+  "stage": "KO",
+  "home": "Mexico",
+  "away": "Ivory Coast",
+  "hg": 2,
+  "ag": 0,
+  "pen": false,
+  "adv": "Mexico"
+ },
+ {
+  "num": 80,
+  "stage": "KO",
+  "home": "England",
+  "away": "Algeria",
+  "hg": 2,
+  "ag": 0,
+  "pen": false,
+  "adv": "England"
+ },
+ {
+  "num": 81,
+  "stage": "KO",
+  "home": "United States",
+  "away": "Bosnia and Herzegovina",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": "United States"
+ },
+ {
+  "num": 82,
+  "stage": "KO",
+  "home": "Belgium",
+  "away": "Czechia",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": "Belgium"
+ },
+ {
+  "num": 83,
+  "stage": "KO",
+  "home": "Colombia",
+  "away": "Croatia",
+  "hg": 1,
+  "ag": 1,
+  "pen": true,
+  "adv": "Croatia"
+ },
+ {
+  "num": 84,
+  "stage": "KO",
+  "home": "Spain",
+  "away": "Austria",
+  "hg": 2,
+  "ag": 0,
+  "pen": false,
+  "adv": "Spain"
+ },
+ {
+  "num": 85,
+  "stage": "KO",
+  "home": "Switzerland",
+  "away": "Iran",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": "Switzerland"
+ },
+ {
+  "num": 86,
+  "stage": "KO",
+  "home": "Argentina",
+  "away": "Uruguay",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": "Argentina"
+ },
+ {
+  "num": 87,
+  "stage": "KO",
+  "home": "Portugal",
+  "away": "Senegal",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": "Portugal"
+ },
+ {
+  "num": 88,
+  "stage": "KO",
+  "home": "Turkey",
+  "away": "Egypt",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": "Turkey"
+ },
+ {
+  "num": 89,
+  "stage": "KO",
+  "home": "Germany",
+  "away": "France",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": "France"
+ },
+ {
+  "num": 90,
+  "stage": "KO",
+  "home": "Canada",
+  "away": "Netherlands",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": "Netherlands"
+ },
+ {
+  "num": 91,
+  "stage": "KO",
+  "home": "Brazil",
+  "away": "Norway",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": "Brazil"
+ },
+ {
+  "num": 92,
+  "stage": "KO",
+  "home": "Mexico",
+  "away": "England",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": "England"
+ },
+ {
+  "num": 93,
+  "stage": "KO",
+  "home": "Croatia",
+  "away": "Spain",
+  "hg": 0,
+  "ag": 2,
+  "pen": false,
+  "adv": "Spain"
+ },
+ {
+  "num": 94,
+  "stage": "KO",
+  "home": "United States",
+  "away": "Belgium",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": "Belgium"
+ },
+ {
+  "num": 95,
+  "stage": "KO",
+  "home": "Argentina",
+  "away": "Turkey",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": "Argentina"
+ },
+ {
+  "num": 96,
+  "stage": "KO",
+  "home": "Switzerland",
+  "away": "Portugal",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": "Portugal"
+ },
+ {
+  "num": 97,
+  "stage": "KO",
+  "home": "France",
+  "away": "Netherlands",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": "France"
+ },
+ {
+  "num": 98,
+  "stage": "KO",
+  "home": "Spain",
+  "away": "Belgium",
+  "hg": 2,
+  "ag": 0,
+  "pen": false,
+  "adv": "Spain"
+ },
+ {
+  "num": 99,
+  "stage": "KO",
+  "home": "Brazil",
+  "away": "England",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": "England"
+ },
+ {
+  "num": 100,
+  "stage": "KO",
+  "home": "Argentina",
+  "away": "Portugal",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": "Argentina"
+ },
+ {
+  "num": 101,
+  "stage": "KO",
+  "home": "France",
+  "away": "Spain",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": "Spain"
+ },
+ {
+  "num": 102,
+  "stage": "KO",
+  "home": "England",
+  "away": "Argentina",
+  "hg": 1,
+  "ag": 2,
+  "pen": false,
+  "adv": "Argentina"
+ },
+ {
+  "num": 103,
+  "stage": "KO",
+  "home": "France",
+  "away": "England",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": "France"
+ },
+ {
+  "num": 104,
+  "stage": "KO",
+  "home": "Spain",
+  "away": "Argentina",
+  "hg": 2,
+  "ag": 1,
+  "pen": false,
+  "adv": "Spain"
+ }
+]

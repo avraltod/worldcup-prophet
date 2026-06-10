@@ -11,7 +11,7 @@ GROUP_ANALYSIS = {
  "H": "**Why:** The champion's runway. Spain is the highest-rated team in the field (Elo 2165), Yamal's fitness trending right, 85%+ market favorite in two of three games. Bielsa's healthy Uruguay is a rock-solid second. Cape Verde's fairytale ends at 3 points, GD −2.",
  "I": "**Why:** France tops it (66% market) despite the odd friendly loss — depth absorbs anything. The story is Norway: first World Cup since 1998, Haaland fit, clear seconds (24% group-winner vs Senegal's 10%); Norway–Senegal on matchday 2 is the real final. Senegal advances as the strongest third-placer in the tournament — which is why Portugal drawing them in the R32 matters.",
  "J": "**Why:** The defending champions stroll — Argentina's Elo (2113) towers here, Messi's hamstring managed. Austria is Europe's stealth team (Rangnick-built pressing) and beats Algeria in the decider (43% vs 28%). Algeria's win over Jordan secures third place.",
- "K": "**Why:** The group rewritten on deadline day. Raw Elo called Portugal–Colombia a dead tie; the prediction markets said Portugal 63% / Colombia 32% to win the group — so the model was recalibrated (140 Elo-equivalent points) and Portugal now tops it via a 1-0 in the head-to-head. This single call transforms Portugal's tournament from R32 exit to QF run. The biggest known sensitivity in the bracket.",
+ "K": "**Why:** The group rewritten on deadline day. Raw Elo called Portugal–Colombia a dead tie; the prediction markets said Portugal 63% / Colombia 32% to win the group — so the model was recalibrated (140 Elo-equivalent points) and Portugal now tops it via a 2-1 in the head-to-head. This single call transforms Portugal's tournament from R32 exit to QF run. The biggest known sensitivity in the bracket.",
  "L": "**Why:** England dominates (68% market, no injuries) — and that reliability quietly powers the bracket: because England nearly always wins Group L, Croatia nearly always lands second, which is why Croatia owns its R32 slot. Modrić's farewell squad is in poor warm-up form (−10 rating) but still outclasses Ghana and Panama.",
 }
 
@@ -27,7 +27,7 @@ KO_ANALYSIS = {
  "Third place — July 18":
   "**Why France:** the third-place game rewards squad depth and motivation management — France has more of both than England (45/27/28).",
  "FINAL — July 19, MetLife Stadium":
-  "**Why Spain:** the most likely final (10.8% of all simulations — no other pairing scores higher) and the most likely champion (27.4%). Spain beats Argentina in 59% of simulated finals: the Elo gap (2160 vs 2113 adjusted), a younger core, and the deepest midfield in the tournament. Predicted score 1-0 — the modal scoreline at 13.2%. Honesty box: Spain still fails to win 72.6% of simulated tournaments; this is the best single bet, not a promise.",
+  "**Why Spain:** the most likely final (10.8% of all simulations — no other pairing scores higher) and the most likely champion (27.4%). Spain beats Argentina in 59% of simulated finals: the Elo gap (2160 vs 2113 adjusted), a younger core, and the deepest midfield in the tournament. Predicted score 2-1 — Spain edges a tight, high-quality final. Honesty box: Spain still fails to win 72.6% of simulated tournaments; this is the best single bet, not a promise.",
 }
 
 DIARY_INTRO = """## Tournament Diary — What Went Wrong & What We Learned
