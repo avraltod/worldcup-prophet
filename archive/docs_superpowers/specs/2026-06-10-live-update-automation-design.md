@@ -38,10 +38,10 @@ trajectory, the scoreboard) updates.
 
 | File | Responsibility |
 |---|---|
-| `scripts/fetch_results.py` | Pure data layer. Fetch final scores from football-data (primary) + ESPN hidden JSON API (cross-check); normalize to `{matchno: [hg, ag]}` via `fixtures.canon`. No side effects; returns data + per-match source-agreement flags. Unit-testable. |
+| `scripts/fetch_results.py` | Pure data layer. Fetch fixtures + final scores from the ESPN public JSON scoreboard (`soccer/fifa.world`); normalize to `{matchno: [hg, ag]}` via `fixtures.canon`, carrying each match's UTC kickoff and finality status. No side effects; pure parse functions are unit-testable against captured JSON. |
 | `scripts/live_update.py` | Orchestrator. Compute the matured-and-unprocessed target set, call `fetch_results`, run the confidence gate, and **only if clean** invoke the existing scripts and regenerate the README block. Supports `--dry-run`. |
 | `.github/workflows/live-update.yml` | GitHub Actions cron. Checkout, install pinned deps, run `live_update.py`, commit + push if files changed, email on failure. |
-| `requirements-live.txt` | Pinned deps for the workflow (football-data client + requests). |
+| `requirements-live.txt` | Pinned deps for the workflow (`requests` only; everything else is stdlib + repo code). |
 
 ### Reused (unchanged) components
 
@@ -80,13 +80,14 @@ hold (do not guess).
 ```
 GitHub Actions cron (13:00 UTC)
  → live_update.py
-    1. target = { matches with kickoff (schedule_ub.json) > 3h before now }
-               − { already in results_log.json }
-    2. fetch_results.py: football-data + ESPN for the target matches
-    3. confidence gate (below). Fail → exit 1, no writes → Actions emails. STOP.
-    4. clean → record_update.py '<{"group": {...}}>' "Matchday N, <date>"
+    1. fetch_results.py: pull ESPN scoreboard over a window of recent dates;
+       each event carries UTC kickoff + finality. target =
+       { ESPN events that are FINAL and matured (kickoff > 3h ago) and map to
+       a GROUP fixture } − { match#s already in results_log.json }
+    2. confidence gate (below). Fail → exit 1, no writes → Actions emails. STOP.
+    3. clean → record_update.py '<{"group": {...}}>' "Matchday N, <date>"
              → score_day.py '<[{home, away, hg, ag}, ...]>'
-    5. regenerate README LIVE-RESULTS block from trajectory.json latest snapshot
+    4. regenerate README LIVE-RESULTS block from trajectory.json latest snapshot
  → workflow: if files changed → commit "Live update: <date> (matchday N)" + push; else no-op
 ```
 
@@ -95,14 +96,24 @@ GitHub Actions cron (13:00 UTC)
 A day's batch publishes **only if every check passes**. Any failure → log the reason,
 exit non-zero, write nothing → GitHub Actions emails the user.
 
-1. **Completeness** — every match in the target set must be present and final in the fetch.
-   A missing/unfinished match → hold the whole day (keeps per-batch KL `info_bits` honest).
-2. **Two-source agreement** — football-data and ESPN must report the same `(hg, ag)` and both
-   mark the match finished/FT. Disagreement or non-final → hold.
-3. **Sanity bounds** — scores are integers 0–19; both team names map via `fixtures.canon`.
-   Unmapped name → hold (catches wrong-tournament / renamed-team fetches).
+1. **Strict finality** — a match is eligible only if ESPN reports `status.type.state == "post"`
+   **and** `status.type.completed == true` **and** `status.type.detail == "FT"` (plain
+   full-time; group matches never go to ET/pens, so `AET`/`FT-Pens` details are out-of-scope
+   knockouts and are ignored) **and** both competitors carry an integer score. Anything else →
+   the match is simply not in the target set (not a hold).
+2. **Completeness within a matchday** — when at least one match of a given calendar matchday is
+   eligible, every *matured* match (kickoff > 3h ago) of that same matchday must also be
+   eligible; if a sibling match is matured but not yet `FT`, **hold the whole matchday** (keeps
+   per-batch KL `info_bits` honest). Matches not yet matured are excluded silently.
+3. **Sanity bounds** — scores are integers 0–19; both team names map via `fixtures.canon` to a
+   single GROUP fixture. Unmapped name, or a pairing that isn't a known group fixture → hold
+   (catches wrong-tournament / renamed-team / knockout fetches).
 4. **No-op detection** — if the target set is empty (rest day or already processed), exit 0
    cleanly: no commit, no trajectory entry.
+
+Single-source note: per the source decision, ESPN is the **only** feed. The strict-finality
+and sanity checks (plus every update being a small, human-visible public commit) are the
+safeguards in place of cross-source agreement.
 
 ### Idempotency
 
@@ -132,15 +143,13 @@ exit non-zero, write nothing → GitHub Actions emails the user.
   the exact cron time is not critical and matchday/UTC-boundary crossings don't cause false
   holds.
 - **Concurrency:** a workflow `concurrency` group prevents overlapping runs.
-- **Kickoff-time parsing (implementation detail the plan must resolve):** `schedule_ub.json`
-  stores times as bare strings like `"Jun 12 03:00"` with no explicit year or timezone. The
-  plan must establish the canonical timezone these represent and normalize them to UTC
-  (with year 2026) so the "kickoff > 3h ago" maturity test is correct. If the timezone cannot
-  be verified, the safe fallback is to widen the maturity margin (e.g. require kickoff > 12h
-  ago) so the gate never processes an in-progress match.
+- **Kickoff time:** taken directly from ESPN's `event.date` (ISO-8601 UTC, e.g.
+  `"2026-06-11T19:00Z"`). No `schedule_ub.json` timezone inference needed — the maturity test
+  compares ESPN's UTC kickoff against `now − 3h`.
 - **Push:** built-in `GITHUB_TOKEN` with `permissions: contents: write`. No PAT.
-- **Data sources:** football-data, ESPN hidden JSON API, and Polymarket gamma-api are all
-  public, no API key → the pipeline needs **zero secrets**.
+- **Data sources:** ESPN public JSON scoreboard (scores + UTC kickoff) and Polymarket
+  gamma-api (market champion, via the reused `market_snapshot.py`) are both public, no API key
+  → the pipeline needs **zero secrets**.
 - **Commit identity:** `github-actions[bot]`, so automated updates are visually distinct from
   locked human commits. Message: `Live update: <date> (matchday N)`.
 - **Deps:** pinned in `requirements-live.txt` for reproducible Actions builds.
