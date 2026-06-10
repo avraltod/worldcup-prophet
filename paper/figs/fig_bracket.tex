@@ -1,0 +1,679 @@
+\documentclass[border=8pt]{standalone}
+\usepackage{tikz}\usepackage{amssymb}\usepackage{xcolor}
+\definecolor{fr}{HTML}{CE1126}
+\definecolor{fb}{HTML}{0033A0}
+\definecolor{fy}{HTML}{FCD116}
+\definecolor{fg}{HTML}{009639}
+\definecolor{fk}{HTML}{000000}
+\definecolor{fw}{HTML}{FFFFFF}
+\definecolor{fw2}{HTML}{F2F2F2}
+\definecolor{fo}{HTML}{F77F00}
+\definecolor{fs}{HTML}{75AADB}
+\begin{document}
+\begin{tikzpicture}
+\node[gray!65,font=\bfseries\scriptsize] at (1.00,10.2){ROUND OF 32};
+\node[gray!65,font=\bfseries\scriptsize] at (26.00,10.2){ROUND OF 32};
+\node[gray!65,font=\bfseries\scriptsize] at (3.70,10.2){R16};
+\node[gray!65,font=\bfseries\scriptsize] at (23.30,10.2){R16};
+\node[gray!65,font=\bfseries\scriptsize] at (6.40,10.2){QF};
+\node[gray!65,font=\bfseries\scriptsize] at (20.60,10.2){QF};
+\node[gray!65,font=\bfseries\scriptsize] at (9.10,10.2){SF};
+\node[gray!65,font=\bfseries\scriptsize] at (17.90,10.2){SF};
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](0.000,9.390)rectangle(2.000,9.810);
+\begin{scope}\clip (0.070,9.450) rectangle (0.530,9.750);
+\fill[fk](0.070,9.650)rectangle(0.530,9.750);
+\fill[fr](0.070,9.550)rectangle(0.530,9.650);
+\fill[fy](0.070,9.450)rectangle(0.530,9.550);
+\end{scope}
+\draw[gray!50,line width=0.12pt](0.070,9.450)rectangle(0.530,9.750);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (0.580,9.600){GER};
+\node[anchor=east, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (-0.070,9.600){E1};
+\draw[fill=gray!7, draw=gray!30, rounded corners=1pt](0.000,8.750)rectangle(2.000,9.170);
+\begin{scope}\clip (0.070,8.810) rectangle (0.530,9.110);
+\fill[fr](0.070,9.010)rectangle(0.530,9.110);
+\fill[fw](0.070,8.910)rectangle(0.530,9.010);
+\fill[fb](0.070,8.810)rectangle(0.530,8.910);
+\end{scope}
+\draw[gray!50,line width=0.12pt](0.070,8.810)rectangle(0.530,9.110);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=gray!60] at (0.580,8.960){PAR};
+\node[anchor=east, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (-0.070,8.960){D3};
+\draw[gray!50,line width=0.4pt](2.000,9.600)--(2.350,9.600);
+\draw[gray!50,line width=0.4pt](2.000,8.960)--(2.350,8.960);
+\draw[gray!50,line width=0.4pt](2.350,9.600)--(2.350,8.960);
+\draw[gray!50,line width=0.4pt](2.350,9.280)--(2.700,9.280);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](0.000,8.110)rectangle(2.000,8.530);
+\begin{scope}\clip (0.070,8.170) rectangle (0.530,8.470);
+\fill[fb](0.070,8.170)rectangle(0.223,8.470);
+\fill[fw](0.223,8.170)rectangle(0.377,8.470);
+\fill[fr](0.377,8.170)rectangle(0.530,8.470);
+\end{scope}
+\draw[gray!50,line width=0.12pt](0.070,8.170)rectangle(0.530,8.470);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (0.580,8.320){FRA};
+\node[anchor=east, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (-0.070,8.320){I1};
+\draw[fill=gray!7, draw=gray!30, rounded corners=1pt](0.000,7.470)rectangle(2.000,7.890);
+\begin{scope}\clip (0.070,7.530) rectangle (0.530,7.830);
+\fill[fb](0.070,7.530)rectangle(0.530,7.830);
+\fill[fy](0.190,7.530)rectangle(0.262,7.830);
+\fill[fy](0.070,7.644)rectangle(0.530,7.716);
+\end{scope}
+\draw[gray!50,line width=0.12pt](0.070,7.530)rectangle(0.530,7.830);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=gray!60] at (0.580,7.680){SWE};
+\node[anchor=east, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (-0.070,7.680){F3};
+\draw[gray!50,line width=0.4pt](2.000,8.320)--(2.350,8.320);
+\draw[gray!50,line width=0.4pt](2.000,7.680)--(2.350,7.680);
+\draw[gray!50,line width=0.4pt](2.350,8.320)--(2.350,7.680);
+\draw[gray!50,line width=0.4pt](2.350,8.000)--(2.700,8.000);
+\draw[fill=gray!7, draw=gray!30, rounded corners=1pt](0.000,6.830)rectangle(2.000,7.250);
+\begin{scope}\clip (0.070,6.890) rectangle (0.530,7.190);
+\fill[fw](0.070,6.890)rectangle(0.530,7.190);
+\fill[fr](0.300,7.040)circle(0.096cm);
+\end{scope}
+\draw[gray!50,line width=0.12pt](0.070,6.890)rectangle(0.530,7.190);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=gray!60] at (0.580,7.040){KOR};
+\node[anchor=east, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (-0.070,7.040){A2};
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](0.000,6.190)rectangle(2.000,6.610);
+\begin{scope}\clip (0.070,6.250) rectangle (0.530,6.550);
+\fill[fr](0.070,6.250)rectangle(0.223,6.550);
+\fill[fw](0.223,6.250)rectangle(0.377,6.550);
+\fill[fr](0.377,6.250)rectangle(0.530,6.550);
+\end{scope}
+\draw[gray!50,line width=0.12pt](0.070,6.250)rectangle(0.530,6.550);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (0.580,6.400){CAN};
+\node[anchor=east, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (-0.070,6.400){B2};
+\draw[gray!50,line width=0.4pt](2.000,7.040)--(2.350,7.040);
+\draw[gray!50,line width=0.4pt](2.000,6.400)--(2.350,6.400);
+\draw[gray!50,line width=0.4pt](2.350,7.040)--(2.350,6.400);
+\draw[gray!50,line width=0.4pt](2.350,6.720)--(2.700,6.720);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](0.000,5.550)rectangle(2.000,5.970);
+\begin{scope}\clip (0.070,5.610) rectangle (0.530,5.910);
+\fill[fr](0.070,5.810)rectangle(0.530,5.910);
+\fill[fw](0.070,5.710)rectangle(0.530,5.810);
+\fill[fb](0.070,5.610)rectangle(0.530,5.710);
+\end{scope}
+\draw[gray!50,line width=0.12pt](0.070,5.610)rectangle(0.530,5.910);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (0.580,5.760){NED};
+\node[anchor=east, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (-0.070,5.760){F1};
+\draw[fill=gray!7, draw=gray!30, rounded corners=1pt](0.000,4.910)rectangle(2.000,5.330);
+\begin{scope}\clip (0.070,4.970) rectangle (0.530,5.270);
+\fill[fr](0.070,4.970)rectangle(0.530,5.270);
+\end{scope}
+\draw[gray!50,line width=0.12pt](0.070,4.970)rectangle(0.530,5.270);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=gray!60] at (0.580,5.120){MAR};
+\node[anchor=east, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (-0.070,5.120){C2};
+\draw[gray!50,line width=0.4pt](2.000,5.760)--(2.350,5.760);
+\draw[gray!50,line width=0.4pt](2.000,5.120)--(2.350,5.120);
+\draw[gray!50,line width=0.4pt](2.350,5.760)--(2.350,5.120);
+\draw[gray!50,line width=0.4pt](2.350,5.440)--(2.700,5.440);
+\draw[fill=gray!7, draw=gray!30, rounded corners=1pt](0.000,4.270)rectangle(2.000,4.690);
+\begin{scope}\clip (0.070,4.330) rectangle (0.530,4.630);
+\fill[fy](0.070,4.555)rectangle(0.530,4.630);
+\fill[fb](0.070,4.405)rectangle(0.530,4.555);
+\fill[fr](0.070,4.330)rectangle(0.530,4.405);
+\end{scope}
+\draw[gray!50,line width=0.12pt](0.070,4.330)rectangle(0.530,4.630);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=gray!60] at (0.580,4.480){COL};
+\node[anchor=east, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (-0.070,4.480){K2};
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](0.000,3.630)rectangle(2.000,4.050);
+\begin{scope}\clip (0.070,3.690) rectangle (0.530,3.990);
+\fill[fr](0.070,3.890)rectangle(0.530,3.990);
+\fill[fw](0.070,3.790)rectangle(0.530,3.890);
+\fill[fb](0.070,3.690)rectangle(0.530,3.790);
+\end{scope}
+\draw[gray!50,line width=0.12pt](0.070,3.690)rectangle(0.530,3.990);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (0.580,3.840){CRO};
+\node[anchor=east, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (-0.070,3.840){L2};
+\draw[gray!50,line width=0.4pt](2.000,4.480)--(2.350,4.480);
+\draw[gray!50,line width=0.4pt](2.000,3.840)--(2.350,3.840);
+\draw[gray!50,line width=0.4pt](2.350,4.480)--(2.350,3.840);
+\draw[gray!50,line width=0.4pt](2.350,4.160)--(2.700,4.160);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](0.000,2.990)rectangle(2.000,3.410);
+\begin{scope}\clip (0.070,3.050) rectangle (0.530,3.350);
+\fill[fr](0.070,3.275)rectangle(0.530,3.350);
+\fill[fy](0.070,3.125)rectangle(0.530,3.275);
+\fill[fr](0.070,3.050)rectangle(0.530,3.125);
+\end{scope}
+\draw[gray!50,line width=0.12pt](0.070,3.050)rectangle(0.530,3.350);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (0.580,3.200){ESP};
+\node[anchor=east, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (-0.070,3.200){H1};
+\draw[fill=gray!7, draw=gray!30, rounded corners=1pt](0.000,2.350)rectangle(2.000,2.770);
+\begin{scope}\clip (0.070,2.410) rectangle (0.530,2.710);
+\fill[fr](0.070,2.610)rectangle(0.530,2.710);
+\fill[fw](0.070,2.510)rectangle(0.530,2.610);
+\fill[fr](0.070,2.410)rectangle(0.530,2.510);
+\end{scope}
+\draw[gray!50,line width=0.12pt](0.070,2.410)rectangle(0.530,2.710);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=gray!60] at (0.580,2.560){AUT};
+\node[anchor=east, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (-0.070,2.560){J2};
+\draw[gray!50,line width=0.4pt](2.000,3.200)--(2.350,3.200);
+\draw[gray!50,line width=0.4pt](2.000,2.560)--(2.350,2.560);
+\draw[gray!50,line width=0.4pt](2.350,3.200)--(2.350,2.560);
+\draw[gray!50,line width=0.4pt](2.350,2.880)--(2.700,2.880);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](0.000,1.710)rectangle(2.000,2.130);
+\begin{scope}\clip (0.070,1.770) rectangle (0.530,2.070);
+\fill[fw](0.070,1.770)rectangle(0.530,2.070);
+\fill[fr](0.070,1.770)rectangle(0.530,1.830);
+\fill[fr](0.070,1.890)rectangle(0.530,1.950);
+\fill[fr](0.070,2.010)rectangle(0.530,2.070);
+\fill[fb](0.070,1.920)rectangle(0.263,2.070);
+\end{scope}
+\draw[gray!50,line width=0.12pt](0.070,1.770)rectangle(0.530,2.070);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (0.580,1.920){USA};
+\node[anchor=east, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (-0.070,1.920){D1};
+\draw[fill=gray!7, draw=gray!30, rounded corners=1pt](0.000,1.070)rectangle(2.000,1.490);
+\begin{scope}\clip (0.070,1.130) rectangle (0.530,1.430);
+\fill[fb](0.070,1.130)rectangle(0.530,1.430);
+\fill[fy](0.070,1.430)--(0.070,1.130)--(0.530,1.130)--cycle;
+\end{scope}
+\draw[gray!50,line width=0.12pt](0.070,1.130)rectangle(0.530,1.430);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=gray!60] at (0.580,1.280){BIH};
+\node[anchor=east, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (-0.070,1.280){B3};
+\draw[gray!50,line width=0.4pt](2.000,1.920)--(2.350,1.920);
+\draw[gray!50,line width=0.4pt](2.000,1.280)--(2.350,1.280);
+\draw[gray!50,line width=0.4pt](2.350,1.920)--(2.350,1.280);
+\draw[gray!50,line width=0.4pt](2.350,1.600)--(2.700,1.600);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](0.000,0.430)rectangle(2.000,0.850);
+\begin{scope}\clip (0.070,0.490) rectangle (0.530,0.790);
+\fill[fk](0.070,0.490)rectangle(0.223,0.790);
+\fill[fy](0.223,0.490)rectangle(0.377,0.790);
+\fill[fr](0.377,0.490)rectangle(0.530,0.790);
+\end{scope}
+\draw[gray!50,line width=0.12pt](0.070,0.490)rectangle(0.530,0.790);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (0.580,0.640){BEL};
+\node[anchor=east, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (-0.070,0.640){G1};
+\draw[fill=gray!7, draw=gray!30, rounded corners=1pt](0.000,-0.210)rectangle(2.000,0.210);
+\begin{scope}\clip (0.070,-0.150) rectangle (0.530,0.150);
+\fill[fw2](0.070,-0.150)rectangle(0.530,0.150);
+\fill[fb](0.070,0.150)--(0.070,-0.150)--(0.530,-0.150)--cycle;
+\end{scope}
+\draw[gray!50,line width=0.12pt](0.070,-0.150)rectangle(0.530,0.150);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=gray!60] at (0.580,0.000){CZE};
+\node[anchor=east, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (-0.070,0.000){A3};
+\draw[gray!50,line width=0.4pt](2.000,0.640)--(2.350,0.640);
+\draw[gray!50,line width=0.4pt](2.000,0.000)--(2.350,0.000);
+\draw[gray!50,line width=0.4pt](2.350,0.640)--(2.350,0.000);
+\draw[gray!50,line width=0.4pt](2.350,0.320)--(2.700,0.320);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](2.700,9.070)rectangle(4.700,9.490);
+\begin{scope}\clip (2.770,9.130) rectangle (3.230,9.430);
+\fill[fk](2.770,9.330)rectangle(3.230,9.430);
+\fill[fr](2.770,9.230)rectangle(3.230,9.330);
+\fill[fy](2.770,9.130)rectangle(3.230,9.230);
+\end{scope}
+\draw[gray!50,line width=0.12pt](2.770,9.130)rectangle(3.230,9.430);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (3.280,9.280){GER};
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](2.700,7.790)rectangle(4.700,8.210);
+\begin{scope}\clip (2.770,7.850) rectangle (3.230,8.150);
+\fill[fb](2.770,7.850)rectangle(2.923,8.150);
+\fill[fw](2.923,7.850)rectangle(3.077,8.150);
+\fill[fr](3.077,7.850)rectangle(3.230,8.150);
+\end{scope}
+\draw[gray!50,line width=0.12pt](2.770,7.850)rectangle(3.230,8.150);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (3.280,8.000){FRA};
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](2.700,6.510)rectangle(4.700,6.930);
+\begin{scope}\clip (2.770,6.570) rectangle (3.230,6.870);
+\fill[fr](2.770,6.570)rectangle(2.923,6.870);
+\fill[fw](2.923,6.570)rectangle(3.077,6.870);
+\fill[fr](3.077,6.570)rectangle(3.230,6.870);
+\end{scope}
+\draw[gray!50,line width=0.12pt](2.770,6.570)rectangle(3.230,6.870);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (3.280,6.720){CAN};
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](2.700,5.230)rectangle(4.700,5.650);
+\begin{scope}\clip (2.770,5.290) rectangle (3.230,5.590);
+\fill[fr](2.770,5.490)rectangle(3.230,5.590);
+\fill[fw](2.770,5.390)rectangle(3.230,5.490);
+\fill[fb](2.770,5.290)rectangle(3.230,5.390);
+\end{scope}
+\draw[gray!50,line width=0.12pt](2.770,5.290)rectangle(3.230,5.590);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (3.280,5.440){NED};
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](2.700,3.950)rectangle(4.700,4.370);
+\begin{scope}\clip (2.770,4.010) rectangle (3.230,4.310);
+\fill[fr](2.770,4.210)rectangle(3.230,4.310);
+\fill[fw](2.770,4.110)rectangle(3.230,4.210);
+\fill[fb](2.770,4.010)rectangle(3.230,4.110);
+\end{scope}
+\draw[gray!50,line width=0.12pt](2.770,4.010)rectangle(3.230,4.310);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (3.280,4.160){CRO};
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](2.700,2.670)rectangle(4.700,3.090);
+\begin{scope}\clip (2.770,2.730) rectangle (3.230,3.030);
+\fill[fr](2.770,2.955)rectangle(3.230,3.030);
+\fill[fy](2.770,2.805)rectangle(3.230,2.955);
+\fill[fr](2.770,2.730)rectangle(3.230,2.805);
+\end{scope}
+\draw[gray!50,line width=0.12pt](2.770,2.730)rectangle(3.230,3.030);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (3.280,2.880){ESP};
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](2.700,1.390)rectangle(4.700,1.810);
+\begin{scope}\clip (2.770,1.450) rectangle (3.230,1.750);
+\fill[fw](2.770,1.450)rectangle(3.230,1.750);
+\fill[fr](2.770,1.450)rectangle(3.230,1.510);
+\fill[fr](2.770,1.570)rectangle(3.230,1.630);
+\fill[fr](2.770,1.690)rectangle(3.230,1.750);
+\fill[fb](2.770,1.600)rectangle(2.963,1.750);
+\end{scope}
+\draw[gray!50,line width=0.12pt](2.770,1.450)rectangle(3.230,1.750);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (3.280,1.600){USA};
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](2.700,0.110)rectangle(4.700,0.530);
+\begin{scope}\clip (2.770,0.170) rectangle (3.230,0.470);
+\fill[fk](2.770,0.170)rectangle(2.923,0.470);
+\fill[fy](2.923,0.170)rectangle(3.077,0.470);
+\fill[fr](3.077,0.170)rectangle(3.230,0.470);
+\end{scope}
+\draw[gray!50,line width=0.12pt](2.770,0.170)rectangle(3.230,0.470);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (3.280,0.320){BEL};
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](5.400,8.430)rectangle(7.400,8.850);
+\begin{scope}\clip (5.470,8.490) rectangle (5.930,8.790);
+\fill[fb](5.470,8.490)rectangle(5.623,8.790);
+\fill[fw](5.623,8.490)rectangle(5.777,8.790);
+\fill[fr](5.777,8.490)rectangle(5.930,8.790);
+\end{scope}
+\draw[gray!50,line width=0.12pt](5.470,8.490)rectangle(5.930,8.790);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (5.980,8.640){FRA};
+\draw[gray!50,line width=0.4pt](4.700,9.280)--(5.050,9.280);
+\draw[gray!50,line width=0.4pt](4.700,8.000)--(5.050,8.000);
+\draw[gray!50,line width=0.4pt](5.050,9.280)--(5.050,8.000);
+\draw[gray!50,line width=0.4pt](5.050,8.640)--(5.400,8.640);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](5.400,5.870)rectangle(7.400,6.290);
+\begin{scope}\clip (5.470,5.930) rectangle (5.930,6.230);
+\fill[fr](5.470,6.130)rectangle(5.930,6.230);
+\fill[fw](5.470,6.030)rectangle(5.930,6.130);
+\fill[fb](5.470,5.930)rectangle(5.930,6.030);
+\end{scope}
+\draw[gray!50,line width=0.12pt](5.470,5.930)rectangle(5.930,6.230);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (5.980,6.080){NED};
+\draw[gray!50,line width=0.4pt](4.700,6.720)--(5.050,6.720);
+\draw[gray!50,line width=0.4pt](4.700,5.440)--(5.050,5.440);
+\draw[gray!50,line width=0.4pt](5.050,6.720)--(5.050,5.440);
+\draw[gray!50,line width=0.4pt](5.050,6.080)--(5.400,6.080);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](5.400,3.310)rectangle(7.400,3.730);
+\begin{scope}\clip (5.470,3.370) rectangle (5.930,3.670);
+\fill[fr](5.470,3.595)rectangle(5.930,3.670);
+\fill[fy](5.470,3.445)rectangle(5.930,3.595);
+\fill[fr](5.470,3.370)rectangle(5.930,3.445);
+\end{scope}
+\draw[gray!50,line width=0.12pt](5.470,3.370)rectangle(5.930,3.670);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (5.980,3.520){ESP};
+\draw[gray!50,line width=0.4pt](4.700,4.160)--(5.050,4.160);
+\draw[gray!50,line width=0.4pt](4.700,2.880)--(5.050,2.880);
+\draw[gray!50,line width=0.4pt](5.050,4.160)--(5.050,2.880);
+\draw[gray!50,line width=0.4pt](5.050,3.520)--(5.400,3.520);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](5.400,0.750)rectangle(7.400,1.170);
+\begin{scope}\clip (5.470,0.810) rectangle (5.930,1.110);
+\fill[fk](5.470,0.810)rectangle(5.623,1.110);
+\fill[fy](5.623,0.810)rectangle(5.777,1.110);
+\fill[fr](5.777,0.810)rectangle(5.930,1.110);
+\end{scope}
+\draw[gray!50,line width=0.12pt](5.470,0.810)rectangle(5.930,1.110);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (5.980,0.960){BEL};
+\draw[gray!50,line width=0.4pt](4.700,1.600)--(5.050,1.600);
+\draw[gray!50,line width=0.4pt](4.700,0.320)--(5.050,0.320);
+\draw[gray!50,line width=0.4pt](5.050,1.600)--(5.050,0.320);
+\draw[gray!50,line width=0.4pt](5.050,0.960)--(5.400,0.960);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](8.100,7.150)rectangle(10.100,7.570);
+\begin{scope}\clip (8.170,7.210) rectangle (8.630,7.510);
+\fill[fb](8.170,7.210)rectangle(8.323,7.510);
+\fill[fw](8.323,7.210)rectangle(8.477,7.510);
+\fill[fr](8.477,7.210)rectangle(8.630,7.510);
+\end{scope}
+\draw[gray!50,line width=0.12pt](8.170,7.210)rectangle(8.630,7.510);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (8.680,7.360){FRA};
+\draw[gray!50,line width=0.4pt](7.400,8.640)--(7.750,8.640);
+\draw[gray!50,line width=0.4pt](7.400,6.080)--(7.750,6.080);
+\draw[gray!50,line width=0.4pt](7.750,8.640)--(7.750,6.080);
+\draw[gray!50,line width=0.4pt](7.750,7.360)--(8.100,7.360);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](8.100,2.030)rectangle(10.100,2.450);
+\begin{scope}\clip (8.170,2.090) rectangle (8.630,2.390);
+\fill[fr](8.170,2.315)rectangle(8.630,2.390);
+\fill[fy](8.170,2.165)rectangle(8.630,2.315);
+\fill[fr](8.170,2.090)rectangle(8.630,2.165);
+\end{scope}
+\draw[gray!50,line width=0.12pt](8.170,2.090)rectangle(8.630,2.390);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (8.680,2.240){ESP};
+\draw[gray!50,line width=0.4pt](7.400,3.520)--(7.750,3.520);
+\draw[gray!50,line width=0.4pt](7.400,0.960)--(7.750,0.960);
+\draw[gray!50,line width=0.4pt](7.750,3.520)--(7.750,0.960);
+\draw[gray!50,line width=0.4pt](7.750,2.240)--(8.100,2.240);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](10.800,4.590)rectangle(12.800,5.010);
+\begin{scope}\clip (10.870,4.650) rectangle (11.330,4.950);
+\fill[fr](10.870,4.875)rectangle(11.330,4.950);
+\fill[fy](10.870,4.725)rectangle(11.330,4.875);
+\fill[fr](10.870,4.650)rectangle(11.330,4.725);
+\end{scope}
+\draw[gray!50,line width=0.12pt](10.870,4.650)rectangle(11.330,4.950);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (11.380,4.800){ESP};
+\draw[gray!50,line width=0.4pt](10.100,7.360)--(10.450,7.360);
+\draw[gray!50,line width=0.4pt](10.100,2.240)--(10.450,2.240);
+\draw[gray!50,line width=0.4pt](10.450,7.360)--(10.450,2.240);
+\draw[gray!50,line width=0.4pt](10.450,4.800)--(10.800,4.800);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](25.000,9.390)rectangle(27.000,9.810);
+\begin{scope}\clip (25.070,9.450) rectangle (25.530,9.750);
+\fill[fg](25.070,9.450)rectangle(25.530,9.750);
+\fill[fy](25.300,9.730)--(25.490,9.600)--(25.300,9.470)--(25.110,9.600)--cycle;
+\fill[fb](25.300,9.600)circle(0.060cm);
+\end{scope}
+\draw[gray!50,line width=0.12pt](25.070,9.450)rectangle(25.530,9.750);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (25.580,9.600){BRA};
+\node[anchor=west, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (27.070,9.600){C1};
+\draw[fill=gray!7, draw=gray!30, rounded corners=1pt](25.000,8.750)rectangle(27.000,9.170);
+\begin{scope}\clip (25.070,8.810) rectangle (25.530,9.110);
+\fill[fw](25.070,8.810)rectangle(25.530,9.110);
+\fill[fr](25.300,8.960)circle(0.096cm);
+\end{scope}
+\draw[gray!50,line width=0.12pt](25.070,8.810)rectangle(25.530,9.110);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=gray!60] at (25.580,8.960){JPN};
+\node[anchor=west, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (27.070,8.960){F2};
+\draw[gray!50,line width=0.4pt](25.000,9.600)--(24.650,9.600);
+\draw[gray!50,line width=0.4pt](25.000,8.960)--(24.650,8.960);
+\draw[gray!50,line width=0.4pt](24.650,9.600)--(24.650,8.960);
+\draw[gray!50,line width=0.4pt](24.650,9.280)--(24.300,9.280);
+\draw[fill=gray!7, draw=gray!30, rounded corners=1pt](25.000,8.110)rectangle(27.000,8.530);
+\begin{scope}\clip (25.070,8.170) rectangle (25.530,8.470);
+\fill[fy](25.070,8.395)rectangle(25.530,8.470);
+\fill[fb](25.070,8.245)rectangle(25.530,8.395);
+\fill[fr](25.070,8.170)rectangle(25.530,8.245);
+\end{scope}
+\draw[gray!50,line width=0.12pt](25.070,8.170)rectangle(25.530,8.470);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=gray!60] at (25.580,8.320){ECU};
+\node[anchor=west, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (27.070,8.320){E2};
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](25.000,7.470)rectangle(27.000,7.890);
+\begin{scope}\clip (25.070,7.530) rectangle (25.530,7.830);
+\fill[fr](25.070,7.530)rectangle(25.530,7.830);
+\fill[fw](25.190,7.530)rectangle(25.262,7.830);
+\fill[fw](25.070,7.644)rectangle(25.530,7.716);
+\end{scope}
+\draw[gray!50,line width=0.12pt](25.070,7.530)rectangle(25.530,7.830);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (25.580,7.680){NOR};
+\node[anchor=west, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (27.070,7.680){I2};
+\draw[gray!50,line width=0.4pt](25.000,8.320)--(24.650,8.320);
+\draw[gray!50,line width=0.4pt](25.000,7.680)--(24.650,7.680);
+\draw[gray!50,line width=0.4pt](24.650,8.320)--(24.650,7.680);
+\draw[gray!50,line width=0.4pt](24.650,8.000)--(24.300,8.000);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](25.000,6.830)rectangle(27.000,7.250);
+\begin{scope}\clip (25.070,6.890) rectangle (25.530,7.190);
+\fill[fg](25.070,6.890)rectangle(25.223,7.190);
+\fill[fw](25.223,6.890)rectangle(25.377,7.190);
+\fill[fr](25.377,6.890)rectangle(25.530,7.190);
+\end{scope}
+\draw[gray!50,line width=0.12pt](25.070,6.890)rectangle(25.530,7.190);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (25.580,7.040){MEX};
+\node[anchor=west, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (27.070,7.040){A1};
+\draw[fill=gray!7, draw=gray!30, rounded corners=1pt](25.000,6.190)rectangle(27.000,6.610);
+\begin{scope}\clip (25.070,6.250) rectangle (25.530,6.550);
+\fill[fo](25.070,6.250)rectangle(25.223,6.550);
+\fill[fw](25.223,6.250)rectangle(25.377,6.550);
+\fill[fg](25.377,6.250)rectangle(25.530,6.550);
+\end{scope}
+\draw[gray!50,line width=0.12pt](25.070,6.250)rectangle(25.530,6.550);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=gray!60] at (25.580,6.400){CIV};
+\node[anchor=west, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (27.070,6.400){E3};
+\draw[gray!50,line width=0.4pt](25.000,7.040)--(24.650,7.040);
+\draw[gray!50,line width=0.4pt](25.000,6.400)--(24.650,6.400);
+\draw[gray!50,line width=0.4pt](24.650,7.040)--(24.650,6.400);
+\draw[gray!50,line width=0.4pt](24.650,6.720)--(24.300,6.720);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](25.000,5.550)rectangle(27.000,5.970);
+\begin{scope}\clip (25.070,5.610) rectangle (25.530,5.910);
+\fill[fw](25.070,5.610)rectangle(25.530,5.910);
+\fill[fr](25.255,5.610)rectangle(25.345,5.910);
+\fill[fr](25.070,5.715)rectangle(25.530,5.805);
+\end{scope}
+\draw[gray!50,line width=0.12pt](25.070,5.610)rectangle(25.530,5.910);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (25.580,5.760){ENG};
+\node[anchor=west, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (27.070,5.760){L1};
+\draw[fill=gray!7, draw=gray!30, rounded corners=1pt](25.000,4.910)rectangle(27.000,5.330);
+\begin{scope}\clip (25.070,4.970) rectangle (25.530,5.270);
+\fill[fg](25.070,4.970)rectangle(25.300,5.270);
+\fill[fw](25.300,4.970)rectangle(25.530,5.270);
+\end{scope}
+\draw[gray!50,line width=0.12pt](25.070,4.970)rectangle(25.530,5.270);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=gray!60] at (25.580,5.120){ALG};
+\node[anchor=west, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (27.070,5.120){J3};
+\draw[gray!50,line width=0.4pt](25.000,5.760)--(24.650,5.760);
+\draw[gray!50,line width=0.4pt](25.000,5.120)--(24.650,5.120);
+\draw[gray!50,line width=0.4pt](24.650,5.760)--(24.650,5.120);
+\draw[gray!50,line width=0.4pt](24.650,5.440)--(24.300,5.440);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](25.000,4.270)rectangle(27.000,4.690);
+\begin{scope}\clip (25.070,4.330) rectangle (25.530,4.630);
+\fill[fs](25.070,4.530)rectangle(25.530,4.630);
+\fill[fw](25.070,4.430)rectangle(25.530,4.530);
+\fill[fs](25.070,4.330)rectangle(25.530,4.430);
+\end{scope}
+\draw[gray!50,line width=0.12pt](25.070,4.330)rectangle(25.530,4.630);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (25.580,4.480){ARG};
+\node[anchor=west, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (27.070,4.480){J1};
+\draw[fill=gray!7, draw=gray!30, rounded corners=1pt](25.000,3.630)rectangle(27.000,4.050);
+\begin{scope}\clip (25.070,3.690) rectangle (25.530,3.990);
+\fill[fb](25.070,3.690)rectangle(25.530,3.990);
+\fill[fw](25.070,3.690)rectangle(25.530,3.750);
+\fill[fw](25.070,3.810)rectangle(25.530,3.870);
+\fill[fw](25.070,3.930)rectangle(25.530,3.990);
+\fill[fy](25.070,3.840)rectangle(25.263,3.990);
+\end{scope}
+\draw[gray!50,line width=0.12pt](25.070,3.690)rectangle(25.530,3.990);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=gray!60] at (25.580,3.840){URU};
+\node[anchor=west, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (27.070,3.840){H2};
+\draw[gray!50,line width=0.4pt](25.000,4.480)--(24.650,4.480);
+\draw[gray!50,line width=0.4pt](25.000,3.840)--(24.650,3.840);
+\draw[gray!50,line width=0.4pt](24.650,4.480)--(24.650,3.840);
+\draw[gray!50,line width=0.4pt](24.650,4.160)--(24.300,4.160);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](25.000,2.990)rectangle(27.000,3.410);
+\begin{scope}\clip (25.070,3.050) rectangle (25.530,3.350);
+\fill[fr](25.070,3.050)rectangle(25.530,3.350);
+\fill[fw](25.280,3.200)circle(0.090cm);
+\fill[fr](25.330,3.200)circle(0.078cm);
+\end{scope}
+\draw[gray!50,line width=0.12pt](25.070,3.050)rectangle(25.530,3.350);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (25.580,3.200){TUR};
+\node[anchor=west, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (27.070,3.200){D2};
+\draw[fill=gray!7, draw=gray!30, rounded corners=1pt](25.000,2.350)rectangle(27.000,2.770);
+\begin{scope}\clip (25.070,2.410) rectangle (25.530,2.710);
+\fill[fr](25.070,2.610)rectangle(25.530,2.710);
+\fill[fw](25.070,2.510)rectangle(25.530,2.610);
+\fill[fk](25.070,2.410)rectangle(25.530,2.510);
+\end{scope}
+\draw[gray!50,line width=0.12pt](25.070,2.410)rectangle(25.530,2.710);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=gray!60] at (25.580,2.560){EGY};
+\node[anchor=west, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (27.070,2.560){G2};
+\draw[gray!50,line width=0.4pt](25.000,3.200)--(24.650,3.200);
+\draw[gray!50,line width=0.4pt](25.000,2.560)--(24.650,2.560);
+\draw[gray!50,line width=0.4pt](24.650,3.200)--(24.650,2.560);
+\draw[gray!50,line width=0.4pt](24.650,2.880)--(24.300,2.880);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](25.000,1.710)rectangle(27.000,2.130);
+\begin{scope}\clip (25.070,1.770) rectangle (25.530,2.070);
+\fill[fr](25.070,1.770)rectangle(25.530,2.070);
+\fill[fw](25.255,1.770)rectangle(25.345,2.070);
+\fill[fw](25.070,1.875)rectangle(25.530,1.965);
+\end{scope}
+\draw[gray!50,line width=0.12pt](25.070,1.770)rectangle(25.530,2.070);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (25.580,1.920){SUI};
+\node[anchor=west, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (27.070,1.920){B1};
+\draw[fill=gray!7, draw=gray!30, rounded corners=1pt](25.000,1.070)rectangle(27.000,1.490);
+\begin{scope}\clip (25.070,1.130) rectangle (25.530,1.430);
+\fill[fg](25.070,1.330)rectangle(25.530,1.430);
+\fill[fw](25.070,1.230)rectangle(25.530,1.330);
+\fill[fr](25.070,1.130)rectangle(25.530,1.230);
+\end{scope}
+\draw[gray!50,line width=0.12pt](25.070,1.130)rectangle(25.530,1.430);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=gray!60] at (25.580,1.280){IRN};
+\node[anchor=west, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (27.070,1.280){G3};
+\draw[gray!50,line width=0.4pt](25.000,1.920)--(24.650,1.920);
+\draw[gray!50,line width=0.4pt](25.000,1.280)--(24.650,1.280);
+\draw[gray!50,line width=0.4pt](24.650,1.920)--(24.650,1.280);
+\draw[gray!50,line width=0.4pt](24.650,1.600)--(24.300,1.600);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](25.000,0.430)rectangle(27.000,0.850);
+\begin{scope}\clip (25.070,0.490) rectangle (25.530,0.790);
+\fill[fg](25.070,0.490)rectangle(25.254,0.790);
+\fill[fr](25.254,0.490)rectangle(25.530,0.790);
+\end{scope}
+\draw[gray!50,line width=0.12pt](25.070,0.490)rectangle(25.530,0.790);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (25.580,0.640){POR};
+\node[anchor=west, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (27.070,0.640){K1};
+\draw[fill=gray!7, draw=gray!30, rounded corners=1pt](25.000,-0.210)rectangle(27.000,0.210);
+\begin{scope}\clip (25.070,-0.150) rectangle (25.530,0.150);
+\fill[fg](25.070,-0.150)rectangle(25.223,0.150);
+\fill[fy](25.223,-0.150)rectangle(25.377,0.150);
+\fill[fr](25.377,-0.150)rectangle(25.530,0.150);
+\end{scope}
+\draw[gray!50,line width=0.12pt](25.070,-0.150)rectangle(25.530,0.150);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=gray!60] at (25.580,0.000){SEN};
+\node[anchor=west, inner sep=1.1pt, rounded corners=1pt, fill=gray!12, font=\sffamily\tiny, text=gray!80] at (27.070,0.000){I3};
+\draw[gray!50,line width=0.4pt](25.000,0.640)--(24.650,0.640);
+\draw[gray!50,line width=0.4pt](25.000,0.000)--(24.650,0.000);
+\draw[gray!50,line width=0.4pt](24.650,0.640)--(24.650,0.000);
+\draw[gray!50,line width=0.4pt](24.650,0.320)--(24.300,0.320);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](22.300,9.070)rectangle(24.300,9.490);
+\begin{scope}\clip (22.370,9.130) rectangle (22.830,9.430);
+\fill[fg](22.370,9.130)rectangle(22.830,9.430);
+\fill[fy](22.600,9.410)--(22.790,9.280)--(22.600,9.150)--(22.410,9.280)--cycle;
+\fill[fb](22.600,9.280)circle(0.060cm);
+\end{scope}
+\draw[gray!50,line width=0.12pt](22.370,9.130)rectangle(22.830,9.430);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (22.880,9.280){BRA};
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](22.300,7.790)rectangle(24.300,8.210);
+\begin{scope}\clip (22.370,7.850) rectangle (22.830,8.150);
+\fill[fr](22.370,7.850)rectangle(22.830,8.150);
+\fill[fw](22.490,7.850)rectangle(22.562,8.150);
+\fill[fw](22.370,7.964)rectangle(22.830,8.036);
+\end{scope}
+\draw[gray!50,line width=0.12pt](22.370,7.850)rectangle(22.830,8.150);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (22.880,8.000){NOR};
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](22.300,6.510)rectangle(24.300,6.930);
+\begin{scope}\clip (22.370,6.570) rectangle (22.830,6.870);
+\fill[fg](22.370,6.570)rectangle(22.523,6.870);
+\fill[fw](22.523,6.570)rectangle(22.677,6.870);
+\fill[fr](22.677,6.570)rectangle(22.830,6.870);
+\end{scope}
+\draw[gray!50,line width=0.12pt](22.370,6.570)rectangle(22.830,6.870);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (22.880,6.720){MEX};
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](22.300,5.230)rectangle(24.300,5.650);
+\begin{scope}\clip (22.370,5.290) rectangle (22.830,5.590);
+\fill[fw](22.370,5.290)rectangle(22.830,5.590);
+\fill[fr](22.555,5.290)rectangle(22.645,5.590);
+\fill[fr](22.370,5.395)rectangle(22.830,5.485);
+\end{scope}
+\draw[gray!50,line width=0.12pt](22.370,5.290)rectangle(22.830,5.590);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (22.880,5.440){ENG};
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](22.300,3.950)rectangle(24.300,4.370);
+\begin{scope}\clip (22.370,4.010) rectangle (22.830,4.310);
+\fill[fs](22.370,4.210)rectangle(22.830,4.310);
+\fill[fw](22.370,4.110)rectangle(22.830,4.210);
+\fill[fs](22.370,4.010)rectangle(22.830,4.110);
+\end{scope}
+\draw[gray!50,line width=0.12pt](22.370,4.010)rectangle(22.830,4.310);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (22.880,4.160){ARG};
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](22.300,2.670)rectangle(24.300,3.090);
+\begin{scope}\clip (22.370,2.730) rectangle (22.830,3.030);
+\fill[fr](22.370,2.730)rectangle(22.830,3.030);
+\fill[fw](22.580,2.880)circle(0.090cm);
+\fill[fr](22.630,2.880)circle(0.078cm);
+\end{scope}
+\draw[gray!50,line width=0.12pt](22.370,2.730)rectangle(22.830,3.030);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (22.880,2.880){TUR};
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](22.300,1.390)rectangle(24.300,1.810);
+\begin{scope}\clip (22.370,1.450) rectangle (22.830,1.750);
+\fill[fr](22.370,1.450)rectangle(22.830,1.750);
+\fill[fw](22.555,1.450)rectangle(22.645,1.750);
+\fill[fw](22.370,1.555)rectangle(22.830,1.645);
+\end{scope}
+\draw[gray!50,line width=0.12pt](22.370,1.450)rectangle(22.830,1.750);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (22.880,1.600){SUI};
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](22.300,0.110)rectangle(24.300,0.530);
+\begin{scope}\clip (22.370,0.170) rectangle (22.830,0.470);
+\fill[fg](22.370,0.170)rectangle(22.554,0.470);
+\fill[fr](22.554,0.170)rectangle(22.830,0.470);
+\end{scope}
+\draw[gray!50,line width=0.12pt](22.370,0.170)rectangle(22.830,0.470);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (22.880,0.320){POR};
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](19.600,8.430)rectangle(21.600,8.850);
+\begin{scope}\clip (19.670,8.490) rectangle (20.130,8.790);
+\fill[fg](19.670,8.490)rectangle(20.130,8.790);
+\fill[fy](19.900,8.770)--(20.090,8.640)--(19.900,8.510)--(19.710,8.640)--cycle;
+\fill[fb](19.900,8.640)circle(0.060cm);
+\end{scope}
+\draw[gray!50,line width=0.12pt](19.670,8.490)rectangle(20.130,8.790);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (20.180,8.640){BRA};
+\draw[gray!50,line width=0.4pt](22.300,9.280)--(21.950,9.280);
+\draw[gray!50,line width=0.4pt](22.300,8.000)--(21.950,8.000);
+\draw[gray!50,line width=0.4pt](21.950,9.280)--(21.950,8.000);
+\draw[gray!50,line width=0.4pt](21.950,8.640)--(21.600,8.640);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](19.600,5.870)rectangle(21.600,6.290);
+\begin{scope}\clip (19.670,5.930) rectangle (20.130,6.230);
+\fill[fw](19.670,5.930)rectangle(20.130,6.230);
+\fill[fr](19.855,5.930)rectangle(19.945,6.230);
+\fill[fr](19.670,6.035)rectangle(20.130,6.125);
+\end{scope}
+\draw[gray!50,line width=0.12pt](19.670,5.930)rectangle(20.130,6.230);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (20.180,6.080){ENG};
+\draw[gray!50,line width=0.4pt](22.300,6.720)--(21.950,6.720);
+\draw[gray!50,line width=0.4pt](22.300,5.440)--(21.950,5.440);
+\draw[gray!50,line width=0.4pt](21.950,6.720)--(21.950,5.440);
+\draw[gray!50,line width=0.4pt](21.950,6.080)--(21.600,6.080);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](19.600,3.310)rectangle(21.600,3.730);
+\begin{scope}\clip (19.670,3.370) rectangle (20.130,3.670);
+\fill[fs](19.670,3.570)rectangle(20.130,3.670);
+\fill[fw](19.670,3.470)rectangle(20.130,3.570);
+\fill[fs](19.670,3.370)rectangle(20.130,3.470);
+\end{scope}
+\draw[gray!50,line width=0.12pt](19.670,3.370)rectangle(20.130,3.670);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (20.180,3.520){ARG};
+\draw[gray!50,line width=0.4pt](22.300,4.160)--(21.950,4.160);
+\draw[gray!50,line width=0.4pt](22.300,2.880)--(21.950,2.880);
+\draw[gray!50,line width=0.4pt](21.950,4.160)--(21.950,2.880);
+\draw[gray!50,line width=0.4pt](21.950,3.520)--(21.600,3.520);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](19.600,0.750)rectangle(21.600,1.170);
+\begin{scope}\clip (19.670,0.810) rectangle (20.130,1.110);
+\fill[fg](19.670,0.810)rectangle(19.854,1.110);
+\fill[fr](19.854,0.810)rectangle(20.130,1.110);
+\end{scope}
+\draw[gray!50,line width=0.12pt](19.670,0.810)rectangle(20.130,1.110);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (20.180,0.960){POR};
+\draw[gray!50,line width=0.4pt](22.300,1.600)--(21.950,1.600);
+\draw[gray!50,line width=0.4pt](22.300,0.320)--(21.950,0.320);
+\draw[gray!50,line width=0.4pt](21.950,1.600)--(21.950,0.320);
+\draw[gray!50,line width=0.4pt](21.950,0.960)--(21.600,0.960);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](16.900,7.150)rectangle(18.900,7.570);
+\begin{scope}\clip (16.970,7.210) rectangle (17.430,7.510);
+\fill[fw](16.970,7.210)rectangle(17.430,7.510);
+\fill[fr](17.155,7.210)rectangle(17.245,7.510);
+\fill[fr](16.970,7.315)rectangle(17.430,7.405);
+\end{scope}
+\draw[gray!50,line width=0.12pt](16.970,7.210)rectangle(17.430,7.510);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (17.480,7.360){ENG};
+\draw[gray!50,line width=0.4pt](19.600,8.640)--(19.250,8.640);
+\draw[gray!50,line width=0.4pt](19.600,6.080)--(19.250,6.080);
+\draw[gray!50,line width=0.4pt](19.250,8.640)--(19.250,6.080);
+\draw[gray!50,line width=0.4pt](19.250,7.360)--(18.900,7.360);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](16.900,2.030)rectangle(18.900,2.450);
+\begin{scope}\clip (16.970,2.090) rectangle (17.430,2.390);
+\fill[fs](16.970,2.290)rectangle(17.430,2.390);
+\fill[fw](16.970,2.190)rectangle(17.430,2.290);
+\fill[fs](16.970,2.090)rectangle(17.430,2.190);
+\end{scope}
+\draw[gray!50,line width=0.12pt](16.970,2.090)rectangle(17.430,2.390);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (17.480,2.240){ARG};
+\draw[gray!50,line width=0.4pt](19.600,3.520)--(19.250,3.520);
+\draw[gray!50,line width=0.4pt](19.600,0.960)--(19.250,0.960);
+\draw[gray!50,line width=0.4pt](19.250,3.520)--(19.250,0.960);
+\draw[gray!50,line width=0.4pt](19.250,2.240)--(18.900,2.240);
+\draw[fill=blue!6, draw=blue!30, rounded corners=1pt](14.200,4.590)rectangle(16.200,5.010);
+\begin{scope}\clip (14.270,4.650) rectangle (14.730,4.950);
+\fill[fs](14.270,4.850)rectangle(14.730,4.950);
+\fill[fw](14.270,4.750)rectangle(14.730,4.850);
+\fill[fs](14.270,4.650)rectangle(14.730,4.750);
+\end{scope}
+\draw[gray!50,line width=0.12pt](14.270,4.650)rectangle(14.730,4.950);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize, text=black] at (14.780,4.800){ARG};
+\draw[gray!50,line width=0.4pt](16.900,7.360)--(16.550,7.360);
+\draw[gray!50,line width=0.4pt](16.900,2.240)--(16.550,2.240);
+\draw[gray!50,line width=0.4pt](16.550,7.360)--(16.550,2.240);
+\draw[gray!50,line width=0.4pt](16.550,4.800)--(16.200,4.800);
+\node[gray!65,font=\bfseries\scriptsize] at (13.50,10.2){FINAL};
+\draw[gray!50,line width=0.4pt](12.800,4.800)--(13.500,4.800)--(13.500,6.200);
+\draw[gray!50,line width=0.4pt](14.200,4.800)--(13.500,4.800)--(13.500,6.200);
+\draw[fill=yellow!88!orange, draw=orange!80!black, line width=0.6pt, rounded corners=1pt](12.500,6.290)rectangle(14.500,6.710);
+\begin{scope}\clip (12.570,6.350) rectangle (13.030,6.650);
+\fill[fr](12.570,6.575)rectangle(13.030,6.650);
+\fill[fy](12.570,6.425)rectangle(13.030,6.575);
+\fill[fr](12.570,6.350)rectangle(13.030,6.425);
+\end{scope}
+\draw[gray!50,line width=0.12pt](12.570,6.350)rectangle(13.030,6.650);
+\node[anchor=west, inner sep=0pt, font=\sffamily\scriptsize\bfseries, text=black] at (13.080,6.500){ESP};
+\node[font=\bfseries\footnotesize,text=orange!55!black] at (13.50,7.00){$\bigstar$ CHAMPION};
+\end{tikzpicture}
+\end{document}
