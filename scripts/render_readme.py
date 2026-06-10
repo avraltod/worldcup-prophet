@@ -4,11 +4,12 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from fixtures import GROUP_FIXTURES
+from fixtures import GROUP_FIXTURES, ROW_MATCH
 
 START = "<!-- LIVE-RESULTS:START -->"
 END = "<!-- LIVE-RESULTS:END -->"
-_NAMES = {r: (h, a) for r, g, h, a in GROUP_FIXTURES}
+# keyed by OFFICIAL FIFA match number (1-72), matching results_log["group"]
+_NAMES = {ROW_MATCH[r]: (h, a) for r, g, h, a in GROUP_FIXTURES}
 
 
 def render_results_block(trajectory, results_log):

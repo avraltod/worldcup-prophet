@@ -16,13 +16,13 @@ def test_clean_matured_final_match_becomes_target():
     parsed = [row("Mexico", "South Africa", 2, 1, t(6), True)]
     targets, holds, scored = fr.eligible_targets(parsed, {"group": {}, "ko": {}}, NOW)
     assert holds == []
-    assert targets == {"4": [2, 1]}
+    assert targets == {"1": [2, 1]}  # Mexico v South Africa = official match 1
     assert scored == [{"home": "Mexico", "away": "South Africa", "hg": 2, "ag": 1}]
 
 def test_reversed_orientation_is_normalized_to_fixture():
     parsed = [row("South Africa", "Mexico", 1, 2, t(6), True)]
     targets, holds, scored = fr.eligible_targets(parsed, {"group": {}, "ko": {}}, NOW)
-    assert targets == {"4": [2, 1]} and holds == []
+    assert targets == {"1": [2, 1]} and holds == []
 
 def test_matured_but_not_final_holds_the_day():
     parsed = [row("Mexico", "South Africa", 1, 1, t(6), False)]
@@ -36,7 +36,7 @@ def test_unmatured_match_is_silently_excluded():
 
 def test_already_recorded_match_is_skipped():
     parsed = [row("Mexico", "South Africa", 2, 1, t(6), True)]
-    targets, holds, scored = fr.eligible_targets(parsed, {"group": {"4": [2, 1]}, "ko": {}}, NOW)
+    targets, holds, scored = fr.eligible_targets(parsed, {"group": {"1": [2, 1]}, "ko": {}}, NOW)
     assert targets == {} and holds == []
 
 def test_score_out_of_bounds_holds():

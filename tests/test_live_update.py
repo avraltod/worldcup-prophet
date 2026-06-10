@@ -16,11 +16,11 @@ def test_plan_holds_returns_exit_1(tmp_path):
     assert any("not FT" in h for h in decision.holds)
 
 def test_plan_noop_returns_exit_0(tmp_path):
-    log = {"group": {"4": [2, 1]}, "ko": {}}
+    log = {"group": {"1": [2, 1]}, "ko": {}}
     decision = lu.decide(parsed_one(), log, NOW)
     assert decision.exit_code == 0 and decision.targets == {}
 
 def test_plan_clean_returns_targets_exit_0():
     decision = lu.decide(parsed_one(), {"group": {}, "ko": {}}, NOW)
-    assert decision.exit_code == 0 and decision.targets == {"4": [2, 1]}
+    assert decision.exit_code == 0 and decision.targets == {"1": [2, 1]}
     assert decision.scored[0]["home"] == "Mexico"

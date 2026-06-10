@@ -9,14 +9,14 @@ TRAJ = [{
     "market_champion": {"Spain": 0.155, "Argentina": 0.142, "France": 0.110},
     "top_movers": [["Mexico", 1.4], ["South Africa", -1.1]],
 }]
-LOG = {"group": {"4": [2, 1]}, "ko": {}}
+LOG = {"group": {"1": [2, 1]}, "ko": {}}
 
 def test_render_block_contains_key_facts():
     block = rr.render_results_block(TRAJ, LOG)
     assert "3/104" in block
     assert "0.012 bits" in block
     assert "Spain" in block and "26.2%" in block and "15.5%" in block
-    assert "M4:" in block and "Mexico" in block and "2" in block
+    assert "M1:" in block and "Mexico" in block and "2" in block
 
 def test_replace_block_only_between_markers():
     text = ("intro\n<!-- LIVE-RESULTS:START -->\nOLD\n<!-- LIVE-RESULTS:END -->\noutro\n")

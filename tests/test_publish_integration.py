@@ -56,7 +56,7 @@ def test_full_publish_creates_ledger_and_updates_readme(restore_repo, monkeypatc
     assert rc == 0
 
     log = json.loads(RESULTS_LOG.read_text())
-    assert log["group"].get("4") == [2, 1]
+    assert log["group"].get("1") == [2, 1]
     assert LEDGER.exists(), "experiment/ledger.csv must be created even if experiment/ was absent"
     readme = README.read_text()
-    assert "M4:" in readme and "Mexico" in readme
+    assert "M1:" in readme and "Mexico" in readme

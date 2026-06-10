@@ -114,3 +114,13 @@ ALIASES = {
 def canon(name):
     n = name.strip()
     return ALIASES.get(n.lower(), n)
+
+
+# Sheet row (4-75) -> official FIFA group-match number (1-72). This is the key
+# `results_log["group"]` / condition.py use; must stay identical to condition.ROW_MATCH
+# (cross-checked by tests/test_match_numbering.py).
+ROW_MATCH = dict(zip(range(4, 76), [
+    1, 2, 25, 28, 53, 54,   3, 8, 26, 27, 51, 52,   7, 5, 30, 29, 49, 50,
+    4, 6, 31, 32, 59, 60,  10, 9, 34, 33, 56, 55,  11, 12, 36, 35, 58, 57,
+    16, 15, 40, 39, 64, 63, 14, 13, 37, 38, 66, 65, 17, 18, 41, 42, 61, 62,
+    19, 20, 44, 43, 69, 70, 23, 24, 48, 47, 71, 72, 22, 21, 46, 45, 67, 68]))

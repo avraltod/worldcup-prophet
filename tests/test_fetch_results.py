@@ -27,7 +27,8 @@ def test_parse_extracts_score_and_finality():
     assert rows[1]["final"] is False
 
 def test_map_to_fixture_matches_and_orients():
-    assert fr.map_to_fixture("Mexico", "South Africa")[0] == 4
+    # Mexico v South Africa is the opener = OFFICIAL match number 1 (sheet row 4)
+    assert fr.map_to_fixture("Mexico", "South Africa")[0] == 1
     r, fh, fa, rev = fr.map_to_fixture("South Africa", "Mexico")
-    assert r == 4 and fh == "Mexico" and fa == "South Africa" and rev is True
+    assert r == 1 and fh == "Mexico" and fa == "South Africa" and rev is True
     assert fr.map_to_fixture("Mars", "Venus") is None

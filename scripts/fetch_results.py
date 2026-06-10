@@ -1,6 +1,7 @@
 """ESPN scoreboard fetch + group-fixture mapping for the live update pipeline.
 Pure parsing/mapping functions (no side effects) + a thin urllib fetch.
-Group stage only: maps ESPN events to GROUP_FIXTURES rows 4-75."""
+Group stage only: maps ESPN events to official FIFA group-match numbers 1-72
+(the keys condition.py / record_update.py / results_log['group'] use)."""
 import datetime as dt
 import json
 import sys
@@ -8,7 +9,7 @@ import urllib.request
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from fixtures import GROUP_FIXTURES, canon
+from fixtures import GROUP_FIXTURES, canon, ROW_MATCH
 
 ESPN_URL = "https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard"
 
@@ -33,7 +34,9 @@ def _espn_name(name):
     return canon(ESPN_ALIASES.get(name.strip().lower(), name))
 
 
-_FIX_ROW = {(_espn_name(h), _espn_name(a)): r for r, g, h, a in GROUP_FIXTURES}
+# Map a canonical (home, away) name pair to its OFFICIAL FIFA match number (1-72),
+# not the sheet row — results_log["group"] and condition.py are keyed by match number.
+_FIX_MATCHNO = {(_espn_name(h), _espn_name(a)): ROW_MATCH[r] for r, g, h, a in GROUP_FIXTURES}
 _FIX_NAMES = {(_espn_name(h), _espn_name(a)): (h, a) for r, g, h, a in GROUP_FIXTURES}
 
 
@@ -68,12 +71,13 @@ def parse_scoreboard(payload):
 
 def map_to_fixture(home, away):
     """Return (matchno, fixture_home, fixture_away, reversed) or None.
-    `reversed` is True when ESPN's home is the fixture's away team."""
+    `matchno` is the OFFICIAL FIFA match number (1-72). `reversed` is True when
+    ESPN's home is the fixture's away team."""
     ch, ca = _espn_name(home), _espn_name(away)
-    if (ch, ca) in _FIX_ROW:
-        return (_FIX_ROW[(ch, ca)], *_FIX_NAMES[(ch, ca)], False)
-    if (ca, ch) in _FIX_ROW:
-        return (_FIX_ROW[(ca, ch)], *_FIX_NAMES[(ca, ch)], True)
+    if (ch, ca) in _FIX_MATCHNO:
+        return (_FIX_MATCHNO[(ch, ca)], *_FIX_NAMES[(ch, ca)], False)
+    if (ca, ch) in _FIX_MATCHNO:
+        return (_FIX_MATCHNO[(ca, ch)], *_FIX_NAMES[(ca, ch)], True)
     return None
 
 
