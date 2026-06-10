@@ -1,0 +1,38 @@
+name: live-update-v2
+on:
+  workflow_dispatch: {}        # inert until cutover: no cron yet
+permissions:
+  contents: write
+concurrency:
+  group: live-update-v2
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run v2 recorder
+        run: python3 scripts/live_update_v2.py
+      - name: Commit and push v2 files only
+        run: |
+          CHANGED=$(git status --porcelain \
+            data/trajectory_v2.json data/results_log_v2.json data/records_index_v2.json)
+          if [ -z "$CHANGED" ]; then
+            echo "v2: no changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/trajectory_v2.json data/results_log_v2.json data/records_index_v2.json
+          for f in $(git diff --cached --name-only); do
+            case "$f" in
+              data/trajectory_v2.json|data/results_log_v2.json|data/records_index_v2.json) ;;
+              *) echo "REFUSING: non-allowlisted file staged: $f"; exit 1 ;;
+            esac
+          done
+          git pull --rebase origin "$GITHUB_REF_NAME" || true
+          git commit -m "v2 records: $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push
