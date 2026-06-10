@@ -51,3 +51,13 @@ def test_pre_then_post_records(clean_v2):
     assert traj[-1]["performance"]["points"] == 3                    # exact pick -> 3 pts
     assert json.loads(RESULTS.read_text())["group"]["1"] == [PICK[0], PICK[1]]
     assert json.loads(INDEX.read_text()) == {"pre": [1], "post": [1]}
+
+
+def test_append_is_deduped_on_phase_match(clean_v2):
+    # crash-safety: re-recording the same (phase, match) must not duplicate the entry
+    RESULTS.write_text(json.dumps({"group": {}, "ko": {}}))
+    now = dt.datetime.now(dt.timezone.utc)
+    v2.make_pre_record(_ev(1), now)
+    v2.make_pre_record(_ev(1), now)        # retry after a hypothetical crash before _mark
+    traj = json.loads(TRAJ.read_text())
+    assert sum(1 for r in traj if r["phase"] == "pre" and r["match"] == 1) == 1

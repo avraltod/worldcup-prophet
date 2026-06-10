@@ -33,6 +33,6 @@ jobs:
               *) echo "REFUSING: non-allowlisted file staged: $f"; exit 1 ;;
             esac
           done
-          git pull --rebase origin "$GITHUB_REF_NAME" || true
           git commit -m "v2 records: $(date -u +%Y-%m-%dT%H:%MZ)"
+          git pull --rebase origin "$GITHUB_REF_NAME" || true
           git push

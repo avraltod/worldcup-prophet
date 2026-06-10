@@ -67,12 +67,17 @@ def _prev_champion():
 
 def _append(rec):
     traj = _load(TRAJ, [])
+    # de-dup on (phase, match): a crash between _append and _mark must not yield a
+    # duplicate trajectory entry when plan_records retries the record next run.
+    if any(r.get("phase") == rec["phase"] and r.get("match") == rec["match"] for r in traj):
+        return
     traj.append(rec)
     TRAJ.write_text(json.dumps(traj, ensure_ascii=False, indent=1))
 
 
 def _mark(match, phase):
     idx = _load(INDEX, {"pre": [], "post": []})
+    idx.setdefault(phase, [])
     if match not in idx[phase]:
         idx[phase].append(match)
     INDEX.write_text(json.dumps(idx))
