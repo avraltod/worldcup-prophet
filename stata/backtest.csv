@@ -1,0 +1,129 @@
+year,home,away,hg,ag,elo_home,elo_away,host
+2018,Russia,Saudi Arabia,5,0,1678,1586,Russia
+2018,Egypt,Uruguay,0,1,1643,1893,Russia
+2018,Morocco,Iran,0,1,1723,1790,Russia
+2018,Portugal,Spain,3,3,1969,2042,Russia
+2018,France,Australia,2,1,1994,1732,Russia
+2018,Argentina,Iceland,1,1,1985,1764,Russia
+2018,Peru,Denmark,0,1,1917,1844,Russia
+2018,Croatia,Nigeria,2,0,1853,1684,Russia
+2018,Costa Rica,Serbia,0,1,1749,1764,Russia
+2018,Germany,Mexico,0,1,2077,1861,Russia
+2018,Brazil,Switzerland,1,1,2136,1889,Russia
+2018,Sweden,South Korea,1,0,1794,1728,Russia
+2018,Belgium,Panama,3,0,1931,1657,Russia
+2018,Tunisia,England,1,2,1658,1948,Russia
+2018,Colombia,Japan,1,2,1928,1666,Russia
+2018,Poland,Senegal,1,2,1829,1734,Russia
+2018,Russia,Egypt,3,1,1678,1643,Russia
+2018,Portugal,Morocco,1,0,1969,1723,Russia
+2018,Uruguay,Saudi Arabia,1,0,1893,1586,Russia
+2018,Iran,Spain,0,1,1790,2042,Russia
+2018,Denmark,Australia,1,1,1844,1732,Russia
+2018,France,Peru,1,0,1994,1917,Russia
+2018,Argentina,Croatia,0,3,1985,1853,Russia
+2018,Brazil,Costa Rica,2,0,2136,1749,Russia
+2018,Nigeria,Iceland,2,0,1684,1764,Russia
+2018,Serbia,Switzerland,1,2,1764,1889,Russia
+2018,Belgium,Tunisia,5,2,1931,1658,Russia
+2018,South Korea,Mexico,1,2,1728,1861,Russia
+2018,Germany,Sweden,2,1,2077,1794,Russia
+2018,England,Panama,6,1,1948,1657,Russia
+2018,Japan,Senegal,2,2,1666,1734,Russia
+2018,Poland,Colombia,0,3,1829,1928,Russia
+2018,Uruguay,Russia,3,0,1893,1678,Russia
+2018,Saudi Arabia,Egypt,2,1,1586,1643,Russia
+2018,Spain,Morocco,2,2,2042,1723,Russia
+2018,Iran,Portugal,1,1,1790,1969,Russia
+2018,Australia,Peru,0,2,1732,1917,Russia
+2018,Denmark,France,0,0,1844,1994,Russia
+2018,Nigeria,Argentina,1,2,1684,1985,Russia
+2018,Iceland,Croatia,1,2,1764,1853,Russia
+2018,Mexico,Sweden,0,3,1861,1794,Russia
+2018,South Korea,Germany,2,0,1728,2077,Russia
+2018,Serbia,Brazil,0,2,1764,2136,Russia
+2018,Switzerland,Costa Rica,2,2,1889,1749,Russia
+2018,Senegal,Colombia,0,1,1734,1928,Russia
+2018,Japan,Poland,0,1,1666,1829,Russia
+2018,England,Belgium,0,1,1948,1931,Russia
+2018,Panama,Tunisia,1,2,1657,1658,Russia
+2018,France,Argentina,4,3,1994,1985,Russia
+2018,Uruguay,Portugal,2,1,1893,1969,Russia
+2018,Spain,Russia,1,1,2042,1678,Russia
+2018,Croatia,Denmark,1,1,1853,1844,Russia
+2018,Brazil,Mexico,2,0,2136,1861,Russia
+2018,Belgium,Japan,3,2,1931,1666,Russia
+2018,Sweden,Switzerland,1,0,1794,1889,Russia
+2018,Colombia,England,1,1,1928,1948,Russia
+2018,Uruguay,France,0,2,1893,1994,Russia
+2018,Brazil,Belgium,1,2,2136,1931,Russia
+2018,Sweden,England,0,2,1794,1948,Russia
+2018,Russia,Croatia,2,2,1678,1853,Russia
+2018,France,Belgium,1,0,1994,1931,Russia
+2018,Croatia,England,2,1,1853,1948,Russia
+2018,Belgium,England,2,0,1931,1948,Russia
+2018,France,Croatia,4,2,1994,1853,Russia
+2022,Qatar,Ecuador,0,2,1680,1833,Qatar
+2022,England,Iran,6,2,1920,1797,Qatar
+2022,Senegal,Netherlands,0,2,1687,2041,Qatar
+2022,United States,Wales,1,1,1798,1790,Qatar
+2022,Argentina,Saudi Arabia,1,2,2143,1635,Qatar
+2022,Denmark,Tunisia,0,0,1971,1707,Qatar
+2022,Mexico,Poland,0,0,1809,1814,Qatar
+2022,France,Australia,4,1,2005,1719,Qatar
+2022,Morocco,Croatia,0,0,1766,1927,Qatar
+2022,Germany,Japan,1,2,1963,1787,Qatar
+2022,Spain,Costa Rica,7,0,2048,1744,Qatar
+2022,Belgium,Canada,1,0,2007,1776,Qatar
+2022,Switzerland,Cameroon,1,0,1902,1610,Qatar
+2022,Uruguay,South Korea,0,0,1936,1786,Qatar
+2022,Portugal,Ghana,3,2,2005,1567,Qatar
+2022,Brazil,Serbia,2,0,2169,1898,Qatar
+2022,Wales,Iran,0,2,1790,1797,Qatar
+2022,Qatar,Senegal,1,3,1680,1687,Qatar
+2022,Netherlands,Ecuador,1,1,2041,1833,Qatar
+2022,England,United States,0,0,1920,1798,Qatar
+2022,Tunisia,Australia,0,1,1707,1719,Qatar
+2022,Poland,Saudi Arabia,2,0,1814,1635,Qatar
+2022,France,Denmark,2,1,2005,1971,Qatar
+2022,Argentina,Mexico,2,0,2143,1809,Qatar
+2022,Japan,Costa Rica,0,1,1787,1744,Qatar
+2022,Belgium,Morocco,0,2,2007,1766,Qatar
+2022,Croatia,Canada,4,1,1927,1776,Qatar
+2022,Spain,Germany,1,1,2048,1963,Qatar
+2022,Cameroon,Serbia,3,3,1610,1898,Qatar
+2022,South Korea,Ghana,2,3,1786,1567,Qatar
+2022,Brazil,Switzerland,1,0,2169,1902,Qatar
+2022,Portugal,Uruguay,2,0,2005,1936,Qatar
+2022,Ecuador,Senegal,1,2,1833,1687,Qatar
+2022,Netherlands,Qatar,2,0,2041,1680,Qatar
+2022,Wales,England,0,3,1790,1920,Qatar
+2022,Iran,United States,0,1,1797,1798,Qatar
+2022,Tunisia,France,1,0,1707,2005,Qatar
+2022,Australia,Denmark,1,0,1719,1971,Qatar
+2022,Poland,Argentina,0,2,1814,2143,Qatar
+2022,Saudi Arabia,Mexico,1,2,1635,1809,Qatar
+2022,Canada,Morocco,1,2,1776,1766,Qatar
+2022,Croatia,Belgium,0,0,1927,2007,Qatar
+2022,Japan,Spain,2,1,1787,2048,Qatar
+2022,Costa Rica,Germany,2,4,1744,1963,Qatar
+2022,Ghana,Uruguay,0,2,1567,1936,Qatar
+2022,South Korea,Portugal,2,1,1786,2005,Qatar
+2022,Cameroon,Brazil,1,0,1610,2169,Qatar
+2022,Serbia,Switzerland,2,3,1898,1902,Qatar
+2022,Netherlands,United States,3,1,2041,1798,Qatar
+2022,Argentina,Australia,2,1,2143,1719,Qatar
+2022,France,Poland,3,1,2005,1814,Qatar
+2022,England,Senegal,3,0,1920,1687,Qatar
+2022,Japan,Croatia,1,1,1787,1927,Qatar
+2022,Brazil,South Korea,4,1,2169,1786,Qatar
+2022,Morocco,Spain,0,0,1766,2048,Qatar
+2022,Portugal,Switzerland,6,1,2005,1902,Qatar
+2022,Croatia,Brazil,1,1,1927,2169,Qatar
+2022,Netherlands,Argentina,2,2,2041,2143,Qatar
+2022,Morocco,Portugal,1,0,1766,2005,Qatar
+2022,England,France,1,2,1920,2005,Qatar
+2022,Argentina,Croatia,3,0,2143,1927,Qatar
+2022,France,Morocco,2,0,2005,1766,Qatar
+2022,Croatia,Morocco,2,1,1927,1766,Qatar
+2022,Argentina,France,3,3,2143,2005,Qatar

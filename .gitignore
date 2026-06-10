@@ -1,0 +1,39 @@
+# Excel lock / temp files
+~$*.xlsx
+*.tmp
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+
+# LaTeX build artifacts (keep the .tex and .pdf; drop the rest)
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.toc
+paper/*.bbl
+paper/*.blg
+paper/*.synctex.gz
+paper/*.fls
+paper/*.fdb_latexmk
+
+# macOS
+.DS_Store
+
+# Editor
+*.swp
+*~
+
+# Scratch / local-only
+/tmp/
+scratch/
+
+# Internal backups / working artifacts (not for the repo)
+paper/figs/_orig_backup/
+*.bak
+data/*_backup.json
+
+# Betting pool spreadsheets (shared with friends separately, not in repo)
+*ScoreChart*.xlsx

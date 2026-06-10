@@ -1,0 +1,674 @@
+[
+  {
+    "home": "Qatar",
+    "away": "Ecuador",
+    "kind": "group",
+    "result": [
+      0,
+      2
+    ],
+    "lam_obs": {
+      "home": 0.0,
+      "away": 0.9767025089605741
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "England",
+    "away": "Iran",
+    "kind": "group",
+    "result": [
+      6,
+      2
+    ],
+    "lam_obs": {
+      "home": 2.2789725209080065,
+      "away": 0.9767025089605741
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Senegal",
+    "away": "Netherlands",
+    "kind": "group",
+    "result": [
+      0,
+      2
+    ],
+    "lam_obs": {
+      "home": 1.3022700119474322,
+      "away": 0.9767025089605741
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "United States",
+    "away": "Wales",
+    "kind": "group",
+    "result": [
+      1,
+      1
+    ],
+    "lam_obs": {
+      "home": 0.32556750298685805,
+      "away": 0.9767025089605741
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Argentina",
+    "away": "Saudi Arabia",
+    "kind": "group",
+    "result": [
+      1,
+      2
+    ],
+    "lam_obs": {
+      "home": 1.9534050179211482,
+      "away": 0.6511350059737161
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Denmark",
+    "away": "Tunisia",
+    "kind": "group",
+    "result": [
+      0,
+      0
+    ],
+    "lam_obs": {
+      "home": 1.6278375149342903,
+      "away": 0.32556750298685805
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Mexico",
+    "away": "Poland",
+    "kind": "group",
+    "result": [
+      0,
+      0
+    ],
+    "lam_obs": {
+      "home": 1.3022700119474322,
+      "away": 0.6511350059737161
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "France",
+    "away": "Australia",
+    "kind": "group",
+    "result": [
+      4,
+      1
+    ],
+    "lam_obs": {
+      "home": 2.2789725209080065,
+      "away": 0.32556750298685805
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Morocco",
+    "away": "Croatia",
+    "kind": "group",
+    "result": [
+      0,
+      0
+    ],
+    "lam_obs": {
+      "home": 0.6511350059737161,
+      "away": 0.6511350059737161
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Germany",
+    "away": "Japan",
+    "kind": "group",
+    "result": [
+      1,
+      2
+    ],
+    "lam_obs": {
+      "home": 2.9301075268817223,
+      "away": 1.3022700119474322
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Spain",
+    "away": "Costa Rica",
+    "kind": "group",
+    "result": [
+      7,
+      0
+    ],
+    "lam_obs": {
+      "home": 2.6045400238948644,
+      "away": 0.0
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Belgium",
+    "away": "Canada",
+    "kind": "group",
+    "result": [
+      1,
+      0
+    ],
+    "lam_obs": {
+      "home": 0.9767025089605741,
+      "away": 0.9767025089605741
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Switzerland",
+    "away": "Cameroon",
+    "kind": "group",
+    "result": [
+      1,
+      0
+    ],
+    "lam_obs": {
+      "home": 0.9767025089605741,
+      "away": 1.6278375149342903
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Uruguay",
+    "away": "South Korea",
+    "kind": "group",
+    "result": [
+      0,
+      0
+    ],
+    "lam_obs": {
+      "home": 0.32556750298685805,
+      "away": 0.0
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Portugal",
+    "away": "Ghana",
+    "kind": "group",
+    "result": [
+      3,
+      2
+    ],
+    "lam_obs": {
+      "home": 1.6278375149342903,
+      "away": 0.9767025089605741
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Brazil",
+    "away": "Serbia",
+    "kind": "group",
+    "result": [
+      2,
+      0
+    ],
+    "lam_obs": {
+      "home": 2.9301075268817223,
+      "away": 0.0
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Wales",
+    "away": "Iran",
+    "kind": "group",
+    "result": [
+      0,
+      2
+    ],
+    "lam_obs": {
+      "home": 0.9767025089605741,
+      "away": 1.9534050179211482
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Qatar",
+    "away": "Senegal",
+    "kind": "group",
+    "result": [
+      1,
+      3
+    ],
+    "lam_obs": {
+      "home": 0.9767025089605741,
+      "away": 1.6278375149342903
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Netherlands",
+    "away": "Ecuador",
+    "kind": "group",
+    "result": [
+      1,
+      1
+    ],
+    "lam_obs": {
+      "home": 0.32556750298685805,
+      "away": 1.3022700119474322
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "England",
+    "away": "United States",
+    "kind": "group",
+    "result": [
+      0,
+      0
+    ],
+    "lam_obs": {
+      "home": 0.9767025089605741,
+      "away": 0.32556750298685805
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Tunisia",
+    "away": "Australia",
+    "kind": "group",
+    "result": [
+      0,
+      1
+    ],
+    "lam_obs": {
+      "home": 1.3022700119474322,
+      "away": 0.6511350059737161
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Poland",
+    "away": "Saudi Arabia",
+    "kind": "group",
+    "result": [
+      2,
+      0
+    ],
+    "lam_obs": {
+      "home": 0.9767025089605741,
+      "away": 1.6278375149342903
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "France",
+    "away": "Denmark",
+    "kind": "group",
+    "result": [
+      2,
+      1
+    ],
+    "lam_obs": {
+      "home": 2.2789725209080065,
+      "away": 0.6511350059737161
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Argentina",
+    "away": "Mexico",
+    "kind": "group",
+    "result": [
+      2,
+      0
+    ],
+    "lam_obs": {
+      "home": 0.6511350059737161,
+      "away": 0.32556750298685805
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Japan",
+    "away": "Costa Rica",
+    "kind": "group",
+    "result": [
+      0,
+      1
+    ],
+    "lam_obs": {
+      "home": 0.9767025089605741,
+      "away": 0.32556750298685805
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Belgium",
+    "away": "Morocco",
+    "kind": "group",
+    "result": [
+      0,
+      2
+    ],
+    "lam_obs": {
+      "home": 0.9767025089605741,
+      "away": 1.3022700119474322
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Croatia",
+    "away": "Canada",
+    "kind": "group",
+    "result": [
+      4,
+      1
+    ],
+    "lam_obs": {
+      "home": 3.2556750298685806,
+      "away": 0.6511350059737161
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Spain",
+    "away": "Germany",
+    "kind": "group",
+    "result": [
+      1,
+      1
+    ],
+    "lam_obs": {
+      "home": 0.9767025089605741,
+      "away": 1.3022700119474322
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Cameroon",
+    "away": "Serbia",
+    "kind": "group",
+    "result": [
+      3,
+      3
+    ],
+    "lam_obs": {
+      "home": 2.6045400238948644,
+      "away": 1.6278375149342903
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "South Korea",
+    "away": "Ghana",
+    "kind": "group",
+    "result": [
+      2,
+      3
+    ],
+    "lam_obs": {
+      "home": 2.2789725209080065,
+      "away": 0.9767025089605741
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Brazil",
+    "away": "Switzerland",
+    "kind": "group",
+    "result": [
+      1,
+      0
+    ],
+    "lam_obs": {
+      "home": 1.6278375149342903,
+      "away": 0.0
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Portugal",
+    "away": "Uruguay",
+    "kind": "group",
+    "result": [
+      2,
+      0
+    ],
+    "lam_obs": {
+      "home": 0.9767025089605741,
+      "away": 0.9767025089605741
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Ecuador",
+    "away": "Senegal",
+    "kind": "group",
+    "result": [
+      1,
+      2
+    ],
+    "lam_obs": {
+      "home": 1.3022700119474322,
+      "away": 0.9767025089605741
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Netherlands",
+    "away": "Qatar",
+    "kind": "group",
+    "result": [
+      2,
+      0
+    ],
+    "lam_obs": {
+      "home": 1.3022700119474322,
+      "away": 0.9767025089605741
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Wales",
+    "away": "England",
+    "kind": "group",
+    "result": [
+      0,
+      3
+    ],
+    "lam_obs": {
+      "home": 0.32556750298685805,
+      "away": 2.2789725209080065
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Iran",
+    "away": "United States",
+    "kind": "group",
+    "result": [
+      0,
+      1
+    ],
+    "lam_obs": {
+      "home": 0.32556750298685805,
+      "away": 1.6278375149342903
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Tunisia",
+    "away": "France",
+    "kind": "group",
+    "result": [
+      1,
+      0
+    ],
+    "lam_obs": {
+      "home": 0.9767025089605741,
+      "away": 0.9767025089605741
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Australia",
+    "away": "Denmark",
+    "kind": "group",
+    "result": [
+      1,
+      0
+    ],
+    "lam_obs": {
+      "home": 1.3022700119474322,
+      "away": 0.9767025089605741
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Poland",
+    "away": "Argentina",
+    "kind": "group",
+    "result": [
+      0,
+      2
+    ],
+    "lam_obs": {
+      "home": 0.0,
+      "away": 3.9068100358422964
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Saudi Arabia",
+    "away": "Mexico",
+    "kind": "group",
+    "result": [
+      1,
+      2
+    ],
+    "lam_obs": {
+      "home": 0.6511350059737161,
+      "away": 3.5812425328554385
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Canada",
+    "away": "Morocco",
+    "kind": "group",
+    "result": [
+      1,
+      2
+    ],
+    "lam_obs": {
+      "home": 0.0,
+      "away": 0.6511350059737161
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Croatia",
+    "away": "Belgium",
+    "kind": "group",
+    "result": [
+      0,
+      0
+    ],
+    "lam_obs": {
+      "home": 1.3022700119474322,
+      "away": 0.9767025089605741
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Japan",
+    "away": "Spain",
+    "kind": "group",
+    "result": [
+      2,
+      1
+    ],
+    "lam_obs": {
+      "home": 0.9767025089605741,
+      "away": 1.6278375149342903
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Costa Rica",
+    "away": "Germany",
+    "kind": "group",
+    "result": [
+      2,
+      4
+    ],
+    "lam_obs": {
+      "home": 1.9534050179211482,
+      "away": 3.5812425328554385
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Ghana",
+    "away": "Uruguay",
+    "kind": "group",
+    "result": [
+      0,
+      2
+    ],
+    "lam_obs": {
+      "home": 1.3022700119474322,
+      "away": 2.2789725209080065
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "South Korea",
+    "away": "Portugal",
+    "kind": "group",
+    "result": [
+      2,
+      1
+    ],
+    "lam_obs": {
+      "home": 1.9534050179211482,
+      "away": 1.9534050179211482
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Cameroon",
+    "away": "Brazil",
+    "kind": "group",
+    "result": [
+      1,
+      0
+    ],
+    "lam_obs": {
+      "home": 0.9767025089605741,
+      "away": 2.2789725209080065
+    },
+    "source": "proxy"
+  },
+  {
+    "home": "Serbia",
+    "away": "Switzerland",
+    "kind": "group",
+    "result": [
+      2,
+      3
+    ],
+    "lam_obs": {
+      "home": 1.3022700119474322,
+      "away": 2.2789725209080065
+    },
+    "source": "proxy"
+  }
+]

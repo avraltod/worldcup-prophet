@@ -1,0 +1,2586 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Avraa_Prediction_WC2026</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+</head>
+<body>
+<h1 id="avraas-prediction">AVRAA’S PREDICTION</h1>
+<h2 id="fifa-world-cup-2026-june-11-july-19">FIFA World Cup 2026 · June
+11 – July 19</h2>
+<blockquote>
+<p><strong>Champion: 🇪🇸 SPAIN</strong> — beats Argentina 1-0 in the
+Final.<br />
+Podium: 🥈 Argentina · 🥉 France · 4th England</p>
+</blockquote>
+<p><em>Predictions locked before the June 11, 2026 kickoff (built June
+7, Group K recalibrated to prediction-market prices, and a final
+pre-kickoff review of squad news that confirmed the entry). All kickoff
+times are Ulaanbaatar time (UTC+8). Write actual scores in the blank
+columns after each match.</em></p>
+<h3 id="how-these-picks-were-made-short-version">How these picks were
+made (short version)</h3>
+<ol type="1">
+<li><strong>Group matches</strong> — live bookmaker odds (bet365,
+FanDuel, Betfair, collected June 5–7) converted to fair probabilities,
+then a Poisson goal model picks the <em>expected-value-optimal
+scoreline</em> under the pool’s 3/2/1 rule (3 exact, 2
+result+goal-difference, 1 result). That’s why most picks are one-goal
+results like 1-0 — the goal-difference tier rewards getting the margin
+right — with a 1-1 draw on the most evenly-matched games.</li>
+<li><strong>Knockout rounds</strong> — World Football Elo ratings
+adjusted for confirmed injuries (Brazil without Rodrygo, Netherlands
+without Xavi Simons…) and host advantage (Mexico/USA at home).</li>
+<li><strong>200,000 Monte Carlo simulations</strong> of the whole
+tournament stress-tested every bracket call — four picks were changed
+because the simulations showed a likelier name in that bracket
+slot.</li>
+</ol>
+<p><strong>Simulated champion odds:</strong> Spain 27% · Argentina 19% ·
+France 14% · England 7% · Colombia 4% · Portugal 4% · Brazil 4% · others
+&lt;3%</p>
+<p><em>Reading the tables: <strong>Exp.</strong> is the model’s expected
+points for that pick under the pool’s 3/2/1 rule (3 exact, 2
+result+goal-difference, 1 result) — higher means a more confident pick.
+Fill in <strong>Actual</strong> (the real 90-minute score) and
+<strong>Pts</strong> (what you scored) as the games are played.</em></p>
+<hr />
+<h2 id="group-stage-twelve-dashboards">Group Stage — Twelve
+Dashboards</h2>
+<p>Each team’s qualification odds come from 100,000 simulations. The
+bars show the chance of winning the group (dark blue), finishing second
+(light blue), advancing as a best third-placed team (orange), or going
+out (grey).</p>
+<figure>
+<img src="paper/figs/fig_group_qual.png"
+alt="Qualification probability by team" />
+<figcaption aria-hidden="true">Qualification probability by
+team</figcaption>
+</figure>
+<h3 id="group-a-host-opener">Group A — Host opener</h3>
+<p><em>Mexico opens the whole tournament at the Azteca, 2,240m
+up.</em></p>
+<table>
+<thead>
+<tr>
+<th>Team</th>
+<th style="text-align: center;">Win grp</th>
+<th style="text-align: center;">2nd</th>
+<th style="text-align: center;">3rd→adv</th>
+<th style="text-align: center;"><strong>Qualify</strong></th>
+<th>Outlook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🥇 Mexico</td>
+<td style="text-align: center;">55%</td>
+<td style="text-align: center;">26%</td>
+<td style="text-align: center;">11%</td>
+<td style="text-align: center;"><strong>91%</strong></td>
+<td>█████████░</td>
+</tr>
+<tr>
+<td>🥈 Czechia</td>
+<td style="text-align: center;">19%</td>
+<td style="text-align: center;">29%</td>
+<td style="text-align: center;">20%</td>
+<td style="text-align: center;"><strong>68%</strong></td>
+<td>███████░░░</td>
+</tr>
+<tr>
+<td>🥉 South Korea</td>
+<td style="text-align: center;">18%</td>
+<td style="text-align: center;">28%</td>
+<td style="text-align: center;">21%</td>
+<td style="text-align: center;"><strong>66%</strong></td>
+<td>███████░░░</td>
+</tr>
+<tr>
+<td>▫️ South Africa</td>
+<td style="text-align: center;">8%</td>
+<td style="text-align: center;">18%</td>
+<td style="text-align: center;">19%</td>
+<td style="text-align: center;"><strong>45%</strong></td>
+<td>█████░░░░░</td>
+</tr>
+</tbody>
+</table>
+<p>🔮 <strong>Pick:</strong> Mexico is the clearest host-advantage story
+in the draw — opener at the Azteca (2,240 m altitude), ~68% market
+favorite, Jiménez in form. Second place is a genuine coin flip: South
+Korea over Czechia on Elo (1756 vs 1733) and tournament pedigree; their
+opener effectively decides it. Czechia still advances as a
+third-placer.</p>
+<p>⭐ <strong>Star:</strong> Hirving Lozano (MEX)<br />
+👀 <strong>What to watch:</strong> South Korea vs Czechia (MD1) decides
+2nd<br />
+⚡ <strong>Biggest risk:</strong> Czechia (68% qual) edges Korea for the
+runner-up spot</p>
+<p><strong>Predicted scores:</strong></p>
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 24%" />
+<col style="width: 15%" />
+<col style="width: 13%" />
+<col style="width: 11%" />
+<col style="width: 17%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr>
+<th>#</th>
+<th>Date (UB)</th>
+<th>Match</th>
+<th style="text-align: center;">Pick</th>
+<th style="text-align: center;">Exp.</th>
+<th style="text-align: center;">Actual</th>
+<th style="text-align: center;">Pts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Jun 12 03:00</td>
+<td>Mexico – South Africa</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">1.08</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Jun 12 10:00</td>
+<td>South Korea – Czechia</td>
+<td style="text-align: center;"><strong>1-1</strong></td>
+<td style="text-align: center;">0.74</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>25</td>
+<td>Jun 19 00:00</td>
+<td>Czechia – South Africa</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">0.84</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>28</td>
+<td>Jun 19 09:00</td>
+<td>Mexico – South Korea</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">0.95</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>53</td>
+<td>Jun 25 09:00</td>
+<td>Czechia – Mexico</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td style="text-align: center;">0.90</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>54</td>
+<td>Jun 25 09:00</td>
+<td>South Africa – South Korea</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td style="text-align: center;">0.79</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+</tbody>
+</table>
+<h3 id="group-b-swiss-lock">Group B — Swiss lock</h3>
+<p><em>Qatar (24% qual) is the field’s weakest side — GD
+currency.</em></p>
+<table>
+<thead>
+<tr>
+<th>Team</th>
+<th style="text-align: center;">Win grp</th>
+<th style="text-align: center;">2nd</th>
+<th style="text-align: center;">3rd→adv</th>
+<th style="text-align: center;"><strong>Qualify</strong></th>
+<th>Outlook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🥇 Switzerland</td>
+<td style="text-align: center;">54%</td>
+<td style="text-align: center;">29%</td>
+<td style="text-align: center;">10%</td>
+<td style="text-align: center;"><strong>94%</strong></td>
+<td>█████████░</td>
+</tr>
+<tr>
+<td>🥈 Canada</td>
+<td style="text-align: center;">33%</td>
+<td style="text-align: center;">38%</td>
+<td style="text-align: center;">17%</td>
+<td style="text-align: center;"><strong>88%</strong></td>
+<td>█████████░</td>
+</tr>
+<tr>
+<td>🥉 Bosnia and Herzegovina</td>
+<td style="text-align: center;">10%</td>
+<td style="text-align: center;">24%</td>
+<td style="text-align: center;">28%</td>
+<td style="text-align: center;"><strong>62%</strong></td>
+<td>██████░░░░</td>
+</tr>
+<tr>
+<td>▫️ Qatar</td>
+<td style="text-align: center;">2%</td>
+<td style="text-align: center;">8%</td>
+<td style="text-align: center;">13%</td>
+<td style="text-align: center;"><strong>24%</strong></td>
+<td>██░░░░░░░░</td>
+</tr>
+</tbody>
+</table>
+<p>🔮 <strong>Pick:</strong> Switzerland is the quiet Elo monster (1894
+— above Belgium). Canada gets host energy but the head-to-head tilts
+Swiss (50% vs 30%). Qatar is the weakest team in the field (Elo 1423) —
+everyone farms them for goal difference. Bosnia’s win over Qatar books a
+third-place ticket.</p>
+<p>⭐ <strong>Star:</strong> Granit Xhaka (SUI)<br />
+👀 <strong>What to watch:</strong> Switzerland vs Canada (MD3) for top
+spot<br />
+⚡ <strong>Biggest risk:</strong> Co-host Canada (88% qual) wins the
+group outright</p>
+<p><strong>Predicted scores:</strong></p>
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 24%" />
+<col style="width: 15%" />
+<col style="width: 13%" />
+<col style="width: 11%" />
+<col style="width: 17%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr>
+<th>#</th>
+<th>Date (UB)</th>
+<th>Match</th>
+<th style="text-align: center;">Pick</th>
+<th style="text-align: center;">Exp.</th>
+<th style="text-align: center;">Actual</th>
+<th style="text-align: center;">Pts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3</td>
+<td>Jun 13 03:00</td>
+<td>Canada – Bosnia and Herzegovina</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">0.90</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Jun 14 03:00</td>
+<td>Qatar – Switzerland</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td style="text-align: center;">1.08</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>26</td>
+<td>Jun 19 03:00</td>
+<td>Switzerland – Bosnia and Herzegovina</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">1.03</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>27</td>
+<td>Jun 19 06:00</td>
+<td>Canada – Qatar</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">1.12</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>51</td>
+<td>Jun 25 03:00</td>
+<td>Switzerland – Canada</td>
+<td style="text-align: center;"><strong>2-1</strong></td>
+<td style="text-align: center;">0.80</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>52</td>
+<td>Jun 25 03:00</td>
+<td>Bosnia and Herzegovina – Qatar</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">0.95</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+</tbody>
+</table>
+<h3 id="group-c-selecao-march">Group C — Selecao march</h3>
+<p><em>Brazil at 98% qual even without Rodrygo and a doubtful
+Neymar.</em></p>
+<table>
+<thead>
+<tr>
+<th>Team</th>
+<th style="text-align: center;">Win grp</th>
+<th style="text-align: center;">2nd</th>
+<th style="text-align: center;">3rd→adv</th>
+<th style="text-align: center;"><strong>Qualify</strong></th>
+<th>Outlook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🥇 Brazil</td>
+<td style="text-align: center;">68%</td>
+<td style="text-align: center;">23%</td>
+<td style="text-align: center;">7%</td>
+<td style="text-align: center;"><strong>98%</strong></td>
+<td>██████████</td>
+</tr>
+<tr>
+<td>🥈 Morocco</td>
+<td style="text-align: center;">22%</td>
+<td style="text-align: center;">46%</td>
+<td style="text-align: center;">20%</td>
+<td style="text-align: center;"><strong>89%</strong></td>
+<td>█████████░</td>
+</tr>
+<tr>
+<td>🥉 Scotland</td>
+<td style="text-align: center;">10%</td>
+<td style="text-align: center;">27%</td>
+<td style="text-align: center;">33%</td>
+<td style="text-align: center;"><strong>69%</strong></td>
+<td>███████░░░</td>
+</tr>
+<tr>
+<td>▫️ Haiti</td>
+<td style="text-align: center;">0%</td>
+<td style="text-align: center;">4%</td>
+<td style="text-align: center;">8%</td>
+<td style="text-align: center;"><strong>12%</strong></td>
+<td>█░░░░░░░░░</td>
+</tr>
+</tbody>
+</table>
+<p>🔮 <strong>Pick:</strong> Brazil tops the group even without Rodrygo
+(ACL) and with Neymar’s calf in doubt — Elo 1988 absorbs it. The pivotal
+game is Scotland–Morocco for second: the market is decisive (Morocco 50%
+vs 23%). Scotland’s 3 points die on goal difference in the third-place
+table.</p>
+<p>⭐ <strong>Star:</strong> Vinicius Jr (BRA)<br />
+👀 <strong>What to watch:</strong> Scotland vs Morocco (MD2) for
+2nd<br />
+⚡ <strong>Biggest risk:</strong> Scotland (69% qual) upsets Morocco for
+second</p>
+<p><strong>Predicted scores:</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Date (UB)</th>
+<th>Match</th>
+<th style="text-align: center;">Pick</th>
+<th style="text-align: center;">Exp.</th>
+<th style="text-align: center;">Actual</th>
+<th style="text-align: center;">Pts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5</td>
+<td>Jun 14 09:00</td>
+<td>Haiti – Scotland</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td style="text-align: center;">1.00</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Jun 14 06:00</td>
+<td>Brazil – Morocco</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">0.97</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>29</td>
+<td>Jun 20 09:00</td>
+<td>Brazil – Haiti</td>
+<td style="text-align: center;"><strong>2-0</strong></td>
+<td style="text-align: center;">1.37</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>30</td>
+<td>Jun 20 06:00</td>
+<td>Scotland – Morocco</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td style="text-align: center;">0.90</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>49</td>
+<td>Jun 25 06:00</td>
+<td>Scotland – Brazil</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td style="text-align: center;">1.05</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>50</td>
+<td>Jun 25 06:00</td>
+<td>Morocco – Haiti</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">1.28</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+</tbody>
+</table>
+<h3 id="group-d-coin-flip-group">Group D — Coin-flip group</h3>
+<p><em>Genuinely the hardest group to call: three teams within 17
+pp.</em></p>
+<table>
+<thead>
+<tr>
+<th>Team</th>
+<th style="text-align: center;">Win grp</th>
+<th style="text-align: center;">2nd</th>
+<th style="text-align: center;">3rd→adv</th>
+<th style="text-align: center;"><strong>Qualify</strong></th>
+<th>Outlook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🥇 United States</td>
+<td style="text-align: center;">37%</td>
+<td style="text-align: center;">29%</td>
+<td style="text-align: center;">16%</td>
+<td style="text-align: center;"><strong>82%</strong></td>
+<td>████████░░</td>
+</tr>
+<tr>
+<td>🥈 Turkey</td>
+<td style="text-align: center;">35%</td>
+<td style="text-align: center;">29%</td>
+<td style="text-align: center;">17%</td>
+<td style="text-align: center;"><strong>81%</strong></td>
+<td>████████░░</td>
+</tr>
+<tr>
+<td>🥉 Paraguay</td>
+<td style="text-align: center;">18%</td>
+<td style="text-align: center;">25%</td>
+<td style="text-align: center;">22%</td>
+<td style="text-align: center;"><strong>65%</strong></td>
+<td>██████░░░░</td>
+</tr>
+<tr>
+<td>▫️ Australia</td>
+<td style="text-align: center;">10%</td>
+<td style="text-align: center;">17%</td>
+<td style="text-align: center;">18%</td>
+<td style="text-align: center;"><strong>45%</strong></td>
+<td>█████░░░░░</td>
+</tr>
+</tbody>
+</table>
+<p>🔮 <strong>Pick:</strong> The tightest group in the tournament.
+Turkey has the higher Elo (1906), but the USA has host advantage and the
+market’s blessing (group-winner: USA 40%, Turkey 35%); their
+head-to-head priced at a literal 36.3/36.3 tie, broken toward the USA
+because simulations show it routes both teams into safer bracket slots.
+Paraguay (Elo 1833, underrated) advances third.</p>
+<p>⭐ <strong>Star:</strong> Arda Guler (TUR)<br />
+👀 <strong>What to watch:</strong> Turkey vs USA (MD3) — 82% vs 81%, the
+tightest in the draw<br />
+⚡ <strong>Biggest risk:</strong> Turkey tops it and reroutes the whole
+bracket</p>
+<p><strong>Predicted scores:</strong></p>
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 24%" />
+<col style="width: 15%" />
+<col style="width: 13%" />
+<col style="width: 11%" />
+<col style="width: 17%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr>
+<th>#</th>
+<th>Date (UB)</th>
+<th>Match</th>
+<th style="text-align: center;">Pick</th>
+<th style="text-align: center;">Exp.</th>
+<th style="text-align: center;">Actual</th>
+<th style="text-align: center;">Pts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4</td>
+<td>Jun 13 09:00</td>
+<td>United States – Paraguay</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">0.86</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Jun 14 12:00</td>
+<td>Australia – Turkey</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td style="text-align: center;">0.94</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>31</td>
+<td>Jun 20 12:00</td>
+<td>Turkey – Paraguay</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">0.82</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>32</td>
+<td>Jun 20 03:00</td>
+<td>United States – Australia</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">0.95</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>59</td>
+<td>Jun 26 10:00</td>
+<td>Turkey – United States</td>
+<td style="text-align: center;"><strong>1-1</strong></td>
+<td style="text-align: center;">0.68</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>60</td>
+<td>Jun 26 10:00</td>
+<td>Paraguay – Australia</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">0.85</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+</tbody>
+</table>
+<h3 id="group-e-german-efficiency">Group E — German efficiency</h3>
+<p><em>Germany vs Curacao is the tournament’s biggest mismatch
+(92%).</em></p>
+<table>
+<thead>
+<tr>
+<th>Team</th>
+<th style="text-align: center;">Win grp</th>
+<th style="text-align: center;">2nd</th>
+<th style="text-align: center;">3rd→adv</th>
+<th style="text-align: center;"><strong>Qualify</strong></th>
+<th>Outlook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🥇 Germany</td>
+<td style="text-align: center;">67%</td>
+<td style="text-align: center;">24%</td>
+<td style="text-align: center;">8%</td>
+<td style="text-align: center;"><strong>99%</strong></td>
+<td>██████████</td>
+</tr>
+<tr>
+<td>🥈 Ecuador</td>
+<td style="text-align: center;">20%</td>
+<td style="text-align: center;">42%</td>
+<td style="text-align: center;">26%</td>
+<td style="text-align: center;"><strong>88%</strong></td>
+<td>█████████░</td>
+</tr>
+<tr>
+<td>🥉 Ivory Coast</td>
+<td style="text-align: center;">13%</td>
+<td style="text-align: center;">33%</td>
+<td style="text-align: center;">36%</td>
+<td style="text-align: center;"><strong>82%</strong></td>
+<td>████████░░</td>
+</tr>
+<tr>
+<td>▫️ Curaçao</td>
+<td style="text-align: center;">0%</td>
+<td style="text-align: center;">2%</td>
+<td style="text-align: center;">5%</td>
+<td style="text-align: center;"><strong>7%</strong></td>
+<td>█░░░░░░░░░</td>
+</tr>
+</tbody>
+</table>
+<p>🔮 <strong>Pick:</strong> Germany–Curaçao is the heaviest mismatch of
+the tournament (92% — hence the 3-0). Ecuador’s Elo (1935) is higher
+than Uruguay’s or Croatia’s — an elite team hiding behind low name
+recognition; they beat Ivory Coast in the decider (42% vs 28%). Ivory
+Coast still advances as one of the two best third-placers.</p>
+<p>⭐ <strong>Star:</strong> Florian Wirtz (GER)<br />
+👀 <strong>What to watch:</strong> Ecuador vs Germany (MD3) for the
+group<br />
+⚡ <strong>Biggest risk:</strong> Ecuador (88% qual, Elo 1935) wins the
+group, not just 2nd</p>
+<p><strong>Predicted scores:</strong></p>
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 24%" />
+<col style="width: 15%" />
+<col style="width: 13%" />
+<col style="width: 11%" />
+<col style="width: 17%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr>
+<th>#</th>
+<th>Date (UB)</th>
+<th>Match</th>
+<th style="text-align: center;">Pick</th>
+<th style="text-align: center;">Exp.</th>
+<th style="text-align: center;">Actual</th>
+<th style="text-align: center;">Pts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>9</td>
+<td>Jun 15 07:00</td>
+<td>Ivory Coast – Ecuador</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td style="text-align: center;">0.83</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Jun 15 01:00</td>
+<td>Germany – Curaçao</td>
+<td style="text-align: center;"><strong>3-0</strong></td>
+<td style="text-align: center;">1.32</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>33</td>
+<td>Jun 21 04:00</td>
+<td>Germany – Ivory Coast</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">1.04</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>34</td>
+<td>Jun 21 08:00</td>
+<td>Ecuador – Curaçao</td>
+<td style="text-align: center;"><strong>2-0</strong></td>
+<td style="text-align: center;">1.15</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>55</td>
+<td>Jun 26 04:00</td>
+<td>Curaçao – Ivory Coast</td>
+<td style="text-align: center;"><strong>0-2</strong></td>
+<td style="text-align: center;">1.15</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>56</td>
+<td>Jun 26 04:00</td>
+<td>Ecuador – Germany</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td style="text-align: center;">0.95</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+</tbody>
+</table>
+<h3 id="group-f-oranje-cruise">Group F — Oranje cruise</h3>
+<p><em>Both NED and JPN carry ACL/hamstring losses — depth
+decides.</em></p>
+<table>
+<thead>
+<tr>
+<th>Team</th>
+<th style="text-align: center;">Win grp</th>
+<th style="text-align: center;">2nd</th>
+<th style="text-align: center;">3rd→adv</th>
+<th style="text-align: center;"><strong>Qualify</strong></th>
+<th>Outlook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🥇 Netherlands</td>
+<td style="text-align: center;">53%</td>
+<td style="text-align: center;">26%</td>
+<td style="text-align: center;">12%</td>
+<td style="text-align: center;"><strong>91%</strong></td>
+<td>█████████░</td>
+</tr>
+<tr>
+<td>🥈 Japan</td>
+<td style="text-align: center;">25%</td>
+<td style="text-align: center;">32%</td>
+<td style="text-align: center;">19%</td>
+<td style="text-align: center;"><strong>76%</strong></td>
+<td>████████░░</td>
+</tr>
+<tr>
+<td>🥉 Sweden</td>
+<td style="text-align: center;">15%</td>
+<td style="text-align: center;">26%</td>
+<td style="text-align: center;">22%</td>
+<td style="text-align: center;"><strong>64%</strong></td>
+<td>██████░░░░</td>
+</tr>
+<tr>
+<td>▫️ Tunisia</td>
+<td style="text-align: center;">7%</td>
+<td style="text-align: center;">16%</td>
+<td style="text-align: center;">18%</td>
+<td style="text-align: center;"><strong>40%</strong></td>
+<td>████░░░░░░</td>
+</tr>
+</tbody>
+</table>
+<p>🔮 <strong>Pick:</strong> Decided on day one — Netherlands–Japan is
+the marquee group game (46% vs 28%). The Dutch absorb the Xavi Simons
+ACL loss; Japan miss Mitoma’s wing threat but still take second
+comfortably. Sweden’s win over Tunisia is worth a third-place
+ticket.</p>
+<p>⭐ <strong>Star:</strong> Cody Gakpo (NED)<br />
+👀 <strong>What to watch:</strong> Netherlands vs Japan (MD1) sets the
+tone<br />
+⚡ <strong>Biggest risk:</strong> Japan (76% qual) beats the Dutch and
+tops the group</p>
+<p><strong>Predicted scores:</strong></p>
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 24%" />
+<col style="width: 15%" />
+<col style="width: 13%" />
+<col style="width: 11%" />
+<col style="width: 17%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr>
+<th>#</th>
+<th>Date (UB)</th>
+<th>Match</th>
+<th style="text-align: center;">Pick</th>
+<th style="text-align: center;">Exp.</th>
+<th style="text-align: center;">Actual</th>
+<th style="text-align: center;">Pts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>11</td>
+<td>Jun 15 04:00</td>
+<td>Netherlands – Japan</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">0.81</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Jun 15 10:00</td>
+<td>Sweden – Tunisia</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">0.89</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>35</td>
+<td>Jun 21 01:00</td>
+<td>Netherlands – Sweden</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">0.99</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>36</td>
+<td>Jun 21 12:00</td>
+<td>Tunisia – Japan</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td style="text-align: center;">0.94</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>57</td>
+<td>Jun 26 07:00</td>
+<td>Japan – Sweden</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">0.77</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>58</td>
+<td>Jun 26 07:00</td>
+<td>Tunisia – Netherlands</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td style="text-align: center;">1.04</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+</tbody>
+</table>
+<h3 id="group-g-soft-draw">Group G — Soft draw</h3>
+<p><em>Weakest group by rating — Belgium’s easy path matters
+later.</em></p>
+<table>
+<thead>
+<tr>
+<th>Team</th>
+<th style="text-align: center;">Win grp</th>
+<th style="text-align: center;">2nd</th>
+<th style="text-align: center;">3rd→adv</th>
+<th style="text-align: center;"><strong>Qualify</strong></th>
+<th>Outlook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🥇 Belgium</td>
+<td style="text-align: center;">68%</td>
+<td style="text-align: center;">21%</td>
+<td style="text-align: center;">7%</td>
+<td style="text-align: center;"><strong>96%</strong></td>
+<td>██████████</td>
+</tr>
+<tr>
+<td>🥈 Egypt</td>
+<td style="text-align: center;">18%</td>
+<td style="text-align: center;">38%</td>
+<td style="text-align: center;">20%</td>
+<td style="text-align: center;"><strong>76%</strong></td>
+<td>████████░░</td>
+</tr>
+<tr>
+<td>🥉 Iran</td>
+<td style="text-align: center;">10%</td>
+<td style="text-align: center;">28%</td>
+<td style="text-align: center;">24%</td>
+<td style="text-align: center;"><strong>63%</strong></td>
+<td>██████░░░░</td>
+</tr>
+<tr>
+<td>▫️ New Zealand</td>
+<td style="text-align: center;">3%</td>
+<td style="text-align: center;">12%</td>
+<td style="text-align: center;">15%</td>
+<td style="text-align: center;"><strong>31%</strong></td>
+<td>███░░░░░░░</td>
+</tr>
+</tbody>
+</table>
+<p>🔮 <strong>Pick:</strong> The weakest group on paper. Belgium (1866)
+wins it without being impressive — which is exactly why the simulations
+love their bracket path. Egypt–Iran decides second (42% vs 27%, Salah’s
+last World Cup vs Iran’s organized block). Iran advances third.</p>
+<p>⭐ <strong>Star:</strong> Kevin De Bruyne (BEL)<br />
+👀 <strong>What to watch:</strong> Egypt vs Iran (MD3) for 2nd<br />
+⚡ <strong>Biggest risk:</strong> Iran (63% qual) edges Egypt behind
+Belgium</p>
+<p><strong>Predicted scores:</strong></p>
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 24%" />
+<col style="width: 15%" />
+<col style="width: 13%" />
+<col style="width: 11%" />
+<col style="width: 17%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr>
+<th>#</th>
+<th>Date (UB)</th>
+<th>Match</th>
+<th style="text-align: center;">Pick</th>
+<th style="text-align: center;">Exp.</th>
+<th style="text-align: center;">Actual</th>
+<th style="text-align: center;">Pts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>15</td>
+<td>Jun 16 09:00</td>
+<td>Iran – New Zealand</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">0.91</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Jun 16 03:00</td>
+<td>Belgium – Egypt</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">0.96</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>39</td>
+<td>Jun 22 03:00</td>
+<td>Belgium – Iran</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">1.06</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>40</td>
+<td>Jun 22 09:00</td>
+<td>New Zealand – Egypt</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td style="text-align: center;">1.00</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>63</td>
+<td>Jun 27 11:00</td>
+<td>Egypt – Iran</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">0.83</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>64</td>
+<td>Jun 27 11:00</td>
+<td>New Zealand – Belgium</td>
+<td style="text-align: center;"><strong>0-2</strong></td>
+<td style="text-align: center;">1.12</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+</tbody>
+</table>
+<h3 id="group-h-champion-runway">Group H — Champion runway</h3>
+<p><em>Spain at 99% qual; the only drama is the 3rd-place
+scrap.</em></p>
+<table>
+<thead>
+<tr>
+<th>Team</th>
+<th style="text-align: center;">Win grp</th>
+<th style="text-align: center;">2nd</th>
+<th style="text-align: center;">3rd→adv</th>
+<th style="text-align: center;"><strong>Qualify</strong></th>
+<th>Outlook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🥇 Spain</td>
+<td style="text-align: center;">75%</td>
+<td style="text-align: center;">21%</td>
+<td style="text-align: center;">3%</td>
+<td style="text-align: center;"><strong>99%</strong></td>
+<td>██████████</td>
+</tr>
+<tr>
+<td>🥈 Uruguay</td>
+<td style="text-align: center;">21%</td>
+<td style="text-align: center;">54%</td>
+<td style="text-align: center;">13%</td>
+<td style="text-align: center;"><strong>88%</strong></td>
+<td>█████████░</td>
+</tr>
+<tr>
+<td>🥉 Cape Verde</td>
+<td style="text-align: center;">2%</td>
+<td style="text-align: center;">12%</td>
+<td style="text-align: center;">20%</td>
+<td style="text-align: center;"><strong>35%</strong></td>
+<td>███░░░░░░░</td>
+</tr>
+<tr>
+<td>▫️ Saudi Arabia</td>
+<td style="text-align: center;">2%</td>
+<td style="text-align: center;">13%</td>
+<td style="text-align: center;">19%</td>
+<td style="text-align: center;"><strong>34%</strong></td>
+<td>███░░░░░░░</td>
+</tr>
+</tbody>
+</table>
+<p>🔮 <strong>Pick:</strong> The champion’s runway. Spain is the
+highest-rated team in the field (Elo 2165), Yamal’s fitness trending
+right, 85%+ market favorite in two of three games. Bielsa’s healthy
+Uruguay is a rock-solid second. Cape Verde’s fairytale ends at 3 points,
+GD −2.</p>
+<p>⭐ <strong>Star:</strong> Lamine Yamal (ESP)<br />
+👀 <strong>What to watch:</strong> Cape Verde vs Saudi Arabia — 35% vs
+34% for the 3rd ticket<br />
+⚡ <strong>Biggest risk:</strong> Neither 3rd-placer qualifies; Uruguay
+slips to 2nd</p>
+<p><strong>Predicted scores:</strong></p>
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 24%" />
+<col style="width: 15%" />
+<col style="width: 13%" />
+<col style="width: 11%" />
+<col style="width: 17%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr>
+<th>#</th>
+<th>Date (UB)</th>
+<th>Match</th>
+<th style="text-align: center;">Pick</th>
+<th style="text-align: center;">Exp.</th>
+<th style="text-align: center;">Actual</th>
+<th style="text-align: center;">Pts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>13</td>
+<td>Jun 16 06:00</td>
+<td>Saudi Arabia – Uruguay</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td style="text-align: center;">1.02</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Jun 16 00:00</td>
+<td>Spain – Cape Verde</td>
+<td style="text-align: center;"><strong>2-0</strong></td>
+<td style="text-align: center;">1.22</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>37</td>
+<td>Jun 22 06:00</td>
+<td>Uruguay – Cape Verde</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">1.08</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>38</td>
+<td>Jun 22 00:00</td>
+<td>Spain – Saudi Arabia</td>
+<td style="text-align: center;"><strong>2-0</strong></td>
+<td style="text-align: center;">1.18</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>65</td>
+<td>Jun 27 08:00</td>
+<td>Cape Verde – Saudi Arabia</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">0.75</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>66</td>
+<td>Jun 27 08:00</td>
+<td>Uruguay – Spain</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td style="text-align: center;">0.98</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+</tbody>
+</table>
+<h3 id="group-i-haaland-arrives">Group I — Haaland arrives</h3>
+<p><em>Norway’s first World Cup since 1998, and Senegal is the field’s
+best 3rd.</em></p>
+<table>
+<thead>
+<tr>
+<th>Team</th>
+<th style="text-align: center;">Win grp</th>
+<th style="text-align: center;">2nd</th>
+<th style="text-align: center;">3rd→adv</th>
+<th style="text-align: center;"><strong>Qualify</strong></th>
+<th>Outlook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🥇 France</td>
+<td style="text-align: center;">62%</td>
+<td style="text-align: center;">26%</td>
+<td style="text-align: center;">10%</td>
+<td style="text-align: center;"><strong>98%</strong></td>
+<td>██████████</td>
+</tr>
+<tr>
+<td>🥈 Norway</td>
+<td style="text-align: center;">24%</td>
+<td style="text-align: center;">41%</td>
+<td style="text-align: center;">25%</td>
+<td style="text-align: center;"><strong>90%</strong></td>
+<td>█████████░</td>
+</tr>
+<tr>
+<td>🥉 Senegal</td>
+<td style="text-align: center;">13%</td>
+<td style="text-align: center;">31%</td>
+<td style="text-align: center;">38%</td>
+<td style="text-align: center;"><strong>82%</strong></td>
+<td>████████░░</td>
+</tr>
+<tr>
+<td>▫️ Iraq</td>
+<td style="text-align: center;">0%</td>
+<td style="text-align: center;">2%</td>
+<td style="text-align: center;">5%</td>
+<td style="text-align: center;"><strong>8%</strong></td>
+<td>█░░░░░░░░░</td>
+</tr>
+</tbody>
+</table>
+<p>🔮 <strong>Pick:</strong> France tops it (66% market) despite the odd
+friendly loss — depth absorbs anything. The story is Norway: first World
+Cup since 1998, Haaland fit, clear seconds (24% group-winner vs
+Senegal’s 10%); Norway–Senegal on matchday 2 is the real final. Senegal
+advances as the strongest third-placer in the tournament — which is why
+Portugal drawing them in the R32 matters.</p>
+<p>⭐ <strong>Star:</strong> Erling Haaland (NOR)<br />
+👀 <strong>What to watch:</strong> Norway vs Senegal (MD2) — the group’s
+real final<br />
+⚡ <strong>Biggest risk:</strong> Senegal (82% qual) beats Norway and
+takes 2nd</p>
+<p><strong>Predicted scores:</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Date (UB)</th>
+<th>Match</th>
+<th style="text-align: center;">Pick</th>
+<th style="text-align: center;">Exp.</th>
+<th style="text-align: center;">Actual</th>
+<th style="text-align: center;">Pts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>17</td>
+<td>Jun 17 03:00</td>
+<td>France – Senegal</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">1.02</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>18</td>
+<td>Jun 17 06:00</td>
+<td>Iraq – Norway</td>
+<td style="text-align: center;"><strong>0-2</strong></td>
+<td style="text-align: center;">1.12</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>41</td>
+<td>Jun 23 08:00</td>
+<td>Norway – Senegal</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">0.88</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>42</td>
+<td>Jun 23 05:00</td>
+<td>France – Iraq</td>
+<td style="text-align: center;"><strong>2-0</strong></td>
+<td style="text-align: center;">1.35</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>61</td>
+<td>Jun 27 03:00</td>
+<td>Norway – France</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td style="text-align: center;">0.94</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>62</td>
+<td>Jun 27 03:00</td>
+<td>Senegal – Iraq</td>
+<td style="text-align: center;"><strong>2-0</strong></td>
+<td style="text-align: center;">1.11</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+</tbody>
+</table>
+<h3 id="group-j-albiceleste-glide">Group J — Albiceleste glide</h3>
+<p><em>Argentina’s lowest-variance group; Messi’s last World
+Cup.</em></p>
+<table>
+<thead>
+<tr>
+<th>Team</th>
+<th style="text-align: center;">Win grp</th>
+<th style="text-align: center;">2nd</th>
+<th style="text-align: center;">3rd→adv</th>
+<th style="text-align: center;"><strong>Qualify</strong></th>
+<th>Outlook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🥇 Argentina</td>
+<td style="text-align: center;">82%</td>
+<td style="text-align: center;">14%</td>
+<td style="text-align: center;">3%</td>
+<td style="text-align: center;"><strong>99%</strong></td>
+<td>██████████</td>
+</tr>
+<tr>
+<td>🥈 Austria</td>
+<td style="text-align: center;">10%</td>
+<td style="text-align: center;">45%</td>
+<td style="text-align: center;">21%</td>
+<td style="text-align: center;"><strong>76%</strong></td>
+<td>████████░░</td>
+</tr>
+<tr>
+<td>🥉 Algeria</td>
+<td style="text-align: center;">7%</td>
+<td style="text-align: center;">29%</td>
+<td style="text-align: center;">22%</td>
+<td style="text-align: center;"><strong>57%</strong></td>
+<td>██████░░░░</td>
+</tr>
+<tr>
+<td>▫️ Jordan</td>
+<td style="text-align: center;">2%</td>
+<td style="text-align: center;">12%</td>
+<td style="text-align: center;">15%</td>
+<td style="text-align: center;"><strong>29%</strong></td>
+<td>███░░░░░░░</td>
+</tr>
+</tbody>
+</table>
+<p>🔮 <strong>Pick:</strong> The defending champions stroll —
+Argentina’s Elo (2113) towers here, Messi’s hamstring managed. Austria
+is Europe’s stealth team (Rangnick-built pressing) and beats Algeria in
+the decider (43% vs 28%). Algeria’s win over Jordan secures third
+place.</p>
+<p>⭐ <strong>Star:</strong> Lionel Messi (ARG)<br />
+👀 <strong>What to watch:</strong> Algeria vs Austria (MD3) for
+2nd<br />
+⚡ <strong>Biggest risk:</strong> Algeria (57% qual) overtakes Austria
+for the runner-up spot</p>
+<p><strong>Predicted scores:</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Date (UB)</th>
+<th>Match</th>
+<th style="text-align: center;">Pick</th>
+<th style="text-align: center;">Exp.</th>
+<th style="text-align: center;">Actual</th>
+<th style="text-align: center;">Pts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>19</td>
+<td>Jun 17 09:00</td>
+<td>Argentina – Algeria</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">1.08</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>20</td>
+<td>Jun 17 12:00</td>
+<td>Austria – Jordan</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">1.07</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>43</td>
+<td>Jun 23 01:00</td>
+<td>Argentina – Austria</td>
+<td style="text-align: center;"><strong>2-0</strong></td>
+<td style="text-align: center;">1.15</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>44</td>
+<td>Jun 23 11:00</td>
+<td>Jordan – Algeria</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td style="text-align: center;">0.75</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>69</td>
+<td>Jun 28 10:00</td>
+<td>Algeria – Austria</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td style="text-align: center;">0.80</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>70</td>
+<td>Jun 28 10:00</td>
+<td>Jordan – Argentina</td>
+<td style="text-align: center;"><strong>0-2</strong></td>
+<td style="text-align: center;">1.22</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+</tbody>
+</table>
+<h3 id="group-k-market-rewrite">Group K — Market rewrite</h3>
+<p><em>Portugal &amp; Colombia both above 94% qual — a two-horse
+group.</em></p>
+<table>
+<thead>
+<tr>
+<th>Team</th>
+<th style="text-align: center;">Win grp</th>
+<th style="text-align: center;">2nd</th>
+<th style="text-align: center;">3rd→adv</th>
+<th style="text-align: center;"><strong>Qualify</strong></th>
+<th>Outlook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🥇 Portugal</td>
+<td style="text-align: center;">63%</td>
+<td style="text-align: center;">28%</td>
+<td style="text-align: center;">6%</td>
+<td style="text-align: center;"><strong>97%</strong></td>
+<td>██████████</td>
+</tr>
+<tr>
+<td>🥈 Colombia</td>
+<td style="text-align: center;">32%</td>
+<td style="text-align: center;">51%</td>
+<td style="text-align: center;">11%</td>
+<td style="text-align: center;"><strong>94%</strong></td>
+<td>█████████░</td>
+</tr>
+<tr>
+<td>🥉 Uzbekistan</td>
+<td style="text-align: center;">3%</td>
+<td style="text-align: center;">12%</td>
+<td style="text-align: center;">23%</td>
+<td style="text-align: center;"><strong>39%</strong></td>
+<td>████░░░░░░</td>
+</tr>
+<tr>
+<td>▫️ Congo DR</td>
+<td style="text-align: center;">2%</td>
+<td style="text-align: center;">8%</td>
+<td style="text-align: center;">18%</td>
+<td style="text-align: center;"><strong>29%</strong></td>
+<td>███░░░░░░░</td>
+</tr>
+</tbody>
+</table>
+<p>🔮 <strong>Pick:</strong> The group rewritten on deadline day. Raw
+Elo called Portugal–Colombia a dead tie; the prediction markets said
+Portugal 63% / Colombia 32% to win the group — so the model was
+recalibrated (140 Elo-equivalent points) and Portugal now tops it via a
+1-0 in the head-to-head. This single call transforms Portugal’s
+tournament from R32 exit to QF run. The biggest known sensitivity in the
+bracket.</p>
+<p>⭐ <strong>Star:</strong> Cristiano Ronaldo (POR)<br />
+👀 <strong>What to watch:</strong> Colombia vs Portugal (MD3) — the call
+that flipped on market data<br />
+⚡ <strong>Biggest risk:</strong> The Elo tie was right and Colombia
+(94% qual) tops the group</p>
+<p><strong>Predicted scores:</strong></p>
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 24%" />
+<col style="width: 15%" />
+<col style="width: 13%" />
+<col style="width: 11%" />
+<col style="width: 17%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr>
+<th>#</th>
+<th>Date (UB)</th>
+<th>Match</th>
+<th style="text-align: center;">Pick</th>
+<th style="text-align: center;">Exp.</th>
+<th style="text-align: center;">Actual</th>
+<th style="text-align: center;">Pts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>23</td>
+<td>Jun 18 01:00</td>
+<td>Portugal – Congo DR</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">1.08</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>24</td>
+<td>Jun 18 10:00</td>
+<td>Uzbekistan – Colombia</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td style="text-align: center;">1.06</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>47</td>
+<td>Jun 24 01:00</td>
+<td>Portugal – Uzbekistan</td>
+<td style="text-align: center;"><strong>2-0</strong></td>
+<td style="text-align: center;">1.12</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>48</td>
+<td>Jun 24 10:00</td>
+<td>Colombia – Congo DR</td>
+<td style="text-align: center;"><strong>2-0</strong></td>
+<td style="text-align: center;">1.18</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>71</td>
+<td>Jun 28 07:30</td>
+<td>Colombia – Portugal</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td style="text-align: center;">0.95</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>72</td>
+<td>Jun 28 07:30</td>
+<td>Congo DR – Uzbekistan</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td style="text-align: center;">0.75</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+</tbody>
+</table>
+<h3 id="group-l-three-lions-engine">Group L — Three Lions engine</h3>
+<p><em>England’s reliability is what parks Croatia in its R32
+slot.</em></p>
+<table>
+<thead>
+<tr>
+<th>Team</th>
+<th style="text-align: center;">Win grp</th>
+<th style="text-align: center;">2nd</th>
+<th style="text-align: center;">3rd→adv</th>
+<th style="text-align: center;"><strong>Qualify</strong></th>
+<th>Outlook</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🥇 England</td>
+<td style="text-align: center;">68%</td>
+<td style="text-align: center;">27%</td>
+<td style="text-align: center;">4%</td>
+<td style="text-align: center;"><strong>99%</strong></td>
+<td>██████████</td>
+</tr>
+<tr>
+<td>🥈 Croatia</td>
+<td style="text-align: center;">29%</td>
+<td style="text-align: center;">56%</td>
+<td style="text-align: center;">10%</td>
+<td style="text-align: center;"><strong>96%</strong></td>
+<td>██████████</td>
+</tr>
+<tr>
+<td>🥉 Panama</td>
+<td style="text-align: center;">3%</td>
+<td style="text-align: center;">12%</td>
+<td style="text-align: center;">21%</td>
+<td style="text-align: center;"><strong>36%</strong></td>
+<td>████░░░░░░</td>
+</tr>
+<tr>
+<td>▫️ Ghana</td>
+<td style="text-align: center;">0%</td>
+<td style="text-align: center;">4%</td>
+<td style="text-align: center;">18%</td>
+<td style="text-align: center;"><strong>23%</strong></td>
+<td>██░░░░░░░░</td>
+</tr>
+</tbody>
+</table>
+<p>🔮 <strong>Pick:</strong> England dominates (68% market, no injuries)
+— and that reliability quietly powers the bracket: because England
+nearly always wins Group L, Croatia nearly always lands second, which is
+why Croatia owns its R32 slot. Modrić’s farewell squad is in poor
+warm-up form (−10 rating) but still outclasses Ghana and Panama.</p>
+<p>⭐ <strong>Star:</strong> Jude Bellingham (ENG)<br />
+👀 <strong>What to watch:</strong> England vs Croatia (MD1), a
+knockout-quality opener<br />
+⚡ <strong>Biggest risk:</strong> Croatia (96% qual) wins the group
+instead of England</p>
+<p><strong>Predicted scores:</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Date (UB)</th>
+<th>Match</th>
+<th style="text-align: center;">Pick</th>
+<th style="text-align: center;">Exp.</th>
+<th style="text-align: center;">Actual</th>
+<th style="text-align: center;">Pts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>21</td>
+<td>Jun 18 07:00</td>
+<td>Ghana – Panama</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">0.84</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>22</td>
+<td>Jun 18 04:00</td>
+<td>England – Croatia</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td style="text-align: center;">0.94</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>45</td>
+<td>Jun 24 04:00</td>
+<td>England – Ghana</td>
+<td style="text-align: center;"><strong>2-0</strong></td>
+<td style="text-align: center;">1.37</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>46</td>
+<td>Jun 24 07:00</td>
+<td>Panama – Croatia</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td style="text-align: center;">0.99</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>67</td>
+<td>Jun 28 05:00</td>
+<td>Panama – England</td>
+<td style="text-align: center;"><strong>0-2</strong></td>
+<td style="text-align: center;">1.06</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>68</td>
+<td>Jun 28 05:00</td>
+<td>Croatia – Ghana</td>
+<td style="text-align: center;"><strong>2-0</strong></td>
+<td style="text-align: center;">1.29</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="knockout-bracket">Knockout Bracket</h2>
+<h3 id="round-of-32-june-28-to-july-3">Round of 32 — June 28 to July
+3</h3>
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 18%" />
+<col style="width: 11%" />
+<col style="width: 18%" />
+<col style="width: 16%" />
+<col style="width: 8%" />
+<col style="width: 13%" />
+<col style="width: 8%" />
+</colgroup>
+<thead>
+<tr>
+<th>M#</th>
+<th>Date (UB)</th>
+<th>Match</th>
+<th style="text-align: center;">Prediction</th>
+<th>Advances</th>
+<th style="text-align: center;">Exp.</th>
+<th style="text-align: center;">Actual</th>
+<th style="text-align: center;">Pts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>73</td>
+<td>Jun 29 03:00</td>
+<td>South Korea – Canada</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td>Canada</td>
+<td style="text-align: center;">0.85</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>74</td>
+<td>Jun 30 04:30</td>
+<td>Germany – Paraguay</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td>Germany</td>
+<td style="text-align: center;">0.88</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>75</td>
+<td>Jun 30 09:00</td>
+<td>Netherlands – Morocco</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td>Netherlands</td>
+<td style="text-align: center;">0.92</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>76</td>
+<td>Jun 30 01:00</td>
+<td>Brazil – Japan</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td>Brazil</td>
+<td style="text-align: center;">0.83</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>77</td>
+<td>Jul 01 05:00</td>
+<td>France – Sweden</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td>France</td>
+<td style="text-align: center;">1.37</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>78</td>
+<td>Jul 01 01:00</td>
+<td>Ecuador – Norway</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td>Norway</td>
+<td style="text-align: center;">0.65</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>79</td>
+<td>Jul 01 09:00</td>
+<td>Mexico – Ivory Coast</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td>Mexico</td>
+<td style="text-align: center;">1.14</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>80</td>
+<td>Jul 02 00:00</td>
+<td>England – Algeria</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td>England</td>
+<td style="text-align: center;">1.23</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>81</td>
+<td>Jul 02 08:00</td>
+<td>United States – Bosnia and Herzegovina</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td>United States</td>
+<td style="text-align: center;">1.04</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>82</td>
+<td>Jul 02 04:00</td>
+<td>Belgium – Czechia</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td>Belgium</td>
+<td style="text-align: center;">0.95</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>83</td>
+<td>Jul 03 07:00</td>
+<td>Colombia – Croatia</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td>Croatia</td>
+<td style="text-align: center;">0.71</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>84</td>
+<td>Jul 03 03:00</td>
+<td>Spain – Austria</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td>Spain</td>
+<td style="text-align: center;">1.31</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>85</td>
+<td>Jul 03 11:00</td>
+<td>Switzerland – Iran</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td>Switzerland</td>
+<td style="text-align: center;">0.94</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>86</td>
+<td>Jul 04 06:00</td>
+<td>Argentina – Uruguay</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td>Argentina</td>
+<td style="text-align: center;">1.12</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>87</td>
+<td>Jul 04 09:30</td>
+<td>Portugal – Senegal</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td>Portugal</td>
+<td style="text-align: center;">1.04</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>88</td>
+<td>Jul 04 02:00</td>
+<td>Turkey – Egypt</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td>Turkey</td>
+<td style="text-align: center;">1.09</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Logic of this round:</strong> every pick maximizes <em>slot
+emergence</em> — the probability the named team actually occupies and
+wins that bracket slot across 200,000 simulations — not just
+head-to-head strength. Three picks deliberately go against the
+head-to-head favorite: <strong>Norway over Ecuador</strong> (Norway’s
+path to the slot is far more reliable, +4pp), <strong>Croatia over
+Colombia</strong> (England’s dominance parks Croatia in this slot with
+high certainty), and the structural calls around Group D. Portugal’s M87
+emergence (50.7%) is the strongest slot claim in the entire bracket.
+Mexico at the Azteca and the USA in Arlington carry host bonuses.</p>
+<h3 id="round-of-16-july-4-to-7">Round of 16 — July 4 to 7</h3>
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 18%" />
+<col style="width: 11%" />
+<col style="width: 18%" />
+<col style="width: 16%" />
+<col style="width: 8%" />
+<col style="width: 13%" />
+<col style="width: 8%" />
+</colgroup>
+<thead>
+<tr>
+<th>M#</th>
+<th>Date (UB)</th>
+<th>Match</th>
+<th style="text-align: center;">Prediction</th>
+<th>Advances</th>
+<th style="text-align: center;">Exp.</th>
+<th style="text-align: center;">Actual</th>
+<th style="text-align: center;">Pts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>89</td>
+<td>Jul 05 05:00</td>
+<td>Germany – France</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td>France</td>
+<td style="text-align: center;">1.00</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>90</td>
+<td>Jul 05 01:00</td>
+<td>Canada – Netherlands</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td>Netherlands</td>
+<td style="text-align: center;">0.90</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>91</td>
+<td>Jul 06 04:00</td>
+<td>Brazil – Norway</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td>Brazil</td>
+<td style="text-align: center;">0.80</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>92</td>
+<td>Jul 06 08:00</td>
+<td>Mexico – England</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td>England</td>
+<td style="text-align: center;">0.91</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>93</td>
+<td>Jul 07 03:00</td>
+<td>Croatia – Spain</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td>Spain</td>
+<td style="text-align: center;">1.15</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>94</td>
+<td>Jul 07 08:00</td>
+<td>United States – Belgium</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td>Belgium</td>
+<td style="text-align: center;">0.88</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>95</td>
+<td>Jul 08 00:00</td>
+<td>Argentina – Turkey</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td>Argentina</td>
+<td style="text-align: center;">1.09</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>96</td>
+<td>Jul 08 04:00</td>
+<td>Switzerland – Portugal</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td>Portugal</td>
+<td style="text-align: center;">1.00</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key calls:</strong> France ends Germany (Elo 2081 vs 1925 — a
+quarter-final-quality tie too early). <strong>Belgium over the
+USA</strong> was the simulations’ biggest correction (+9.6pp): Belgium’s
+soft path through Group G makes them far likelier to even be here than
+any Group D survivor. England eliminates host Mexico at the Azteca —
+atmosphere loses to Elo gap (2020 vs 1908). Brazil handles Haaland’s
+Norway; Spain ends Croatia; Portugal beats Switzerland in the slot the
+market opened for him.</p>
+<h3 id="quarter-finals-july-9-to-11">Quarter-finals — July 9 to 11</h3>
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 18%" />
+<col style="width: 11%" />
+<col style="width: 18%" />
+<col style="width: 16%" />
+<col style="width: 8%" />
+<col style="width: 13%" />
+<col style="width: 8%" />
+</colgroup>
+<thead>
+<tr>
+<th>M#</th>
+<th>Date (UB)</th>
+<th>Match</th>
+<th style="text-align: center;">Prediction</th>
+<th>Advances</th>
+<th style="text-align: center;">Exp.</th>
+<th style="text-align: center;">Actual</th>
+<th style="text-align: center;">Pts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>97</td>
+<td>Jul 10 04:00</td>
+<td>France – Netherlands</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td>France</td>
+<td style="text-align: center;">0.98</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>98</td>
+<td>Jul 11 03:00</td>
+<td>Spain – Belgium</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td>Spain</td>
+<td style="text-align: center;">1.25</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>99</td>
+<td>Jul 12 05:00</td>
+<td>Brazil – England</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td>England</td>
+<td style="text-align: center;">0.80</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>100</td>
+<td>Jul 12 09:00</td>
+<td>Argentina – Portugal</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td>Argentina</td>
+<td style="text-align: center;">0.81</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key calls:</strong> France–Netherlands is the closest QF
+(56/19/25) — French depth decides it. Spain dispatches Belgium (71%).
+<strong>England over Brazil</strong> is the boldest call of the bracket:
+a 44/28 market edge for England plus Brazil’s Rodrygo/Neymar injuries;
+this is where the sheet wins or loses its swagger. Argentina ends
+Portugal’s run (38% vs 21% slot emergence) — Messi vs Ronaldo’s heirs,
+one last time.</p>
+<h3 id="semi-finals-july-14-15">Semi-finals — July 14 &amp; 15</h3>
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 18%" />
+<col style="width: 11%" />
+<col style="width: 18%" />
+<col style="width: 16%" />
+<col style="width: 8%" />
+<col style="width: 13%" />
+<col style="width: 8%" />
+</colgroup>
+<thead>
+<tr>
+<th>M#</th>
+<th>Date (UB)</th>
+<th>Match</th>
+<th style="text-align: center;">Prediction</th>
+<th>Advances</th>
+<th style="text-align: center;">Exp.</th>
+<th style="text-align: center;">Actual</th>
+<th style="text-align: center;">Pts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>101</td>
+<td>Jul 15 03:00</td>
+<td>France – Spain</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td>Spain</td>
+<td style="text-align: center;">0.85</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+<tr>
+<td>102</td>
+<td>Jul 16 03:00</td>
+<td>England – Argentina</td>
+<td style="text-align: center;"><strong>0-1</strong></td>
+<td>Argentina</td>
+<td style="text-align: center;">0.88</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key calls:</strong> Spain over France (48% vs 25% in the
+matchup) — the two best teams meet one round early; Spain’s midfield
+control beats French transition. Argentina over England (50% vs 24%):
+tournament know-how against a team that historically blinks in
+semis.</p>
+<h3 id="third-place-july-18">Third place — July 18</h3>
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 18%" />
+<col style="width: 11%" />
+<col style="width: 18%" />
+<col style="width: 16%" />
+<col style="width: 8%" />
+<col style="width: 13%" />
+<col style="width: 8%" />
+</colgroup>
+<thead>
+<tr>
+<th>M#</th>
+<th>Date (UB)</th>
+<th>Match</th>
+<th style="text-align: center;">Prediction</th>
+<th>Advances</th>
+<th style="text-align: center;">Exp.</th>
+<th style="text-align: center;">Actual</th>
+<th style="text-align: center;">Pts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>103</td>
+<td>Jul 19 05:00</td>
+<td>France – England</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td>France</td>
+<td style="text-align: center;">0.81</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why France:</strong> the third-place game rewards squad depth
+and motivation management — France has more of both than England
+(45/27/28).</p>
+<h3 id="final-july-19-metlife-stadium">FINAL — July 19, MetLife
+Stadium</h3>
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 18%" />
+<col style="width: 11%" />
+<col style="width: 18%" />
+<col style="width: 16%" />
+<col style="width: 8%" />
+<col style="width: 13%" />
+<col style="width: 8%" />
+</colgroup>
+<thead>
+<tr>
+<th>M#</th>
+<th>Date (UB)</th>
+<th>Match</th>
+<th style="text-align: center;">Prediction</th>
+<th>Advances</th>
+<th style="text-align: center;">Exp.</th>
+<th style="text-align: center;">Actual</th>
+<th style="text-align: center;">Pts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>104</td>
+<td>Jul 20 03:00</td>
+<td>Spain – Argentina</td>
+<td style="text-align: center;"><strong>1-0</strong></td>
+<td>SPAIN 🏆</td>
+<td style="text-align: center;">0.78</td>
+<td style="text-align: center;">____</td>
+<td style="text-align: center;">__</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why Spain:</strong> the most likely final (10.8% of all
+simulations — no other pairing scores higher) and the most likely
+champion (27.4%). Spain beats Argentina in 59% of simulated finals: the
+Elo gap (2160 vs 2113 adjusted), a younger core, and the deepest
+midfield in the tournament. Predicted score 1-0 — the modal scoreline at
+13.2%. Honesty box: Spain still fails to win 72.6% of simulated
+tournaments; this is the best single bet, not a promise.</p>
+<hr />
+<h2 id="tournament-diary-what-went-wrong-what-we-learned">Tournament
+Diary — What Went Wrong &amp; What We Learned</h2>
+<p><em>Predictions above are locked (before the June 11 kickoff). This
+diary tracks reality against the model after each matchday: points
+earned, calls that broke, and the updated outlook. The picks never
+change — the understanding does.</em></p>
+<table>
+<colgroup>
+<col style="width: 7%" />
+<col style="width: 10%" />
+<col style="width: 23%" />
+<col style="width: 32%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Date</th>
+<th>Matches</th>
+<th>Pts won / possible</th>
+<th>What went wrong (or right)</th>
+<th>Bracket implications</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Jun 11</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Jun 12</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Jun 13</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Jun 14</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Jun 15</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Jun 16</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Jun 17</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Jun 18</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Jun 19</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Jun 20</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Jun 21</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Jun 22</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Jun 23</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Jun 24</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Jun 25</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Jun 26</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Jun 27</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>— R32 Jun 28–Jul 3</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>— R16 Jul 4–7</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>— QF Jul 9–11</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>— SF Jul 14–15</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>— Final Jul 18–19</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="methodology-for-the-curious">Methodology (for the curious)</h3>
+<ul>
+<li><strong>Odds → probabilities</strong>: bookmaker margins stripped by
+normalising implied probabilities. Matchday-3 fixtures without published
+odds use Elo-based estimates.</li>
+<li><strong>Poisson scorelines</strong>: for each match, goal rates
+(λ-home, λ-away) are fitted to reproduce the market’s win/draw/loss
+probabilities; the predicted score maximises expected points under the
+pool’s 3/2/1 rule, P(exact) + P(result and goal difference) +
+P(result).</li>
+<li><strong>Knockout model</strong>: Elo win expectancy
+1/(1+10^(−ΔElo/400)); injury adjustments Brazil −20, Netherlands −15,
+Japan −10, Croatia −10, Spain −5; hosts +40 (fading to +20 late).</li>
+<li><strong>Slot-emergence optimisation</strong>: knockout picks
+maximise P(team actually occupies and wins that bracket slot) across
+200,000 simulated tournaments — not just head-to-head strength. This is
+why Croatia (27.5%) is picked over Portugal (25.1%) in M83: Portugal too
+often wins his group and never plays that match at all.</li>
+<li><strong>Machine-learning risk check</strong>: a Random Forest
+<em>and</em> XGBoost (gradient boosting) trained on 40,000 simulated
+tournaments agree (rank correlation 0.83) that getting <strong>Group H
+right (Spain) is the single highest-leverage call</strong> — SHAP says
+naming Spain as Group H winner is worth <strong>+0.79 knockout
+points</strong>, ~3× the weakest group call — because Spain’s path runs
+6 matches deep. Both models also agree that group results explain only
+<strong>~50% of the bracket score</strong>; the rest is knockout luck.
+The call to protect above all: Spain topping Group H.</li>
+<li>Model: odds research + Poisson fitting + Elo Monte Carlo, built June
+7 and locked at the June 11 kickoff. Good luck to everyone — Авраа.</li>
+</ul>
+</body>
+</html>

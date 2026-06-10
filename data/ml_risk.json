@@ -1,0 +1,77 @@
+{
+ "r2": 0.474,
+ "n": 40000,
+ "target_mean": 11.485,
+ "drivers": [
+  {
+   "feature": "H: winner correct",
+   "perm_importance": 0.2715,
+   "impurity_importance": 0.2377
+  },
+  {
+   "feature": "I: winner correct",
+   "perm_importance": 0.1528,
+   "impurity_importance": 0.15
+  },
+  {
+   "feature": "J: winner correct",
+   "perm_importance": 0.1474,
+   "impurity_importance": 0.1452
+  },
+  {
+   "feature": "L: winner correct",
+   "perm_importance": 0.12,
+   "impurity_importance": 0.1262
+  },
+  {
+   "feature": "K: winner correct",
+   "perm_importance": 0.0665,
+   "impurity_importance": 0.0646
+  },
+  {
+   "feature": "F: winner correct",
+   "perm_importance": 0.0417,
+   "impurity_importance": 0.0447
+  },
+  {
+   "feature": "C: winner correct",
+   "perm_importance": 0.0353,
+   "impurity_importance": 0.036
+  },
+  {
+   "feature": "G: winner correct",
+   "perm_importance": 0.0232,
+   "impurity_importance": 0.0286
+  },
+  {
+   "feature": "A: winner correct",
+   "perm_importance": 0.0115,
+   "impurity_importance": 0.0194
+  },
+  {
+   "feature": "B: runner-up correct",
+   "perm_importance": 0.0102,
+   "impurity_importance": 0.0193
+  },
+  {
+   "feature": "B: winner correct",
+   "perm_importance": 0.0097,
+   "impurity_importance": 0.0194
+  },
+  {
+   "feature": "E: winner correct",
+   "perm_importance": 0.0087,
+   "impurity_importance": 0.0159
+  },
+  {
+   "feature": "D: runner-up correct",
+   "perm_importance": 0.0078,
+   "impurity_importance": 0.0172
+  },
+  {
+   "feature": "D: winner correct",
+   "perm_importance": 0.0075,
+   "impurity_importance": 0.0156
+  }
+ ]
+}

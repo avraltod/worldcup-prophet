@@ -1,0 +1,450 @@
+[
+ {
+  "home": "Russia",
+  "away": "Saudi Arabia",
+  "hg": 5,
+  "ag": 0,
+  "date": "2018-06-14"
+ },
+ {
+  "home": "Egypt",
+  "away": "Uruguay",
+  "hg": 0,
+  "ag": 1,
+  "date": "2018-06-15"
+ },
+ {
+  "home": "Morocco",
+  "away": "Iran",
+  "hg": 0,
+  "ag": 1,
+  "date": "2018-06-15"
+ },
+ {
+  "home": "Portugal",
+  "away": "Spain",
+  "hg": 3,
+  "ag": 3,
+  "date": "2018-06-15"
+ },
+ {
+  "home": "France",
+  "away": "Australia",
+  "hg": 2,
+  "ag": 1,
+  "date": "2018-06-16"
+ },
+ {
+  "home": "Argentina",
+  "away": "Iceland",
+  "hg": 1,
+  "ag": 1,
+  "date": "2018-06-16"
+ },
+ {
+  "home": "Peru",
+  "away": "Denmark",
+  "hg": 0,
+  "ag": 1,
+  "date": "2018-06-16"
+ },
+ {
+  "home": "Croatia",
+  "away": "Nigeria",
+  "hg": 2,
+  "ag": 0,
+  "date": "2018-06-16"
+ },
+ {
+  "home": "Costa Rica",
+  "away": "Serbia",
+  "hg": 0,
+  "ag": 1,
+  "date": "2018-06-17"
+ },
+ {
+  "home": "Germany",
+  "away": "Mexico",
+  "hg": 0,
+  "ag": 1,
+  "date": "2018-06-17"
+ },
+ {
+  "home": "Brazil",
+  "away": "Switzerland",
+  "hg": 1,
+  "ag": 1,
+  "date": "2018-06-17"
+ },
+ {
+  "home": "Sweden",
+  "away": "South Korea",
+  "hg": 1,
+  "ag": 0,
+  "date": "2018-06-18"
+ },
+ {
+  "home": "Belgium",
+  "away": "Panama",
+  "hg": 3,
+  "ag": 0,
+  "date": "2018-06-18"
+ },
+ {
+  "home": "Tunisia",
+  "away": "England",
+  "hg": 1,
+  "ag": 2,
+  "date": "2018-06-18"
+ },
+ {
+  "home": "Colombia",
+  "away": "Japan",
+  "hg": 1,
+  "ag": 2,
+  "date": "2018-06-19"
+ },
+ {
+  "home": "Poland",
+  "away": "Senegal",
+  "hg": 1,
+  "ag": 2,
+  "date": "2018-06-19"
+ },
+ {
+  "home": "Russia",
+  "away": "Egypt",
+  "hg": 3,
+  "ag": 1,
+  "date": "2018-06-19"
+ },
+ {
+  "home": "Portugal",
+  "away": "Morocco",
+  "hg": 1,
+  "ag": 0,
+  "date": "2018-06-20"
+ },
+ {
+  "home": "Uruguay",
+  "away": "Saudi Arabia",
+  "hg": 1,
+  "ag": 0,
+  "date": "2018-06-20"
+ },
+ {
+  "home": "Iran",
+  "away": "Spain",
+  "hg": 0,
+  "ag": 1,
+  "date": "2018-06-20"
+ },
+ {
+  "home": "Denmark",
+  "away": "Australia",
+  "hg": 1,
+  "ag": 1,
+  "date": "2018-06-21"
+ },
+ {
+  "home": "France",
+  "away": "Peru",
+  "hg": 1,
+  "ag": 0,
+  "date": "2018-06-21"
+ },
+ {
+  "home": "Argentina",
+  "away": "Croatia",
+  "hg": 0,
+  "ag": 3,
+  "date": "2018-06-21"
+ },
+ {
+  "home": "Brazil",
+  "away": "Costa Rica",
+  "hg": 2,
+  "ag": 0,
+  "date": "2018-06-22"
+ },
+ {
+  "home": "Nigeria",
+  "away": "Iceland",
+  "hg": 2,
+  "ag": 0,
+  "date": "2018-06-22"
+ },
+ {
+  "home": "Serbia",
+  "away": "Switzerland",
+  "hg": 1,
+  "ag": 2,
+  "date": "2018-06-22"
+ },
+ {
+  "home": "Belgium",
+  "away": "Tunisia",
+  "hg": 5,
+  "ag": 2,
+  "date": "2018-06-23"
+ },
+ {
+  "home": "South Korea",
+  "away": "Mexico",
+  "hg": 1,
+  "ag": 2,
+  "date": "2018-06-23"
+ },
+ {
+  "home": "Germany",
+  "away": "Sweden",
+  "hg": 2,
+  "ag": 1,
+  "date": "2018-06-23"
+ },
+ {
+  "home": "England",
+  "away": "Panama",
+  "hg": 6,
+  "ag": 1,
+  "date": "2018-06-24"
+ },
+ {
+  "home": "Japan",
+  "away": "Senegal",
+  "hg": 2,
+  "ag": 2,
+  "date": "2018-06-24"
+ },
+ {
+  "home": "Poland",
+  "away": "Colombia",
+  "hg": 0,
+  "ag": 3,
+  "date": "2018-06-24"
+ },
+ {
+  "home": "Uruguay",
+  "away": "Russia",
+  "hg": 3,
+  "ag": 0,
+  "date": "2018-06-25"
+ },
+ {
+  "home": "Saudi Arabia",
+  "away": "Egypt",
+  "hg": 2,
+  "ag": 1,
+  "date": "2018-06-25"
+ },
+ {
+  "home": "Spain",
+  "away": "Morocco",
+  "hg": 2,
+  "ag": 2,
+  "date": "2018-06-25"
+ },
+ {
+  "home": "Iran",
+  "away": "Portugal",
+  "hg": 1,
+  "ag": 1,
+  "date": "2018-06-25"
+ },
+ {
+  "home": "Australia",
+  "away": "Peru",
+  "hg": 0,
+  "ag": 2,
+  "date": "2018-06-26"
+ },
+ {
+  "home": "Denmark",
+  "away": "France",
+  "hg": 0,
+  "ag": 0,
+  "date": "2018-06-26"
+ },
+ {
+  "home": "Nigeria",
+  "away": "Argentina",
+  "hg": 1,
+  "ag": 2,
+  "date": "2018-06-26"
+ },
+ {
+  "home": "Iceland",
+  "away": "Croatia",
+  "hg": 1,
+  "ag": 2,
+  "date": "2018-06-26"
+ },
+ {
+  "home": "Mexico",
+  "away": "Sweden",
+  "hg": 0,
+  "ag": 3,
+  "date": "2018-06-27"
+ },
+ {
+  "home": "South Korea",
+  "away": "Germany",
+  "hg": 2,
+  "ag": 0,
+  "date": "2018-06-27"
+ },
+ {
+  "home": "Serbia",
+  "away": "Brazil",
+  "hg": 0,
+  "ag": 2,
+  "date": "2018-06-27"
+ },
+ {
+  "home": "Switzerland",
+  "away": "Costa Rica",
+  "hg": 2,
+  "ag": 2,
+  "date": "2018-06-27"
+ },
+ {
+  "home": "Senegal",
+  "away": "Colombia",
+  "hg": 0,
+  "ag": 1,
+  "date": "2018-06-28"
+ },
+ {
+  "home": "Japan",
+  "away": "Poland",
+  "hg": 0,
+  "ag": 1,
+  "date": "2018-06-28"
+ },
+ {
+  "home": "England",
+  "away": "Belgium",
+  "hg": 0,
+  "ag": 1,
+  "date": "2018-06-28"
+ },
+ {
+  "home": "Panama",
+  "away": "Tunisia",
+  "hg": 1,
+  "ag": 2,
+  "date": "2018-06-28"
+ },
+ {
+  "home": "France",
+  "away": "Argentina",
+  "hg": 4,
+  "ag": 3,
+  "date": "2018-06-30"
+ },
+ {
+  "home": "Uruguay",
+  "away": "Portugal",
+  "hg": 2,
+  "ag": 1,
+  "date": "2018-06-30"
+ },
+ {
+  "home": "Spain",
+  "away": "Russia",
+  "hg": 1,
+  "ag": 1,
+  "date": "2018-07-01"
+ },
+ {
+  "home": "Croatia",
+  "away": "Denmark",
+  "hg": 1,
+  "ag": 1,
+  "date": "2018-07-01"
+ },
+ {
+  "home": "Brazil",
+  "away": "Mexico",
+  "hg": 2,
+  "ag": 0,
+  "date": "2018-07-02"
+ },
+ {
+  "home": "Belgium",
+  "away": "Japan",
+  "hg": 3,
+  "ag": 2,
+  "date": "2018-07-02"
+ },
+ {
+  "home": "Sweden",
+  "away": "Switzerland",
+  "hg": 1,
+  "ag": 0,
+  "date": "2018-07-03"
+ },
+ {
+  "home": "Colombia",
+  "away": "England",
+  "hg": 1,
+  "ag": 1,
+  "date": "2018-07-03"
+ },
+ {
+  "home": "Uruguay",
+  "away": "France",
+  "hg": 0,
+  "ag": 2,
+  "date": "2018-07-06"
+ },
+ {
+  "home": "Brazil",
+  "away": "Belgium",
+  "hg": 1,
+  "ag": 2,
+  "date": "2018-07-06"
+ },
+ {
+  "home": "Sweden",
+  "away": "England",
+  "hg": 0,
+  "ag": 2,
+  "date": "2018-07-07"
+ },
+ {
+  "home": "Russia",
+  "away": "Croatia",
+  "hg": 2,
+  "ag": 2,
+  "date": "2018-07-07"
+ },
+ {
+  "home": "France",
+  "away": "Belgium",
+  "hg": 1,
+  "ag": 0,
+  "date": "2018-07-10"
+ },
+ {
+  "home": "Croatia",
+  "away": "England",
+  "hg": 2,
+  "ag": 1,
+  "date": "2018-07-11"
+ },
+ {
+  "home": "Belgium",
+  "away": "England",
+  "hg": 2,
+  "ag": 0,
+  "date": "2018-07-14"
+ },
+ {
+  "home": "France",
+  "away": "Croatia",
+  "hg": 4,
+  "ag": 2,
+  "date": "2018-07-15"
+ }
+]

@@ -1,0 +1,67 @@
+{
+ "r2_rf": 0.474,
+ "r2_xgb": 0.495,
+ "spearman": 0.829,
+ "shap": [
+  {
+   "feature": "H: winner correct",
+   "mean_abs_shap": 1.2097,
+   "effect_when_correct": 0.7925,
+   "rf_importance": 0.2377
+  },
+  {
+   "feature": "I: winner correct",
+   "mean_abs_shap": 0.9775,
+   "effect_when_correct": 0.7861,
+   "rf_importance": 0.15
+  },
+  {
+   "feature": "J: winner correct",
+   "mean_abs_shap": 0.8427,
+   "effect_when_correct": 0.5135,
+   "rf_importance": 0.1452
+  },
+  {
+   "feature": "L: winner correct",
+   "mean_abs_shap": 0.7757,
+   "effect_when_correct": 0.5671,
+   "rf_importance": 0.1262
+  },
+  {
+   "feature": "K: winner correct",
+   "mean_abs_shap": 0.7316,
+   "effect_when_correct": 0.5768,
+   "rf_importance": 0.0646
+  },
+  {
+   "feature": "F: winner correct",
+   "mean_abs_shap": 0.6196,
+   "effect_when_correct": 0.5754,
+   "rf_importance": 0.0447
+  },
+  {
+   "feature": "C: winner correct",
+   "mean_abs_shap": 0.5288,
+   "effect_when_correct": 0.3901,
+   "rf_importance": 0.036
+  },
+  {
+   "feature": "G: winner correct",
+   "mean_abs_shap": 0.4518,
+   "effect_when_correct": 0.3316,
+   "rf_importance": 0.0286
+  },
+  {
+   "feature": "A: winner correct",
+   "mean_abs_shap": 0.3429,
+   "effect_when_correct": 0.3137,
+   "rf_importance": 0.0194
+  },
+  {
+   "feature": "E: winner correct",
+   "mean_abs_shap": 0.3181,
+   "effect_when_correct": 0.2381,
+   "rf_importance": 0.0159
+  }
+ ]
+}

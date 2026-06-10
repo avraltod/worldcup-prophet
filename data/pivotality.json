@@ -1,0 +1,517 @@
+[
+ {
+  "match": 1,
+  "stage": "group",
+  "pivotality": 0.0141
+ },
+ {
+  "match": 2,
+  "stage": "group",
+  "pivotality": 0.0138
+ },
+ {
+  "match": 3,
+  "stage": "group",
+  "pivotality": 0.0106
+ },
+ {
+  "match": 4,
+  "stage": "group",
+  "pivotality": 0.0218
+ },
+ {
+  "match": 5,
+  "stage": "group",
+  "pivotality": 0.011
+ },
+ {
+  "match": 6,
+  "stage": "group",
+  "pivotality": 0.0135
+ },
+ {
+  "match": 7,
+  "stage": "group",
+  "pivotality": 0.0099
+ },
+ {
+  "match": 8,
+  "stage": "group",
+  "pivotality": 0.0132
+ },
+ {
+  "match": 9,
+  "stage": "group",
+  "pivotality": 0.0103
+ },
+ {
+  "match": 10,
+  "stage": "group",
+  "pivotality": 0.0119
+ },
+ {
+  "match": 11,
+  "stage": "group",
+  "pivotality": 0.0176
+ },
+ {
+  "match": 12,
+  "stage": "group",
+  "pivotality": 0.0173
+ },
+ {
+  "match": 13,
+  "stage": "group",
+  "pivotality": 0.0201
+ },
+ {
+  "match": 14,
+  "stage": "group",
+  "pivotality": 0.0169
+ },
+ {
+  "match": 15,
+  "stage": "group",
+  "pivotality": 0.0145
+ },
+ {
+  "match": 16,
+  "stage": "group",
+  "pivotality": 0.0157
+ },
+ {
+  "match": 17,
+  "stage": "group",
+  "pivotality": 0.0181
+ },
+ {
+  "match": 18,
+  "stage": "group",
+  "pivotality": 0.0129
+ },
+ {
+  "match": 19,
+  "stage": "group",
+  "pivotality": 0.0134
+ },
+ {
+  "match": 20,
+  "stage": "group",
+  "pivotality": 0.0143
+ },
+ {
+  "match": 21,
+  "stage": "group",
+  "pivotality": 0.0143
+ },
+ {
+  "match": 22,
+  "stage": "group",
+  "pivotality": 0.0143
+ },
+ {
+  "match": 23,
+  "stage": "group",
+  "pivotality": 0.0142
+ },
+ {
+  "match": 24,
+  "stage": "group",
+  "pivotality": 0.013
+ },
+ {
+  "match": 25,
+  "stage": "group",
+  "pivotality": 0.0119
+ },
+ {
+  "match": 26,
+  "stage": "group",
+  "pivotality": 0.0173
+ },
+ {
+  "match": 27,
+  "stage": "group",
+  "pivotality": 0.0123
+ },
+ {
+  "match": 28,
+  "stage": "group",
+  "pivotality": 0.0116
+ },
+ {
+  "match": 29,
+  "stage": "group",
+  "pivotality": 0.014
+ },
+ {
+  "match": 30,
+  "stage": "group",
+  "pivotality": 0.0122
+ },
+ {
+  "match": 31,
+  "stage": "group",
+  "pivotality": 0.0135
+ },
+ {
+  "match": 32,
+  "stage": "group",
+  "pivotality": 0.014
+ },
+ {
+  "match": 33,
+  "stage": "group",
+  "pivotality": 0.0154
+ },
+ {
+  "match": 34,
+  "stage": "group",
+  "pivotality": 0.011
+ },
+ {
+  "match": 35,
+  "stage": "group",
+  "pivotality": 0.0146
+ },
+ {
+  "match": 36,
+  "stage": "group",
+  "pivotality": 0.0115
+ },
+ {
+  "match": 37,
+  "stage": "group",
+  "pivotality": 0.0115
+ },
+ {
+  "match": 38,
+  "stage": "group",
+  "pivotality": 0.0117
+ },
+ {
+  "match": 39,
+  "stage": "group",
+  "pivotality": 0.0088
+ },
+ {
+  "match": 40,
+  "stage": "group",
+  "pivotality": 0.0101
+ },
+ {
+  "match": 41,
+  "stage": "group",
+  "pivotality": 0.0204
+ },
+ {
+  "match": 42,
+  "stage": "group",
+  "pivotality": 0.0095
+ },
+ {
+  "match": 43,
+  "stage": "group",
+  "pivotality": 0.0203
+ },
+ {
+  "match": 44,
+  "stage": "group",
+  "pivotality": 0.0118
+ },
+ {
+  "match": 45,
+  "stage": "group",
+  "pivotality": 0.0118
+ },
+ {
+  "match": 46,
+  "stage": "group",
+  "pivotality": 0.0132
+ },
+ {
+  "match": 47,
+  "stage": "group",
+  "pivotality": 0.0093
+ },
+ {
+  "match": 48,
+  "stage": "group",
+  "pivotality": 0.0111
+ },
+ {
+  "match": 49,
+  "stage": "group",
+  "pivotality": 0.0134
+ },
+ {
+  "match": 50,
+  "stage": "group",
+  "pivotality": 0.0148
+ },
+ {
+  "match": 51,
+  "stage": "group",
+  "pivotality": 0.0119
+ },
+ {
+  "match": 52,
+  "stage": "group",
+  "pivotality": 0.0162
+ },
+ {
+  "match": 53,
+  "stage": "group",
+  "pivotality": 0.0132
+ },
+ {
+  "match": 54,
+  "stage": "group",
+  "pivotality": 0.0096
+ },
+ {
+  "match": 55,
+  "stage": "group",
+  "pivotality": 0.0155
+ },
+ {
+  "match": 56,
+  "stage": "group",
+  "pivotality": 0.0194
+ },
+ {
+  "match": 57,
+  "stage": "group",
+  "pivotality": 0.0114
+ },
+ {
+  "match": 58,
+  "stage": "group",
+  "pivotality": 0.0084
+ },
+ {
+  "match": 59,
+  "stage": "group",
+  "pivotality": 0.0117
+ },
+ {
+  "match": 60,
+  "stage": "group",
+  "pivotality": 0.0123
+ },
+ {
+  "match": 61,
+  "stage": "group",
+  "pivotality": 0.022
+ },
+ {
+  "match": 62,
+  "stage": "group",
+  "pivotality": 0.0172
+ },
+ {
+  "match": 63,
+  "stage": "group",
+  "pivotality": 0.0139
+ },
+ {
+  "match": 64,
+  "stage": "group",
+  "pivotality": 0.0128
+ },
+ {
+  "match": 65,
+  "stage": "group",
+  "pivotality": 0.0147
+ },
+ {
+  "match": 66,
+  "stage": "group",
+  "pivotality": 0.0256
+ },
+ {
+  "match": 67,
+  "stage": "group",
+  "pivotality": 0.0142
+ },
+ {
+  "match": 68,
+  "stage": "group",
+  "pivotality": 0.0082
+ },
+ {
+  "match": 69,
+  "stage": "group",
+  "pivotality": 0.0093
+ },
+ {
+  "match": 70,
+  "stage": "group",
+  "pivotality": 0.0094
+ },
+ {
+  "match": 71,
+  "stage": "group",
+  "pivotality": 0.0159
+ },
+ {
+  "match": 72,
+  "stage": "group",
+  "pivotality": 0.0104
+ },
+ {
+  "match": 74,
+  "stage": "ko",
+  "pivotality": 0.0118
+ },
+ {
+  "match": 77,
+  "stage": "ko",
+  "pivotality": 0.0152
+ },
+ {
+  "match": 73,
+  "stage": "ko",
+  "pivotality": 0.0095
+ },
+ {
+  "match": 75,
+  "stage": "ko",
+  "pivotality": 0.0274
+ },
+ {
+  "match": 76,
+  "stage": "ko",
+  "pivotality": 0.0399
+ },
+ {
+  "match": 78,
+  "stage": "ko",
+  "pivotality": 0.0335
+ },
+ {
+  "match": 79,
+  "stage": "ko",
+  "pivotality": 0.0073
+ },
+ {
+  "match": 80,
+  "stage": "ko",
+  "pivotality": 0.0113
+ },
+ {
+  "match": 83,
+  "stage": "ko",
+  "pivotality": 0.0348
+ },
+ {
+  "match": 84,
+  "stage": "ko",
+  "pivotality": 0.0831
+ },
+ {
+  "match": 81,
+  "stage": "ko",
+  "pivotality": 0.0068
+ },
+ {
+  "match": 82,
+  "stage": "ko",
+  "pivotality": 0.0175
+ },
+ {
+  "match": 86,
+  "stage": "ko",
+  "pivotality": 0.0822
+ },
+ {
+  "match": 88,
+  "stage": "ko",
+  "pivotality": 0.0113
+ },
+ {
+  "match": 85,
+  "stage": "ko",
+  "pivotality": 0.0153
+ },
+ {
+  "match": 87,
+  "stage": "ko",
+  "pivotality": 0.0072
+ },
+ {
+  "match": 89,
+  "stage": "ko",
+  "pivotality": 0.1156
+ },
+ {
+  "match": 90,
+  "stage": "ko",
+  "pivotality": 0.0281
+ },
+ {
+  "match": 91,
+  "stage": "ko",
+  "pivotality": 0.0567
+ },
+ {
+  "match": 92,
+  "stage": "ko",
+  "pivotality": 0.0643
+ },
+ {
+  "match": 93,
+  "stage": "ko",
+  "pivotality": 0.1502
+ },
+ {
+  "match": 94,
+  "stage": "ko",
+  "pivotality": 0.009
+ },
+ {
+  "match": 95,
+  "stage": "ko",
+  "pivotality": 0.0904
+ },
+ {
+  "match": 96,
+  "stage": "ko",
+  "pivotality": 0.0482
+ },
+ {
+  "match": 97,
+  "stage": "ko",
+  "pivotality": 0.1502
+ },
+ {
+  "match": 98,
+  "stage": "ko",
+  "pivotality": 0.1251
+ },
+ {
+  "match": 99,
+  "stage": "ko",
+  "pivotality": 0.1204
+ },
+ {
+  "match": 100,
+  "stage": "ko",
+  "pivotality": 0.2486
+ },
+ {
+  "match": 101,
+  "stage": "ko",
+  "pivotality": 0.5424
+ },
+ {
+  "match": 102,
+  "stage": "ko",
+  "pivotality": 0.3387
+ },
+ {
+  "match": 104,
+  "stage": "ko",
+  "pivotality": 0.9871
+ }
+]

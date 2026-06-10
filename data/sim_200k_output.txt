@@ -1,0 +1,102 @@
+=== 200000 simulations ===
+
+-- P(champion) top 12 --
+  Spain             27.4%
+  Argentina         18.6%
+  France            14.8%
+  England            7.3%
+  Portugal           4.2%
+  Colombia           4.1%
+  Brazil             3.6%
+  Netherlands        2.7%
+  Germany            2.2%
+  Ecuador            1.9%
+  Norway             1.8%
+  Croatia            1.7%
+
+-- P(reach final) top 8 --
+  Spain             39.0%
+  Argentina         30.9%
+  France            25.2%
+  England           15.1%
+  Portugal           9.8%
+  Colombia           9.5%
+  Brazil             8.7%
+  Netherlands        6.7%
+
+-- P(reach semi-final) top 10 --
+  Spain             51.8%
+  Argentina         44.3%
+  France            43.6%
+  England           29.0%
+  Brazil            20.3%
+  Portugal          18.6%
+  Colombia          18.4%
+  Netherlands       16.6%
+  Germany           15.6%
+  Norway            13.9%
+
+-- Sheet bracket reality-check (matchup happens / your advancer advances) --
+  R32   M74: Germany vs Paraguay               matchup   4.1% | Germany        advances  47.5%
+  R32   M77: France vs Sweden                 matchup   2.9% | France         advances  52.3%
+  R32   M73: South Korea vs Canada                 matchup  10.6% | Canada         advances  23.3%
+  R32   M75: Netherlands vs Morocco                matchup  24.4% | Netherlands    advances  34.4%
+  R32   M83: Portugal vs Croatia                matchup  23.8% | Portugal       advances  25.0%
+  R32   M84: Spain vs Austria                matchup  33.7% | Spain          advances  63.7%
+  R32   M81: Turkey vs Bosnia and Herzegovina matchup   7.0% | Turkey         advances  23.7%
+  R32   M82: Belgium vs Czechia                matchup  10.1% | Belgium        advances  43.7%
+  R32   M76: Brazil vs Japan                  matchup  21.5% | Brazil         advances  46.4%
+  R32   M78: Ecuador vs Norway                 matchup  17.0% | Ecuador        advances  20.5%
+  R32   M79: Mexico vs Ivory Coast            matchup   4.5% | Mexico         advances  35.7%
+  R32   M80: England vs Algeria                matchup   2.7% | England        advances  52.6%
+  R32   M86: Argentina vs Uruguay                matchup  43.9% | Argentina      advances  61.5%
+  R32   M88: United States vs Egypt                  matchup  10.9% | United States  advances  15.7%
+  R32   M85: Switzerland vs Iran                   matchup   9.3% | Switzerland    advances  35.8%
+  R32   M87: Colombia vs Senegal                matchup   2.2% | Colombia       advances  37.5%
+  R16   M89: Germany vs France                 matchup  24.7% | France         advances  39.4%
+  R16   M90: Canada vs Netherlands            matchup   8.1% | Netherlands    advances  23.4%
+  R16   M93: Portugal vs Spain                  matchup  15.9% | Spain          advances  48.6%
+  R16   M94: Turkey vs Belgium                matchup  10.4% | Turkey         advances  14.4%
+  R16   M91: Brazil vs Ecuador                matchup   9.5% | Brazil         advances  25.7%
+  R16   M92: Mexico vs England                matchup  18.7% | England        advances  37.9%
+  R16   M95: Argentina vs United States          matchup   9.6% | Argentina      advances  52.0%
+  R16   M96: Switzerland vs Colombia               matchup  13.4% | Colombia       advances  25.5%
+  QF    M97: France vs Netherlands            matchup   9.3% | France         advances  30.0%
+  QF    M98: Spain vs Turkey                 matchup   7.1% | Spain          advances  41.6%
+  QF    M99: Brazil vs England                matchup   9.7% | England        advances  22.9%
+  QF    M100: Argentina vs Colombia               matchup  13.3% | Argentina      advances  39.3%
+  SF    M101: France vs Spain                  matchup  12.5% | Spain          advances  31.8%
+  SF    M102: England vs Argentina              matchup   9.0% | Argentina      advances  27.5%
+  Final M104: Spain vs Argentina              matchup  10.8% | Spain          advances  27.4%
+
+-- Slot emergence: sheet pick vs sheet opponent vs overall best --
+  R32  M74: pick Germany 47.2% vs opp Paraguay 2.5% | top: Germany 47.2%, Ecuador 14.6%
+  R32  M77: pick France 52.3% vs opp Sweden 0.8% | top: France 52.3%, Norway 16.5%
+  R32  M73: pick Canada 23.3% vs opp South Korea 13.5% | top: Canada 23.3%, Switzerland 19.9%
+  R32  M75: pick Netherlands 34.7% vs opp Morocco 19.5% | top: Netherlands 34.7%, Morocco 19.5%
+  R32  M83: pick Portugal 25.1% vs opp Croatia 27.5% | top: Croatia 27.5%, Portugal 25.1% <-- FLIP?
+  R32  M84: pick Spain 63.7% vs opp Austria 9.7% | top: Spain 63.7%, Uruguay 12.3%
+  R32  M81: pick Turkey 23.5% vs opp Bosnia and Herzegovina 4.3% | top: Turkey 23.5%, United States 20.2%
+  R32  M82: pick Belgium 43.8% vs opp Czechia 5.6% | top: Belgium 43.8%, Egypt 8.0%
+  R32  M76: pick Brazil 46.5% vs opp Japan 15.0% | top: Brazil 46.5%, Japan 15.0%
+  R32  M78: pick Ecuador 20.5% vs opp Norway 24.5% | top: Norway 24.5%, Ecuador 20.5% <-- FLIP?
+  R32  M79: pick Mexico 35.7% vs opp Ivory Coast 2.7% | top: Mexico 35.7%, Czechia 8.5%
+  R32  M80: pick England 52.6% vs opp Algeria 0.8% | top: England 52.6%, Croatia 19.7%
+  R32  M86: pick Argentina 61.4% vs opp Uruguay 16.2% | top: Argentina 61.4%, Uruguay 16.2%
+  R32  M88: pick United States 15.6% vs opp Egypt 12.5% | top: Turkey 20.7%, Paraguay 15.8%
+  R32  M85: pick Switzerland 36.0% vs opp Iran 6.9% | top: Switzerland 36.0%, Canada 19.8%
+  R32  M87: pick Colombia 37.5% vs opp Senegal 1.6% | top: Colombia 37.5%, Portugal 33.3%
+  R16  M89: pick France 39.3% vs opp Germany 20.3% | top: France 39.3%, Germany 20.3%
+  R16  M90: pick Netherlands 23.6% vs opp Canada 10.1% | top: Netherlands 23.6%, Switzerland 10.3%
+  R16  M93: pick Spain 48.7% vs opp Portugal 9.9% | top: Spain 48.7%, Portugal 9.9%
+  R16  M94: pick Turkey 14.3% vs opp Belgium 23.9% | top: Belgium 23.9%, Turkey 14.3% <-- FLIP?
+  R16  M91: pick Brazil 25.7% vs opp Ecuador 11.1% | top: Brazil 25.7%, France 14.6%
+  R16  M92: pick England 37.8% vs opp Mexico 15.5% | top: England 37.8%, Mexico 15.5%
+  R16  M95: pick Argentina 52.1% vs opp United States 3.0% | top: Argentina 52.1%, Spain 11.3%
+  R16  M96: pick Colombia 25.5% vs opp Switzerland 15.8% | top: Colombia 25.5%, Portugal 22.9%
+  QF   M97: pick France 30.0% vs opp Netherlands 12.0% | top: France 30.0%, Netherlands 12.0%
+  QF   M98: pick Spain 41.6% vs opp Turkey 4.5% | top: Spain 41.6%, Portugal 6.7%
+  QF   M99: pick England 23.0% vs opp Brazil 14.4% | top: England 23.0%, Brazil 14.4%
+  QF   M100: pick Argentina 39.3% vs opp Colombia 11.2% | top: Argentina 39.3%, Colombia 11.2%
+  SF   M101: pick Spain 31.7% vs opp France 17.8% | top: Spain 31.7%, France 17.8%
+  SF   M102: pick Argentina 27.5% vs opp England 12.1% | top: Argentina 27.5%, England 12.1%

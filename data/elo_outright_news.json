@@ -1,0 +1,307 @@
+{
+ "outright": [
+  {
+   "team": "Spain",
+   "odds": 5.5
+  },
+  {
+   "team": "France",
+   "odds": 5.75
+  },
+  {
+   "team": "England",
+   "odds": 7.5
+  },
+  {
+   "team": "Argentina",
+   "odds": 9.5
+  },
+  {
+   "team": "Brazil",
+   "odds": 9.0
+  },
+  {
+   "team": "Portugal",
+   "odds": 10.75
+  },
+  {
+   "team": "Germany",
+   "odds": 16.0
+  },
+  {
+   "team": "Netherlands",
+   "odds": 22.0
+  },
+  {
+   "team": "Norway",
+   "odds": 38.0
+  },
+  {
+   "team": "Belgium",
+   "odds": 45.0
+  },
+  {
+   "team": "Colombia",
+   "odds": 52.0
+  },
+  {
+   "team": "Mexico",
+   "odds": 58.0
+  },
+  {
+   "team": "United States",
+   "odds": 58.0
+  },
+  {
+   "team": "Japan",
+   "odds": 66.0
+  },
+  {
+   "team": "Morocco",
+   "odds": 66.0
+  }
+ ],
+ "elo": [
+  {
+   "team": "Mexico",
+   "elo": 1868
+  },
+  {
+   "team": "South Africa",
+   "elo": 1517
+  },
+  {
+   "team": "South Korea",
+   "elo": 1756
+  },
+  {
+   "team": "Czechia",
+   "elo": 1733
+  },
+  {
+   "team": "Canada",
+   "elo": 1793
+  },
+  {
+   "team": "Bosnia and Herzegovina",
+   "elo": 1591
+  },
+  {
+   "team": "Qatar",
+   "elo": 1423
+  },
+  {
+   "team": "Switzerland",
+   "elo": 1894
+  },
+  {
+   "team": "Brazil",
+   "elo": 1988
+  },
+  {
+   "team": "Morocco",
+   "elo": 1822
+  },
+  {
+   "team": "Haiti",
+   "elo": 1532
+  },
+  {
+   "team": "Scotland",
+   "elo": 1770
+  },
+  {
+   "team": "United States",
+   "elo": 1733
+  },
+  {
+   "team": "Paraguay",
+   "elo": 1833
+  },
+  {
+   "team": "Australia",
+   "elo": 1775
+  },
+  {
+   "team": "Turkey",
+   "elo": 1906
+  },
+  {
+   "team": "Germany",
+   "elo": 1925
+  },
+  {
+   "team": "Cura\u00e7ao",
+   "elo": 1433
+  },
+  {
+   "team": "Ivory Coast",
+   "elo": 1676
+  },
+  {
+   "team": "Ecuador",
+   "elo": 1935
+  },
+  {
+   "team": "Netherlands",
+   "elo": 1961
+  },
+  {
+   "team": "Japan",
+   "elo": 1906
+  },
+  {
+   "team": "Sweden",
+   "elo": 1714
+  },
+  {
+   "team": "Tunisia",
+   "elo": 1633
+  },
+  {
+   "team": "Belgium",
+   "elo": 1866
+  },
+  {
+   "team": "Egypt",
+   "elo": 1699
+  },
+  {
+   "team": "Iran",
+   "elo": 1764
+  },
+  {
+   "team": "New Zealand",
+   "elo": 1585
+  },
+  {
+   "team": "Spain",
+   "elo": 2165
+  },
+  {
+   "team": "Cape Verde",
+   "elo": 1576
+  },
+  {
+   "team": "Saudi Arabia",
+   "elo": 1566
+  },
+  {
+   "team": "Uruguay",
+   "elo": 1892
+  },
+  {
+   "team": "France",
+   "elo": 2081
+  },
+  {
+   "team": "Senegal",
+   "elo": 1866
+  },
+  {
+   "team": "Iraq",
+   "elo": 1608
+  },
+  {
+   "team": "Norway",
+   "elo": 1917
+  },
+  {
+   "team": "Argentina",
+   "elo": 2113
+  },
+  {
+   "team": "Algeria",
+   "elo": 1743
+  },
+  {
+   "team": "Austria",
+   "elo": 1830
+  },
+  {
+   "team": "Jordan",
+   "elo": 1685
+  },
+  {
+   "team": "Portugal",
+   "elo": 1984
+  },
+  {
+   "team": "Congo DR",
+   "elo": 1655
+  },
+  {
+   "team": "Uzbekistan",
+   "elo": 1718
+  },
+  {
+   "team": "Colombia",
+   "elo": 1977
+  },
+  {
+   "team": "England",
+   "elo": 2020
+  },
+  {
+   "team": "Croatia",
+   "elo": 1930
+  },
+  {
+   "team": "Ghana",
+   "elo": 1503
+  },
+  {
+   "team": "Panama",
+   "elo": 1733
+  }
+ ],
+ "news": [
+  {
+   "team": "Spain",
+   "note": "Fermin Lopez out (metatarsal); drew 1-1 Iraq friendly"
+  },
+  {
+   "team": "Argentina",
+   "note": "Messi hamstring fatigue, expected available"
+  },
+  {
+   "team": "France",
+   "note": "Lost 2-1 to Ivory Coast friendly; squad intact"
+  },
+  {
+   "team": "Brazil",
+   "note": "Rodrygo OUT (ACL) - significant"
+  },
+  {
+   "team": "Germany",
+   "note": "Lennart Karl out, minor"
+  },
+  {
+   "team": "Netherlands",
+   "note": "Xavi Simons OUT (ACL)"
+  },
+  {
+   "team": "Japan",
+   "note": "Mitoma left out (hamstring)"
+  },
+  {
+   "team": "Croatia",
+   "note": "Poor form: friendly losses to Brazil and Belgium"
+  },
+  {
+   "team": "England",
+   "note": "No major injuries; Palmer not in squad"
+  },
+  {
+   "team": "Mexico",
+   "note": "Raul Jimenez recalled, good form"
+  }
+ ],
+ "injury_elo_adj": {
+  "Brazil": -20,
+  "Netherlands": -23,
+  "Japan": -10,
+  "Croatia": -10,
+  "Spain": -5
+ }
+}
