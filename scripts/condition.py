@@ -54,6 +54,15 @@ for row, grp, h, a in GROUP_FIXTURES:
 TS = {74: set("ABCDF"), 77: set("CDFGH"), 81: set("BEFIJ"), 82: set("AEHIJ"),
       79: set("CEFHI"), 80: set("EHIJK"), 85: set("EFGIJ"), 87: set("DEIJL")}
 SO = list(TS)
+# Realized third-place -> T-slot assignment, to be pinned from FIFA's official
+# Round-of-32 bracket once the group stage concludes (~27 June 2026). Map each
+# T-slot match number to the GROUP whose third-placed team fills it, e.g.
+#   REALIZED_THIRDS = {74:"A", 77:"C", 79:"F", 80:"K", 81:"B", 82:"G", 85:"E", 87:"D"}
+# While empty, assign() falls back to a deterministic backtracking fill, which the
+# baseline forecast is robust to (measured: champion/advance probs unchanged within
+# Monte-Carlo noise). Read the realized slotting off observed groups, and cross-check
+# it against FIFA's announced bracket, with realized_bracket(<group results>).
+REALIZED_THIRDS = {}
 R32 = {74: ("E1", "T74"), 77: ("I1", "T77"), 73: ("A2", "B2"), 75: ("F1", "C2"),
        76: ("C1", "F2"), 78: ("E2", "I2"), 79: ("A1", "T79"), 80: ("L1", "T80"),
        83: ("K2", "L2"), 84: ("H1", "J2"), 81: ("D1", "T81"), 82: ("G1", "T82"),
@@ -84,18 +93,56 @@ def sample(lam):
 
 
 def assign(q):
+    """Map the 8 qualifying third-place groups to the 8 T-slots. Once the group
+    stage is played, REALIZED_THIRDS pins FIFA's official slotting; otherwise a
+    deterministic backtracking fills the slots. The old code shuffled candidates
+    randomly, so a given third-placed team landed in many different slots across
+    Monte-Carlo iterations and a recorded third-place R32 result was accepted in
+    only a fraction of them (see archive/docs_superpowers KO-conditioning issue)."""
+    if REALIZED_THIRDS and set(REALIZED_THIRDS.values()) == set(q):
+        return dict(REALIZED_THIRDS)
+
     def bt(i, used):
         if i == len(SO):
             return {}
-        c = [g for g in q if g not in used and g in TS[SO[i]]]
-        random.shuffle(c)
-        for g in c:
+        for g in sorted(g for g in q if g not in used and g in TS[SO[i]]):
             r = bt(i + 1, used | {g})
             if r is not None:
                 r[SO[i]] = g
                 return r
         return None
     return bt(0, set())
+
+
+def realized_bracket(results, seed=2026):
+    """Deterministic R32 slotting for FULLY-OBSERVED group results. Returns
+    (slots, assignment): slots maps every R32 entry slot ('A1','T79',...) to a
+    team; assignment maps each T-slot match number to its group letter. Used to
+    build the KO acceptance test, and on ~27 June to read the realized third-place
+    slotting off the final group table (cross-check against FIFA's bracket before
+    pinning REALIZED_THIRDS)."""
+    random.seed(seed)
+    g_obs = {int(k): v for k, v in results.get("group", {}).items()}
+    pos, thirds = {}, {}
+    for grp in "ABCDEFGHIJKL":
+        st = defaultdict(lambda: [0, 0, 0])
+        for row in GROUPS[grp]:
+            m = ROW_MATCH[row]
+            lh, la, home, away = RATES[row]
+            hg, ag = g_obs[m]
+            for t, f, gg in ((home, hg, ag), (away, ag, hg)):
+                st[t][1] += f - gg
+                st[t][2] += f
+                st[t][0] += 3 if f > gg else (1 if f == gg else 0)
+        o = sorted(st, key=lambda t: (*st[t], random.random()), reverse=True)
+        pos[f"{grp}1"], pos[f"{grp}2"] = o[0], o[1]
+        thirds[grp] = (o[2], tuple(st[o[2]]))
+    rk = sorted(thirds, key=lambda g: (*thirds[g][1], random.random()), reverse=True)
+    am = assign(rk[:8]) or assign(rk[:7] + [rk[8]])
+    slots = dict(pos)
+    for m_, g_ in am.items():
+        slots[f"T{m_}"] = thirds[g_][0]
+    return slots, am
 
 
 def conditional_probs(results, N=50000, seed=2026):
