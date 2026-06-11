@@ -113,7 +113,87 @@ $\sum_{j \in \{H,D,A\}} (p_j - \mathbf{1}[j = r])^2$.
 
 ## 1. Inputs — from information to numbers
 
-*(section pending)*
+Everything downstream is arithmetic on numbers, so the first real modeling step is
+**measurement**: turning four kinds of worldly information into typed numerical
+objects. This section gives the encoding map for each.
+
+**(a) Bookmaker odds $\to$ probability triples.** Each group fixture is one JSON
+record carrying decimal odds and their implied fair probabilities:
+
+$$
+\text{quote } (o_H, o_D, o_A) \;\longmapsto\; (p_H, p_D, p_A), \qquad
+p_j \propto 1/o_j
+$$
+
+(the normalization is §2's subject). Odds were hand-collected June 2–7, 2026 from
+bet365, FanDuel, DraftKings, Betfair, oddschecker/oddspedia aggregators, and
+sportytrader composites including Kalshi/Polymarket — one source per fixture, recorded
+in a `source` field (e.g. `"FanDuel 2026-06-05"`), not averaged across books. The
+loader merges three files (`odds_AD.json`, `odds_EH.json`, `odds_IL.json`, 24
+fixtures each = 72), keys them by the canonicalized team pair, flips home/away
+orientation if a quote was stored reversed, and **defensively renormalizes**
+$p_j \leftarrow p_j / (p_H + p_D + p_A)$ so rounding in the stored triples cannot
+leak through.
+
+*Anchor: `scripts/predict_groups.py:load_odds` + `main` — pair-keyed merge,
+orientation flip, renormalization.*
+
+For matchday-3 fixtures with no published odds at collection time, the probability
+triple is instead an **Elo estimate** (the §3 logistic applied to the two ratings,
+flagged in `source`, e.g. `"Elo estimate (ARG 2113, AUT 1830)"`) — the weakest data
+tier, used for roughly a third of the group slate.
+
+**(b) Elo table $\to$ ratings $R_i$.** One integer per team for all 48 teams
+(Spain 2165 down to Qatar 1423), read from `data/elo_outright_news.json` as collected
+June 5–7, 2026. The effective knockout rating adds two deterministic corrections:
+
+$$
+R_i^{\mathrm{eff}} \;=\; R_i \;+\; \delta_i^{\mathrm{inj}} \;+\;
+\delta_i^{\mathrm{host}},
+$$
+
+with the injury and host terms defined in (c) and §4.
+
+*Anchor: `scripts/simulate.py:ko_rating` — `ELO[team] + ADJ.get(team, 0)` plus the
+host bonus.*
+
+**(c) Team news $\to$ additive rating penalties.** Qualitative injury reports are
+encoded as fixed Elo deductions $\delta_i^{\mathrm{inj}}$, set once at collection
+time:
+
+| Team | $\delta^{\mathrm{inj}}$ | Reason on record |
+|---|---|---|
+| Netherlands | $-23$ | Xavi Simons out |
+| Brazil | $-20$ | Rodrygo out |
+| Japan | $-10$ | Mitoma out |
+| Croatia | $-10$ | squad fitness |
+| Spain | $-5$ | Fermín López out (metatarsal) |
+
+This is the bluntest measurement in the pipeline — a hand-set scalar per absence,
+not a player-value model — and is flagged as such per the honesty rule.
+
+*Anchor: `data/elo_outright_news.json:injury_elo_adj`, applied in
+`scripts/simulate.py:ko_rating`.*
+
+**(d) Tournament structure $\to$ fixture list + bracket graph.** The 72 group
+fixtures are a static table `(row, group, home, away)`; the knockout is a directed
+graph encoded as the sheet's slot layout (16 R32 pairs feeding 8 R16 pairs, 4 QF, 2
+SF, final + third-place playoff). Two auxiliary encodings matter:
+
+- **Name canonicalization**: a deterministic alias map (`"Türkiye"` $\to$
+  `"Turkey"`, `"Korea Republic"` $\to$ `"South Korea"`, …) so that every data source
+  keys to one team identity — the unglamorous half of information-to-data.
+- **Match numbering**: a fixed bijection between sheet rows 4–75 and FIFA's official
+  group-match numbers 1–72, cross-checked by a unit test, so results logged by match
+  number join correctly to predictions made by row.
+
+*Anchor: `scripts/fixtures.py:GROUP_FIXTURES/KNOCKOUT/ALIASES/canon/ROW_MATCH`
+(numbering guarded by `tests/test_match_numbering.py`).*
+
+**As implemented.** All four inputs are frozen files under `data/` committed before
+kickoff (locked 2026-06-10, tag `prereg-2026`); nothing in Part I re-reads the
+outside world. The model's information set is exactly: one odds quote per fixture,
+one Elo integer per team, five injury scalars, and the bracket wiring.
 
 ## 2. Clean the odds — de-vigging
 
