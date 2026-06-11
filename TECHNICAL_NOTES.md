@@ -197,7 +197,45 @@ one Elo integer per team, five injury scalars, and the bracket wiring.
 
 ## 2. Clean the odds — de-vigging
 
-*(section pending)*
+A decimal quote $o_j$ implies probability $1/o_j$, but a book's implied probabilities
+sum to more than one. The excess is the **overround** (vig),
+
+$$
+V \;=\; \sum_{j \in \{H, D, A\}} \frac{1}{o_j} \;-\; 1 \;>\; 0,
+$$
+
+the bookmaker's built-in margin. The model strips it by **proportional
+normalization**:
+
+$$
+p_j \;=\; \frac{1/o_j}{\sum_{k \in \{H, D, A\}} 1/o_k},
+\qquad j \in \{H, D, A\}.
+$$
+
+**Worked example** (the one in the companion's §2): implied $0.50/0.30/0.28$ sums to
+$1.08$, so $V = 8\%$; dividing through gives fair probabilities
+$0.463/0.278/0.259$ — the "46/28/26" of the plain-language walkthrough. A real one
+from the data: Mexico–South Africa at $(1.40, 4.60, 8.00)$ implies
+$(0.714, 0.217, 0.125)$, $V = 5.6\%$, normalizing to the stored
+$(0.676, 0.206, 0.118)$.
+
+**What proportional de-vigging assumes — honesty note.** Dividing by the total
+spreads the vig across outcomes *in proportion to their implied probability*. That is
+the standard first-order method, but it is a modeling choice: books are known to
+shade longshots more than favorites (the favorite–longshot bias), which power or
+Shin-type de-vigging methods would correct by shrinking small $1/o_j$ relatively
+more. The pipeline knowingly uses the proportional map — the bias is second-order at
+World Cup group-match prices, and the downstream pick rule (§3) is insensitive to
+probability perturbations of that size.
+
+**As implemented.** De-vigging is applied at data-entry time — each odds record
+stores both the raw quotes $(o_H, o_D, o_A)$ and the normalized triple
+$(p_H, p_D, p_A)$, so the transformation is auditable per fixture — and the loader
+re-applies the same normalization defensively against rounding drift in the stored
+values.
+
+*Anchor: `data/odds_*.json` (fields `odds_*` and `p_*`);
+`scripts/predict_groups.py:main` — `ph, pd, pa = ph/s, pd/s, pa/s`.*
 
 ## 3. Predict each match — the Poisson scoreline model
 
