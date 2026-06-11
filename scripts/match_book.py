@@ -6,6 +6,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 BOOK_DIR = ROOT / "paper" / "match_book"
+# Valid values for an entry's `failure_mode` field; consumed by live_stats and
+# the driver to categorise and aggregate post-match attribution.
 FAILURE_MODES = ["champion_call", "bracket_decay", "group_upset_cascade",
                  "md3_rotation", "systematic_rating_error", "knockout_coinflip"]
 
@@ -22,19 +24,26 @@ def _movers(pre_champ, post_champ, n=5):
 
 
 def _watch_line(exp):
-    ph = exp["probs_HDA"][0]
-    fav, dog = exp["home"], exp["away"]
-    return (f"an upset by {dog} would be the surprise "
-            f"(model {round(ph * 100)}% {fav}).")
+    p_home, _p_draw, p_away = exp["probs_HDA"]
+    if p_home >= p_away:
+        favorite, underdog, p_fav = exp["home"], exp["away"], p_home
+    else:
+        favorite, underdog, p_fav = exp["away"], exp["home"], p_away
+    return (f"an upset by {underdog} would be the surprise "
+            f"(model {round(p_fav * 100)}% {favorite}).")
 
 
 def build_entry(match, trajectory, expectations, forecast_commit, documented_at):
-    pre = next(r for r in trajectory if r["phase"] == "pre" and r["match"] == match)
-    post = next(r for r in trajectory if r["phase"] == "post" and r["match"] == match)
-    exp = next(e for e in expectations if e["match"] == match)
+    pre = next((r for r in trajectory if r["phase"] == "pre" and r["match"] == match), None)
+    post = next((r for r in trajectory if r["phase"] == "post" and r["match"] == match), None)
+    exp = next((e for e in expectations if e["match"] == match), None)
+    if pre is None or post is None:
+        raise ValueError(f"match {match} missing a pre/post record in trajectory")
+    if exp is None:
+        raise ValueError(f"match {match} missing from expectations")
     return {
         "match": match,
-        "stage": f"Group {exp['group']}",
+        "stage": f"Group {exp['group']}" if "group" in exp else exp.get("stage", "KO"),
         "fixture": f"{exp['home']} v {exp['away']}",
         "kickoff": post["kickoff"],
         "documented_at": documented_at,

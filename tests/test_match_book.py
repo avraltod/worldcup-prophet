@@ -44,6 +44,18 @@ def test_roundtrip_markdown():
     assert back["pre"]["pick"] == [2, 1]
     assert back["result"] == [2, 0]
 
+def test_watch_line_picks_true_favorite_when_away_stronger():
+    exp = [{"match": 9, "group": "A", "home": "South Africa", "away": "South Korea",
+            "pick": [0, 1], "probs_HDA": [0.285, 0.294, 0.421], "lh": 0.8, "la": 1.1}]
+    pre = {"phase": "pre", "match": 9, "kickoff": "x", "champion": {"Spain": 0.27},
+           "market_champion": {"Spain": 0.16}, "info_bits": 0.0}
+    post = {"phase": "post", "match": 9, "kickoff": "x", "champion": {"Spain": 0.27},
+            "info_bits": 0.0, "result": [0, 1],
+            "performance": {"points": 3, "ev_points": 0.5, "p_outcome": 0.42, "brier": 0.3}}
+    e = mb.build_entry(9, [pre, post], exp, "abc", "t")
+    assert "South Korea" in e["pre"]["watch_line"]   # away is favorite here
+    assert "42%" in e["pre"]["watch_line"]
+
 def test_index_mark_and_query(tmp_path):
     idx = tmp_path / "index.json"
     assert mb.is_documented(idx, 1) is False
