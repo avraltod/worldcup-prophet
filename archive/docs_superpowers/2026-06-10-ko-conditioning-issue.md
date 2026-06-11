@@ -1,7 +1,9 @@
 # Issue: non-deterministic third-place slotting breaks KO conditioning
 
 **Date:** 2026-06-10
-**Status:** OPEN — blocks knockout-stage automation; needs a methodology decision
+**Status:** PREPPED 2026-06-11 — deterministic fix wired into `condition.py` + acceptance test
+(`tests/test_ko_conditioning.py`); **awaiting the `REALIZED_THIRDS` fill from FIFA's announced
+R32 bracket (~27 June)**. Confirmed baseline-neutral (see below).
 **Severity:** Critical (corrupts the champion-probability trajectory — the paper's central metric)
 **Discovered:** during the final review of the knockout-automation build (parked on branch
 `ko-automation-parked`).
@@ -93,6 +95,34 @@ Record a third-placed-team R32 winner (e.g. M79) and assert, via `conditional_pr
 - the loser's QF probability → ~0.0;
 - the winner's QF probability → ~1.0.
 This is the round-trip the current tests lack.
+
+## Resolution prepped (2026-06-11)
+
+Chose a hybrid of option 1: a **deterministic `assign()`** plus a pinned realized table,
+rather than encoding all 495 group-combinations.
+
+- `condition.py`: `assign()` now returns FIFA's official slotting via `REALIZED_THIRDS`
+  when the qualifier set matches, and otherwise fills the 8 T-slots by **deterministic
+  backtracking** (sorted candidates, no `random.shuffle`). `REALIZED_THIRDS = {}` is a
+  placeholder to be filled from FIFA's announced R32 bracket (~27 June) — map each of the
+  8 T-slot match numbers {74,77,79,80,81,82,85,87} to the GROUP whose third-placed team
+  fills it.
+- Added `realized_bracket(results)`: returns the slotting for fully-observed groups, used by
+  the acceptance test and to read/cross-check the realized assignment on 27 June before pinning.
+- `tests/test_ko_conditioning.py`: the doc's acceptance test (a recorded third-place R32
+  winner reaches the R16 and eliminates its opponent) **plus** a baseline-unchanged guard.
+
+**Baseline-neutral (measured).** Champion probabilities and third-place advance probabilities
+are identical under random vs deterministic `assign()` to within Monte-Carlo noise (Spain ~27%,
+Czechia advance ~68%, etc.), because champions are never third-placed teams and a team's
+*advancement* depends on finishing top-8-among-thirds, not on which slot it fills. So the fix
+does **not** alter the locked pre-registered baseline — the post-kickoff integrity concern does
+not arise.
+
+**Remaining for 27 June:** (1) read FIFA's official R32 bracket; (2) set `REALIZED_THIRDS` to the
+8 slot→group assignments and cross-check against `realized_bracket(<final group results>)`;
+(3) re-run `tests/test_ko_conditioning.py`; (4) un-park / rebase the KO automation branch and
+apply the same `assign()` to `ko_bracket.py` before shipping it.
 
 ## State of the parked automation
 
