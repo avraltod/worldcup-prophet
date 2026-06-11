@@ -164,6 +164,18 @@ is therefore both the few-shot memory the CI draft conditions on and the self-le
 with no edits it enforces voice consistency, and each optional edit sharpens later drafts. No model
 is retrained.
 
+### Component 3b — Manual parallel track (human backstop + learning signal)
+The CI draft never blocks; alongside it the author can run a **parallel manual track** at any time:
+write their own interpretation for any match via `update_after_match.py M --reopen`. This (a)
+replaces that match's note with the human version, (b) records the `(CI draft → human)` pair in
+`corrections.md` as the learning signal, and (c) re-renders so the edit flows into the current
+paper's narrative. Interpretation prose affects only the rolling-narrative highlights, never
+`live_stats`, so no number moves — it is purely wording and judgment. The track is parallel (does
+not gate CI), asynchronous, and **selective**: the author backs up only the matches worth their
+judgment (upsets, failure-mode fires). Contemporaneity is preserved by timestamp — a note written
+promptly is the contemporaneous record; a much-later rewrite is stored as a timestamped **amendment**
+beside the original, never silently overwriting it.
+
 ### Component 4 — Paper integration
 A generator (`scripts/render_evolution.py`) consumes the Match Book and rewrites, between markers:
 - **Results ledger table** — one row per documented match: `M, fixture, pick, result, pts, Brier,
