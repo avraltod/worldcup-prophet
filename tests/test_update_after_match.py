@@ -27,6 +27,12 @@ def test_re_ev_delta_uses_ev_pick():
     d = uam.re_ev_delta_for(EXP[0], [2, 0], realistic_points=1)
     assert d == 0
 
+def test_re_ev_delta_nonzero_when_tiers_differ():
+    # ev pick (1,0) vs actual 2-1 scores 2 (correct result + GD); realistic scored 3 (exact) -> delta +1
+    exp = {"lh": 1.9, "la": 0.65}
+    d = uam.re_ev_delta_for(exp, [2, 1], realistic_points=3)
+    assert d == 1
+
 def test_build_full_entry_attaches_interpretation_and_failure_tag(tmp_path):
     e = uam.build_full_entry(1, TRAJ, EXP, forecast_commit="abc1234",
                              documented_at="2026-06-11T21:10:58Z", use_api=False)

@@ -79,10 +79,6 @@ def _entries_for_stats(index_path):
     return out
 
 
-def _git(*args):
-    subprocess.run(["git", *args], cwd=ROOT, check=True)
-
-
 def _latexmk():
     subprocess.run(["latexmk", "-xelatex", "-interaction=nonstopmode",
                     "Avraa_WC2026_paper.tex"], cwd=PAPER, check=True)
@@ -96,7 +92,9 @@ def revise(match, use_api=True, reopen_text=None):
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     entry_path = PAPER / "match_book" / f"M{match:03d}.md"
-    if reopen_text is not None and entry_path.exists():
+    if reopen_text is not None:
+        if not entry_path.exists():
+            raise SystemExit(f"--reopen: M{match:03d}.md not found — run without --reopen first")
         e = mb.parse_markdown(entry_path.read_text())
         old = e["interpretation"]
         e["interpretation"], e["interpretation_source"] = reopen_text, "human"
@@ -109,8 +107,10 @@ def revise(match, use_api=True, reopen_text=None):
     mb.mark_documented(INDEX, match)
 
     entries = _entries_for_stats(INDEX)
-    latest_champ = next(r["champion"] for r in reversed(trajectory)
-                        if r["phase"] == "post")
+    latest_champ = next((r["champion"] for r in reversed(trajectory)
+                         if r["phase"] == "post"), None)
+    if latest_champ is None:
+        raise SystemExit("no post record in trajectory — cannot compute stats")
     stats = ls.compute(entries, latest_champ)
     stats["re_ev_delta"] = sum(
         re_ev_delta_for(next(x for x in expectations if x["match"] == en["match"]),
