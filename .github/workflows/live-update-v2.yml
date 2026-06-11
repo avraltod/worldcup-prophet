@@ -1,6 +1,8 @@
 name: live-update-v2
 on:
-  workflow_dispatch: {}        # inert until cutover: no cron yet
+  schedule:
+    - cron: "5,25,45 * * * *"   # every 20 min: catches the 90-min pre-game window and post-FT finality
+  workflow_dispatch: {}         # manual rehearsal / on-demand runs
 permissions:
   contents: write
 concurrency:
