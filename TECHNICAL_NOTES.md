@@ -528,8 +528,8 @@ experiment (the flip case studied in the paper), flagged here so the constants i
 $100{+}k$, simulation seed 2026.*
 
 **Attaching scorelines to knockout picks.** Each predicted tie gets a score via the
-same machinery as §3: Elo-synthesized $(p_H, p_D, p_A)$ (the logistic-plus-decaying-
-draw construction), `fit_rates` inversion, modal-conditional readout. If the modal
+same machinery as §3: Elo-synthesized $(p_H, p_D, p_A)$ (the §3 logistic with decaying draw
+share), `fit_rates` inversion, modal-conditional readout. If the modal
 outcome is a draw, the full-time pick stays level and the higher-rated side gets
 $+1$ in the OT/PK column — the sheet's encoding of "wins on penalties."
 
