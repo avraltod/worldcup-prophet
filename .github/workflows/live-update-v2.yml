@@ -28,7 +28,9 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/trajectory_v2.json data/results_log_v2.json data/records_index_v2.json
+          for f in data/trajectory_v2.json data/results_log_v2.json data/records_index_v2.json; do
+            [ -f "$f" ] && git add "$f"   # results_log_v2 is absent on PRE-only runs
+          done
           for f in $(git diff --cached --name-only); do
             case "$f" in
               data/trajectory_v2.json|data/results_log_v2.json|data/records_index_v2.json) ;;
