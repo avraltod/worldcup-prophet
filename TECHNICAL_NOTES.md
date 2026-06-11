@@ -697,7 +697,43 @@ with the source recorded per match so the two never mix silently.
 
 ## 8. The expectation model: $\lambda_{exp}$ from ratings
 
-*(section pending)*
+To be surprised, the model first needs an expectation. Given the two teams' current
+ratings, the expected performance rates are produced by the *same* chain Part I
+uses for odds-free matchups — one composition of three maps, applied to the rating
+difference $d = R_{home} - R_{away}$:
+
+$$
+d
+\;\xrightarrow[\text{Elo logistic + draw}]{\;\text{(i)}\;}
+(p_H, p_D, p_A)
+\;\xrightarrow[\texttt{fit\_rates}]{\;\text{(ii)}\;}
+(\lambda_{exp}^{home}, \lambda_{exp}^{away}),
+$$
+
+where step (i) is §3's synthesis
+
+$$
+e = \frac{1}{1 + 10^{-d/400}}, \qquad
+p_D = 0.30\, e^{-|d|/700}, \qquad
+p_H = \max\!\bigl(0.01,\, e - \tfrac{p_D}{2}\bigr), \qquad
+p_A = \max(0.01,\, 1 - p_H - p_D),
+$$
+
+(renormalized) and step (ii) is the lattice least-squares inversion of §3. Nothing
+new is fitted here — the Prophet inherits Part I's match model wholesale, which is
+what makes the frozen and learning tracks comparable: they disagree only about the
+ratings fed in, never about the map from ratings to goals.
+
+*Anchor: `scripts/learn.py:_lambda_for_diff/lambda_expected`.*
+
+**Numerics.** $\lambda_{exp}$ depends only on the difference $d$, rounded to the
+nearest integer Elo point, and `_lambda_for_diff` is memoized on that integer
+(`lru_cache`). The rounding is a pure-performance approximation: a half-point rating
+change moves the win expectancy by under $10^{-3}$, far below the lattice
+resolution (0.05 goals) of the inversion it feeds, so the cache is lossless in
+effect. The payoff is large — `fit_rates` is a grid search invoked inside every
+Monte Carlo iteration, and memoization cut the full replay test suite from minutes
+to about a second.
 
 ## 9. The learning update: net surprise and regularized drift
 
