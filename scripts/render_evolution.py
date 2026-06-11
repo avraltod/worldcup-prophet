@@ -16,6 +16,8 @@ def replace_markers(tex, name, content):
     start, end = _markers(name)
     if start not in tex or end not in tex:
         raise ValueError(f"missing markers for {name}")
+    if tex.index(start) > tex.index(end):
+        raise ValueError(f"marker {name}:START appears after :END")
     pre = tex.split(start, 1)[0]
     post = tex.split(end, 1)[1]
     return f"{pre}{start}\n{content}\n{end}{post}"
@@ -23,7 +25,7 @@ def replace_markers(tex, name, content):
 
 def frozen_hash(tex):
     """Hash everything OUTSIDE every LIVE-EVOLUTION marker block."""
-    stripped = _re.sub(r"% LIVE-EVOLUTION-[A-Z]+:START.*?% LIVE-EVOLUTION-[A-Z]+:END",
+    stripped = _re.sub(r"% (LIVE-EVOLUTION-[A-Z]+):START.*?% \1:END",
                        "", tex, flags=_re.DOTALL)
     return hashlib.sha256(stripped.encode()).hexdigest()
 

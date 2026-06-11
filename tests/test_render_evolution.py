@@ -13,7 +13,7 @@ SAMPLE = ("FROZEN ABOVE\n"
 ENTRIES = [
     {"match": 1, "fixture": "Mexico v South Africa", "result": [2, 0],
      "failure_mode": None,
-     "pre": {"pick": [2, 1]},
+     "pre": {"pick": [1, 0]},
      "post": {"points": 1, "brier": 0.1655, "info_bits": 0.0011},
      "interpretation": "A likely home win arrived; the title race barely moved."},
 ]
@@ -41,3 +41,5 @@ def test_ledger_table_has_one_row_per_entry():
     assert "Mexico v South Africa" in tex
     assert "2--0" in tex          # result rendered with en-dash
     assert tex.count(r"\\") >= 1  # at least one table row
+    assert "1--0" in tex          # pick rendered with en-dash
+    assert "0.001" in tex         # info_bits to 3dp
