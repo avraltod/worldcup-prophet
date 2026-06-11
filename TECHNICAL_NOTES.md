@@ -474,7 +474,93 @@ draws.
 
 ## 5. Optimize the bracket — slot emergence as a formula
 
-*(section pending)*
+**Why "stronger team" is the wrong criterion.** A knockout pick at bracket slot $m$
+scores only if the named team **occupies** the slot *and* **wins** it. For team $t$
+and slot $m$, define from the §4 simulation
+
+$$
+E_m(t) \;=\; P\bigl(t \text{ wins match } m\bigr)
+\;=\; P(t \text{ reaches } m) \cdot P(t \text{ wins} \mid t \text{ reaches } m),
+$$
+
+the **slot emergence** of $t$ at $m$ — estimated as the fraction of the $N$
+simulated tournaments in which $t$ is the winner recorded at slot $m$. The pick rule
+is simply
+
+$$
+\hat t_m \;=\; \arg\max_t \; E_m(t).
+$$
+
+A strong team that splits its qualification between first and second place spreads
+its mass across *different* slots; a weaker team that reliably finishes second
+concentrates its mass in one. The argmax sees the product, not the strength — this
+is the criterion that overturned three naive picks on the sheet.
+
+*Anchor: `scripts/simulate.py` (second pass, `slot_win` counters; the `FLIP?` flag
+prints whenever the sheet's opponent out-emerges the sheet's pick) and
+`scripts/slot_value.py:simulate/entries`.*
+
+*Honesty note:* the optimization is **greedy per slot**, not a joint argmax over
+path-consistent brackets — each slot takes its own maximizer, and the author keeps
+the sheet path-consistent by hand. A full joint optimization over the $2^{31}$
+advancement patterns was not attempted; the per-slot criterion already captures the
+occupancy–strength tradeoff that drives the value.
+
+**Quantifying the criterion's value.** `slot_value.py` compares three entry
+strategies over all 31 knockout matches, scoring each by its expected knockout
+points $\sum_m E_m(\hat t_m)$ (under the pool rule a knockout pick's expected
+points are proportional to exactly this win-the-slot probability):
+
+1. *Slot-emergence*: $\hat t_m = \arg\max_t E_m(t)$,
+2. *Modal occupant*: the team most often **reaching** $m$ (occupancy without the win
+   term),
+3. *Strongest reachable*: the highest-rated team that ever reaches $m$.
+
+The comparison is repeated on the actual 2026 bracket and on four strength-perturbed
+replicas (independent $\mathcal{N}(0, 80^2)$ noise added to every Elo rating, group
+probabilities rebuilt from the perturbed ratings), so the conclusion — emergence
+beats both rivals — is a property of the criterion, not of one bracket draw. The
+study file also carries a Portugal/Colombia rating recalibration specific to that
+experiment (the flip case studied in the paper), flagged here so the constants in
+`slot_value.py:ADJ` are not mistaken for the locked forecast's inputs.
+
+*Anchor: `scripts/slot_value.py` — $N = 20{,}000$ per bracket, perturbation seeds
+$100{+}k$, simulation seed 2026.*
+
+**Attaching scorelines to knockout picks.** Each predicted tie gets a score via the
+same machinery as §3: Elo-synthesized $(p_H, p_D, p_A)$ (the logistic-plus-decaying-
+draw construction), `fit_rates` inversion, modal-conditional readout. If the modal
+outcome is a draw, the full-time pick stays level and the higher-rated side gets
+$+1$ in the OT/PK column — the sheet's encoding of "wins on penalties."
+
+*Anchor: `scripts/predict_knockout.py:probs/predict_pair`.*
+
+**Pivotality — which single results carry the forecast.** For an upcoming match $m$
+with pre-match champion distribution $p^{\mathrm{pre}}$, fork the match across its
+possible outcomes $o$ (three for a group match, weighted by the §2 fair
+probabilities; two for a knockout, weighted by the Elo win expectancy), recompute
+the conditioned champion distribution $p^{\mathrm{post}(o)}$, and average the
+information distance:
+
+$$
+\mathrm{Piv}(m) \;=\; \sum_{o} w_o \,
+D_{\mathrm{KL}}\!\bigl(p^{\mathrm{post}(o)} \,\big\|\, p^{\mathrm{pre}}\bigr)
+\quad \text{bits},
+$$
+
+with an $\varepsilon = 10^{-6}$ floor added to both distributions before the
+$\log_2$ ratio. This is the *expected* forecast swing of playing match $m$ — the
+ex-ante counterpart of the realized per-game KL the Prophet tracks in §11. The
+headline finding: a knockout match is several times as pivotal as a typical group
+match, and the most pivotal calls cluster on the predicted champion's path.
+
+*Anchor: `scripts/pivotality.py:kl/main` — group outcomes encoded as scores
+$(1,0)/(1,1)/(0,1)$, $N = 5{,}000$ per fork, seed 2026, output
+`data/pivotality.json`.*
+
+**As implemented.** Slot emergence and pivotality are decision *diagnostics* —
+they choose and stress-test the sheet's knockout entries; they do not feed back into
+the match-level probabilities, which remain market- and Elo-driven (§§2–3).
 
 ## 6. Check the risk — the machine learning layer
 
