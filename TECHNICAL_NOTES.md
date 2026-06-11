@@ -105,8 +105,8 @@ therefore the expected-points optimum even when neither side is a likely winner.
 
 **As implemented.** `ev321.py` evaluates $\mathbb{E}[S]$ exactly (no simulation) on
 the truncated grid $\{0,\dots,8\}^2$; the truncation error is the Poisson tail mass
-beyond 8 goals, negligible at football rates ($P(X > 8) < 10^{-5}$ at
-$\lambda = 2$). `scoring.py:score_match` applies the same tiers to realized results
+beyond 8 goals, negligible at football rates ($P(X > 8) \approx 2.4 \times 10^{-4}$
+per team at $\lambda = 2$, and the rates in play are mostly below that). `scoring.py:score_match` applies the same tiers to realized results
 during the live run, alongside two diagnostics: the outcome probability assigned to
 the realized result, and the Brier score
 $\sum_{j \in \{H,D,A\}} (p_j - \mathbf{1}[j = r])^2$.
@@ -141,7 +141,7 @@ orientation flip, renormalization.*
 For matchday-3 fixtures with no published odds at collection time, the probability
 triple is instead an **Elo estimate** (the §3 logistic applied to the two ratings,
 flagged in `source`, e.g. `"Elo estimate (ARG 2113, AUT 1830)"`) — the weakest data
-tier, used for roughly a third of the group slate.
+tier, used for 17 of the 72 group fixtures, mostly on matchday 3.
 
 **(b) Elo table $\to$ ratings $R_i$.** One integer per team for all 48 teams
 (Spain 2165 down to Qatar 1423), read from `data/elo_outright_news.json` as collected
@@ -309,7 +309,7 @@ $$
 $$
 (\hat h, \hat a) =
 \begin{cases}
-(k, k),\ \ k = \mathrm{round}\!\bigl(\tfrac{\lambda_H + \lambda_A}{2}\bigr)
+(c, c),\ \ c = \mathrm{round}\!\bigl(\tfrac{\lambda_H + \lambda_A}{2}\bigr)
   & r^* = D \\[4pt]
 \bigl(\mathrm{round}(\lambda_H),\, \mathrm{round}(\lambda_A)\bigr)
 \ \text{reordered, winner bumped } {+1} \text{ if level}
