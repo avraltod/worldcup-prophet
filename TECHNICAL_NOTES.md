@@ -289,22 +289,26 @@ $(0.46, 0.26, 0.28)$ fit to $(\hat\lambda_{\mathrm{NED}}, \hat\lambda_{\mathrm{J
 = (1.5, 1.1)$, under which $P(1,1) = 12.3\%$ is the modal scoreline but the modal
 *outcome* is a Netherlands win.
 
-**Three pick rules, one published readout.** The pipeline distinguishes:
+**Three pick rules, one published readout.** The pipeline distinguishes three rules.
 
-1. **EV-optimal** (§0): $\arg\max\, \mathbb{E}[S]$ over all 81 scorelines — the
-   theoretical optimum under the pool rule.
-2. **Modal-conditional**: most likely scoreline *conditional on the modal outcome*,
+*Rule 1 — EV-optimal* (§0): $\arg\max\, \mathbb{E}[S]$ over all 81 scorelines — the
+theoretical optimum under the pool rule.
+
+*Rule 2 — Modal-conditional*: most likely scoreline *conditional on the modal
+outcome*,
 
 $$
 (\hat h, \hat a) \;=\; \underset{(h, a)\,:\ \mathrm{sgn}(h - a)\, =\, r^*}{\arg\max}\; P(h, a),
 \qquad r^* = \underset{j \in \{H,D,A\}}{\arg\max}\; p_j ,
 $$
 
-   which never predicts a draw for a match it calls a win. Checked exhaustively:
-   it matches rule 1 on **71 of 72** group fixtures.
-   *Anchor: `scripts/poisson_model.py:modal_score`.*
-3. **Realistic readout** (the published picks, revised pre-kickoff 2026-06-10):
-   round the fitted expected goals while preserving the locked result $r^*$,
+which never predicts a draw for a match it calls a win. Checked exhaustively: it
+matches rule 1 on **71 of 72** group fixtures.
+
+*Anchor: `scripts/poisson_model.py:modal_score`.*
+
+*Rule 3 — Realistic readout* (the published picks, revised pre-kickoff 2026-06-10):
+round the fitted expected goals while preserving the locked result $r^*$,
 
 $$
 (\hat h, \hat a) =
@@ -317,11 +321,12 @@ $$
 \end{cases}
 $$
 
-   In knockouts the locked winner takes the higher score; if the rounded scores tie
-   and the winner's rate edge is below $0.25$ goals, the pick is a level score
-   decided on penalties.
-   *Anchor: `scripts/realistic_scores.py:realistic/ko_realistic` — pen threshold
-   `(lw - ll) >= 0.25`.*
+In knockouts the locked winner takes the higher score; if the rounded scores tie
+and the winner's rate edge is below $0.25$ goals, the pick is a level score decided
+on penalties.
+
+*Anchor: `scripts/realistic_scores.py:realistic/ko_realistic` — pen threshold
+`(lw - ll) >= 0.25`.*
 
 The revision is evidence-based, not aesthetic: on the 128 real matches of 2018+2022,
 the realistic readout lands 18/128 exact scores versus 16 for the EV pick and is

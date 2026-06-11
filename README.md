@@ -23,6 +23,7 @@ first match (**2026-06-11**). The forecast has not been altered since the lock.
 ## How it works
 
 - **Method writeup:** [`HOW_THE_MODEL_WORKS.md`](HOW_THE_MODEL_WORKS.md)
+- **Technical notes (the math):** [`TECHNICAL_NOTES.md`](TECHNICAL_NOTES.md)
 - **Full paper:** [`paper/Avraa_WC2026_paper.pdf`](paper/Avraa_WC2026_paper.pdf)
 
 The forecast starts from public bookmaker odds (converted to fair probabilities), applies a
@@ -40,6 +41,7 @@ Poisson goal model, and optimizes picks under the pool's 3/2/1 scoring rule.
 |------|----------|
 | `Avraa_Prediction_WC2026.md` | The locked predictions |
 | `HOW_THE_MODEL_WORKS.md` | Plain-language method |
+| `TECHNICAL_NOTES.md` | The same pipeline in formulas, anchored to the code |
 | `paper/` | The formal paper (`Avraa_WC2026_paper.pdf` + LaTeX source + figures) |
 | `data/` | Locked input odds and generated predictions |
 | `scripts/` | Model, simulation, and analysis code |
