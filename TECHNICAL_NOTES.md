@@ -520,9 +520,13 @@ The comparison is repeated on the actual 2026 bracket and on four strength-pertu
 replicas (independent $\mathcal{N}(0, 80^2)$ noise added to every Elo rating, group
 probabilities rebuilt from the perturbed ratings), so the conclusion — emergence
 beats both rivals — is a property of the criterion, not of one bracket draw. The
-study file also carries a Portugal/Colombia rating recalibration specific to that
-experiment (the flip case studied in the paper), flagged here so the constants in
-`slot_value.py:ADJ` are not mistaken for the locked forecast's inputs.
+study (like `condition.py` and the other analysis-layer scripts) also carries a
+**market-implied Elo recalibration** of the Portugal/Colombia pair: the market
+priced their head-to-head as a 140-point gap where raw Elo showed 7, so the
+difference is split as Portugal $+66$, Colombia $-67$. Adopted at a prediction
+refresh, this is part of the knockout machinery from `condition.py` onward but
+absent from the original `simulate.py` constants — worth knowing when reconciling
+numbers across scripts.
 
 *Anchor: `scripts/slot_value.py` — $N = 20{,}000$ per bracket, perturbation seeds
 $100{+}k$, simulation seed 2026.*
@@ -564,7 +568,54 @@ the match-level probabilities, which remain market- and Elo-driven (§§2–3).
 
 ## 6. Check the risk — the machine learning layer
 
-*(section pending)*
+**The supervised problem.** The simulator is also a data generator. Each simulated
+tournament yields one labeled example of the question "given which group calls came
+true, how many knockout picks scored?":
+
+- **Features** $x \in \{0,1\}^{24}$: for each group $g \in \{A, \dots, L\}$, two
+  indicators — *winner correct* ($\mathbf{1}[\text{simulated group winner} =
+  \text{sheet's predicted winner}]$) and *runner-up correct* (same for second
+  place).
+- **Target** $y \in \{0, \dots, 31\}$: the number of the sheet's 31 knockout
+  advancers ($16 + 8 + 4 + 2 + 1$) that advance in that simulation.
+
+The dataset is $N = 40{,}000$ draws (seed 7), split 75/25 train/test, and two
+regressors $\hat f(x) \approx \mathbb{E}[y \mid x]$ are fit side by side:
+
+| Model | Hyperparameters |
+|---|---|
+| Random Forest | 300 trees, max depth 12, min leaf 20 |
+| XGBoost | 400 trees, max depth 4, learning rate 0.05, subsample 0.8, colsample 0.8 |
+
+*Anchor: `scripts/ml_risk_xgb.py` (XGBoost + SHAP), `scripts/ml_risk.py` (Random
+Forest original); both use the same surrogate generator and the market-implied
+Portugal/Colombia recalibration of §5.*
+
+**What is measured.**
+
+1. *Explained variance.* The test $R^2$ of $\hat f$ answers "how much of the
+   knockout score is determined by the group stage at all?" — about half, the
+   companion's "group-stage correctness explains only ~50%; the rest is knockout
+   luck." The agreement of two different model families (and a Spearman rank
+   correlation of their importance vectors) certifies this is not an artifact of
+   one learner.
+2. *Leverage per call.* SHAP values decompose each prediction additively,
+   $\hat f(x) = \phi_0 + \sum_{i=1}^{24} \phi_i(x)$; the report ranks features by
+   mean $|\phi_i|$ and quantifies the directional effect
+   $\mathbb{E}[\phi_i \mid x_i = 1]$ — expected knockout points gained when group
+   call $i$ comes true. The top of the ranking ("Spain wins Group H", roughly
+   $+0.8$ points, about $3\times$ the weakest group) is the model's own risk
+   concentration made explicit: Spain's predicted path runs six matches deep, so
+   that one group call props up the whole champion run.
+
+**Honesty note — what this layer is and is not.** The regression is trained on the
+simulator's *own* output: it is a **sensitivity analysis of the model**, a
+variance-decomposition diagnostic, not an independent second forecast and not a
+validation against reality. It changes no pick; its product is the ranked list of
+calls to protect.
+
+*Anchor: `scripts/ml_risk_xgb.py` — `shap.TreeExplainer`, output
+`data/ml_risk_xgb.json`.*
 
 ---
 
