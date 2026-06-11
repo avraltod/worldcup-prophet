@@ -919,4 +919,66 @@ would vanish into the first.
 
 ## 12. How we know it works: held-out validation, placebo, k-sweep
 
-*(section pending)*
+The learning claim was stress-tested against the two complete free-data tournaments
+available, 2018 and 2022, with three designs. The evaluation metric throughout is
+**finalist lift**: replay a tournament's group stage, then compare how much
+champion-probability mass each track's end-of-groups forecast assigns to the two
+teams that actually reached that final,
+
+$$
+\mathrm{lift} \;=\; \Bigl(\textstyle\sum_{t \in \mathrm{finalists}}
+p_T^{\mathrm{learn}}(t)\Bigr) - \Bigl(\textstyle\sum_{t \in \mathrm{finalists}}
+p_T^{\mathrm{frozen}}(t)\Bigr),
+$$
+
+in percentage points, alongside the champion log-loss
+$-\ln p_T(\text{actual champion})$.
+
+**(1) Leave-one-tournament-out cross-validation.** Tune $k$ on one World Cup, test
+on the other — genuinely out-of-sample in the only unit that matters here, whole
+tournaments: train-2018 fixes $k = 60$, tested on 2022; train-2022 fixes $k = 40$,
+tested on 2018. Learning helps out-of-sample in both directions (e.g. $+7.2$
+points of finalist mass carrying the 2018-tuned $k$ into 2022), with the champion
+log-loss improving in tandem.
+
+*Anchor: `scripts/heldout_validation.py` part (1) — $N = 4{,}000$, seed 7.*
+
+**(2) Placebo control.** If the lift is *signal*, destroying the signal must
+destroy the lift. Shuffle the $\lambda_{obs}$ values across the tournament's games
+(4 independent shuffles, seeds 0–3) and re-run at the locked $k = 50$: the real-xG
+lift (about $+6.8$ points on 2022) collapses to negative territory under shuffling
+(mean $\approx -5.3$) — randomized performance data actively *hurts*, as it
+should if the proxy carries real per-team information rather than a free-parameter
+artifact.
+
+*Anchor: `scripts/heldout_validation.py` part (2) — `rng.shuffle(lams)`,
+$N = 3{,}000$ per run.*
+
+**(3) Proxy stability and calibration.** The §7 coefficient refit on each
+tournament alone brackets the locked value ($\beta_1$ fit on 2018 only and on 2022
+only straddle $0.326$); the cross-tournament goal RMSE (fit on one, predict the
+other) beats the **naive baseline** (predict every team-match with the tournament's
+mean goals) in both tournaments. The proxy is crude, but it is stable and it earns
+its keep against the cheapest alternative.
+
+*Anchor: `scripts/heldout_validation.py` part (3) — per-tournament refit
+$c = \sum s_i g_i / \sum s_i^2$ (OLS through the origin), RMSE comparisons.*
+
+**The k-sweep.** The gain was chosen by sweeping
+$k \in \{0, 20, 40, 60, 80, 120, 160, 220, 300\}$ on full two-track replays of both
+tournaments, scoring finalist mass and log-loss, and tracking responsiveness as the
+total-variation distance between the tracks' final forecasts. The curve is
+single-peaked in both years — learning helps, then over-reacts: at high $k$ the
+forecast chases every shot count and the finalist mass falls back below the frozen
+baseline. Optima: $k = 40$ (2022), $k = 60$ (2018); locked default: the midpoint
+$k = 50$ (with $\gamma = 0.95$, $B = 75$ fixed throughout).
+
+*Anchor: `scripts/sweep_k.py` ($N = 3{,}000$, seed 2022),
+`scripts/run_2018_ksweep.py`, figure `paper/figs/fig_ksweep_2tourn.pdf`.*
+
+**Limitations, stated plainly.** The sample is $n = 2$ tournaments; every number
+above carries that caveat. The validation shows the learning signal is real and
+correctly signed out-of-sample — it does not pin the optimal gain to better than
+"somewhere around 50," and the study is framed as exploratory in the paper
+accordingly. The 2026 live run is the genuine test: the locked $k = 50$ meets data
+it has never seen.
