@@ -35,6 +35,8 @@ def _score(result):
 
 
 def ledger_table(entries):
+    if not entries:
+        return r"\textit{No matches documented yet.}"
     rows = []
     for e in entries:
         fm = e["failure_mode"] or "--"
@@ -42,7 +44,13 @@ def ledger_table(entries):
             f"{e['match']} & {e['fixture']} & {e['pre']['pick'][0]}--{e['pre']['pick'][1]} "
             f"& {_score(e['result'])} & {e['post']['points']} & {e['post']['brier']:.3f} "
             f"& {e['post']['info_bits']:.3f} & {fm} \\\\")
-    return "\n".join(rows)
+    head = ("\\begin{longtable}{rlcccccl}\n"
+            "\\toprule\n"
+            "M & Fixture & Pick & Result & Pts & Brier & Info & Mode \\\\\n"
+            "\\midrule\n"
+            "\\endhead\n")
+    foot = "\n\\bottomrule\n\\end{longtable}"
+    return head + "\n".join(rows) + foot
 
 
 def narrative(entries):
