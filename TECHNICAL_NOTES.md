@@ -803,7 +803,70 @@ track)".*
 
 ## 10. Re-simulation and the two-track trajectory
 
-*(section pending)*
+**The conditional estimand.** After $t$ games have been played, the forecast is no
+longer §4's prior — it is the conditional distribution
+
+$$
+p_t(\text{team}) \;=\; P\bigl(\text{team wins} \;\big|\;
+\mathrm{results}_{1..t},\ \text{ratings}_t\bigr),
+$$
+
+estimated by Monte Carlo with the played games **pinned** and the future sampled:
+a group fixture found in the results set contributes its realized scoreline to the
+standings; an unplayed one is sampled from $\mathrm{Pois}(\lambda_{exp})$ at the
+current ratings; a played knockout tie advances its recorded winner; an unplayed
+one is a Bernoulli draw from the Elo logistic. The two tracks differ **only** in
+$\text{ratings}_t$: the frozen track always passes the locked baseline $R_i$, the
+learning track passes $R_i + d_{i,t}$ with the drift of §9.
+
+*Anchor: `scripts/sim_tournament.py:group_standings/simulate_knockout/simulate` —
+results dicts keyed by team pair; `win_prob` is the Elo logistic; knockout folded
+as a depth map (entrant depth 1, champion $1 + \log_2(\text{bracket size})$).*
+
+**The replay loop.** `run_replay` steps an ordered game list. For each finished game
+it (i) pins the result, (ii) applies the §9 drift update from the game's
+$\lambda_{obs}$, and (iii) re-simulates the whole tournament **twice** — once per
+track — recording a snapshot $\bigl(p_t^{\mathrm{frozen}},
+p_t^{\mathrm{learn}}\bigr)$ plus the per-game KL of §11. Snapshot $t = 0$
+(index $-1$) is the unconditioned baseline, where the two tracks coincide by
+construction.
+
+$$
+\text{trajectory} \;=\;
+\Bigl\{\bigl(p_t^{\mathrm{frozen}},\, p_t^{\mathrm{learn}}\bigr)\Bigr\}_{t=0}^{T},
+\qquad
+\text{headline} = \text{the gap between the two paths.}
+$$
+
+*Anchor: `scripts/replay.py:run_replay` — $N = 4{,}000$ per snapshot, seed 2026,
+$k = 50$ default.*
+
+**Numerics.** Every snapshot reuses the same seed, so consecutive distributions are
+coupled through common random numbers: the difference between $p_t$ and $p_{t-1}$
+reflects the new information (and the rating drift), not resampling noise. At
+$N = 4{,}000$ the per-probability MC noise is $\approx 0.7$ percentage points at
+champion scale — coarse for headlines, fine for a 100-snapshot trajectory.
+
+**Two engines, honestly distinguished.** The format-agnostic engine above runs the
+learning study (and the 2022 replay validation); it seeds the bracket directly from
+group positions and ranks groups by a *deterministic* (Pts, GD, GF, stable-order)
+sort — no third-place machinery, no random tiebreak. The **live 2026 trajectory**
+instead runs through the production conditioning engine, which carries the full
+2026 bracket: third-place ranking, FIFA slot constraints, and the market-implied
+recalibration of §5.
+
+*Anchor: `scripts/condition.py:conditional_probs` (2026-hardcoded; the engine
+behind `scripts/pivotality.py`, `scripts/record_update.py`, and the live updates).*
+
+*Caveat (same issue as §4):* in the production engine, a recorded R32 winner who
+qualified as a **third-placed team** is honored only in the Monte Carlo iterations
+that slotted that team into that match — measured acceptance as low as 10% — so
+the conditioned trajectory under-responds to those eight possible results. A
+deterministic third-place assignment is prepped in `condition.py` behind the
+`REALIZED_THIRDS` table, to be pinned from FIFA's announced bracket (~27 June) and
+verified by `tests/test_ko_conditioning.py`; it is baseline-neutral by measurement.
+Until then, knockout conditioning for third-place winners carries this documented
+bias. Reference: `archive/docs_superpowers/2026-06-10-ko-conditioning-issue.md`.
 
 ## 11. Information accounting: KL divergence in bits
 
