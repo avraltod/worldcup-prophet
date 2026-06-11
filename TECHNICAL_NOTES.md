@@ -621,9 +621,79 @@ calls to protect.
 
 # Part II — Avraa's Prophet: the self-learning forecaster
 
+Part I's forecast is frozen by design. The Prophet asks the live question: *as the
+tournament speaks, how should the forecast listen?* It runs two tracks side by
+side — the **Frozen Prophet** (control: re-condition on results as they arrive, team
+strengths fixed at their locked values) and the **Learning Prophet** (treatment:
+strengths drift in response to match *performance*, not just results). The headline
+quantities are the gap between the two tracks' champion trajectories and the
+per-game information ledger of §11 — which matches actually taught the model
+something. Hard constraint inherited from the project: **free data sources only.**
+
 ## 7. Measurement: from match events to $\lambda_{obs}$
 
-*(section pending)*
+**The signal problem.** Learning from results alone is slow — 1-0 carries one bit
+of winner information but little about *how* the teams played. The natural
+performance signal is expected goals (xG), but real xG is not freely available for
+World Cups (Understat covers the top-5 European leagues only). The free signal that
+survives is the box score: shots on target and other shots.
+
+**The proxy.** Define the observed performance rate of a team in a match as
+
+$$
+\hat\lambda_{obs} \;=\; \max\bigl(0,\;
+\beta_1 \cdot \mathrm{SoT} \;+\; \beta_2 \cdot \mathrm{otherShots}\bigr),
+\qquad
+\beta_1 = 0.3256, \quad \beta_2 = 0,
+$$
+
+where $\mathrm{otherShots} = \text{off-target} + \text{blocked}$. The calibrated
+$\beta_2$ is exactly zero (see below), so in practice the proxy reads: **each shot
+on target is worth about a third of an expected goal.**
+
+*Anchor: `scripts/performance.py:proxy_xg`; coefficients in
+`data/proxy_coef.json` — `sot: 0.32557, other: 0.0`. Box-score parsing
+(`other_shots = off_target + blocked`) in `scripts/collect_match.py:parse_statistics`.*
+
+**Calibration.** The coefficients are a one-time least-squares fit of realized goals
+on shot counts over the 2018 and 2022 World Cups — $n = 236$ team-matches of free
+ESPN box-score data:
+
+$$
+(\beta_1, \beta_2) \;=\; \underset{\beta \ge 0}{\arg\min}
+\sum_{i=1}^{236} \bigl(\mathrm{goals}_i - \beta_1 \mathrm{SoT}_i -
+\beta_2 \mathrm{otherShots}_i\bigr)^2 ,
+$$
+
+OLS **through the origin** (no intercept: zero shots should mean zero expected
+goals), solved in closed form and clipped to non-negative coefficients. The clip is
+what zeroes $\beta_2$: off-target and blocked shots carry no incremental goal
+information once shots on target are counted.
+
+*Anchor: `scripts/calibrate_proxy.py:fit` — `np.linalg.lstsq` on the
+$236 \times 2$ design, `SEASONS = world-cup-2018, world-cup-2022`.*
+
+**Validation** (full design in §12): the coefficient is stable across tournaments
+(refit on 2018 alone vs 2022 alone brackets the locked $0.326$), the
+cross-tournament goal RMSE beats the naive predict-the-mean baseline in both
+directions, and a placebo test confirms the proxy carries real signal. The
+honest reading stands: this is a *poor man's xG* — it ignores shot quality,
+location, and game state — but it is free, it is available within minutes of
+full time, and it beats not measuring performance at all.
+
+**The fallback.** If a real xG number is available for a match, it takes precedence:
+
+$$
+\lambda_{obs} =
+\begin{cases}
+\text{xG}^{\mathrm{real}} & \text{if supplied} \\
+\hat\lambda_{obs}(\mathrm{SoT}, \mathrm{otherShots}) & \text{otherwise,}
+\end{cases}
+$$
+
+with the source recorded per match so the two never mix silently.
+
+*Anchor: `scripts/performance.py:compute_lambda_obs` — `source: 'real' | 'proxy'`.*
 
 ## 8. The expectation model: $\lambda_{exp}$ from ratings
 
