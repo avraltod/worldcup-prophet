@@ -1,0 +1,85 @@
+name: paper-revision
+on:
+  workflow_run:
+    workflows: ["live-update-v2"]
+    types: [completed]
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency:
+  group: paper-revision
+  cancel-in-progress: false
+jobs:
+  revise:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Detect pending matches
+        id: detect
+        run: |
+          PENDING=$(python3 -c "import sys, os, json; sys.path.insert(0, 'scripts'); import update_after_match as u; t = json.load(open('data/trajectory_v2.json')) if os.path.exists('data/trajectory_v2.json') else []; print(len(u.pending_matches(t, u.INDEX)))")
+          echo "pending=$PENDING" >> "$GITHUB_OUTPUT"
+          echo "pending matches: $PENDING"
+      - name: Install anthropic SDK
+        if: steps.detect.outputs.pending != '0'
+        run: pip install anthropic
+      - name: Install TeX Live (XeLaTeX) + MS core fonts
+        if: steps.detect.outputs.pending != '0'
+        run: |
+          sudo apt-get update
+          echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | sudo debconf-set-selections
+          sudo apt-get install -y --no-install-recommends \
+            texlive-xetex texlive-latex-recommended texlive-latex-extra \
+            texlive-fonts-recommended texlive-fonts-extra latexmk \
+            ttf-mscorefonts-installer fontconfig cabextract
+          sudo fc-cache -f
+      - name: Revise paper for each pending match
+        if: steps.detect.outputs.pending != '0'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python3 - <<'PY'
+          import sys, os, json, shutil
+          sys.path.insert(0, "scripts")
+          import update_after_match as uam
+          traj = json.load(open("data/trajectory_v2.json"))
+          os.makedirs("paper/_snapshots", exist_ok=True)
+          for m in uam.pending_matches(traj, uam.INDEX):
+              print("revising match", m)
+              uam.revise(m, use_api=True)
+              uam._latexmk()
+              shutil.copy("paper/Avraa_WC2026_paper.pdf",
+                          f"paper/_snapshots/Avraa_WC2026_paper_M{m:03d}.pdf")
+          PY
+      - name: Upload version snapshots (artifacts, not committed)
+        if: steps.detect.outputs.pending != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: paper-versions
+          path: paper/_snapshots/*.pdf
+          retention-days: 90
+      - name: Commit living layer only (allowlisted)
+        if: steps.detect.outputs.pending != '0'
+        run: |
+          CHANGED=$(git status --porcelain \
+            paper/Avraa_WC2026_paper.tex paper/live_stats.tex paper/REVISIONS.md paper/match_book)
+          if [ -z "$CHANGED" ]; then echo "no changes."; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for f in paper/Avraa_WC2026_paper.tex paper/live_stats.tex paper/REVISIONS.md; do
+            [ -f "$f" ] && git add "$f"
+          done
+          git add paper/match_book
+          for f in $(git diff --cached --name-only); do
+            case "$f" in
+              paper/Avraa_WC2026_paper.tex|paper/live_stats.tex|paper/REVISIONS.md|paper/match_book/*) ;;
+              *) echo "REFUSING: non-allowlisted file staged: $f"; exit 1 ;;
+            esac
+          done
+          git commit -m "paper: revise live study through pending matches"
+          git pull --rebase origin "$GITHUB_REF_NAME" || true
+          git push

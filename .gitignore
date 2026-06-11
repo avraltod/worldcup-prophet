@@ -37,3 +37,13 @@ data/*_backup.json
 
 # Betting pool spreadsheets (shared with friends separately, not in repo)
 *ScoreChart*.xlsx
+
+# Paper-revision build outputs (generated in CI, never committed)
+paper/_snapshots/
+paper/Avraa_WC2026_paper.pdf
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.fls
+paper/*.fdb_latexmk
+paper/*.xdv
