@@ -432,6 +432,16 @@ discarded.
 *Anchor: `scripts/simulate.py:THIRD_SLOTS/assign_thirds` and the qualification block
 in the main loop.*
 
+*Caveat (known issue, documented 2026-06-10):* sampling among feasible third-place
+assignments is fine for the **pre-tournament** forecast — champion and advancement
+probabilities are measurably identical under random vs deterministic slotting,
+because advancement depends on ranking top-8-among-thirds, not on which slot a team
+fills. It becomes a problem when **conditioning on realized knockout results**
+(§10): a recorded R32 winner who is a third-placed team is honored only in the
+iterations that happened to slot that team into that match. A deterministic fix is
+prepped in `scripts/condition.py`, pending FIFA's announced bracket (~27 June); see
+`archive/docs_superpowers/2026-06-10-ko-conditioning-issue.md`.
+
 *(iv) Knockouts.* Each tie is a single Bernoulli draw from the Elo logistic on
 effective ratings (§1b):
 
