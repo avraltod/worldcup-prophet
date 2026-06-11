@@ -26,15 +26,17 @@ revision history that is itself a research artifact.
 - The pre-registered (frozen) layer is **byte-identical across all 104 versions**.
 - Each version carries a response-to-reviewer note recording what that match changed and why.
 - The per-match interpretation is captured contemporaneously (before the next match is known).
-- The author's effort per match is minutes: everything mechanical is auto-filled; only the
-  1–3 sentence interpretation needs human judgment, and even that is auto-drafted first.
+- The author's effort per match is **zero** — the GitHub Actions pipeline runs the full cycle
+  hands-off, including the voice-matched interpretation; editing a note later is optional.
 
 ### Non-goals (YAGNI)
 - No model change, no in-tournament learning, no touch to the locked picks or `prereg-2026`.
 - The Learning track stays parked; this spec documents the frozen forecast only.
 - The public markdown dossier diary (`Avraa_Prediction_WC2026.md`) and the README block are
   **secondary surfaces**, fed from the same source later; they are out of scope for v1.
-- No attempt to automate the human interpretation away — it is drafted, never decided, by code.
+- The v2 live-results recorder is **not modified** and stays zero-secret / stdlib-only; this
+  paper-revision pipeline is a separate, isolated workflow that carries the API secret and the
+  `anthropic` dependency, so the live-results path keeps its purity.
 
 ---
 
@@ -102,7 +104,7 @@ scripts/update_after_match.py M                            [Component 5: one com
         │
         ├─ append response note  paper/REVISIONS.md         [Component 9]
         │
-        ├─ build PDF → snapshot  paper/versions/..._M0XX.*  [Component 8: 104 versions]
+        ├─ build PDF (latexmk) → upload snapshot as CI artifact [Component 8: 104 versions]
         │
         └─ allowlist guard on every written path            [Component 6: integrity]
 ```
@@ -149,13 +151,18 @@ A 67%-likely home win duly arrived, so the opener barely informs the title race
 The `failure_mode` enum is keyed to the paper's six (L541–546): `champion_call`, `bracket_decay`,
 `group_upset_cascade`, `md3_rotation`, `systematic_rating_error`, `knockout_coinflip`.
 
-### Component 3 — Auto-draft + self-learning loop
-`draft_interpretation(entry)` produces the first-pass interpretation from the structured deltas
-(expected-vs-surprise via `info_bits`, the scoreline-vs-pick gap, any failure-mode signal),
-written in the author's voice (the `avraa-voice` skill rules apply). The author edits; the
-`(draft, final)` pair is appended to `paper/match_book/corrections.md`. Each subsequent draft is
-conditioned on the accumulated corrections, so drafts calibrate to the author's judgment over the
-run. This is the concrete "self-learning": the loop is the corrections log, not a model retrain.
+### Component 3 — Interpretation draft (Claude in CI) + self-learning loop
+`draft_interpretation(entry)` calls the Anthropic API from inside GitHub Actions, passing the
+structured deltas (expected-vs-surprise via `info_bits`, the scoreline-vs-pick gap, any
+failure-mode signal), the `avraa-voice` rules, and the accumulated `corrections.md` notes as
+few-shot examples. It returns the voice-matched interpretation, published without a required human
+step — so the pipeline is fully hands-off. If the API call fails, it falls back to a deterministic
+templated sentence so the paper still updates, and flags the entry for an optional later voice
+pass. The author may **optionally** edit any note later; an edit appends the `(draft, final)` pair
+to `paper/match_book/corrections.md` and re-renders/re-snapshots that version. The corrections log
+is therefore both the few-shot memory the CI draft conditions on and the self-learning signal:
+with no edits it enforces voice consistency, and each optional edit sharpens later drafts. No model
+is retrained.
 
 ### Component 4 — Paper integration
 A generator (`scripts/render_evolution.py`) consumes the Match Book and rewrites, between markers:
@@ -171,22 +178,23 @@ A generator (`scripts/render_evolution.py`) consumes the Match Book and rewrites
 
 The paper then recompiles via its existing LaTeX build.
 
-### Component 5 — The one command
-```
-python3 scripts/update_after_match.py 1
-```
-Scaffolds the entry (auto-fields filled), shows the drafted interpretation, takes the edit,
-regenerates the blocks + macros, appends the revision note, builds the PDF, snapshots the version,
-runs the guard, and reports:
+### Component 5 — The entry point (`update_after_match.py M`)
+The same driver runs in two contexts. **In CI** (default, hands-off) it reads the POST record,
+builds the entry, calls Claude for the interpretation, regenerates the blocks + macros, appends the
+revision note, builds the PDF with latexmk, uploads the snapshot artifact, runs the guard, commits
+the living `.tex`, and logs:
 > Paper revised through Match 1 — 1 documented · cumulative 1 pt · mean Brier 0.166 ·
-> +1 ledger row · trajectory refreshed · 0 failure modes fired · snapshot M001.
+> +1 ledger row · 0 failure modes fired · snapshot M001 (artifact).
+
+**Locally** the author runs `python3 scripts/update_after_match.py M --reopen` to edit an
+interpretation and re-render that version — the only time a human is in the loop.
 
 ### Component 6 — Integrity guards
-- **Allowlist.** The update may write only: `paper/match_book/**`, `paper/REVISIONS.md`,
-  `paper/live_stats.tex`, the marker-delimited regions of `paper/Avraa_WC2026_paper.tex`, the
-  trajectory figure asset, and `paper/versions/**`. Any staged write outside the allowlist aborts
-  the run (mirrors the v2 commit-step guard). Never the model, the locked picks, the frozen `.tex`
-  outside markers, or `prereg-2026`.
+- **Allowlist.** The update may *commit* only: `paper/match_book/**`, `paper/REVISIONS.md`,
+  `paper/live_stats.tex`, the marker-delimited regions of `paper/Avraa_WC2026_paper.tex`, and the
+  trajectory figure asset. (Version snapshots are uploaded as CI artifacts, never committed.) Any
+  staged write outside the allowlist aborts the run (mirrors the v2 commit-step guard). Never the
+  model, the locked picks, the frozen `.tex` outside markers, or `prereg-2026`.
 - **Marker integrity.** Missing or unbalanced `LIVE-EVOLUTION` markers abort before any write.
 - **Frozen-hash check.** A pre-run hash of the frozen regions is compared post-run; any change
   aborts and reverts.
@@ -199,10 +207,12 @@ All living numbers derive from one computed `live_stats` object (built from `tra
 + the Match Book index). It is rendered once to `live_stats.tex`; every in-prose living number is
 a macro reference, so a single match cannot leave two places disagreeing.
 
-### Component 8 — Versioning (104 versions)
-Each successful update writes an immutable snapshot `paper/versions/Avraa_WC2026_paper_M0XX.pdf`
-and the `.tex` it was built from, and updates a `LATEST` pointer. The accumulated sequence is the
-match-by-match revision reel.
+### Component 8 — Versioning (104 versions, as CI artifacts)
+Each successful update builds an immutable snapshot (`Avraa_WC2026_paper_M0XX.pdf` + the `.tex` it
+was built from). To keep the public mirror small, snapshots are **not committed** — CI uploads each
+as a retained **build artifact** (downloadable on demand), and only the small living `.tex`,
+`live_stats.tex`, `REVISIONS.md`, and Match Book are committed. The accumulated artifact sequence is
+the match-by-match revision reel; the author pulls any version locally when wanted.
 
 ### Component 9 — Reviewer-revision response log
 Each update appends one paragraph to `paper/REVISIONS.md`, formatted as a response-to-reviewers
@@ -217,12 +227,13 @@ note:
 
 1. v2 recorder commits a POST record for match M to `trajectory_v2.json` (existing).
 2. `update_after_match.py M` reads the PRE+POST records and `scoring.py` outputs.
-3. It scaffolds `match_book/M0XX.md` with PRE/RESULT/POST auto-filled and a drafted interpretation.
-4. Author edits the interpretation (and the failure-mode tag if any); the diff lands in
-   `corrections.md`.
+3. It builds `match_book/M0XX.md` with PRE/RESULT/POST auto-filled, calls Claude for the
+   voice-matched interpretation (with `corrections.md` as few-shot), and sets the failure-mode tag.
+4. The note is published as-is (hands-off); an optional later author edit lands in `corrections.md`
+   and re-renders that version.
 5. `live_stats` is recomputed; `render_evolution.py` rewrites the marker blocks and `live_stats.tex`.
 6. `REVISIONS.md` gets the response note; `match_book/index.json` marks M documented.
-7. LaTeX builds; the PDF + `.tex` are snapshotted to `paper/versions/`.
+7. LaTeX builds; the PDF + `.tex` snapshot is uploaded as a CI artifact (not committed).
 8. The allowlist + frozen-hash guards verify nothing outside the living layer changed.
 
 ---
@@ -238,13 +249,13 @@ paper/
     index.json                  # {"documented": [...]}
     corrections.md              # (draft → edit) pairs, the self-learning log
     M001.md ... M104.md         # one contemporaneous entry per match
-  versions/
-    Avraa_WC2026_paper_M001.pdf # immutable snapshots (+ .tex)
-    LATEST -> ...
 scripts/
-  update_after_match.py         # the one command (driver)
+  update_after_match.py         # the driver (runs in CI; locally for --reopen)
   render_evolution.py           # Match Book + trajectory → generated LaTeX blocks + macros
-  draft_interpretation.py       # auto-draft note from structured deltas, in avraa-voice
+  draft_interpretation.py       # calls Anthropic API; deterministic templated fallback
+.github/workflows/
+  paper-revision.yml            # isolated CI: chains off live-update-v2; carries ANTHROPIC_API_KEY
+# Version snapshots are NOT in the repo — built in CI, uploaded as retained build artifacts.
 ```
 
 ---
@@ -253,7 +264,8 @@ scripts/
 
 - Missing POST record for M → abort with "match M not final / not recorded yet."
 - Missing markers or `live_stats.tex` `\input` → abort before writing.
-- LaTeX build failure → keep the previous `LATEST`; report the build log; do not snapshot.
+- LaTeX build failure → keep the previous latest version; report the build log; do not upload a
+  snapshot or mark the match documented (the next run retries).
 - Guard or frozen-hash violation → revert all writes from the run, report the offending path.
 - Re-run on a documented match → no-op unless `--reopen`.
 
@@ -274,15 +286,38 @@ scripts/
 
 ---
 
-## 9. Open questions for review
+## 9. Resolved decisions
 
-1. **Build command.** Confirm the exact LaTeX build invocation for `Avraa_WC2026_paper.tex` so
-   the driver can call it (latexmk? a Makefile? a script?).
-2. **Appendix of full notes.** Do the full per-match interpretations get a paper appendix, or stay
-   Match-Book-only with the prose highlighting the informative ones? (Current spec: Match-Book-only,
-   appendix optional.)
-3. **Abstract scorecard line.** Confirm which one or two living numbers earn a tagged twin in the
-   abstract/conclusion (e.g., cumulative points and mean Brier), so the pre-registered figures keep
-   their original literals alongside.
-4. **Snapshot storage.** 104 PDFs in-repo, or snapshots kept local / in `archive/`? (Affects repo
-   size on the public mirror.)
+1. **Build:** `latexmk` — via a TeX Live GitHub Action in CI; local `latexmk` for `--reopen`.
+2. **Full notes:** Match-Book-only; the paper prose highlights only the informative matches; no
+   appendix.
+3. **Tagged twins:** the abstract/conclusion gain a live twin for **cumulative points** and **mean
+   Brier** only; every other pre-registered figure keeps its literal untouched.
+4. **Snapshots:** kept out of the repo — generated in CI and retained as build artifacts
+   (downloaded locally on demand), not committed to the public mirror.
+5. **Interpretation:** drafted by Claude in CI via the Anthropic API (voice-matched, hands-off),
+   with a deterministic templated fallback on API failure; an optional later human edit feeds the
+   self-learning loop.
+
+---
+
+## 10. Automation: the GitHub Actions pipeline (`paper-revision.yml`)
+
+A new workflow, **isolated** from `live-update-v2.yml` (which stays zero-secret / stdlib-only).
+
+- **Trigger.** `workflow_run` after `live-update-v2` completes successfully (fires right after a
+  POST lands), plus `workflow_dispatch`. It processes every match that has a POST record but is not
+  yet in `match_book/index.json`, in ascending match order.
+- **Steps.** checkout → TeX Live action (provides `latexmk`) → setup Python + `pip install
+  anthropic` → for each undocumented finalized match, run `update_after_match.py M` → upload the
+  PDF snapshot as a build artifact → allowlist-guarded commit of the living files.
+- **Secret.** `ANTHROPIC_API_KEY` in repo Actions secrets. The repo is public, but Actions secrets
+  are **not** exposed to fork-PR runs; this workflow triggers only via `workflow_run` /
+  `workflow_dispatch` on the main repo, which have secret access. The key is never echoed; per-match
+  cost is one short completion.
+- **Isolation.** The v2 recorder is untouched and keeps its purity. This workflow alone carries the
+  secret and the `anthropic` dependency.
+- **Degradation.** API failure → deterministic templated note (paper still updates, flagged for a
+  later voice pass). `latexmk` failure → keep the prior latest, surface the log, do not snapshot or
+  mark the match documented (so the next run retries).
+- **Idempotency.** The `index.json` documented-set makes re-runs and overlapping triggers safe.
