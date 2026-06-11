@@ -364,7 +364,103 @@ arithmetic is exact on the truncated grid — no simulation enters until §4.
 
 ## 4. Simulate the tournament 200,000 times — the Monte Carlo sampler
 
-*(section pending)*
+**The estimand.** Quantities like "P(Spain champion)" have no closed form — the
+bracket chains 104 dependent matches through standings, third-place allocation, and
+knockout routing. They are expectations over tournament realizations $\omega$,
+
+$$
+\theta \;=\; \mathbb{E}\,[\,\mathbf{1}\{\text{event}(\omega)\}\,]
+\;\approx\; \hat\theta_N \;=\; \frac{1}{N} \sum_{n=1}^{N}
+\mathbf{1}\{\text{event}(\omega_n)\},
+$$
+
+estimated by drawing $N$ full tournaments. The locked run used $N = 200{,}000$, so
+the Monte Carlo standard error at a champion-scale probability is
+
+$$
+\mathrm{SE}(\hat\theta) \;=\; \sqrt{\frac{\theta(1 - \theta)}{N}}
+\;\approx\; \sqrt{\frac{0.27 \times 0.73}{200{,}000}} \;\approx\; 0.001,
+$$
+
+i.e. about $\pm 0.1$ percentage points — the "stable, not simulation noise" claim of
+the companion, made exact.
+
+*Anchor: `scripts/simulate.py` — `N_SIMS = int(sys.argv[1])` (default 20,000; the
+published run passed 200,000), `random.seed(2026)`.*
+
+**One tournament draw.** Each $\omega_n$ is generated in four stages:
+
+*(i) Group scorelines.* Every group match draws an exact score from its fitted rates
+(§3) by inverse-CDF sampling of each truncated Poisson independently:
+
+$$
+h \sim \mathrm{Pois}(\lambda_H) \wedge 8, \qquad
+a \sim \mathrm{Pois}(\lambda_A) \wedge 8,
+$$
+
+where the residual tail mass beyond 8 collapses onto 8.
+
+*Anchor: `scripts/simulate.py:sample_score` — cumulative-sum inversion of
+`pois(k, lam)` over $k = 0..8$.*
+
+*(ii) Standings.* Group tables sort descending by the key
+
+$$
+\bigl(\text{Pts},\ \text{GD},\ \text{GF},\ U\bigr), \qquad U \sim \mathrm{Unif}(0,1),
+$$
+
+with one correction: if two adjacent teams tie exactly on all three stats, their
+head-to-head result (if decisive) reorders them. *Honesty note:* FIFA's full
+tiebreaker cascade includes multi-team head-to-head mini-tables, fair-play points,
+and drawing of lots; the code implements Pts/GD/GF + pairwise head-to-head + a
+random tail. The cheap approximation matters only on exact three-stat ties, which
+carry little probability mass.
+
+*Anchor: `scripts/simulate.py:simulate_group` — sort key
+`(pts, gd, gf, random.random())`, two-way h2h swap.*
+
+*(iii) Third-place qualification and slotting.* The 12 third-placed teams rank by
+the same $(\text{Pts}, \text{GD}, \text{GF}, U)$ key; the top 8 advance. FIFA's
+allocation table is encoded as a constraint set per R32 slot — e.g. match 74 may
+only receive a third from groups $\{A,B,C,D,F\}$ — and the 8 qualifiers are placed
+by **bipartite matching**, solved by backtracking with the candidate order shuffled
+so that, when several feasible assignments exist, the simulation samples among them
+rather than fixing one. If the drawn combination of groups admits no feasible
+matching, the 8th-ranked third is swapped for the 9th; a still-infeasible draw is
+discarded.
+
+*Anchor: `scripts/simulate.py:THIRD_SLOTS/assign_thirds` and the qualification block
+in the main loop.*
+
+*(iv) Knockouts.* Each tie is a single Bernoulli draw from the Elo logistic on
+effective ratings (§1b):
+
+$$
+P(A \text{ beats } B) \;=\; \frac{1}{1 + 10^{-(R_A^{\mathrm{eff}} -
+R_B^{\mathrm{eff}})/400}} .
+$$
+
+There is no separate draw state: the logistic is read as the probability of
+advancing *by any means*, extra time and shootout included ("Elo-weighted
+shootout"). The host bonus decays in the late rounds: $+40$ through R32/R16, $+20$
+from the quarter-finals on (crowds matter less in one-off late games at neutral-ish
+venues).
+
+*Anchor: `scripts/simulate.py:ko_rating/ko_winner` — `late=True` for QF/SF/final;
+bracket wiring in dicts `R32/R16/QF/SF`.*
+
+**Outputs.** Counters over the $N$ draws give champion / finalist / semi-finalist
+distributions, per-matchup materialization rates for the sheet's predicted bracket
+("how often does Germany–France actually happen at match 89"), and the per-slot
+winner distribution that §5 turns into picks. A second pass with the RNG reseeded to
+2026 recomputes the slot-winner counters so both passes see identical group-stage
+randomness.
+
+**As implemented.** Plain `random` (Mersenne Twister), single seed 2026, no variance
+reduction — at $N = 200{,}000$ none is needed. The fitted rates are computed once
+per fixture before the loop (the `lru_cache` on `outcome_probs` makes the lattice
+inversion a one-time cost), so a draw is $72$ score samples plus $\le 32$ Bernoulli
+draws.
 
 ## 5. Optimize the bracket — slot emergence as a formula
 
