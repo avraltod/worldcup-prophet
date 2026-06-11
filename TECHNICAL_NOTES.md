@@ -870,7 +870,52 @@ bias. Reference: `archive/docs_superpowers/2026-06-10-ko-conditioning-issue.md`.
 
 ## 11. Information accounting: KL divergence in bits
 
-*(section pending)*
+**The per-game ledger.** Each snapshot records how far the new champion
+distribution moved from the previous one, in bits:
+
+$$
+D_{\mathrm{KL}}\bigl(p_t \,\big\|\, p_{t-1}\bigr)
+\;=\; \sum_{i\,:\,p_t(i) > 0} p_t(i)\,
+\log_2 \frac{p_t(i)}{\max\bigl(p_{t-1}(i),\ \varepsilon\bigr)},
+\qquad \varepsilon = 10^{-12}.
+$$
+
+The direction is *new given old* — "how surprising is today's belief from
+yesterday's vantage." Terms with $p_t(i) = 0$ contribute nothing (the correct
+$0 \log 0 = 0$ limit); only the denominator is floored, so a team rising from
+(near-)elimination registers as a large surprise. Base 2 makes the unit **bits**:
+one bit is the information in one fair coin flip about the championship.
+
+*Anchor: `scripts/snapshot.py:kl_divergence`; attached per snapshot as
+`kl_from_prev` in `scripts/replay.py:_snapshot`.*
+
+This is the *realized* counterpart of §5's pivotality: pivotality is the expected
+KL of a match before kickoff; `kl_from_prev` is what the match actually delivered.
+Summing the ledger over any window gives "how much the tournament taught the
+forecast" in that window. In the 2022 replay validation the ledger is sharply
+peaked: Japan's two upsets carried 0.13 and 0.09 bits against a median group game
+of 0.026 — a handful of matches carry most of the tournament's information.
+
+**Channel decomposition — result vs performance.** A game informs the forecast
+through two separable channels:
+
+- **Result channel**: the frozen track's own per-game divergence, summed over the
+  window — what conditioning on scorelines alone teaches. Over the 48 group games
+  of the 2022 replay: $\sum_t D_{\mathrm{KL}}(p_t^{\mathrm{frozen}} \|
+  p_{t-1}^{\mathrm{frozen}}) = 1.52$ bits.
+- **Performance channel**: the divergence **between the tracks** once the window
+  has been played, $D_{\mathrm{KL}}(p_T^{\mathrm{learn}} \|
+  p_T^{\mathrm{frozen}}) = 0.26$ bits — what reading the shot counts added beyond
+  the scorelines, about one part in six.
+
+Across the 48 games the per-game result and performance informations correlate at
+$-0.09$ — essentially orthogonal: *how well a team played is largely independent of
+whether it won*. That near-orthogonality is the empirical license for the learning
+track's existence; if the proxy merely relabeled scorelines, the second channel
+would vanish into the first.
+
+*Anchor: computed from `run_replay` trajectories; reported in the paper's §4.9
+(learning study) and `data/replay_2022_trajectory.json`.*
 
 ## 12. How we know it works: held-out validation, placebo, k-sweep
 
