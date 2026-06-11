@@ -239,7 +239,128 @@ values.
 
 ## 3. Predict each match — the Poisson scoreline model
 
-*(section pending)*
+**The model.** Goals are independent Poisson counts:
+
+$$
+P(h, a) \;=\; \mathrm{Pois}(h; \lambda_H)\,\mathrm{Pois}(a; \lambda_A)
+\;=\; e^{-\lambda_H} \frac{\lambda_H^{h}}{h!} \cdot
+e^{-\lambda_A} \frac{\lambda_A^{a}}{a!},
+$$
+
+truncated to the grid $(h, a) \in \{0, \dots, 8\}^2$ everywhere.
+
+*Anchor: `scripts/poisson_model.py:pois` (`MAX_G = 8`).*
+
+*Honesty note:* real scorelines exhibit mild dependence between the two counts
+(bivariate-Poisson and Dixon–Coles corrections exist for exactly this); the pipeline
+uses independence throughout. At World Cup rates the correction mostly reweights
+low-scoring draws, and the pick rule below conditions on the predicted outcome
+anyway, which absorbs most of the effect.
+
+**The inverse problem.** The market gives $(p_H, p_D, p_A)$; the model needs rates.
+Outcome probabilities under the model are the grid sums
+
+$$
+\tilde p_H(\lambda_H, \lambda_A) = \sum_{h > a} P(h, a), \quad
+\tilde p_D = \sum_{h = a} P(h, a), \quad
+\tilde p_A = \sum_{h < a} P(h, a),
+$$
+
+and `fit_rates` inverts the map by constrained least squares on a lattice:
+
+$$
+(\hat\lambda_H, \hat\lambda_A) \;=\;
+\underset{\substack{\lambda_H,\, \lambda_A \,\in\, \{0.10,\, 0.15,\, \dots,\, 3.50\} \\
+1.6 \,\le\, \lambda_H + \lambda_A \,\le\, 3.4}}{\arg\min}
+\;\sum_{j \in \{H, D, A\}} \bigl(\tilde p_j(\lambda_H, \lambda_A) - p_j\bigr)^2 .
+$$
+
+The lattice step is $0.05$; the total-goals band $[1.6, 3.4]$ encodes the prior that
+World Cup group games average roughly $2.5$–$2.7$ total goals while letting lopsided
+matches drift higher. Three targets, two parameters: the system is overdetermined and
+the fit is a projection, not an interpolation.
+
+*Anchor: `scripts/poisson_model.py:outcome_probs/fit_rates` —
+`steps = 0.05k, k = 2..70`; `outcome_probs` is `lru_cache`d so the
+$69 \times 69$ grid search costs one pass.*
+
+**Worked example** (Netherlands–Japan, the companion's §3): fair probabilities
+$(0.46, 0.26, 0.28)$ fit to $(\hat\lambda_{\mathrm{NED}}, \hat\lambda_{\mathrm{JPN}})
+= (1.5, 1.1)$, under which $P(1,1) = 12.3\%$ is the modal scoreline but the modal
+*outcome* is a Netherlands win.
+
+**Three pick rules, one published readout.** The pipeline distinguishes:
+
+1. **EV-optimal** (§0): $\arg\max\, \mathbb{E}[S]$ over all 81 scorelines — the
+   theoretical optimum under the pool rule.
+2. **Modal-conditional**: most likely scoreline *conditional on the modal outcome*,
+
+$$
+(\hat h, \hat a) \;=\; \underset{(h, a)\,:\ \mathrm{sgn}(h - a)\, =\, r^*}{\arg\max}\; P(h, a),
+\qquad r^* = \underset{j \in \{H,D,A\}}{\arg\max}\; p_j ,
+$$
+
+   which never predicts a draw for a match it calls a win. Checked exhaustively:
+   it matches rule 1 on **71 of 72** group fixtures.
+   *Anchor: `scripts/poisson_model.py:modal_score`.*
+3. **Realistic readout** (the published picks, revised pre-kickoff 2026-06-10):
+   round the fitted expected goals while preserving the locked result $r^*$,
+
+$$
+(\hat h, \hat a) =
+\begin{cases}
+(k, k),\ \ k = \mathrm{round}\!\bigl(\tfrac{\lambda_H + \lambda_A}{2}\bigr)
+  & r^* = D \\[4pt]
+\bigl(\mathrm{round}(\lambda_H),\, \mathrm{round}(\lambda_A)\bigr)
+\ \text{reordered, winner bumped } {+1} \text{ if level}
+  & r^* \in \{H, A\}.
+\end{cases}
+$$
+
+   In knockouts the locked winner takes the higher score; if the rounded scores tie
+   and the winner's rate edge is below $0.25$ goals, the pick is a level score
+   decided on penalties.
+   *Anchor: `scripts/realistic_scores.py:realistic/ko_realistic` — pen threshold
+   `(lw - ll) >= 0.25`.*
+
+The revision is evidence-based, not aesthetic: on the 128 real matches of 2018+2022,
+the realistic readout lands 18/128 exact scores versus 16 for the EV pick and is
+about 10% closer in total-goals error, at no measurable pool-points cost
+(`scripts/backtest.py`). The *model* — probabilities, bracket, champion — is
+unchanged; only the scoreline readout differs.
+
+**Why the optimum lives at 1-0 / 2-1 / 1-1.** Under rule 1 the margin tier makes
+$P(h - a = \hat h - \hat a,\ \hat r = r)$ the dominant term. For a favorite at
+World Cup rates, $P(h - a = 1) > P(h - a = m)$ for any $m \ge 2$ (Skellam mass
+concentrates at small margins), so the optimal winning pick carries margin one, and
+among margin-one scores the lowest-scoring (1-0) has the largest exact-hit
+probability since $P(h,a)$ decays in $h + a$. For near-even matches, §0's pooling
+identity $\mathbb{E}[S(1,1)] = 2 p_D + P(1,1)$ beats every win pick whose
+$p_{r^*} \approx p_D$. Netherlands–Japan resolves accordingly: NED favored, so the
+pick is the modal Netherlands-win score 1-0, not the modal score 1-1.
+
+**Knockout probabilities without a market.** Undrawn knockout ties have no odds, so
+$(p_H, p_D, p_A)$ is synthesized from effective Elo ratings
+($d = R_H^{\mathrm{eff}} - R_A^{\mathrm{eff}}$, §1b):
+
+$$
+e = \frac{1}{1 + 10^{-d/400}}, \qquad
+p_D = 0.30\, e^{-|d|/700}, \qquad
+p_H = \max\!\bigl(0.01,\ e - \tfrac{p_D}{2}\bigr), \qquad
+p_A = \max(0.01,\ 1 - p_H - p_D),
+$$
+
+renormalized to sum to one, then fed through the same `fit_rates` inversion. The
+draw share $0.30\,e^{-|d|/700}$ is a calibration choice: 30% for dead-even ties,
+decaying as the mismatch grows. A 100-point Elo gap gives $e \approx 0.64$; 200
+points $\approx 0.76$.
+
+*Anchor: `scripts/realistic_scores.py:main` (KO branch); the same logistic appears
+in `scripts/predict_knockout.py:probs` (§5).*
+
+**As implemented.** Group rates come from market triples (§2); KO rates from the
+Elo synthesis above; both pass through the same lattice inversion. All probability
+arithmetic is exact on the truncated grid — no simulation enters until §4.
 
 ## 4. Simulate the tournament 200,000 times — the Monte Carlo sampler
 
