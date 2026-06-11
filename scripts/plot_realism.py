@@ -1,18 +1,15 @@
 """Regenerate paper/figs/fig_realism.{pdf,png}.
 
-The optimal entry against a realistic, draw-producing alternative that samples
-each scoreline from its fitted distribution. Two panels:
+EV-optimal scoreline pick vs the realistic rounded-expected-goals readout, both
+over the identical probability model, backtested on 2018+2022 (3/2/1 rule).
+Data: data/backtest/realism_backtest.json (scripts/realism_backtest.py).
 
-  Left  -- draws predicted on the 2026 group stage: Optimal entry (2, blue),
-           Realistic sampled entry (13, orange), Reality average (19, grey).
-           Optimal draws are counted from data/match_expectations.json (the EV-
-           optimal picks); realistic draws from data/realistic_sheet.json (the
-           sampled alternative); the real-tournament average is ~26% of 72.
-  Right  -- pool points on the 2018 and 2022 backtests under the 3/2/1 rule:
-           Optimal 67 vs Realistic 46 in 2018 (-21 pts), Optimal 48 vs 45 in
-           2022 (-3 pts). These optimal-vs-sampling backtest totals are the
-           values reported in the paper (sec on the cost of realism) and are
-           pinned here as the panel's backing data.
+  Left  -- scoreline accuracy: goal error per match by year + pooled. The
+           realistic readout lands closer to the actual score in both years;
+           exact-score counts annotated.
+  Right -- pool points by year + pooled: realistic matches the EV pick at no
+           cost (EV ahead in the orderly 2018, realistic ahead in the chaotic
+           2022, level pooled), so realism here is free, not paid for.
 
 No in-image title (the paper caption carries it); panel subtitles kept.
 """
@@ -25,67 +22,67 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
-DATA = ROOT / "data"
+BT = json.loads((ROOT / "data" / "backtest" / "realism_backtest.json").read_text())
 FIGS = ROOT / "paper" / "figs"
 
-BLUE = "#1f77b4"
-ORANGE = "#E69500"
+BLUE = "#1f77b4"      # EV-optimal
+GREEN = "#2ca02c"     # realistic
 GREY = "#9e9e9e"
-RED = "#cc0000"
 
-# --- Left panel data: draws predicted (of 72 group matches) ---
-me = json.loads((DATA / "match_expectations.json").read_text())
-optimal_draws = sum(1 for m in me if m["pick"][0] == m["pick"][1])
-sheet = json.loads((DATA / "realistic_sheet.json").read_text())
-realistic_draws = sum(1 for v in sheet.values() if v[0] == v[1])
-reality_draws = 19   # ~26% of 72 group matches end level historically
-
-# --- Right panel data: pool points, optimal vs sampled (paper-reported) ---
-years = ["2018 World Cup", "2022 World Cup"]
-opt_pts = [67, 48]
-real_pts = [46, 45]
+per = {r["year"]: r for r in BT["per_year"]}
+pooled = BT["pooled"]
+years = [2018, 2022]
+ev_gerr = [per[y]["ev"]["gerr"] / per[y]["n"] for y in years] + [pooled["ev"]["gerr"] / pooled["n"]]
+re_gerr = [per[y]["re"]["gerr"] / per[y]["n"] for y in years] + [pooled["re"]["gerr"] / pooled["n"]]
+ev_pts = [per[y]["ev"]["pts"] for y in years] + [pooled["ev"]["pts"]]
+re_pts = [per[y]["re"]["pts"] for y in years] + [pooled["re"]["pts"]]
+ev_exact = [per[y]["ev"]["exact"] for y in years] + [pooled["ev"]["exact"]]
+re_exact = [per[y]["re"]["exact"] for y in years] + [pooled["re"]["exact"]]
+labels = ["2018", "2022", "Pooled"]
 
 fig, (axL, axR) = plt.subplots(1, 2, figsize=(13, 5))
+x = np.arange(len(labels))
+w = 0.38
 
-# Left
-labels = ["Optimal\n(your entry)", "Realistic\n(sampled)", "Reality\n(avg)"]
-vals = [optimal_draws, realistic_draws, reality_draws]
-cols = [BLUE, ORANGE, GREY]
-bars = axL.bar(labels, vals, color=cols, width=0.6)
-for rect, v in zip(bars, vals):
-    axL.text(rect.get_x() + rect.get_width() / 2, v + 0.3, str(v),
-             ha="center", va="bottom", fontsize=12, fontweight="bold")
-axL.set_ylabel("Draws predicted (of 72 group matches)")
-axL.set_ylim(0, 22)
-axL.set_title("Realism: draws predicted", fontsize=12, loc="left")
+# Left: goal error per match (lower = closer to reality)
+b1 = axL.bar(x - w / 2, ev_gerr, w, color=BLUE, label="EV-optimal pick")
+b2 = axL.bar(x + w / 2, re_gerr, w, color=GREEN, label="Realistic readout")
+for rect, v, ex in zip(b1, ev_gerr, ev_exact):
+    axL.text(rect.get_x() + rect.get_width() / 2, v + 0.02, f"{v:.2f}",
+             ha="center", va="bottom", fontsize=10)
+for rect, v, ex in zip(b2, re_gerr, re_exact):
+    axL.text(rect.get_x() + rect.get_width() / 2, v + 0.02, f"{v:.2f}",
+             ha="center", va="bottom", fontsize=10)
+axL.set_xticks(x); axL.set_xticklabels(labels)
+axL.set_ylabel("Goal error per match (lower is closer)")
+axL.set_ylim(0, 2.5)
+axL.set_title("Closer to the real score", fontsize=12, loc="left")
+axL.legend(frameon=False, loc="upper right")
+axL.text(2, re_gerr[2] - 0.28, f"exact: {re_exact[2]} vs {ev_exact[2]}",
+         ha="center", fontsize=9, color=GREEN, fontweight="bold")
 for s in ("top", "right"):
     axL.spines[s].set_visible(False)
 
-# Right
-x = np.arange(len(years))
-w = 0.38
-b1 = axR.bar(x - w / 2, opt_pts, w, color=BLUE, label="Optimal (your entry)")
-b2 = axR.bar(x + w / 2, real_pts, w, color=ORANGE, label="Realistic (sampled)")
-for rect, v in zip(b1, opt_pts):
-    axR.text(rect.get_x() + rect.get_width() / 2, v + 0.6, str(v),
-             ha="center", va="bottom", fontsize=11)
-for rect, v in zip(b2, real_pts):
-    axR.text(rect.get_x() + rect.get_width() / 2, v + 0.6, str(v),
-             ha="center", va="bottom", fontsize=11)
-# loss annotations above the optimal bar
-for xi, o, r in zip(x, opt_pts, real_pts):
-    axR.text(xi - w / 2, o + 4, f"{r - o} pts", ha="center", va="bottom",
-             fontsize=11, fontweight="bold", color=RED)
-axR.set_xticks(x)
-axR.set_xticklabels(years)
+# Right: pool points (no cost)
+b3 = axR.bar(x - w / 2, ev_pts, w, color=BLUE, label="EV-optimal pick")
+b4 = axR.bar(x + w / 2, re_pts, w, color=GREEN, label="Realistic readout")
+for rect, v in zip(b3, ev_pts):
+    axR.text(rect.get_x() + rect.get_width() / 2, v + 0.8, str(v),
+             ha="center", va="bottom", fontsize=10)
+for rect, v in zip(b4, re_pts):
+    axR.text(rect.get_x() + rect.get_width() / 2, v + 0.8, str(v),
+             ha="center", va="bottom", fontsize=10)
+axR.set_xticks(x); axR.set_xticklabels(labels)
 axR.set_ylabel("Pool points (backtested, 3/2/1)")
-axR.set_ylim(0, 78)
-axR.set_title("The cost of realism", fontsize=12, loc="left")
-axR.legend(frameon=False, loc="upper right")
+axR.set_ylim(0, max(ev_pts + re_pts) * 1.18)
+axR.set_title("At no cost in pool points", fontsize=12, loc="left")
+axR.legend(frameon=False, loc="upper left")
 for s in ("top", "right"):
     axR.spines[s].set_visible(False)
 
 fig.tight_layout()
 fig.savefig(FIGS / "fig_realism.pdf")
 fig.savefig(FIGS / "fig_realism.png", dpi=150)
-print("wrote fig_realism")
+print("wrote fig_realism (EV vs realistic):",
+      f"goal-err pooled {ev_gerr[2]:.3f}->{re_gerr[2]:.3f}, "
+      f"pts {ev_pts[2]}->{re_pts[2]}, exact {ev_exact[2]}->{re_exact[2]}")

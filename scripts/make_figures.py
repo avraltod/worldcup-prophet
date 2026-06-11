@@ -76,8 +76,8 @@ ax.set_xlabel("Argentina goals")
 ax.set_ylabel("Spain goals")
 ax.set_xticks(range(G + 1))
 ax.set_yticks(range(G + 1))
-# highlight modal pick 1-0
-ax.add_patch(plt.Rectangle((-0.5 + 0, 0.5), 1, 1, fill=False, edgecolor=ORANGE, lw=2.2))
+# highlight the realistic pick 2-1 (Spain 2, Argentina 1)
+ax.add_patch(plt.Rectangle((1 - 0.5, 2 - 0.5), 1, 1, fill=False, edgecolor=ORANGE, lw=2.2))
 cb = fig.colorbar(im, ax=ax, shrink=0.85)
 cb.set_label("P(scoreline), %")
 fig.tight_layout()
@@ -85,4 +85,4 @@ fig.savefig(FIGS / "fig3_final_scorelines.pdf")
 plt.close(fig)
 
 print(f"figures written to {FIGS}; final fit lh={lh}, la={la}, "
-      f"modal 1-0 p={M[1,0]*100:.1f}%")
+      f"realistic 2-1 p={M[2,1]*100:.1f}%")

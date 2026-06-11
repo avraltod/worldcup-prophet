@@ -23,30 +23,19 @@
 
 \title{\textbf{Forecasting the 2026 FIFA World Cup: A Market-Calibrated Poisson--Elo Model and the Information Each Result Reveals}}
 \author{Avralt-Od Purevjav\\ \small Washington, DC, USA \\ \small \texttt{avraltod@gmail.com}}
-\date{Pre-kickoff version, \today}
+\date{Pre-kickoff version, \today\thanks{\itshape Update log --- forecast built 7 June 2026 from bookmaker odds collected 5--7 June; Group~K recalibrated to prediction-market prices the evening of 7 June; squad and injury news monitored through 9 June, when the confirmed withdrawals of Jurri\"en Timber (Netherlands) and several Brazil attackers were already in the pre-kickoff ratings and the remaining late losses (e.g.\ Germany's Lennart Karl) fall on non-decisive squad members, so the entry is confirmed unchanged; group scorelines re-derived on 10 June with a realistic rounded-expected-goals readout that matches the points-optimal pick at no cost in pool points while resembling actual scores more closely (Section~\ref{sec:objective}), leaving champion, bracket, and podium unchanged; predictions lock at the 11 June kickoff. Code and data timestamped for the out-of-sample record.}}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-\noindent This paper documents a forecasting framework I built to predict all 104 matches of the 2026 FIFA World Cup, the first edition with 48 teams. The objective is to maximize an entry's expected score in a private prediction pool that awards 3 points for an exact scoreline, 2 for the correct result and goal difference, and 1 for the correct result, so the target quantity is an expected-value-optimal scoreline and not the most likely winner. The group-stage forecasts derive from bookmaker odds collected four days before kickoff, margin-stripped and fitted to independent Poisson goal distributions, and the knockout forecasts use World Football Elo ratings adjusted for confirmed squad injuries and host advantage. I then simulate 200{,}000 full tournaments to stress-test the bracket. Because a knockout prediction can score only if the named team actually occupies its bracket slot, I optimize the picks for \emph{slot emergence}, the joint probability of reaching and winning a slot, following the expected-pool-score principle of the office-pool literature and applying it to the 48-team format's constrained third-place allocation. This criterion overturned three knockout picks, and two of them survive a full sensitivity sweep over the framework's hand-set constants. The model forecasts Spain as champion in 27.4 percent of simulations, defeating Argentina (18.6 percent) in the final, with France (14.8 percent) third. The paper's central pre-registered analysis treats this static forecast as a baseline and studies how it revises as the tournament is played. After each result I fix the played matches and re-simulate the rest, which updates every team's probability of reaching each stage, and I measure the information each result carries by the Kullback--Leibler divergence between the champion distribution before and after it. I register the hypothesis that this information is highly uneven across the 104 matches, near zero through most of the group stage and concentrated at the eliminations of likely champions. All predictions are locked before kickoff, so the forecast trajectory is an out-of-sample record, and all data and code are retained for that evaluation.
+\noindent This paper documents a forecasting framework I built to predict all 104 matches of the 2026 FIFA World Cup, the first edition with 48 teams. A private prediction pool scores each entry in three tiers --- 3 points for an exact scoreline, 2 for the correct result and goal difference, 1 for the correct result --- so the target is a full scoreline, not merely the winner. For each match I report a realistic rounded-expected-goals scoreline; a backtest on the 2018 and 2022 World Cups shows it scores as well in pool points as the points-optimal pick while landing closer to the actual scores. The group-stage forecasts derive from bookmaker odds collected four days before kickoff, margin-stripped and fitted to independent Poisson goal distributions, and the knockout forecasts use World Football Elo ratings adjusted for confirmed squad injuries and host advantage. I then simulate 200{,}000 full tournaments to stress-test the bracket. Because a knockout prediction can score only if the named team actually occupies its bracket slot, I optimize the picks for \emph{slot emergence}, the joint probability of reaching and winning a slot, following the expected-pool-score principle of the office-pool literature and applying it to the 48-team format's constrained third-place allocation. This criterion overturned three knockout picks, and two of them survive a full sensitivity sweep over the framework's hand-set constants. The model forecasts Spain as champion in 27.4 percent of simulations, defeating Argentina (18.6 percent) in the final, with France (14.8 percent) third. The paper's central pre-registered analysis treats this static forecast as a baseline and studies how it revises as the tournament is played. After each result I fix the played matches and re-simulate the rest, which updates every team's probability of reaching each stage, and I measure the information each result carries by the Kullback--Leibler divergence between the champion distribution before and after it. I register the hypothesis that this information is highly uneven across the 104 matches, near zero through most of the group stage and concentrated at the eliminations of likely champions. All predictions are locked before kickoff, so the forecast trajectory is an out-of-sample record, and all data and code are retained for that evaluation.
 
 \medskip
 \noindent\textbf{Keywords:} association football, betting odds, Poisson model, Elo ratings, Monte Carlo simulation, FIFA World Cup
 \end{abstract}
 
-\begin{center}
-\rule{0.6\textwidth}{0.4pt}
-\end{center}
-
-% ---- Update log stamped on the first page ----
-\begin{center}
-\footnotesize\itshape
-Update log --- forecast built 7 June 2026 from bookmaker odds collected 5--7 June;
-Group~K recalibrated to prediction-market prices the evening of 7 June;
-squad and injury news monitored through 9 June, when the confirmed withdrawals of Jurri\"en Timber (Netherlands) and several Brazil attackers were already in the pre-kickoff ratings and the remaining late losses (e.g.\ Germany's Lennart Karl) fall on non-decisive squad members, so the entry is confirmed unchanged;
-predictions lock at the 11 June kickoff. Code and data timestamped for the out-of-sample record.
-\end{center}
+% ---- Update log moved to a \thanks footnote on the \date ----
 
 % ---- Mongolian abstract: commented out for now (re-enable by removing \iffalse ... \fi) ----
 \iffalse
@@ -78,10 +67,10 @@ The rest of the paper is organized as follows. Section~2 describes the data, Sec
 
 I collected four datasets on June 5--7, 2026, four days before the opening match (Table~\ref{tab:data}).
 
-\begin{table}[htpb!]
+\begin{table}[!t]
   \centering
   \caption{Data sources}\label{tab:data}
-  \begin{small}
+  \begin{footnotesize}
   \begin{threeparttable}
     {\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} p{3.4cm}p{5.2cm}p{5.6cm}}
       \toprule
@@ -94,10 +83,10 @@ I collected four datasets on June 5--7, 2026, four days before the opening match
       \bottomrule
     \end{tabular*}}
     \begin{tablenotes}\notesize
-      \item Note: Collected June 5--7, 2026.
+      \item \textit{Notes}: Collected June 5--7, 2026.
     \end{tablenotes}
   \end{threeparttable}
-  \end{small}
+  \end{footnotesize}
 \end{table}
 
 I incorporate several squad facts as rating adjustments, including Brazil without Rodrygo (anterior cruciate ligament), the Netherlands without Xavi Simons, Japan without Kaoru Mitoma, Croatia in poor warm-up form, and a minor deduction for Spain (Fermín López). I take the fixture list, kickoff times, venues, and the official third-place allocation table from the tournament schedule.
@@ -110,7 +99,7 @@ Decimal odds $o_H, o_D, o_A$ for a home win, draw, and away win embed a bookmake
 \begin{equation}
 p_r = \frac{1/o_r}{\sum_{s \in \{H,D,A\}} 1/o_s}, \qquad r \in \{H,D,A\},
 \end{equation}
-Basic normalization is a deliberate simplification: \citet{strumbelj2014} showed it is generally inferior to Shin's method, which corrects the favorite--longshot bias in the margin's distribution. The simplification is acceptable for the present decision problem because the target is the expected-value-optimal scoreline, not a staking probability, and re-de-vigging the 48 fixtures with published lines under Shin's method changes only 2 of the resulting group picks; it would not be acceptable if the forecasts were used for staking. For the remaining 24 fixtures without published lines, probabilities were estimated from Elo differences using the win expectancy in Section~\ref{sec:elo}. The Poisson fit reproduces the market probabilities closely, with a mean root-mean-square residual across the home, draw, and away targets of 0.003 and the goal-sum constraint binding on only 6 of the 72 fixtures.
+Basic normalization is a deliberate simplification: \citet{strumbelj2014} showed it is generally inferior to Shin's method, which corrects the favorite--longshot bias in the margin's distribution. The simplification is acceptable for the present decision problem because the target is a scoreline readout, not a staking probability, and re-de-vigging the 48 fixtures with published lines under Shin's method changes only 2 of the resulting group picks; it would not be acceptable if the forecasts were used for staking. For the remaining 24 fixtures without published lines, probabilities were estimated from Elo differences using the win expectancy in Section~\ref{sec:elo}. The Poisson fit reproduces the market probabilities closely, with a mean root-mean-square residual across the home, draw, and away targets of 0.003 and the goal-sum constraint binding on only 6 of the 72 fixtures.
 
 \subsection{Poisson scorelines}
 
@@ -124,17 +113,17 @@ where $\pi_r$ is the outcome probability implied by the Poisson pair and the con
 \mathrm{EV}(h,a) \;=\; P(h,a) \;+\; P\bigl(\text{result}=r,\ \text{GD}=g\bigr) \;+\; P\bigl(\text{result}=r\bigr),
 \label{eq:ev}
 \end{equation}
-because the exact score earns all three tiers, the right goal difference earns the lower two, and the right result earns the lowest. The published prediction maximizes Equation~\eqref{eq:ev} over all scorelines. The goal-difference tier shapes the picks in two ways. For a favorite the optimal pick is a one-goal margin such as 1--0, because winning by one is the most common margin and the middle tier rewards getting the margin right rather than only the winner. For an evenly matched fixture the optimal pick is a 1--1 draw, because every drawn scoreline shares goal difference zero, so a draw prediction collects the 2-point tier on any drawn result and not only on an exact 1--1. The entry therefore contains a small number of draws, on the most balanced fixtures, alongside the one-goal favorites that dominate the rest.
+because the exact score earns all three tiers, the right goal difference earns the lower two, and the right result earns the lowest. Equation~\eqref{eq:ev} values any candidate scoreline, but the published prediction is not its raw maximizer. The expected-value-optimal pick is a coarse readout: the goal-difference tier sends almost every favorite to a one-goal 1--0, because winning by one is the most common margin, and sends every even fixture to a 1--1 draw, because all draws share goal difference zero and a draw therefore collects the 2-point tier on any level result. I instead publish the \emph{realistic} readout, which rounds the fitted expected goals $(\hat\lambda_h, \hat\lambda_a)$ to the nearest scoreline while preserving the modal result, so a clear favorite reads as 2--1 or 2--0 and the most balanced fixtures read level. As Section~\ref{sec:objective} shows by backtest, this readout matches the expected-value-optimal pick on pool points while landing more exact scores and closer goal totals, so it is adopted at no cost; the two share the same probabilities, bracket, and champion, and differ only in the printed scoreline.
 
-The same expected value can be read pick by pick, and it makes the structure of the entry concrete (Figure~\ref{fig:pickvalue}). Each of the 104 predictions carries an expected-points value between 0.65 and 1.37 under the three-tier rule, averaging 0.99, and the spread is informative: a confident pick against a weak side, such as England's 2--0 over Ghana at 1.37 expected points, is worth roughly twice the most evenly matched game, such as the 1--1 draw between Turkey and the United States at 0.68. The group stage sums to 72.0 expected points and the knockout stage to 31.0 conditional on the predicted matchups occurring. The figure is also the natural scoreboard for the live evaluation, because each realized result can be set against the expected value its pick carried.
+The same expected value can be read pick by pick, and it makes the structure of the entry concrete (Figure~\ref{fig:pickvalue}). Each of the 104 predictions carries an expected-points value between 0.59 and 1.37 under the three-tier rule, averaging 0.94, and the spread is informative: a confident pick against a weak side, such as Brazil's 2--0 over Haiti at 1.37 expected points, is worth roughly twice the most evenly matched game, such as the 1--1 draw between Turkey and the United States at 0.68. The group stage sums to 68.3 expected points and the knockout stage to 29.3 conditional on the predicted matchups occurring. The figure is also the natural scoreboard for the live evaluation, because each realized result can be set against the expected value its pick carried.
 
-\begin{figure}[htpb!]
+\begin{figure}[!t]
   \caption{Expected points per pick}\label{fig:pickvalue}
   \begin{threeparttable}
     {\centering
-      \includegraphics[width=0.92\textwidth]{figs/fig_pickvalue.pdf}}
+      \includegraphics[width=0.92\textwidth]{figs/fig_pickvalue.pdf}\par}
     \begin{tablenotes}\notesize
-      \item Note: Expected points per pick for all 104 predictions, sorted, under the pool's three-tier rule (group orange, knockout blue). Confident picks against weak teams sit highest and the most even games lowest; the mean is 0.99 points per game. Knockout values are conditional on the predicted matchup occurring.
+      \item \textit{Notes}: Expected points per pick for all 104 predictions, sorted, under the pool's three-tier rule (group orange, knockout blue). Confident picks against weak teams sit highest and the most even games lowest; the mean is 0.94 points per game. Knockout values are conditional on the predicted matchup occurring.
     \end{tablenotes}
   \end{threeparttable}
 \end{figure}
@@ -179,10 +168,10 @@ These measures are not new, and the contribution here is their application to a 
 
 Table~\ref{tab:champ} reports champion, finalist, and semi-finalist probabilities. Spain is the modal champion at 27.4\%, ahead of Argentina at 18.6\% and France at 14.8\%, and the predicted Spain--Argentina final is the single most likely pairing at 10.8\% of simulations.\footnote{This is the original locked forecast. Two later numbers in the paper differ by about a percentage point: the pre-deadline Group~K recalibration of Section~\ref{sec:postscript} revises Spain to 26.8\%, and Monte Carlo variation across runs is about 0.5~pp (Section~\ref{sec:robust}). I report the original 27.4\% as the headline and the recalibrated 26.8\% wherever the recalibrated model is the explicit subject; the two are the same forecast before and after that single localized update.} The forecast is consistent with the outright betting market, which priced Spain as favorite at decimal odds near 5.5.
 
-\begin{table}[htpb!]
+\begin{table}[!t]
   \centering
   \caption{Simulated tournament probabilities, top eight teams}\label{tab:champ}
-  \begin{small}
+  \begin{footnotesize}
   \begin{threeparttable}
     {\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} lccc}
       \toprule
@@ -199,19 +188,19 @@ Table~\ref{tab:champ} reports champion, finalist, and semi-finalist probabilitie
       \bottomrule
     \end{tabular*}}
     \begin{tablenotes}\notesize
-      \item Note: $N$ = 200{,}000; standard errors $\le$ 0.11 pp.
+      \item \textit{Notes}: $N$ = 200{,}000; standard errors $\le$ 0.11 pp.
     \end{tablenotes}
   \end{threeparttable}
-  \end{small}
+  \end{footnotesize}
 \end{table}
 
-\begin{figure}[htpb!]
+\begin{figure}[!t]
   \caption{Champion probability distribution}\label{fig:champdist}
   \begin{threeparttable}
     {\centering
-      \includegraphics[width=0.92\textwidth]{figs/fig1_champion_dist.pdf}}
+      \includegraphics[width=0.92\textwidth]{figs/fig1_champion_dist.pdf}\par}
     \begin{tablenotes}\notesize
-      \item Note: Champion probability across 200{,}000 simulated tournaments. Spain (blue) is the modal champion yet fails to win in 72.6\% of simulations; Portugal (orange) is discussed in Section~\ref{sec:portugal}. The 36 teams outside the top twelve jointly retain a 9.7\% champion share.
+      \item \textit{Notes}: Champion probability across 200{,}000 simulated tournaments. Spain (blue) is the modal champion yet fails to win in 72.6\% of simulations; Portugal (orange) is discussed in Section~\ref{sec:portugal}. The 36 teams outside the top twelve jointly retain a 9.7\% champion share.
     \end{tablenotes}
   \end{threeparttable}
 \end{figure}
@@ -220,28 +209,28 @@ The distribution in Figure~\ref{fig:champdist} is heavy-tailed in a way the head
 
 \subsection{Simulation-driven bracket revisions}
 
-Applying criterion~\eqref{eq:slot} to the greedily constructed bracket overturned three of the 31 knockout entries, and it routed an even group-stage call toward the structurally better side (Table~\ref{tab:revisions}). That group-stage case needs one clarification, because the Turkey--United States fixture is a near-tie whose expected-value-optimal scoreline under the three-tier rule is a 1--1 draw, which is what the entry submits; the slot-emergence analysis then assigns the group-winner position to the United States for better bracket structure. Because the pool scores each match independently, this routing choice shapes the predicted path but not the entry's points, so the scoreline and the routing are two separate decisions that need not agree. The Belgium revision is the largest, because Turkey, the head-to-head favorite in the predicted Round-of-16 pairing, reaches that slot in only 14.3\% of simulations, since its path requires first winning a tight Group D and then a Round-of-32 tie, while Belgium's route through Group G is substantially safer. The Croatia--Portugal case illustrates the subtler failure mode, because Portugal is the stronger side and yet it too often wins Group K outright across the 200{,}000 simulations and never contests the predicted slot at all.
+Applying criterion~\eqref{eq:slot} to the greedily constructed bracket overturned three of the 31 knockout entries, and it routed an even group-stage call toward the structurally better side (Table~\ref{tab:revisions}). That group-stage case needs one clarification, because the Turkey--United States fixture is a near-tie whose realistic readout is a level 1--1, which is what the entry submits; the slot-emergence analysis then assigns the group-winner position to the United States for better bracket structure. Because the pool scores each match independently, this routing choice shapes the predicted path but not the entry's points, so the scoreline and the routing are two separate decisions that need not agree. The Belgium revision is the largest, because Turkey, the head-to-head favorite in the predicted Round-of-16 pairing, reaches that slot in only 14.3\% of simulations, since its path requires first winning a tight Group D and then a Round-of-32 tie, while Belgium's route through Group G is substantially safer. The Croatia--Portugal case illustrates the subtler failure mode, because Portugal is the stronger side and yet it too often wins Group K outright across the 200{,}000 simulations and never contests the predicted slot at all.
 
-\begin{table}[htpb!]
+\begin{table}[!t]
   \centering
   \caption{Bracket entries revised by slot emergence}\label{tab:revisions}
-  \begin{small}
+  \begin{footnotesize}
   \begin{threeparttable}
     {\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} llccc}
       \toprule
       Slot & Revision & Original & Revised & Gain \\
       \midrule
-      Group D, match 59 & Turkey 1--1 USA (EV-optimal draw), routed to USA & \multicolumn{2}{c}{tied call (36.3\% / 36.3\%)} & --- \\
+      Group D, match 59 & Turkey 1--1 USA (realistic level), routed to USA & \multicolumn{2}{c}{tied call (36.3\% / 36.3\%)} & --- \\
       Round of 32, M78 & Ecuador $\to$ Norway & 20.5\% & 24.5\% & $+4.0$ pp \\
       Round of 32, M83 & Portugal $\to$ Croatia & 25.1\% & 27.5\% & $+2.4$ pp \\
       Round of 16, M94 & Turkey $\to$ Belgium & 14.3\% & 23.9\% & $+9.6$ pp \\
       \bottomrule
     \end{tabular*}}
     \begin{tablenotes}\notesize
-      \item Note: For the three knockout rows, percentages are the probability that the named team occupies and wins the slot; the group-stage row submits the even fixture's expected-value-optimal 1--1 draw and routes the resulting tied group to the United States for bracket structure, a routing choice the pool scores independently of the submitted scoreline.
+      \item \textit{Notes}: For the three knockout rows, percentages are the probability that the named team occupies and wins the slot; the group-stage row submits the even fixture's realistic level 1--1 and routes the resulting tied group to the United States for bracket structure, a routing choice the pool scores independently of the submitted scoreline.
     \end{tablenotes}
   \end{threeparttable}
-  \end{small}
+  \end{footnotesize}
 \end{table}
 
 The three overturned picks understate the criterion's importance, because the right way to value slot emergence is over the whole bracket and against the baseline a naive forecaster would actually use. Scored across all 31 knockout matches, a slot-emergence entry earns 11.5 expected knockout points, against 4.3 for an entry that fills each slot with the strongest team that could reach it. The gap is the Portugal paradox at scale: the strongest reachable team for a deep slot is usually a giant who arrives there too rarely to score, so an entry built on raw strength leaves most of its knockout points unclaimed. The advantage is not specific to the 2026 draw either; repeating the comparison on four tournaments with team strengths randomly perturbed by 80 Elo points gives a slot-emergence margin over the strongest-team entry of between 5.1 and 6.9 points in every case. Against a less naive baseline that fills each slot with its most likely \emph{occupant}, however, slot emergence adds only about 0.2 points, so almost all of the value comes from routing the pick toward a slot the team is likely to occupy, and the marginal refinement of also conditioning on winning that slot is small. The decision-relevant lesson is the first comparison: committing one name per slot, strength is the wrong objective and reachability is most of the right one.
@@ -258,15 +247,15 @@ The aggregate stake is worth stating plainly. Summed over the three slots, the r
 
 The submitted bracket has Spain defeating Argentina 1--0 in the final at MetLife Stadium on July 19, with France third over England. Semi-finals: Spain over France and Argentina over England, both 1--0. The complete match-level forecast (72 group scorelines and 31 knockout entries) accompanies this paper as the official pool submission sheet.
 
-Figure~\ref{fig:finaldist} shows the fitted scoreline distribution for the predicted final ($\hat\lambda_{\mathrm{ESP}} = 1.25$, $\hat\lambda_{\mathrm{ARG}} = 1.00$). The modal pick, 1--0, carries only 13.2\% probability; the five most likely scorelines together cover barely half the distribution. Exact-score forecasting is intrinsically low-hit-rate even when the model is well calibrated, which is why the pool strategy optimizes the \emph{sum} of many small edges rather than any single confident call.
+Figure~\ref{fig:finaldist} shows the fitted scoreline distribution for the predicted final ($\hat\lambda_{\mathrm{ESP}} = 1.25$, $\hat\lambda_{\mathrm{ARG}} = 1.00$). The published realistic pick, 2--1, carries only 8.2\% probability, and even the single most likely scoreline, 1--0 at 13.2\%, is far from certain; the five most likely scorelines together cover barely half the distribution. Exact-score forecasting is intrinsically low-hit-rate even when the model is well calibrated, which is why the pool strategy optimizes the \emph{sum} of many small edges rather than any single confident call.
 
-\begin{figure}[htpb!]
+\begin{figure}[!t]
   \caption{Scoreline distribution for the predicted final}\label{fig:finaldist}
   \begin{threeparttable}
     {\centering
-      \includegraphics[width=0.62\textwidth]{figs/fig3_final_scorelines.pdf}}
+      \includegraphics[width=0.62\textwidth]{figs/fig3_final_scorelines.pdf}\par}
     \begin{tablenotes}\notesize
-      \item Note: Fitted Poisson scoreline distribution for the predicted final, Spain vs.\ Argentina. The orange box marks the submitted prediction (1--0), which carries only 13.2\% probability; no single scoreline is much more likely.
+      \item \textit{Notes}: Fitted Poisson scoreline distribution for the predicted final, Spain vs.\ Argentina. The orange box marks the submitted prediction (1--0), which carries only 13.2\% probability; no single scoreline is much more likely.
     \end{tablenotes}
   \end{threeparttable}
 \end{figure}
@@ -279,13 +268,13 @@ I register three hypotheses before the tournament. First, the information is con
 
 To verify that the recording machinery behaves as registered, I ran it once as a dress rehearsal, treating a single simulated tournament as if it were the real one and feeding its 104 results through the pipeline in order. Figure~\ref{fig:trajectory} shows the result. The synthetic run reproduces all three hypothesized patterns. The information is concentrated, because the ten most informative matches carry 69 percent of the total; the information arrives late, because the group stage accounts for only 19 percent of the movement against 81 percent for the knockouts; and the largest single spike, 0.52 bits, falls on a semi-final that eliminates a likely finalist. The champion probabilities stay nearly flat through the group stage, then move sharply once elimination begins, with the eventual champion's probability climbing from the low twenties to one over the final two weeks. This is a demonstration on simulated data and not a forecast of the real tournament, but it confirms that the instrument measures what it is meant to. The realized trajectory will confirm or refute the same three hypotheses on real results, and the data, the conditional-simulation code, and the per-match information series are retained for that evaluation.
 
-\begin{figure}[htpb!]
+\begin{figure}[!t]
   \caption{Forecast evolution dress rehearsal}\label{fig:trajectory}
   \begin{threeparttable}
     {\centering
-      \includegraphics[width=0.94\textwidth]{figs/fig_trajectory_demo.pdf}}
+      \includegraphics[width=0.94\textwidth]{figs/fig_trajectory_demo.pdf}\par}
     \begin{tablenotes}\notesize
-      \item Note: Illustrative dress rehearsal of the live study on one simulated tournament (not the real forecast). Upper panel: each contender's champion probability, traced from the pre-tournament prior on the left to the realized outcome on the right, flat through the group stage and moving sharply once eliminations begin. Lower panel: the information content of each result in bits (Equation~\ref{eq:kl}), orange for group matches and blue for knockouts, near zero through the group stage and spiking at knockout eliminations. The same figure will be regenerated on real results after each matchday.
+      \item \textit{Notes}: Illustrative dress rehearsal of the live study on one simulated tournament (not the real forecast). Upper panel: each contender's champion probability, traced from the pre-tournament prior on the left to the realized outcome on the right, flat through the group stage and moving sharply once eliminations begin. Lower panel: the information content of each result in bits (Equation~\ref{eq:kl}), orange for group matches and blue for knockouts, near zero through the group stage and spiking at knockout eliminations. The same figure will be regenerated on real results after each matchday.
     \end{tablenotes}
   \end{threeparttable}
 \end{figure}
@@ -298,13 +287,13 @@ At the baseline the two disagree in a specific and interpretable way (Figure~\re
 
 I do not resolve this disagreement here, because the tournament resolves it. I pre-register two questions for the live study. First, whether the two trajectories converge as results arrive, and which one moves toward the other, since convergence of the market toward the model would suggest the model's early concentration was justified, while the reverse would suggest it was overconfidence. Second, whether the model or the market revises first at the moment of a major elimination, measured by which trajectory shows the larger one-match move when a likely champion falls. Both trajectories are recorded after every match, and Figure~\ref{fig:trajectory} will carry the market line beside the model line in the final version.
 
-\begin{figure}[htpb!]
+\begin{figure}[!t]
   \caption{Model and market champion odds at baseline}\label{fig:marketbase}
   \begin{threeparttable}
     {\centering
-      \includegraphics[width=0.72\textwidth]{figs/fig_market_baseline.pdf}}
+      \includegraphics[width=0.72\textwidth]{figs/fig_market_baseline.pdf}\par}
     \begin{tablenotes}\notesize
-      \item Note: Model and market champion odds at the baseline, before any match is played. The model (blue) is more concentrated on Spain and Argentina, while the market (orange) spreads more probability to England, Brazil, and Germany. The disagreement comes entirely from the knockout stage, because the model's group-stage probabilities are themselves recovered from market odds.
+      \item \textit{Notes}: Model and market champion odds at the baseline, before any match is played. The model (blue) is more concentrated on Spain and Argentina, while the market (orange) spreads more probability to England, Brazil, and Germany. The disagreement comes entirely from the knockout stage, because the model's group-stage probabilities are themselves recovered from market odds.
     \end{tablenotes}
   \end{threeparttable}
 \end{figure}
@@ -317,28 +306,28 @@ The probabilities are roughly calibrated and carry modest skill, though two tour
 
 At the champion level the model and the market are comparably imperfect, which is what the literature predicts (Figure~\ref{fig:backtest}, right). In 2018 the model gave the eventual champion France a 7 percent chance against the market's 13 percent, so the market was closer, while in 2022 the model gave Argentina 22 percent against the market's 17 percent, so the model was closer. Both placed Brazil first in both years, and Brazil won neither. The model ranked France fourth of 32 in 2018 and Argentina second of 32 in 2022, so it never badly missed the eventual winner. The honest summary is that the framework forecasts at roughly the level of the betting market and not above it, which is the expected outcome for a model built from market information \citep{strumbelj2014, hvattum2010}.
 
-One finding tempers the paper's emphasis on scoreline selection. On these 128 matches the expected-value-optimal pick scored within a point or two of a naive baseline that simply predicts a one-goal win for the favorite, with the naive baseline marginally ahead at 68 against 67 in 2018 and 52 against 48 in 2022. A one-goal favorite is the optimal pick on most fixtures in any case, and the goal-difference tier and the occasional draw that distinguish the optimal entry did not pay off on these two particular tournaments, although the optimal entry has the higher expected value under the model. The scoreline sophistication of Section~\ref{sec:elo} is therefore close to neutral against a simple baseline on realized results, and the framework's edge lives in the slot-emergence routing, which the 32-team format of these tournaments does not exercise and which remains validated only in simulation.
+One finding tempers the paper's emphasis on scoreline selection. On these 128 matches the expected-value-optimal pick, the realistic readout, and a naive baseline that simply predicts a one-goal win for the favorite all score within a few points of one another: across the two years the naive baseline totals 120 (68 then 52), the expected-value pick 115 (67 then 48), and the realistic readout 119 (58 then 61). On realized results the choice of scoreline rule is therefore close to neutral for points. What the realistic readout buys is not points but fidelity to actual scores---more exact hits and closer goal totals (Section~\ref{sec:objective})---while the framework's points edge lives in the slot-emergence routing, which the 32-team format of these tournaments does not exercise and which remains validated only in simulation.
 
 The backtest also lets me test the central forecast-evolution hypotheses of Section~\ref{sec:evolution} on real data, by replaying each tournament match by match and conditioning on the actual results (Figure~\ref{fig:btevo}). All three pre-registered patterns hold. The information arrives late, because the knockout stage carried 86 percent of the total in 2018 and 84 percent in 2022, against a group stage that barely moved the forecast. The information is concentrated in a handful of results. And the largest spikes fall on eliminations of likely champions: in both tournaments the single most informative result was the elimination of Brazil, the pre-tournament favorite, beaten by Belgium in the 2018 quarter-final and by Croatia in the 2022 quarter-final. The famous group-stage upset of 2022, Argentina's opening loss to Saudi Arabia, moved Argentina's champion probability by only three percentage points and carried almost no information, because Argentina still advanced comfortably, which is exactly the pattern the hypotheses predict for a group-stage result. Two real tournaments are a small sample, but both behave as the live study expects the 2026 forecast to behave.
 
-\begin{figure}[htpb!]
+\begin{figure}[!t]
   \caption{Forecast evolution on 2018 and 2022}\label{fig:btevo}
   \begin{threeparttable}
     {\centering
-      \includegraphics[width=\textwidth]{figs/fig_backtest_evolution.pdf}}
+      \includegraphics[width=\textwidth]{figs/fig_backtest_evolution.pdf}\par}
     \begin{tablenotes}\notesize
-      \item Note: Forecast evolution replayed on the 2018 and 2022 World Cups. Top: the champion probability of the eventual winner (bold) and three reference teams, conditioned on actual results, rising from the pre-tournament prior to one. Bottom: the information each result carried (orange for group matches, blue for knockouts). In both tournaments the largest spike is the elimination of Brazil, the pre-tournament favorite, and the group stage carries little information.
+      \item \textit{Notes}: Forecast evolution replayed on the 2018 and 2022 World Cups. Top: the champion probability of the eventual winner (bold) and three reference teams, conditioned on actual results, rising from the pre-tournament prior to one. Bottom: the information each result carried (orange for group matches, blue for knockouts). In both tournaments the largest spike is the elimination of Brazil, the pre-tournament favorite, and the group stage carries little information.
     \end{tablenotes}
   \end{threeparttable}
 \end{figure}
 
-\begin{figure}[htpb!]
+\begin{figure}[!t]
   \caption{Out-of-sample sanity check on 2018 and 2022}\label{fig:backtest}
   \begin{threeparttable}
     {\centering
-      \includegraphics[width=\textwidth]{figs/fig_backtest.pdf}}
+      \includegraphics[width=\textwidth]{figs/fig_backtest.pdf}\par}
     \begin{tablenotes}\notesize
-      \item Note: Out-of-sample sanity check on the 2018 and 2022 World Cups (128 matches). Left: reliability of the model's top pick, with dot size proportional to the number of matches in each confidence bin. The hit rate rises roughly monotonically with predicted probability (50, 45, 48, 56, 66, 75 percent across the bins), but each bin holds only 8--32 matches, so the 95 percent intervals are wide and the diagram supports no stronger claim than ``not grossly miscalibrated.'' Right: the pre-tournament probability the model and the betting market each assigned to the eventual champion. On two tournaments the model forecasts at roughly the market's level; this is a sanity check, not a validation.
+      \item \textit{Notes}: Out-of-sample sanity check on the 2018 and 2022 World Cups (128 matches). Left: reliability of the model's top pick, with dot size proportional to the number of matches in each confidence bin. The hit rate rises roughly monotonically with predicted probability (50, 45, 48, 56, 66, 75 percent across the bins), but each bin holds only 8--32 matches, so the 95 percent intervals are wide and the diagram supports no stronger claim than ``not grossly miscalibrated.'' Right: the pre-tournament probability the model and the betting market each assigned to the eventual champion. On two tournaments the model forecasts at roughly the market's level; this is a sanity check, not a validation.
     \end{tablenotes}
   \end{threeparttable}
 \end{figure}
@@ -351,13 +340,13 @@ The status is observable in advance, so the gap is in principle addressable. Bef
 
 One refinement carries a behavioral lesson. Penalizing clinched and eliminated teams together barely helps, improving the Brier score by only 0.4 percent, while penalizing clinched teams alone delivers the full effect. Eliminated teams do not fade, because they play with the freedom of nothing left to lose, and in the data they keep winning final-matchday games, so the rotation effect lives entirely in teams that have already qualified. The adjustment is a real but partial fix, because qualification status is only a proxy for the information that actually matters, which is the confirmed starting eleven announced about an hour before kickoff. The status-based layer captures the predictable part of rotation cheaply, and closing the remainder would require ingesting lineups, which is the clearest direction for improving match-level accuracy in future work.
 
-\begin{figure}[htpb!]
+\begin{figure}[!t]
   \caption{Rotation-aware adjustment on final matchdays}\label{fig:rotation}
   \begin{threeparttable}
     {\centering
-      \includegraphics[width=0.66\textwidth]{figs/fig_rotation.pdf}}
+      \includegraphics[width=0.66\textwidth]{figs/fig_rotation.pdf}\par}
     \begin{tablenotes}\notesize
-      \item Note: The rotation-aware adjustment on the 30 final-matchday games of 2018 and 2022. Reducing the Elo rating of a team that has clinched qualification improves the pooled Brier score by 2.7 percent at a 120-point penalty, but the gain does not generalize: tournament by tournament it helps 2022 by about 10 percent and hurts 2018 by about the same, so the pooled figure is driven by one edition. The monotone rise to the search boundary marks this as a sample-fit effect, reported as a located weakness rather than a validated fix. Eliminated teams are not penalized, because they continue to play at full strength.
+      \item \textit{Notes}: The rotation-aware adjustment on the 30 final-matchday games of 2018 and 2022. Reducing the Elo rating of a team that has clinched qualification improves the pooled Brier score by 2.7 percent at a 120-point penalty, but the gain does not generalize: tournament by tournament it helps 2022 by about 10 percent and hurts 2018 by about the same, so the pooled figure is driven by one edition. The monotone rise to the search boundary marks this as a sample-fit effect, reported as a located weakness rather than a validated fix. Eliminated teams are not penalized, because they continue to play at full strength.
     \end{tablenotes}
   \end{threeparttable}
 \end{figure}
@@ -372,24 +361,24 @@ A single example makes the magnitude concrete (Figure~\ref{fig:fork}). Before th
 
 It is worth separating what the model contributes here from what tournament structure alone would produce. The stage-level pattern, that knockout matches carry more information than group matches and that the final carries about one bit, is largely structural: a uniform model in which all teams are equally strong would produce the same ordering, because eliminations late in a bracket necessarily move a champion distribution more than redundant early group games, and a two-team final between equals resolves exactly one bit by definition. The model's distinctive content is instead the variation \emph{within} a round, which a uniform model would not produce at all, because by symmetry it would assign every match in a given round the same pivotality. In the calibrated forecast the pivotality of the sixteen round-of-32 matches spans a factor of twelve, from 0.007 to 0.083 bits, and the eight round-of-16 matches span a factor of seventeen, with a coefficient of variation near 0.9 and 0.6 respectively. That dispersion is the model speaking rather than the bracket: it tracks which favorites are exposed in which match, and it is the part of the pivotality profile that a structural null cannot supply.
 
-\begin{figure}[htpb!]
+\begin{figure}[!t]
   \caption{Pivotality along the predicted path}\label{fig:pivotality}
   \begin{threeparttable}
     {\centering
-      \includegraphics[width=0.92\textwidth]{figs/fig_pivotality.pdf}}
+      \includegraphics[width=0.92\textwidth]{figs/fig_pivotality.pdf}\par}
     \begin{tablenotes}\notesize
-      \item Note: Pivotality of each match along the predicted path: the expected movement of the champion forecast from a single result, before it is played. Group matches (orange) average 0.014 bits; knockout matches (blue) average 0.11 bits; the final reaches 0.99 bits. Most matches barely affect who wins, and a few decide it.
+      \item \textit{Notes}: Pivotality of each match along the predicted path: the expected movement of the champion forecast from a single result, before it is played. Group matches (orange) average 0.014 bits; knockout matches (blue) average 0.11 bits; the final reaches 0.99 bits. Most matches barely affect who wins, and a few decide it.
     \end{tablenotes}
   \end{threeparttable}
 \end{figure}
 
-\begin{figure}[htpb!]
+\begin{figure}[!t]
   \caption{One match, two futures}\label{fig:fork}
   \begin{threeparttable}
     {\centering
-      \includegraphics[width=0.78\textwidth]{figs/fig_fork.pdf}}
+      \includegraphics[width=0.78\textwidth]{figs/fig_fork.pdf}\par}
     \begin{tablenotes}\notesize
-      \item Note: One match, two futures. Champion probabilities before the predicted Spain--France semi-final (grey) and under each result. Spain go from 38 percent to 61 percent if they win and to zero if they lose, and the result also shifts Argentina and England, who are not in the match, because it changes their projected final opponent.
+      \item \textit{Notes}: One match, two futures. Champion probabilities before the predicted Spain--France semi-final (grey) and under each result. Spain go from 38 percent to 61 percent if they win and to zero if they lose, and the result also shifts Argentina and England, who are not in the match, because it changes their projected final opponent.
     \end{tablenotes}
   \end{threeparttable}
 \end{figure}
@@ -474,7 +463,7 @@ $\bullet$ swept-knob (learning-rate) sensitivity curve & $\bullet$ model-vs-mark
 \draw[a] (more.east) -- ([xshift=7mm]bef.east|-more) -- ([xshift=7mm]bef.east|-loophead) node[midway,right,font=\scriptsize]{yes, next $g$} -- (loophead.east);
 \end{tikzpicture}}
     \begin{tablenotes}\notesize
-      \item Note: A pre-tournament baseline feeds the model; then, for each match, the system gathers and feeds a distinct set of information \emph{before} kickoff (confirmed lineups, late injury and suspension news, and the strengths learned so far) and \emph{after} full-time (the result and the match's performance statistics, converted to an observed expected-goals signal $\lambda_{\text{obs}}$). The frozen track conditions on results with strengths held fixed; the learning track additionally updates each team's strength from $\lambda_{\text{obs}}$ through a regularised-Elo step. Both tracks are re-simulated at every step; the before/after snapshots, the information each carries (KL), and the frozen-versus-learning gap are the outputs.
+      \item \textit{Notes}: A pre-tournament baseline feeds the model; then, for each match, the system gathers and feeds a distinct set of information \emph{before} kickoff (confirmed lineups, late injury and suspension news, and the strengths learned so far) and \emph{after} full-time (the result and the match's performance statistics, converted to an observed expected-goals signal $\lambda_{\text{obs}}$). The frozen track conditions on results with strengths held fixed; the learning track additionally updates each team's strength from $\lambda_{\text{obs}}$ through a regularised-Elo step. Both tracks are re-simulated at every step; the before/after snapshots, the information each carries (KL), and the frozen-versus-learning gap are the outputs.
     \end{tablenotes}
   \end{threeparttable}
 \end{figure}
@@ -487,20 +476,20 @@ The study is exploratory and hypothesis-generating, not a validation, and three 
 
 A decomposition separates the two kinds of information a game carries. The result channel, the per-game divergence of the frozen track, summed to 1.52 bits over the 2022 group stage, and the performance channel, the divergence between the learning and frozen forecasts once the tournament had been played, added 0.26 bits beyond it, about one part in six. The two channels are close to orthogonal across the 48 games, with a correlation of $-0.09$ between a game's result information and its performance information, so how well a team played is largely independent of whether it won. This is the quantity the learning track is built to read, and the decomposition suggests it is a small but genuinely separate signal rather than a relabeling of the scoreline.
 
-\begin{figure}[htpb!]
+\begin{figure}[!t]
   \caption{The 2022 group stage as a living forecast}\label{fig:replay2022}
   \begin{threeparttable}
     {\centering
-      \includegraphics[width=0.95\textwidth]{figs/fig_replay2022.pdf}}
+      \includegraphics[width=0.95\textwidth]{figs/fig_replay2022.pdf}\par}
     \begin{tablenotes}\notesize
-      \item Note: The 2022 World Cup group stage replayed as a living forecast. Top: champion probability for five contenders after each group match, under the learning track (solid, strength updated from performance) and the frozen track (dashed, results only); the learning track raises the eventual finalists Argentina and France and lowers the unconvincing group winners Netherlands and Spain. Bottom: the information each match carries (KL divergence against the previous forecast, in milli-bits), concentrated at Japan's upsets of Germany and Spain.
+      \item \textit{Notes}: The 2022 World Cup group stage replayed as a living forecast. Top: champion probability for five contenders after each group match, under the learning track (solid, strength updated from performance) and the frozen track (dashed, results only); the learning track raises the eventual finalists Argentina and France and lowers the unconvincing group winners Netherlands and Spain. Bottom: the information each match carries (KL divergence against the previous forecast, in milli-bits), concentrated at Japan's upsets of Germany and Spain.
     \end{tablenotes}
   \end{threeparttable}
 \end{figure}
 
 \section{Discussion}
 
-My central design choice is to use market odds where they exist and Elo where they do not, and it follows the empirical finding that betting markets are difficult to beat for match-level football forecasting \citep{strumbelj2014, leitner2010, hvattum2010}. Well-designed hybrid models have outperformed market odds in recent tournaments \citep{groll2019}, so the market tier should be read as a strong baseline rather than an unbeatable one. The slot-emergence criterion itself is not new, because it instantiates the expected-pool-score objective of \citet{kaplangarstka2001}, but the 2026 format gives it unusual bite, because with twelve groups feeding a constrained third-place allocation the gap between head-to-head strength and slot-conditional expected points was large enough to overturn three of 31 knockout entries, two of them robustly (Section~\ref{sec:robust}). Because the group-stage probabilities are recovered from market odds, the entry's edge over a market-literate rival comes entirely from two structural layers, the EV-optimal scoreline selection and the slot-emergence routing.
+My central design choice is to use market odds where they exist and Elo where they do not, and it follows the empirical finding that betting markets are difficult to beat for match-level football forecasting \citep{strumbelj2014, leitner2010, hvattum2010}. Well-designed hybrid models have outperformed market odds in recent tournaments \citep{groll2019}, so the market tier should be read as a strong baseline rather than an unbeatable one. The slot-emergence criterion itself is not new, because it instantiates the expected-pool-score objective of \citet{kaplangarstka2001}, but the 2026 format gives it unusual bite, because with twelve groups feeding a constrained third-place allocation the gap between head-to-head strength and slot-conditional expected points was large enough to overturn three of 31 knockout entries, two of them robustly (Section~\ref{sec:robust}). Because the group-stage probabilities are recovered from market odds, the entry's edge over a market-literate rival comes entirely from two structural layers, the points-efficient scoreline readout and the slot-emergence routing.
 
 \subsection{Expected points versus winning the pool}\label{sec:objective}
 
@@ -508,17 +497,17 @@ The optimization target is the entry's own expected points, and this is not iden
 
 Two features of the present pool attenuate the gap without closing it. First, the scoring is additive over 104 quasi-independent match calls rather than dominated by a single bracket outcome, so an entry's total concentrates near its expectation and rank order tracks expected points more closely than in winner-take-all bracket pools. Second, the field is small, a friends' pool and not a thousand-entrant office pool, which reduces the duplication pressure that drives contrarian play. If several rivals nonetheless submit near-identical market-consensus entries, the marginal value of my headline picks of Spain and a Spain--Argentina final falls, and a contrarian champion pick could dominate in pool-win probability. Modeling the opponent field, even crudely, is the highest-value extension this framework forgoes.
 
-A second consequence of the objective is how the goal-difference tier governs draws. A draw is rarely the single most probable outcome, but the middle tier rewards a 1--1 prediction on every drawn result, because all draws share goal difference zero, and this makes a draw the expected-value-optimal pick on the most balanced fixtures. The entry therefore predicts a draw on the two most even group games of 2026 and a one-goal favorite on the rest. This already resolves part of the tension between scoring points and resembling reality that a pure exact-score rule would create, because the optimal entry is no longer draw-free, but it does not resolve it fully, since the optimal entry still predicts only a handful of draws against the roughly one-in-four of real matches that end level.
+A second design choice concerns how the printed scoreline is read off the model. The expected-value-optimal pick maximizes Equation~\eqref{eq:ev} directly, but it is a coarse readout of the fitted goals: it collapses almost every favorite to a one-goal 1--0 and every even fixture to a 1--1 draw, because the goal-difference tier rewards the modal margin and every draw shares goal difference zero. I instead publish the \emph{realistic} readout, which rounds the fitted expected goals to the nearest integer scoreline while preserving the modal result, so a clear favorite reads as 2--1 or 2--0 and a balanced fixture reads level. The two readouts share the identical probability model, bracket, and champion, and both still place a draw on the most even fixtures, where rounded expected goals are level; only the printed scoreline differs.
 
-The residual tension can be quantified. An alternative entry that samples each scoreline from its fitted Poisson distribution, rather than taking the optimal pick, reproduces the true draw frequency but gives up points, and backtesting the sampling entry against the optimal entry on 2018 and 2022 measures the cost (Figure~\ref{fig:realism}). The optimal entry scored 67 points in 2018 against the sampling entry's expected 46, a loss of 31 percent, and 48 against 45 in 2022, a loss of 6 percent. The cost of realism is largest exactly when the favorite-based entry does well, in the orderly 2018 tournament, and smallest when favorites disappoint, in the chaotic 2022 tournament, so realism is cheap insurance precisely in the years a points-maximizer least needs it. The three-tier rule pulls the optimal entry partway toward realism on its own, but matching reality fully still costs points.
+Crucially, the choice between them is not a trade-off of points for realism, because the realistic readout costs nothing. Backtesting both on 2018 and 2022 under the three-tier rule, the realistic readout scored 119 points across the 128 matches against the expected-value-optimal pick's 115, landed 18 exact scores against 16, and sat about nine percent closer to the actual goals (Figure~\ref{fig:realism}). The pooled points are within noise and split by tournament---the expected-value pick led the orderly 2018, 67 to 58, and the realistic readout led the chaotic 2022, 61 to 48---so neither readout systematically outscores the other. Because the realistic readout matches the points while resembling real football far more closely, I publish it; the expected value of Equation~\eqref{eq:ev} remains the yardstick that certifies the choice is free rather than the criterion that dictates the scoreline.
 
-\begin{figure}[htpb!]
-  \caption{Optimal entry against a draw-producing alternative}\label{fig:realism}
+\begin{figure}[!t]
+  \caption{The realistic scoreline readout against the points-optimal pick}\label{fig:realism}
   \begin{threeparttable}
     {\centering
-      \includegraphics[width=\textwidth]{figs/fig_realism.pdf}}
+      \includegraphics[width=\textwidth]{figs/fig_realism.pdf}\par}
     \begin{tablenotes}\notesize
-      \item Note: The optimal entry against a realistic, draw-producing alternative that samples each scoreline from its distribution. Left: draws predicted on the 2026 group stage, against the real-tournament average. Right: pool points on the 2018 and 2022 backtests, where the optimal entry scores more in both years, by 31 percent in the orderly 2018 tournament and 6 percent in the upset-heavy 2022 tournament.
+      \item \textit{Notes}: The realistic rounded-goals readout against the expected-value-optimal pick, both over the identical probability model, backtested under the 3/2/1 rule on the 128 matches of 2018 and 2022. Left: goal error per match (lower is closer to the real score) in each year and pooled, where the realistic readout lands nearer the actual scoreline and hits more exact scores (18 vs.\ 16 pooled). Right: pool points by year and pooled, level overall (119 vs.\ 115), with the points-optimal pick ahead in the orderly 2018 and the realistic readout ahead in the upset-heavy 2022.
     \end{tablenotes}
   \end{threeparttable}
 \end{figure}
@@ -529,13 +518,13 @@ The submitted bracket eliminates Portugal in the Round of 32, and this pick dema
 
 The mechanism has three steps. First, the group forecast places Portugal second in Group K behind Colombia, because the deciding fixture is an Elo near-tie (ratings 1984 against 1977) whose modal outcome favors Colombia by under three percentage points. Second, as Group K runner-up, Portugal is routed to bracket slot M83 against the Group L runner-up, Croatia. Third, and most importantly, Portugal's probability mass is split across two slots, because it wins the group nearly as often as it does not: in the simulation it emerges from the K1 slot (M87) 32.6 percent of the time and from the K2 slot (M83) 25.1 percent of the time. Croatia, by contrast, is concentrated, because England wins Group L in the large majority of simulations, so Croatia lands in M83 with high reliability and emerges from it 27.5 percent of the time. A forecaster who must write one name per slot earns more expected points from the concentrated team than from the stronger but dispersed one (Figure~\ref{fig:slotfig}).
 
-\begin{figure}[htpb!]
+\begin{figure}[!t]
   \caption{Head-to-head strength versus slot emergence}\label{fig:slotfig}
   \begin{threeparttable}
     {\centering
-      \includegraphics[width=0.88\textwidth]{figs/fig2_slot_vs_h2h.pdf}}
+      \includegraphics[width=0.88\textwidth]{figs/fig2_slot_vs_h2h.pdf}\par}
     \begin{tablenotes}\notesize
-      \item Note: Head-to-head strength versus slot emergence for the three revised knockout picks. Grey: probability the original pick wins \emph{if the predicted matchup occurs} (Elo). Orange/blue: probability the team actually occupies and wins the bracket slot across 200{,}000 simulations. All three original picks are head-to-head favorites; all three are slot-emergence underdogs.
+      \item \textit{Notes}: Head-to-head strength versus slot emergence for the three revised knockout picks. Grey: probability the original pick wins \emph{if the predicted matchup occurs} (Elo). Orange/blue: probability the team actually occupies and wins the bracket slot across 200{,}000 simulations. All three original picks are head-to-head favorites; all three are slot-emergence underdogs.
     \end{tablenotes}
   \end{threeparttable}
 \end{figure}
@@ -575,13 +564,13 @@ The fourth test is the most revealing. I obtained each team's expected goals for
 
 The fifth test puts the sharpest possible case to that conclusion, because it asks whether the archetypal intangible, penalty-shootout temperament, carries any predictive signal. Using the 24 World Cup shootouts from 1998 to 2022, I asked whether the team with the better prior shootout record wins. Only five shootouts involved two teams that each had a prior record and those records differed, and on those five the better-record team won three, a rate indistinguishable from a coin flip. The cumulative records are seductive, with Croatia at four wins and no losses and Argentina at four and one against Spain at one and three and the Netherlands at one and three, and they match the folklore exactly; but they are assembled from the very shootouts one would use them to predict, and prospectively they forecast nothing, because a team contests at most one or two shootouts a tournament and the sample never accumulates. Penalty grit is therefore real as a narrative and absent as a predictor, which is the same lesson the expected-goal analysis gives from the other side: what looks like temperament after the result is, before it, the irreducible coin the tournament tosses.
 
-\begin{figure}[htpb!]
+\begin{figure}[!t]
   \caption{Candidate improvements tested on 2018 and 2022}\label{fig:audit}
   \begin{threeparttable}
     {\centering
-      \includegraphics[width=\textwidth]{figs/fig_audit.pdf}}
+      \includegraphics[width=\textwidth]{figs/fig_audit.pdf}\par}
     \begin{tablenotes}\notesize
-      \item Note: Candidate improvements tested on 2018 and 2022. Left: in-tournament updating improves knockout prediction; forecast combination did not help on this sample; the Dixon--Coles correction, judged on realized points rather than likelihood, gives a small in-sample gain (a fifth test, penalty-shootout temperament, showed no predictive signal and is discussed in the text). Right: expected-goal difference against the stage each team reached, with the correlation only 0.39. The most dominant teams (Brazil, Germany, in red) often went out early, so much of the model's residual error is the irreducible randomness of football rather than missing information.
+      \item \textit{Notes}: Candidate improvements tested on 2018 and 2022. Left: in-tournament updating improves knockout prediction; forecast combination did not help on this sample; the Dixon--Coles correction, judged on realized points rather than likelihood, gives a small in-sample gain (a fifth test, penalty-shootout temperament, showed no predictive signal and is discussed in the text). Right: expected-goal difference against the stage each team reached, with the correlation only 0.39. The most dominant teams (Brazil, Germany, in red) often went out early, so much of the model's residual error is the irreducible randomness of football rather than missing information.
     \end{tablenotes}
   \end{threeparttable}
 \end{figure}
@@ -624,18 +613,18 @@ Figure~\ref{fig:groupqual} shows each team's qualification probability from 100{
   \caption{Qualification probability by team}\label{fig:groupqual}
   \begin{threeparttable}
     {\centering
-      \includegraphics[width=0.96\textwidth]{figs/fig_group_qual.pdf}}
+      \includegraphics[width=0.96\textwidth]{figs/fig_group_qual.pdf}\par}
     \begin{tablenotes}\notesize
-      \item Note: Qualification probability by team across 100{,}000 simulations. Dark blue is the probability of winning the group, light blue of finishing second, orange of advancing as one of the eight best third-placed teams, and grey of elimination. The number at each bar is the total qualification probability.
+      \item \textit{Notes}: Qualification probability by team across 100{,}000 simulations. Dark blue is the probability of winning the group, light blue of finishing second, orange of advancing as one of the eight best third-placed teams, and grey of elimination. The number at each bar is the total qualification probability.
     \end{tablenotes}
   \end{threeparttable}
 \end{figure}
 
-\begin{table}[htpb!]
+\begin{table}[!t]
   \centering
   \caption{Qualification probabilities by team}\label{tab:qual}
   \begin{threeparttable}
-    {\scriptsize
+    {\footnotesize
 \begin{minipage}{0.49\textwidth}\centering
 \begin{tabular}{llcccc}
 \toprule
@@ -713,15 +702,15 @@ L & England & 68 & 27 & 4 & \textbf{99} \\
 \end{tabular}
 \end{minipage}}
     \begin{tablenotes}\notesize
-      \item Note: Qualification probabilities by team (percent), 100{,}000 simulations. Columns report the probability of winning the group, finishing second, advancing as a best third-placed team ($^{*}$), and qualifying in total.
+      \item \textit{Notes}: Qualification probabilities by team (percent), 100{,}000 simulations. Columns report the probability of winning the group, finishing second, advancing as a best third-placed team ($^{*}$), and qualifying in total.
     \end{tablenotes}
   \end{threeparttable}
 \end{table}
 
-\begin{table}[htpb!]
+\begin{table}[!t]
   \centering
   \caption{Decisive fixture and primary forecast risk by group}\label{tab:watchrisk}
-  \begin{small}
+  \begin{footnotesize}
   \begin{threeparttable}
     {\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} p{0.5cm}p{5.4cm}p{6.6cm}}
       \toprule
@@ -742,204 +731,264 @@ L & England & 68 & 27 & 4 & \textbf{99} \\
       \bottomrule
     \end{tabular*}}
     \begin{tablenotes}\notesize
-      \item Note: The decisive fixture is the match that, in the simulations, most often determines the second qualification place; the primary risk is the most probable way the submitted group order is wrong.
+      \item \textit{Notes}: The decisive fixture is the match that, in the simulations, most often determines the second qualification place; the primary risk is the most probable way the submitted group order is wrong.
     \end{tablenotes}
   \end{threeparttable}
-  \end{small}
+  \end{footnotesize}
 \end{table}
 
 The group-by-group rationale follows; each paragraph states the decisive evidence behind the predicted order.
 
 \paragraph{Group A (Mexico, South Korea, Czechia, South Africa).} Mexico tops the group on the tournament's clearest host signal, because the opener is at Estadio Azteca at 2{,}240 m altitude, the market prices Mexico at 68 percent, and the striker is in form. Second place is the group's only genuine toss-up, and South Korea over Czechia rests on a 23-point Elo edge of 1756 against 1733, so their direct meeting on matchday 1 effectively decides the order. Czechia advances third.
 
-\noindent\textit{\footnotesize Predicted group table (each cell: row team's score against the column team, then the prediction's expected points in parentheses; G = goal difference, P = points):}
 
-\noindent{\footnotesize\begin{tabular}{@{}clcccccccr@{}}
+\medskip
+\noindent\begin{threeparttable}
+{\footnotesize\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}clcccccccr@{}}
 \toprule
  & Team & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{MX}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{KR}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{CZ}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{ZA}} & W & L & G & P \\
 \midrule
-1 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{MX}}~\textbf{Mexico} & --- & 1--0\,{\scriptsize(0.95)} & 1--0\,{\scriptsize(0.90)} & 1--0\,{\scriptsize(1.08)} & 3 & 0 & $+$3 & \textbf{9} \\
-2 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{KR}}~\textbf{South Korea} & 0--1\,{\scriptsize(0.95)} & --- & 1--1\,{\scriptsize(0.74)} & 1--0\,{\scriptsize(0.79)} & 1 & 1 & 0 & \textbf{4} \\
-3 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{CZ}}~Czechia & 0--1\,{\scriptsize(0.90)} & 1--1\,{\scriptsize(0.74)} & --- & 1--0\,{\scriptsize(0.84)} & 1 & 1 & 0 & 4 \\
-4 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{ZA}}~South Africa & 0--1\,{\scriptsize(1.08)} & 0--1\,{\scriptsize(0.79)} & 0--1\,{\scriptsize(0.84)} & --- & 0 & 3 & -3 & 0 \\
+1 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{MX}}~\textbf{Mexico} & --- & 2--1\,(0.88) & 2--1\,(0.84) & 2--1\,(1.02) & 3 & 0 & $+$3 & \textbf{9} \\
+2 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{KR}}~\textbf{South Korea} & 1--2\,(0.88) & --- & 1--1\,(0.74) & 2--1\,(0.73) & 1 & 1 & 0 & \textbf{4} \\
+3 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{CZ}}~Czechia & 1--2\,(0.84) & 1--1\,(0.74) & --- & 2--1\,(0.79) & 1 & 1 & 0 & 4 \\
+4 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{ZA}}~South Africa & 1--2\,(1.02) & 1--2\,(0.73) & 1--2\,(0.79) & --- & 0 & 3 & -3 & 0 \\
 \bottomrule
-\end{tabular}}
+\end{tabular*}}
+\begin{tablenotes}\notesize
+\item \textit{Notes}: Each cell is the row team's predicted score against the column team, with the prediction's expected points in parentheses; G is goal difference and P is points.
+\end{tablenotes}
+\end{threeparttable}
 
 
 \paragraph{Group B (Switzerland, Canada, Bosnia and Herzegovina, Qatar).} Switzerland carries the group's highest rating (Elo 1894) and a 50\% vs.\ 30\% market edge in the decider against host Canada. Qatar is the weakest side in the field (Elo 1423), making goal difference against them the implicit tiebreaker currency. Bosnia advances third via the Qatar fixture.
 
-\noindent\textit{\footnotesize Predicted group table (each cell: row team's score against the column team, then the prediction's expected points in parentheses; G = goal difference, P = points):}
 
-\noindent{\footnotesize\begin{tabular}{@{}clcccccccr@{}}
+\medskip
+\noindent\begin{threeparttable}
+{\footnotesize\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}clcccccccr@{}}
 \toprule
  & Team & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{CH}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{CA}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{BA}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{QA}} & W & L & G & P \\
 \midrule
-1 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{CH}}~\textbf{Switzerland} & --- & 2--1\,{\scriptsize(0.80)} & 1--0\,{\scriptsize(1.03)} & 1--0\,{\scriptsize(1.08)} & 3 & 0 & $+$3 & \textbf{9} \\
-2 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{CA}}~\textbf{Canada} & 1--2\,{\scriptsize(0.80)} & --- & 1--0\,{\scriptsize(0.90)} & 1--0\,{\scriptsize(1.12)} & 2 & 1 & $+$1 & \textbf{6} \\
-3 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{BA}}~Bosnia and Herzegovina & 0--1\,{\scriptsize(1.03)} & 0--1\,{\scriptsize(0.90)} & --- & 1--0\,{\scriptsize(0.95)} & 1 & 2 & -1 & 3 \\
-4 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{QA}}~Qatar & 0--1\,{\scriptsize(1.08)} & 0--1\,{\scriptsize(1.12)} & 0--1\,{\scriptsize(0.95)} & --- & 0 & 3 & -3 & 0 \\
+1 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{CH}}~\textbf{Switzerland} & --- & 2--1\,(0.80) & 2--1\,(0.97) & 2--1\,(1.06) & 3 & 0 & $+$3 & \textbf{9} \\
+2 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{CA}}~\textbf{Canada} & 1--2\,(0.80) & --- & 2--1\,(0.87) & 2--1\,(1.06) & 2 & 1 & $+$1 & \textbf{6} \\
+3 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{BA}}~Bosnia and Herzegovina & 1--2\,(0.97) & 1--2\,(0.87) & --- & 2--1\,(0.89) & 1 & 2 & -1 & 3 \\
+4 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{QA}}~Qatar & 1--2\,(1.06) & 1--2\,(1.06) & 1--2\,(0.89) & --- & 0 & 3 & -3 & 0 \\
 \bottomrule
-\end{tabular}}
+\end{tabular*}}
+\begin{tablenotes}\notesize
+\item \textit{Notes}: Each cell is the row team's predicted score against the column team, with the prediction's expected points in parentheses; G is goal difference and P is points.
+\end{tablenotes}
+\end{threeparttable}
 
 
 \paragraph{Group C (Brazil, Morocco, Scotland, Haiti).} Brazil wins the group despite the Rodrygo injury (rating adjusted $-20$); an Elo of 1988 and an 87\% market price against Haiti absorb the loss. The pivotal fixture is Scotland--Morocco for second, where the market is unambiguous (50\% vs.\ 23\% for Morocco). Scotland's three points are eliminated on goal difference.
 
-\noindent\textit{\footnotesize Predicted group table (each cell: row team's score against the column team, then the prediction's expected points in parentheses; G = goal difference, P = points):}
 
-\noindent{\footnotesize\begin{tabular}{@{}clcccccccr@{}}
+\medskip
+\noindent\begin{threeparttable}
+{\footnotesize\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}clcccccccr@{}}
 \toprule
  & Team & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{BR}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{MA}} & \resizebox{4mm}{2.7mm}{\flagSCO[10mm]} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{HT}} & W & L & G & P \\
 \midrule
-1 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{BR}}~\textbf{Brazil} & --- & 1--0\,{\scriptsize(0.97)} & 1--0\,{\scriptsize(1.05)} & 2--0\,{\scriptsize(1.37)} & 3 & 0 & $+$4 & \textbf{9} \\
-2 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{MA}}~\textbf{Morocco} & 0--1\,{\scriptsize(0.97)} & --- & 1--0\,{\scriptsize(0.90)} & 1--0\,{\scriptsize(1.28)} & 2 & 1 & $+$1 & \textbf{6} \\
-3 & \resizebox{4mm}{2.7mm}{\flagSCO[10mm]}~Scotland & 0--1\,{\scriptsize(1.05)} & 0--1\,{\scriptsize(0.90)} & --- & 1--0\,{\scriptsize(1.00)} & 1 & 2 & -1 & 3 \\
-4 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{HT}}~Haiti & 0--2\,{\scriptsize(1.37)} & 0--1\,{\scriptsize(1.28)} & 0--1\,{\scriptsize(1.00)} & --- & 0 & 3 & -4 & 0 \\
+1 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{BR}}~\textbf{Brazil} & --- & 2--1\,(0.94) & 2--1\,(1.02) & 2--0\,(1.37) & 3 & 0 & $+$4 & \textbf{9} \\
+2 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{MA}}~\textbf{Morocco} & 1--2\,(0.94) & --- & 2--1\,(0.84) & 2--0\,(1.22) & 2 & 1 & $+$2 & \textbf{6} \\
+3 & \resizebox{4mm}{2.7mm}{\flagSCO[10mm]}~Scotland & 1--2\,(1.02) & 1--2\,(0.84) & --- & 2--1\,(0.99) & 1 & 2 & -1 & 3 \\
+4 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{HT}}~Haiti & 0--2\,(1.37) & 0--2\,(1.22) & 1--2\,(0.99) & --- & 0 & 3 & -5 & 0 \\
 \bottomrule
-\end{tabular}}
+\end{tabular*}}
+\begin{tablenotes}\notesize
+\item \textit{Notes}: Each cell is the row team's predicted score against the column team, with the prediction's expected points in parentheses; G is goal difference and P is points.
+\end{tablenotes}
+\end{threeparttable}
 
 
-\paragraph{Group D (United States, Turkey, Paraguay, Australia).} The tightest group in the tournament and the bracket's largest group-stage risk. Turkey holds the higher rating (Elo 1906), but the United States carries the host adjustment and the group-winner market (40\% vs.\ 35\%). The head-to-head was priced at an exact tie (36.3\%/36.3\%); the submitted scoreline is the expected-value-optimal 1--1 draw, and the entry assigns the group-winner slot to the United States because simulation showed that routing places both teams in bracket slots they survive more often (Section 4.2). Paraguay advances third.
+\paragraph{Group D (United States, Turkey, Paraguay, Australia).} The tightest group in the tournament and the bracket's largest group-stage risk. Turkey holds the higher rating (Elo 1906), but the United States carries the host adjustment and the group-winner market (40\% vs.\ 35\%). The head-to-head was priced at an exact tie (36.3\%/36.3\%); the submitted scoreline is the realistic level 1--1, and the entry assigns the group-winner slot to the United States because simulation showed that routing places both teams in bracket slots they survive more often (Section 4.2). Paraguay advances third.
 
-\noindent\textit{\footnotesize Predicted group table (each cell: row team's score against the column team, then the prediction's expected points in parentheses; G = goal difference, P = points):}
 
-\noindent{\footnotesize\begin{tabular}{@{}clcccccccr@{}}
+\medskip
+\noindent\begin{threeparttable}
+{\footnotesize\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}clcccccccr@{}}
 \toprule
  & Team & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{US}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{TR}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{PY}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{AU}} & W & L & G & P \\
 \midrule
-1 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{US}}~\textbf{United States} & --- & 1--1\,{\scriptsize(0.68)} & 1--0\,{\scriptsize(0.86)} & 1--0\,{\scriptsize(0.95)} & 2 & 0 & $+$2 & \textbf{7} \\
-2 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{TR}}~\textbf{Turkey} & 1--1\,{\scriptsize(0.68)} & --- & 1--0\,{\scriptsize(0.82)} & 1--0\,{\scriptsize(0.94)} & 2 & 0 & $+$2 & \textbf{7} \\
-3 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{PY}}~Paraguay & 0--1\,{\scriptsize(0.86)} & 0--1\,{\scriptsize(0.82)} & --- & 1--0\,{\scriptsize(0.85)} & 1 & 2 & -1 & 3 \\
-4 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{AU}}~Australia & 0--1\,{\scriptsize(0.95)} & 0--1\,{\scriptsize(0.94)} & 0--1\,{\scriptsize(0.85)} & --- & 0 & 3 & -3 & 0 \\
+1 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{US}}~\textbf{United States} & --- & 1--1\,(0.68) & 2--1\,(0.81) & 2--1\,(0.89) & 2 & 0 & $+$2 & \textbf{7} \\
+2 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{TR}}~\textbf{Turkey} & 1--1\,(0.68) & --- & 2--1\,(0.75) & 2--1\,(0.87) & 2 & 0 & $+$2 & \textbf{7} \\
+3 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{PY}}~Paraguay & 1--2\,(0.81) & 1--2\,(0.75) & --- & 2--1\,(0.77) & 1 & 2 & -1 & 3 \\
+4 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{AU}}~Australia & 1--2\,(0.89) & 1--2\,(0.87) & 1--2\,(0.77) & --- & 0 & 3 & -3 & 0 \\
 \bottomrule
-\end{tabular}}
+\end{tabular*}}
+\begin{tablenotes}\notesize
+\item \textit{Notes}: Each cell is the row team's predicted score against the column team, with the prediction's expected points in parentheses; G is goal difference and P is points.
+\end{tablenotes}
+\end{threeparttable}
 
 
 \paragraph{Group E (Germany, Ecuador, Ivory Coast, Curaçao).} Germany--Curaçao is the tournament's heaviest mismatch at 92 percent, and it produces the forecast's only 3--0. Ecuador's rating of Elo 1935 exceeds several traditional powers', and the 42 against 28 percent market edge over Ivory Coast settles second. Ivory Coast advances as one of the two strongest third-placers.
 
-\noindent\textit{\footnotesize Predicted group table (each cell: row team's score against the column team, then the prediction's expected points in parentheses; G = goal difference, P = points):}
 
-\noindent{\footnotesize\begin{tabular}{@{}clcccccccr@{}}
+\medskip
+\noindent\begin{threeparttable}
+{\footnotesize\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}clcccccccr@{}}
 \toprule
  & Team & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{DE}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{EC}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{CI}} & \resizebox{4mm}{2.7mm}{\flagCUW[10mm]} & W & L & G & P \\
 \midrule
-1 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{DE}}~\textbf{Germany} & --- & 1--0\,{\scriptsize(0.95)} & 1--0\,{\scriptsize(1.04)} & 3--0\,{\scriptsize(1.32)} & 3 & 0 & $+$5 & \textbf{9} \\
-2 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{EC}}~\textbf{Ecuador} & 0--1\,{\scriptsize(0.95)} & --- & 1--0\,{\scriptsize(0.83)} & 2--0\,{\scriptsize(1.15)} & 2 & 1 & $+$2 & \textbf{6} \\
-3 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{CI}}~Ivory Coast & 0--1\,{\scriptsize(1.04)} & 0--1\,{\scriptsize(0.83)} & --- & 2--0\,{\scriptsize(1.15)} & 1 & 2 & 0 & 3 \\
-4 & \resizebox{4mm}{2.7mm}{\flagCUW[10mm]}~Curaçao & 0--3\,{\scriptsize(1.32)} & 0--2\,{\scriptsize(1.15)} & 0--2\,{\scriptsize(1.15)} & --- & 0 & 3 & -7 & 0 \\
+1 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{DE}}~\textbf{Germany} & --- & 2--1\,(0.91) & 2--1\,(0.98) & 3--0\,(1.32) & 3 & 0 & $+$5 & \textbf{9} \\
+2 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{EC}}~\textbf{Ecuador} & 1--2\,(0.91) & --- & 2--1\,(0.75) & 2--1\,(1.09) & 2 & 1 & $+$1 & \textbf{6} \\
+3 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{CI}}~Ivory Coast & 1--2\,(0.98) & 1--2\,(0.75) & --- & 2--1\,(1.09) & 1 & 2 & -1 & 3 \\
+4 & \resizebox{4mm}{2.7mm}{\flagCUW[10mm]}~Curaçao & 0--3\,(1.32) & 1--2\,(1.09) & 1--2\,(1.09) & --- & 0 & 3 & -5 & 0 \\
 \bottomrule
-\end{tabular}}
+\end{tabular*}}
+\begin{tablenotes}\notesize
+\item \textit{Notes}: Each cell is the row team's predicted score against the column team, with the prediction's expected points in parentheses; G is goal difference and P is points.
+\end{tablenotes}
+\end{threeparttable}
 
 
 \paragraph{Group F (Netherlands, Japan, Sweden, Tunisia).} The opening Netherlands--Japan fixture effectively decides the group (46\% vs.\ 28\%). The Dutch absorb the Xavi Simons loss ($-15$); Japan's Mitoma absence ($-10$) trims a key attacking channel but leaves second place secure. Sweden advances third on the Tunisia result.
 
-\noindent\textit{\footnotesize Predicted group table (each cell: row team's score against the column team, then the prediction's expected points in parentheses; G = goal difference, P = points):}
 
-\noindent{\footnotesize\begin{tabular}{@{}clcccccccr@{}}
+\medskip
+\noindent\begin{threeparttable}
+{\footnotesize\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}clcccccccr@{}}
 \toprule
  & Team & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{NL}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{JP}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{SE}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{TN}} & W & L & G & P \\
 \midrule
-1 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{NL}}~\textbf{Netherlands} & --- & 1--0\,{\scriptsize(0.81)} & 1--0\,{\scriptsize(0.99)} & 1--0\,{\scriptsize(1.04)} & 3 & 0 & $+$3 & \textbf{9} \\
-2 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{JP}}~\textbf{Japan} & 0--1\,{\scriptsize(0.81)} & --- & 1--0\,{\scriptsize(0.77)} & 1--0\,{\scriptsize(0.94)} & 2 & 1 & $+$1 & \textbf{6} \\
-3 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{SE}}~Sweden & 0--1\,{\scriptsize(0.99)} & 0--1\,{\scriptsize(0.77)} & --- & 1--0\,{\scriptsize(0.89)} & 1 & 2 & -1 & 3 \\
-4 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{TN}}~Tunisia & 0--1\,{\scriptsize(1.04)} & 0--1\,{\scriptsize(0.94)} & 0--1\,{\scriptsize(0.89)} & --- & 0 & 3 & -3 & 0 \\
+1 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{NL}}~\textbf{Netherlands} & --- & 2--1\,(0.79) & 2--1\,(0.96) & 2--1\,(0.98) & 3 & 0 & $+$3 & \textbf{9} \\
+2 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{JP}}~\textbf{Japan} & 1--2\,(0.79) & --- & 2--1\,(0.72) & 2--1\,(0.86) & 2 & 1 & $+$1 & \textbf{6} \\
+3 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{SE}}~Sweden & 1--2\,(0.96) & 1--2\,(0.72) & --- & 2--1\,(0.82) & 1 & 2 & -1 & 3 \\
+4 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{TN}}~Tunisia & 1--2\,(0.98) & 1--2\,(0.86) & 1--2\,(0.82) & --- & 0 & 3 & -3 & 0 \\
 \bottomrule
-\end{tabular}}
+\end{tabular*}}
+\begin{tablenotes}\notesize
+\item \textit{Notes}: Each cell is the row team's predicted score against the column team, with the prediction's expected points in parentheses; G is goal difference and P is points.
+\end{tablenotes}
+\end{threeparttable}
 
 
 \paragraph{Group G (Belgium, Egypt, Iran, New Zealand).} This is the weakest group by aggregate rating. Belgium wins it at modest strength, and this matters later, because the soft path inflates Belgium's slot emergence in the knockout phase (Section 4.2). Egypt over Iran decides second at 42 against 27 percent, and Iran advances third.
 
-\noindent\textit{\footnotesize Predicted group table (each cell: row team's score against the column team, then the prediction's expected points in parentheses; G = goal difference, P = points):}
 
-\noindent{\footnotesize\begin{tabular}{@{}clcccccccr@{}}
+\medskip
+\noindent\begin{threeparttable}
+{\footnotesize\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}clcccccccr@{}}
 \toprule
  & Team & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{BE}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{EG}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{IR}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{NZ}} & W & L & G & P \\
 \midrule
-1 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{BE}}~\textbf{Belgium} & --- & 1--0\,{\scriptsize(0.96)} & 1--0\,{\scriptsize(1.06)} & 2--0\,{\scriptsize(1.12)} & 3 & 0 & $+$4 & \textbf{9} \\
-2 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{EG}}~\textbf{Egypt} & 0--1\,{\scriptsize(0.96)} & --- & 1--0\,{\scriptsize(0.83)} & 1--0\,{\scriptsize(1.00)} & 2 & 1 & $+$1 & \textbf{6} \\
-3 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{IR}}~Iran & 0--1\,{\scriptsize(1.06)} & 0--1\,{\scriptsize(0.83)} & --- & 1--0\,{\scriptsize(0.91)} & 1 & 2 & -1 & 3 \\
-4 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{NZ}}~New Zealand & 0--2\,{\scriptsize(1.12)} & 0--1\,{\scriptsize(1.00)} & 0--1\,{\scriptsize(0.91)} & --- & 0 & 3 & -4 & 0 \\
+1 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{BE}}~\textbf{Belgium} & --- & 2--1\,(0.93) & 2--1\,(1.02) & 2--1\,(1.08) & 3 & 0 & $+$3 & \textbf{9} \\
+2 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{EG}}~\textbf{Egypt} & 1--2\,(0.93) & --- & 2--1\,(0.75) & 2--1\,(0.92) & 2 & 1 & $+$1 & \textbf{6} \\
+3 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{IR}}~Iran & 1--2\,(1.02) & 1--2\,(0.75) & --- & 2--1\,(0.86) & 1 & 2 & -1 & 3 \\
+4 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{NZ}}~New Zealand & 1--2\,(1.08) & 1--2\,(0.92) & 1--2\,(0.86) & --- & 0 & 3 & -3 & 0 \\
 \bottomrule
-\end{tabular}}
+\end{tabular*}}
+\begin{tablenotes}\notesize
+\item \textit{Notes}: Each cell is the row team's predicted score against the column team, with the prediction's expected points in parentheses; G is goal difference and P is points.
+\end{tablenotes}
+\end{threeparttable}
 
 
 \paragraph{Group H (Spain, Uruguay, Cape Verde, Saudi Arabia).} The champion pick's runway: Spain is the field's highest-rated team (Elo 2165) and an 85\%+ market favorite in two of three fixtures. Uruguay's healthy squad takes second. Cape Verde's three points fall on goal difference.
 
-\noindent\textit{\footnotesize Predicted group table (each cell: row team's score against the column team, then the prediction's expected points in parentheses; G = goal difference, P = points):}
 
-\noindent{\footnotesize\begin{tabular}{@{}clcccccccr@{}}
+\medskip
+\noindent\begin{threeparttable}
+{\footnotesize\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}clcccccccr@{}}
 \toprule
  & Team & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{ES}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{UY}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{CV}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{SA}} & W & L & G & P \\
 \midrule
-1 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{ES}}~\textbf{Spain} & --- & 1--0\,{\scriptsize(0.98)} & 2--0\,{\scriptsize(1.22)} & 2--0\,{\scriptsize(1.18)} & 3 & 0 & $+$5 & \textbf{9} \\
-2 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{UY}}~\textbf{Uruguay} & 0--1\,{\scriptsize(0.98)} & --- & 1--0\,{\scriptsize(1.08)} & 1--0\,{\scriptsize(1.02)} & 2 & 1 & $+$1 & \textbf{6} \\
-3 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{CV}}~Cape Verde & 0--2\,{\scriptsize(1.22)} & 0--1\,{\scriptsize(1.08)} & --- & 1--0\,{\scriptsize(0.75)} & 1 & 2 & -2 & 3 \\
-4 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{SA}}~Saudi Arabia & 0--2\,{\scriptsize(1.18)} & 0--1\,{\scriptsize(1.02)} & 0--1\,{\scriptsize(0.75)} & --- & 0 & 3 & -4 & 0 \\
+1 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{ES}}~\textbf{Spain} & --- & 2--1\,(0.92) & 3--0\,(1.18) & 3--1\,(1.12) & 3 & 0 & $+$6 & \textbf{9} \\
+2 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{UY}}~\textbf{Uruguay} & 1--2\,(0.92) & --- & 2--1\,(1.02) & 2--1\,(0.97) & 2 & 1 & $+$1 & \textbf{6} \\
+3 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{CV}}~Cape Verde & 0--3\,(1.18) & 1--2\,(1.02) & --- & 2--1\,(0.70) & 1 & 2 & -3 & 3 \\
+4 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{SA}}~Saudi Arabia & 1--3\,(1.12) & 1--2\,(0.97) & 1--2\,(0.70) & --- & 0 & 3 & -4 & 0 \\
 \bottomrule
-\end{tabular}}
+\end{tabular*}}
+\begin{tablenotes}\notesize
+\item \textit{Notes}: Each cell is the row team's predicted score against the column team, with the prediction's expected points in parentheses; G is goal difference and P is points.
+\end{tablenotes}
+\end{threeparttable}
 
 
 \paragraph{Group I (France, Norway, Senegal, Iraq).} France tops the group at a 66 percent market price. Norway is at a first World Cup since 1998 and the group-winner market puts it at 24 percent against Senegal's 10 percent, so Norway takes second via the matchday-2 meeting with Senegal (Elo 1917 against 1866). Senegal advances as the tournament's strongest third-placer, which is consequential, because it is the predicted Round-of-32 opponent in Portugal's slot.
 
-\noindent\textit{\footnotesize Predicted group table (each cell: row team's score against the column team, then the prediction's expected points in parentheses; G = goal difference, P = points):}
 
-\noindent{\footnotesize\begin{tabular}{@{}clcccccccr@{}}
+\medskip
+\noindent\begin{threeparttable}
+{\footnotesize\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}clcccccccr@{}}
 \toprule
  & Team & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{FR}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{NO}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{SN}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{IQ}} & W & L & G & P \\
 \midrule
-1 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{FR}}~\textbf{France} & --- & 1--0\,{\scriptsize(0.94)} & 1--0\,{\scriptsize(1.02)} & 2--0\,{\scriptsize(1.35)} & 3 & 0 & $+$4 & \textbf{9} \\
-2 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{NO}}~\textbf{Norway} & 0--1\,{\scriptsize(0.94)} & --- & 1--0\,{\scriptsize(0.88)} & 2--0\,{\scriptsize(1.12)} & 2 & 1 & $+$2 & \textbf{6} \\
-3 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{SN}}~Senegal & 0--1\,{\scriptsize(1.02)} & 0--1\,{\scriptsize(0.88)} & --- & 2--0\,{\scriptsize(1.11)} & 1 & 2 & 0 & 3 \\
-4 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{IQ}}~Iraq & 0--2\,{\scriptsize(1.35)} & 0--2\,{\scriptsize(1.12)} & 0--2\,{\scriptsize(1.11)} & --- & 0 & 3 & -6 & 0 \\
+1 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{FR}}~\textbf{France} & --- & 2--1\,(0.90) & 2--1\,(0.95) & 3--0\,(1.31) & 3 & 0 & $+$5 & \textbf{9} \\
+2 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{NO}}~\textbf{Norway} & 1--2\,(0.90) & --- & 2--1\,(0.82) & 3--1\,(1.07) & 2 & 1 & $+$2 & \textbf{6} \\
+3 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{SN}}~Senegal & 1--2\,(0.95) & 1--2\,(0.82) & --- & 3--1\,(1.07) & 1 & 2 & 0 & 3 \\
+4 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{IQ}}~Iraq & 0--3\,(1.31) & 1--3\,(1.07) & 1--3\,(1.07) & --- & 0 & 3 & -7 & 0 \\
 \bottomrule
-\end{tabular}}
+\end{tabular*}}
+\begin{tablenotes}\notesize
+\item \textit{Notes}: Each cell is the row team's predicted score against the column team, with the prediction's expected points in parentheses; G is goal difference and P is points.
+\end{tablenotes}
+\end{threeparttable}
 
 
 \paragraph{Group J (Argentina, Austria, Algeria, Jordan).} The lowest-variance group for the bracket: Argentina (Elo 2113) is a 63\%+ favorite in every fixture. Austria (Elo 1830) beats Algeria in the decider for second (43\% vs.\ 28\%); Algeria advances third.
 
-\noindent\textit{\footnotesize Predicted group table (each cell: row team's score against the column team, then the prediction's expected points in parentheses; G = goal difference, P = points):}
 
-\noindent{\footnotesize\begin{tabular}{@{}clcccccccr@{}}
+\medskip
+\noindent\begin{threeparttable}
+{\footnotesize\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}clcccccccr@{}}
 \toprule
  & Team & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{AR}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{AT}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{DZ}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{JO}} & W & L & G & P \\
 \midrule
-1 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{AR}}~\textbf{Argentina} & --- & 2--0\,{\scriptsize(1.15)} & 1--0\,{\scriptsize(1.08)} & 2--0\,{\scriptsize(1.22)} & 3 & 0 & $+$5 & \textbf{9} \\
-2 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{AT}}~\textbf{Austria} & 0--2\,{\scriptsize(1.15)} & --- & 1--0\,{\scriptsize(0.80)} & 1--0\,{\scriptsize(1.07)} & 2 & 1 & 0 & \textbf{6} \\
-3 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{DZ}}~Algeria & 0--1\,{\scriptsize(1.08)} & 0--1\,{\scriptsize(0.80)} & --- & 1--0\,{\scriptsize(0.75)} & 1 & 2 & -1 & 3 \\
-4 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{JO}}~Jordan & 0--2\,{\scriptsize(1.22)} & 0--1\,{\scriptsize(1.07)} & 0--1\,{\scriptsize(0.75)} & --- & 0 & 3 & -4 & 0 \\
+1 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{AR}}~\textbf{Argentina} & --- & 3--1\,(1.09) & 2--1\,(0.99) & 3--0\,(1.18) & 3 & 0 & $+$6 & \textbf{9} \\
+2 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{AT}}~\textbf{Austria} & 1--3\,(1.09) & --- & 2--1\,(0.75) & 2--1\,(1.03) & 2 & 1 & 0 & \textbf{6} \\
+3 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{DZ}}~Algeria & 1--2\,(0.99) & 1--2\,(0.75) & --- & 2--1\,(0.70) & 1 & 2 & -1 & 3 \\
+4 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{JO}}~Jordan & 0--3\,(1.18) & 1--2\,(1.03) & 1--2\,(0.70) & --- & 0 & 3 & -5 & 0 \\
 \bottomrule
-\end{tabular}}
+\end{tabular*}}
+\begin{tablenotes}\notesize
+\item \textit{Notes}: Each cell is the row team's predicted score against the column team, with the prediction's expected points in parentheses; G is goal difference and P is points.
+\end{tablenotes}
+\end{threeparttable}
 
 
 \paragraph{Group K (Portugal, Colombia, Uzbekistan, Congo DR).} This is the recalibrated group (Section 5.4). Raw Elo priced Portugal--Colombia as a tie, but the group-winner prediction markets priced Portugal at 63 percent against Colombia's 32 percent, which implies a 140-point effective gap. Portugal therefore tops the group via a 1--0 in the direct meeting, and this is the single revision that converts Portugal's predicted tournament from a Round-of-32 exit to a quarter-final run. It remains the bracket's most explicitly flagged sensitivity.
 
-\noindent\textit{\footnotesize Predicted group table (each cell: row team's score against the column team, then the prediction's expected points in parentheses; G = goal difference, P = points):}
 
-\noindent{\footnotesize\begin{tabular}{@{}clcccccccr@{}}
+\medskip
+\noindent\begin{threeparttable}
+{\footnotesize\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}clcccccccr@{}}
 \toprule
  & Team & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{PT}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{CO}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{UZ}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{CD}} & W & L & G & P \\
 \midrule
-1 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{PT}}~\textbf{Portugal} & --- & 1--0\,{\scriptsize(0.95)} & 2--0\,{\scriptsize(1.12)} & 1--0\,{\scriptsize(1.08)} & 3 & 0 & $+$4 & \textbf{9} \\
-2 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{CO}}~\textbf{Colombia} & 0--1\,{\scriptsize(0.95)} & --- & 1--0\,{\scriptsize(1.06)} & 2--0\,{\scriptsize(1.18)} & 2 & 1 & $+$2 & \textbf{6} \\
-3 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{UZ}}~Uzbekistan & 0--2\,{\scriptsize(1.12)} & 0--1\,{\scriptsize(1.06)} & --- & 1--0\,{\scriptsize(0.75)} & 1 & 2 & -2 & 3 \\
-4 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{CD}}~Congo DR & 0--1\,{\scriptsize(1.08)} & 0--2\,{\scriptsize(1.18)} & 0--1\,{\scriptsize(0.75)} & --- & 0 & 3 & -4 & 0 \\
+1 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{PT}}~\textbf{Portugal} & --- & 2--1\,(0.59) & 3--1\,(1.07) & 2--1\,(1.05) & 3 & 0 & $+$4 & \textbf{9} \\
+2 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{CO}}~\textbf{Colombia} & 1--2\,(0.59) & --- & 2--1\,(1.02) & 3--1\,(1.12) & 2 & 1 & $+$2 & \textbf{6} \\
+3 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{UZ}}~Uzbekistan & 1--3\,(1.07) & 1--2\,(1.02) & --- & 2--1\,(0.70) & 1 & 2 & -2 & 3 \\
+4 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{CD}}~Congo DR & 1--2\,(1.05) & 1--3\,(1.12) & 1--2\,(0.70) & --- & 0 & 3 & -4 & 0 \\
 \bottomrule
-\end{tabular}}
+\end{tabular*}}
+\begin{tablenotes}\notesize
+\item \textit{Notes}: Each cell is the row team's predicted score against the column team, with the prediction's expected points in parentheses; G is goal difference and P is points.
+\end{tablenotes}
+\end{threeparttable}
 
 
 \paragraph{Group L (England, Croatia, Ghana, Panama).} England's dominance, at a 68 percent group-winner price with no injury concerns, is the bracket's quiet engine, because England nearly always wins the group, so Croatia nearly always finishes second and its probability mass concentrates in one Round-of-32 slot. This is the basis of the Croatia-over-Portugal slot decision before the Group K recalibration and of Croatia-over-Colombia after it. Croatia's poor warm-up form, worth a $-10$ adjustment, does not threaten second place against Ghana (Elo 1503) and Panama.
 
-\noindent\textit{\footnotesize Predicted group table (each cell: row team's score against the column team, then the prediction's expected points in parentheses; G = goal difference, P = points):}
 
-\noindent{\footnotesize\begin{tabular}{@{}clcccccccr@{}}
+\medskip
+\noindent\begin{threeparttable}
+{\footnotesize\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}clcccccccr@{}}
 \toprule
  & Team & \resizebox{4mm}{2.7mm}{\flagENG[10mm]} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{HR}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{GH}} & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{PA}} & W & L & G & P \\
 \midrule
-1 & \resizebox{4mm}{2.7mm}{\flagENG[10mm]}~\textbf{England} & --- & 1--0\,{\scriptsize(0.94)} & 2--0\,{\scriptsize(1.37)} & 2--0\,{\scriptsize(1.06)} & 3 & 0 & $+$5 & \textbf{9} \\
-2 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{HR}}~\textbf{Croatia} & 0--1\,{\scriptsize(0.94)} & --- & 2--0\,{\scriptsize(1.29)} & 1--0\,{\scriptsize(0.99)} & 2 & 1 & $+$2 & \textbf{6} \\
-3 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{GH}}~Ghana & 0--2\,{\scriptsize(1.37)} & 0--2\,{\scriptsize(1.29)} & --- & 1--0\,{\scriptsize(0.84)} & 1 & 2 & -3 & 3 \\
-4 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{PA}}~Panama & 0--2\,{\scriptsize(1.06)} & 0--1\,{\scriptsize(0.99)} & 0--1\,{\scriptsize(0.84)} & --- & 0 & 3 & -4 & 0 \\
+1 & \resizebox{4mm}{2.7mm}{\flagENG[10mm]}~\textbf{England} & --- & 2--1\,(0.90) & 3--0\,(1.34) & 2--1\,(1.05) & 3 & 0 & $+$5 & \textbf{9} \\
+2 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{HR}}~\textbf{Croatia} & 1--2\,(0.90) & --- & 3--0\,(1.26) & 2--1\,(0.95) & 2 & 1 & $+$3 & \textbf{6} \\
+3 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{GH}}~Ghana & 0--3\,(1.34) & 0--3\,(1.26) & --- & 2--1\,(0.81) & 1 & 2 & -5 & 3 \\
+4 & \resizebox{4mm}{2.7mm}{\worldflag[width=10mm]{PA}}~Panama & 1--2\,(1.05) & 1--2\,(0.95) & 1--2\,(0.81) & --- & 0 & 3 & -3 & 0 \\
 \bottomrule
-\end{tabular}}
+\end{tabular*}}
+\begin{tablenotes}\notesize
+\item \textit{Notes}: Each cell is the row team's predicted score against the column team, with the prediction's expected points in parentheses; G is goal difference and P is points.
+\end{tablenotes}
+\end{threeparttable}
 
 
 \section{Knockout bracket rationale}\label{app:bracket}
@@ -951,9 +1000,9 @@ The complete submitted knockout entry is shown in Figure~\ref{fig:bracket}, with
   \caption{The submitted knockout bracket}\label{fig:bracket}
   \begin{threeparttable}
     {\centering
-      \includegraphics[width=\linewidth]{figs/fig_bracket.pdf}}
+      \includegraphics[width=\linewidth]{figs/fig_bracket.pdf}\par}
     \begin{tablenotes}\notesize
-      \item Note: The full submitted bracket, both halves converging on the predicted Spain--Argentina final (Spain champion, gold). Winners are shaded blue and eliminated teams grey. Each tie carries its predicted scoreline, read top box first, so a $0$--$1$ means the lower team won by that score. Each Round-of-32 box is tagged with its group origin: the letter is the group and the digit the finishing place ($1$ winner, $2$ runner-up, $3$ best-third), and the eight $3$s are exactly the eight best third-placed teams that complete the 32-team field. Flags are drawn schematically and disambiguated by the three-letter codes. Resolved from the locked entry; regenerated by \texttt{scripts/make\_bracket\_tikz.py}.
+      \item \textit{Notes}: The full submitted bracket, both halves converging on the predicted Spain--Argentina final (Spain champion, gold). Winners are shaded blue and eliminated teams grey. Each tie carries its predicted scoreline, read top box first, so a $0$--$1$ means the lower team won by that score. Each Round-of-32 box is tagged with its group origin: the letter is the group and the digit the finishing place ($1$ winner, $2$ runner-up, $3$ best-third), and the eight $3$s are exactly the eight best third-placed teams that complete the 32-team field. Flags are drawn schematically and disambiguated by the three-letter codes. Resolved from the locked entry; regenerated by \texttt{scripts/make\_bracket\_tikz.py}.
     \end{tablenotes}
   \end{threeparttable}
 \end{figure}
@@ -965,7 +1014,7 @@ The complete submitted knockout entry is shown in Figure~\ref{fig:bracket}, with
 
 \paragraph{Quarter-finals.} France--Netherlands is the closest tie (56/19/25); squad depth decides it. Spain dispatches Belgium (71\%). England over Brazil is the bracket's boldest call: a 44\%/28\% edge resting on Brazil's compounding attacking injuries (Rodrygo out, Neymar doubtful). Argentina ends Portugal's recalibrated run (38\% vs.\ 21\% slot emergence).
 
-\paragraph{Semi-finals and final.} Spain over France (48 against 25 percent) and Argentina over England (50 against 24 percent) produce the modal final. Spain--Argentina occurs in 10.8 percent of simulations, more than any other pairing, and Spain wins 59 percent of the simulated finals. The predicted 1--0 carries 13.2 percent probability. One honesty constraint bears repeating, because the modal champion fails in 72.6 percent of simulations, and the entry is the single bet that maximizes expected points rather than a confident prediction of the winner.
+\paragraph{Semi-finals and final.} Spain over France (48 against 25 percent) and Argentina over England (50 against 24 percent) produce the modal final. Spain--Argentina occurs in 10.8 percent of simulations, more than any other pairing, and Spain wins 59 percent of the simulated finals. The published realistic scoreline, 2--1, carries 8.2 percent probability, and even the single most likely scoreline, 1--0, only 13.2. One honesty constraint bears repeating, because the modal champion fails in 72.6 percent of simulations: the entry is built to score points and to resemble plausible scores, not to predict the winner with confidence.
 
 \section{Stage-by-stage outcome distributions}\label{app:survival}
 
@@ -980,7 +1029,7 @@ Third, the table separates teams that survive from teams that threaten. The Unit
 \begin{table}[p]
   \centering
   \caption{Probability of reaching each stage, all 48 teams}\label{tab:survival}
-  \begin{small}
+  \begin{footnotesize}
   \begin{threeparttable}
     {\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} lcccccc}
       \toprule
@@ -1037,10 +1086,10 @@ Curaçao                &  6.8\% &  0.6\% &  0.1\% &  0.0\% &  0.0\% &  0.0\% \\
       \bottomrule
     \end{tabular*}}
     \begin{tablenotes}\notesize
-      \item Note: Cumulative probabilities, recalibrated model, $N$ = 200{,}000.
+      \item \textit{Notes}: Cumulative probabilities, recalibrated model, $N$ = 200{,}000.
     \end{tablenotes}
   \end{threeparttable}
-  \end{small}
+  \end{footnotesize}
 \end{table}
 
 The bracket I submit to the pool is a single path through these distributions and not their summary. The entry has England reaching the semi-finals, an event with probability 29.3 percent, and the bracket bets on it not because it is likely in absolute terms but because no alternative occupant of that path is likelier. The distributions are the honest backdrop against which the point forecast should be read.
@@ -1049,12 +1098,12 @@ The bracket I submit to the pool is a single path through these distributions an
 
 To see which modeling layer is responsible for which forecast feature, I rebuild the model cumulatively in the order the layers were actually added and re-simulate at each rung, with 20{,}000 iterations per rung (Table~\ref{tab:ablation}). The champion-probability standard errors are about 0.3 pp, so single-step changes under 0.6 pp are within noise. The contributions are order-dependent, and a Shapley-style averaging over orderings would remove this, but the chronological order matches the model's construction and keeps each delta interpretable.
 
-\begin{table}[htpb!]
+\begin{table}[!t]
   \centering
   \caption{Cumulative ablation of champion probabilities}\label{tab:ablation}
-  \begin{small}
+  \begin{footnotesize}
   \begin{threeparttable}
-    {\scriptsize\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} lcccccccc}
+    {\footnotesize\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} lcccccccc}
       \toprule
       Model rung & Spain & Argentina & France & Portugal & England & Brazil & Mexico & P(POR tops K) \\
       \midrule
@@ -1066,10 +1115,10 @@ To see which modeling layer is responsible for which forecast feature, I rebuild
       \bottomrule
     \end{tabular*}}
     \begin{tablenotes}\notesize
-      \item Note: Champion probabilities (\%) as model layers are added.
+      \item \textit{Notes}: Champion probabilities (\%) as model layers are added.
     \end{tablenotes}
   \end{threeparttable}
-  \end{small}
+  \end{footnotesize}
 \end{table}
 
 I draw three conclusions. First, the podium is robust to the baseline, because Spain, Argentina, and France hold their ranks and approximate levels from raw Elo onward, and no layer of the model manufactures the headline forecast. Second, the largest single factor in the entire framework is informational rather than methodological, because the Group K market recalibration moves Portugal by 5.2 pp, more than the combined effect of the market-odds tier, all of the injury adjustments, and host advantage produces on any team. Third, each layer's footprint is local and sensible, because the injury rung costs Brazil 0.9 pp through the Rodrygo adjustment alone, and the host rung gives Mexico 0.5 pp and nobody else anything material. The market-odds rung barely moves champion probabilities, because the market and Elo agree on the strength hierarchy, and the value of that tier lies instead in scoreline precision for per-match scoring, which champion probabilities cannot register.
@@ -1128,10 +1177,10 @@ The single free parameter $k$ governs a bias-variance trade-off: too small and t
 
 A leave-one-tournament-out cross-validation nonetheless shows the benefit is genuinely out of sample, not an artifact of tuning $k$ on the same data it is evaluated on. Fitting $k$ on 2018 alone ($k=60$) and applying it untouched to 2022 lifts the eventual finalists by $+7.2$ points and lowers Argentina's champion log-loss from $2.01$ to $1.76$; fitting on 2022 alone ($k=40$) and applying it to 2018 lifts the finalists by $+1.8$ points and lowers France's log-loss from $2.69$ to $2.41$. The effect is signed-positive in both held-out directions but markedly weaker on 2018, where France won its group unconvincingly and the performance signal had less to add. This rests the learning tuning on the same two-tournament basis as the frozen backtest of Section~\ref{sec:backtest}, with the honest caveat that two tournaments and two single-champion targets cannot pin the rate precisely.
 
-\begin{table}[htpb!]
+\begin{table}[!t]
   \centering
   \caption{Learning-rate sweep on the 2022 World Cup}\label{tab:ksweep22}
-  \begin{small}
+  \begin{footnotesize}
   \begin{threeparttable}
     {\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l *{9}{c}}
       \toprule
@@ -1143,18 +1192,18 @@ A leave-one-tournament-out cross-validation nonetheless shows the benefit is gen
       \bottomrule
     \end{tabular*}}
     \begin{tablenotes}\notesize
-      \item Note: The learning rate $k$ is swept on the 2022 group-stage replay ($N=3{,}000$ simulations), each value scored by the probability the learning track's end-of-group forecast places on the team that actually won, Argentina. The model's confidence in the real champion and the champion log-loss both optimize at $k=40$ (bold). At $k=0$ the learning track reproduces the frozen track.
+      \item \textit{Notes}: The learning rate $k$ is swept on the 2022 group-stage replay ($N=3{,}000$ simulations), each value scored by the probability the learning track's end-of-group forecast places on the team that actually won, Argentina. The model's confidence in the real champion and the champion log-loss both optimize at $k=40$ (bold). At $k=0$ the learning track reproduces the frozen track.
     \end{tablenotes}
   \end{threeparttable}
-  \end{small}
+  \end{footnotesize}
 \end{table}
 
-\begin{table}[htpb!]
+\begin{table}[!t]
   \centering
   \caption{Learning-rate sweep on the 2018 World Cup}\label{tab:ksweep18}
-  \begin{small}
+  \begin{footnotesize}
   \begin{threeparttable}
-    {\scriptsize\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l *{9}{c}}
+    {\footnotesize\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l *{9}{c}}
       \toprule
       $k$ & 0 & 20 & 40 & \textbf{60} & 80 & 120 & 160 & 220 & 300 \\
       \midrule
@@ -1164,19 +1213,19 @@ A leave-one-tournament-out cross-validation nonetheless shows the benefit is gen
       \bottomrule
     \end{tabular*}}
     \begin{tablenotes}\notesize
-      \item Note: 2018 group-stage replay ($N=3{,}000$). A genuine out-of-sample test, because France won its group unconvincingly; learning still helps, with a flat optimum near $k=60$ (bold).
+      \item \textit{Notes}: 2018 group-stage replay ($N=3{,}000$). A genuine out-of-sample test, because France won its group unconvincingly; learning still helps, with a flat optimum near $k=60$ (bold).
     \end{tablenotes}
   \end{threeparttable}
-  \end{small}
+  \end{footnotesize}
 \end{table}
 
-\begin{figure}[htpb!]
+\begin{figure}[!t]
   \caption{Learning-rate sweep on two World Cups}\label{fig:ksweep}
   \begin{threeparttable}
     {\centering
-      \includegraphics[width=0.85\textwidth]{figs/fig_ksweep_2tourn.pdf}}
+      \includegraphics[width=0.85\textwidth]{figs/fig_ksweep_2tourn.pdf}\par}
     \begin{tablenotes}\notesize
-      \item Note: The learning-rate sweep on two World Cups. The vertical axis is the improvement of the learning track's champion log-loss over the frozen track (higher is better), against the learning rate $k$. Learning helps in both tournaments across a wide range of $k$, the 2022 optimum falling near $40$ and the 2018 optimum near $60$, and over-reacts (turns negative) at large $k$. The default $k=50$ is the midpoint of the two optima.
+      \item \textit{Notes}: The learning-rate sweep on two World Cups. The vertical axis is the improvement of the learning track's champion log-loss over the frozen track (higher is better), against the learning rate $k$. Learning helps in both tournaments across a wide range of $k$, the 2022 optimum falling near $40$ and the 2018 optimum near $60$, and over-reacts (turns negative) at large $k$. The default $k=50$ is the midpoint of the two optima.
     \end{tablenotes}
   \end{threeparttable}
 \end{figure}
@@ -1189,10 +1238,10 @@ The stress test then probes the engine and the data layer at their limits (Table
 
 Two further controls address the sharper question of whether the lift is the performance signal itself or merely the effect of giving the learning track one adjustable parameter. The first is a placebo: shuffling the observed expected goals across the games, so that the learning track updates on a real but mismatched performance signal, collapses the lift from $+6.8$ to $-5.3 \pm 6.7$ points on 2022 and from $+2.5$ to $+0.6 \pm 4.7$ on 2018 (four shuffles each). The benefit requires the signal to match the game; the free parameter alone does not produce it. The second validates the proxy directly. Its coefficient is stable across tournaments, $0.326$ fit on 2018 alone against $0.314$ on 2022, and it predicts match goals with a root-mean-square error of $0.99$ on 2018 and $1.09$ on 2022, below the $1.18$ and $1.32$ of a mean-goals baseline; fitting the coefficient on one tournament and predicting the other gives the same range. The proxy is a crude one-coefficient signal, but it carries genuine, transferable information about goals, and the learning benefit travels with it rather than with the tuning knob.
 
-\begin{table}[htpb!]
+\begin{table}[!t]
   \centering
   \caption{Pre-tournament stress test}\label{tab:stress}
-  \begin{small}
+  \begin{footnotesize}
   \begin{threeparttable}
     {\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} llll}
       \toprule
@@ -1212,10 +1261,10 @@ Two further controls address the sharper question of whether the lift is the per
       \bottomrule
     \end{tabular*}}
     \begin{tablenotes}\notesize
-      \item Note: Top: adversarial scenarios probing the learning engine and data layer (all passed). Bottom: robustness of the headline finding, the learning track's lift of the eventual finalists' champion mass over the frozen track, under seed, rating, and proxy perturbations.
+      \item \textit{Notes}: Top: adversarial scenarios probing the learning engine and data layer (all passed). Bottom: robustness of the headline finding, the learning track's lift of the eventual finalists' champion mass over the frozen track, under seed, rating, and proxy perturbations.
     \end{tablenotes}
   \end{threeparttable}
-  \end{small}
+  \end{footnotesize}
 \end{table}
 
 \subsection*{D.8 \quad Reproducibility}
