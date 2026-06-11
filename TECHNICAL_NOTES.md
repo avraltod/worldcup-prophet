@@ -34,7 +34,82 @@ Two contracts hold for the whole document:
 
 ## 0. The goal shapes everything — the 3/2/1 objective as a decision problem
 
-*(section pending)*
+The pool awards points per match by comparing the predicted scoreline
+$(\hat h, \hat a)$ to the realized one $(h, a)$. Write the realized result as
+$r = \operatorname{sgn}(h - a) \in \{+1, 0, -1\}$ (home win, draw, away win) and the
+predicted result as $\hat r = \operatorname{sgn}(\hat h - \hat a)$. The score function
+is
+
+$$
+S(\hat h, \hat a;\, h, a) =
+\begin{cases}
+3 & \text{if } (\hat h, \hat a) = (h, a) \\
+2 & \text{if } \hat r = r \text{ and } \hat h - \hat a = h - a \\
+1 & \text{if } \hat r = r \\
+0 & \text{otherwise.}
+\end{cases}
+$$
+
+*Anchor: `scripts/scoring.py:score_match` — tiers checked in exactly this order
+(exact, then result+goal-difference, then result).*
+
+The tiers are **nested**: an exact hit implies the right goal difference, which
+implies the right result. So the score decomposes into three indicator variables,
+
+$$
+S = \mathbf{1}[\hat r = r] \;+\; \mathbf{1}[\hat r = r,\ \hat h - \hat a = h - a]
+\;+\; \mathbf{1}[(\hat h, \hat a) = (h, a)],
+$$
+
+and taking expectations under the match's scoreline distribution $P(h, a)$ gives the
+identity the code actually computes:
+
+$$
+\mathbb{E}\,[S(\hat h, \hat a)] \;=\; P(\text{result}) \;+\;
+P(\text{result and goal difference}) \;+\; P(\text{exact}).
+$$
+
+*Anchor: `scripts/ev321.py:ev_321` — returns `p_exact + p_rg + p_r`, the three terms
+summed over the scoreline grid $\{0,\dots,8\}^2$ (`MAX_G = 8`).*
+
+**The decision problem.** Given a scoreline distribution $P(h,a)$ for the match
+(built in §3), the model's pick is the expected-points maximizer
+
+$$
+(\hat h, \hat a) \;=\; \underset{(\hat h, \hat a)\, \in\, \{0,\dots,8\}^2}{\arg\max}\;
+\mathbb{E}\,[S(\hat h, \hat a;\, h, a)],
+$$
+
+found by brute force over all $81$ candidate scorelines.
+
+*Anchor: `scripts/ev321.py:best_pick` — exhaustive search over the $9 \times 9$ grid;
+ties keep the first maximizer encountered in row-major order.*
+
+**Why this is not "pick the most likely result."** The objective rewards margins, not
+just winners, and that changes the optimum in two systematic ways:
+
+1. *One-goal margins dominate.* For realistic goal rates, the goal-difference tier
+   $P(h - a = 1)$ concentrates on $\hat h - \hat a = 1$, pulling picks toward 1-0
+   and 2-1 (made precise in §3).
+2. *Draws pool their goal difference.* Every draw shares $h - a = 0$, so a 1-1
+   prediction banks the 2-point tier on **any** drawn scoreline:
+
+$$
+\mathbb{E}\,[S(1,1)] \;=\; 2\,p_D \;+\; P(1,1) ,
+$$
+
+since $\mathbf{1}[\hat r = r]$ and the goal-difference indicator coincide whenever the
+match is drawn. No win prediction enjoys this pooling — a 1-0 pick needs the margin
+to be exactly one. On evenly-matched games ($p_D$ near its Poisson ceiling), 1-1 is
+therefore the expected-points optimum even when neither side is a likely winner.
+
+**As implemented.** `ev321.py` evaluates $\mathbb{E}[S]$ exactly (no simulation) on
+the truncated grid $\{0,\dots,8\}^2$; the truncation error is the Poisson tail mass
+beyond 8 goals, negligible at football rates ($P(X > 8) < 10^{-5}$ at
+$\lambda = 2$). `scoring.py:score_match` applies the same tiers to realized results
+during the live run, alongside two diagnostics: the outcome probability assigned to
+the realized result, and the Brier score
+$\sum_{j \in \{H,D,A\}} (p_j - \mathbf{1}[j = r])^2$.
 
 ## 1. Inputs — from information to numbers
 
