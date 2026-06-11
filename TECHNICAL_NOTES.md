@@ -737,7 +737,69 @@ to about a second.
 
 ## 9. The learning update: net surprise and regularized drift
 
-*(section pending)*
+**Net surprise.** After a match, each team's performance is compared to expectation
+on both sides of the ball and netted:
+
+$$
+s_{home} \;=\;
+\underbrace{\bigl(\lambda_{obs}^{home} - \lambda_{exp}^{home}\bigr)}_{\text{attack: out-produced expectation}}
+\;-\;
+\underbrace{\bigl(\lambda_{obs}^{away} - \lambda_{exp}^{away}\bigr)}_{\text{defense: leaked above expectation}},
+\qquad s_{away} = -\,s_{home}.
+$$
+
+The construction is **zero-sum by definition** — one team's positive surprise is
+exactly the other's negative — so learning redistributes strength rather than
+inflating it. The expectations $\lambda_{exp}$ are computed at the learning track's
+*current* ratings (baseline + drift), so a team that has already been upgraded must
+keep over-performing to keep earning.
+
+*Anchor: `scripts/learn.py:net_surprise` and `LearningTrack.apply_match`.*
+
+**The drift update.** Each team carries an accumulated drift $d_i$ (initialized to
+0) on top of its frozen baseline, $R_i^{\mathrm{learn}} = R_i + d_i$. One match
+updates it as
+
+$$
+d_i \;\leftarrow\; \gamma\, d_i \;+\;
+\operatorname{clip}\bigl(k\, s_i,\ -B,\ +B\bigr),
+\qquad
+k = 50, \quad \gamma = 0.95, \quad B = 75 .
+$$
+
+Note the exact form, extracted from the code: the **clip binds the per-match step**
+$k s_i$, not the accumulated drift. The drift itself is bounded only geometrically
+— after $n$ matches $|d_i| \le B\,\tfrac{1 - \gamma^n}{1 - \gamma}$ (about
+$214$ Elo over a 3-game group stage, $453$ over a full 7-game run) — though
+realized drifts in the 2022 replay stayed far inside that envelope.
+
+*Anchor: `scripts/learn.py:update_drift` —
+`step = max(-bound, min(bound, k*surprise)); return decay*drift + step`; defaults in
+`LearningTrack.__init__` (`k=50.0, decay=0.95, bound=75.0`).*
+
+**What kind of filter this is.** The update is a regularized online estimator of a
+slowly-varying strength state — exponential forgetting plus a gain on the
+innovation, the same family as exponentially-weighted Elo variants and a
+steady-state (fixed-gain) Kalman/EKF update:
+
+- $\gamma = 0.95$ is the **forgetting factor**: absent new surprises, drift decays
+  toward the pre-tournament baseline with half-life
+  $\ln 2 / \ln(1/\gamma) \approx 13.5$ matches — longer than any team's
+  tournament, so within one World Cup the decay mostly tempers, rather than erases,
+  what was learned.
+- $k = 50$ is the **gain**: one full goal of net surprise moves a rating by 50 Elo
+  points (about 7 percentage points of win expectancy at even ratings). Chosen by
+  the two-tournament sweep of §12 (2022 optimum 40, 2018 optimum 60, locked at the
+  midpoint).
+- $B = 75$ is **hard regularization** against single-match outliers: no one result
+  — however lopsided the shot count — can move a team more than 75 points.
+
+Setting $k = 0$ makes the step vanish and the drift stay at zero: **the frozen
+track is exactly the learning track at zero gain**, which is what makes the A/B
+comparison clean.
+
+*Anchor: `scripts/learn.py:LearningTrack` — "k is the swept knob (k=0 => frozen
+track)".*
 
 ## 10. Re-simulation and the two-track trajectory
 
