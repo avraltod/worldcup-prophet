@@ -64,7 +64,10 @@ def divergence_section(frozen, now, entries, group_state):
               if t in frozen
               and (abs(now[t]["advance_KO"] - frozen[t]["advance_KO"]) >= 0.03
                    or abs(now[t]["champion"] - frozen[t]["champion"]) >= 0.005)]
-    teams = sorted(set(top) | set(movers), key=lambda t: -now.get(t, frozen[t])["champion"])
+    # tiebreak on the name: equal champion probs (e.g. two teams at 0 in the
+    # MC sample) must not inherit set-iteration order, which varies per process
+    teams = sorted(set(top) | set(movers),
+                   key=lambda t: (-now.get(t, frozen[t])["champion"], t))
 
     rows = []
     for t in teams:

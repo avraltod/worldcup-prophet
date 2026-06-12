@@ -1,5 +1,7 @@
 """The two per-edition figures: current qualification odds vs the lock, and the
 frozen-vs-learning champion paths. matplotlib only; Agg-safe."""
+import os
+os.environ.setdefault("SOURCE_DATE_EPOCH", "1749686400")  # 2026-06-12: byte-stable PDFs across reruns
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt

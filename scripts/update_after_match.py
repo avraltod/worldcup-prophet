@@ -4,8 +4,11 @@ step). Renders every living unit to paper/live/*.tex; the skeleton
 WC2026_paper.tex is never written and a sha256 check proves it byte-identical."""
 import argparse
 import json
+import os
 import subprocess
 import sys
+
+os.environ.setdefault("SOURCE_DATE_EPOCH", "1749686400")  # byte-stable figure PDFs across reruns
 from datetime import datetime, timezone
 from pathlib import Path
 
