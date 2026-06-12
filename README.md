@@ -31,7 +31,7 @@ Poisson goal model, and optimizes picks under the pool's 3/2/1 scoring rule.
 ## Verify it yourself
 
 - Input + prediction data: [`data/`](data/)
-- Model code: [`scripts/`](scripts/)
+- Model & pipeline code: [`scripts/`](scripts/)
 - Tests: `pytest`
 
 ## Repository map
@@ -42,9 +42,11 @@ Poisson goal model, and optimizes picks under the pool's 3/2/1 scoring rule.
 | `HOW_THE_MODEL_WORKS.md` | Plain-language method |
 | `paper/` | The formal paper (`WC2026_paper.pdf` + LaTeX source + figures) |
 | `data/` | Locked input odds and generated predictions |
-| `scripts/` | Model, simulation, and analysis code |
+| `scripts/` | Operational pipeline, paper build, and live-update code |
+| `stata/` | Stata replication scripts and backing data |
 | `tests/` | Test suite |
-| `archive/` | Supporting material — drafts, alternate formats, dev notes. **Not part of the locked forecast.** |
+| `experiment/ledger.csv` | Match-by-match scoring ledger |
+| `archive/` | Issued paper editions M000, M001, … (`archive/paper_versions/`) + progress reports |
 
 ## Results tracking
 
