@@ -23,7 +23,8 @@
 \newcommand{\flagCUW}[1][5mm]{\begin{tikzpicture}[x=#1,y=#1]\fill[blue!75!black!92](0,0)rectangle(1,.6);\fill[yellow!92!orange](0,.13)rectangle(1,.21);\fill[white](.17,.43)circle(.045);\fill[white](.30,.30)circle(.03);\draw[black,line width=.15pt](0,0)rectangle(1,.6);\end{tikzpicture}}
 
 \title{\textbf{Forecasting the 2026 FIFA World Cup: A Market-Calibrated Poisson--Elo Model and the Information Each Result Reveals}}
-\author{Avralt-Od Purevjav\\ \small Washington, DC, USA \\ \small \texttt{avraltod@gmail.com}}
+\author{Avralt-Od Purevjav\\ \small Washington, DC, USA \\ \small \texttt{avraltod@gmail.com}
+\and Jeronimo Luza\\ \small \texttt{github.com/jeronimoluza}}
 \date{\liveVersionLine\thanks{\itshape Update log --- forecast built 7 June 2026 from bookmaker odds collected 5--7 June; Group~K recalibrated to prediction-market prices the evening of 7 June; squad and injury news monitored through 9 June, when the confirmed withdrawals of Jurri\"en Timber (Netherlands) and several Brazil attackers were already in the pre-kickoff ratings and the remaining late losses (e.g.\ Germany's Lennart Karl) fall on non-decisive squad members, so the entry is confirmed unchanged; group scorelines re-derived on 10 June with a realistic rounded-expected-goals readout that matches the points-optimal pick at no cost in pool points while resembling actual scores more closely (Section~\ref{sec:objective}), leaving champion, bracket, and podium unchanged; predictions lock at the 11 June kickoff. Code and data timestamped for the out-of-sample record.\liveUpdateLog{}}}
 
 \input{live_stats}
@@ -651,17 +652,17 @@ Post-tournament, the forecast will be evaluated against realized results match b
 
 \section*{Declarations}
 
-\noindent\textbf{Data availability.} All input data (odds snapshots, Elo ratings, squad news), model code (Poisson fitting, knockout model, tournament simulator, sensitivity sweep), and the generated prediction sheet are available from the author. Reproducibility parameters: Poisson rates fitted by grid search with step 0.05 over $\lambda \in [0.10, 3.50]$; simulations use $N = 200{,}000$ iterations with fixed seed 2026 (sensitivity sweep: $N = 20{,}000$ per configuration, same seed).
+\noindent\textbf{Data availability.} All input data (odds snapshots, Elo ratings, squad news), model code (Poisson fitting, knockout model, tournament simulator, sensitivity sweep), and the generated prediction sheet are available from the authors. Reproducibility parameters: Poisson rates fitted by grid search with step 0.05 over $\lambda \in [0.10, 3.50]$; simulations use $N = 200{,}000$ iterations with fixed seed 2026 (sensitivity sweep: $N = 20{,}000$ per configuration, same seed).
 
 \noindent\textbf{Ethics.} The forecast supports a private, small-stakes prediction pool among friends; no commercial betting activity is involved.
 
-\noindent\textbf{Author contributions (CRediT).} Avralt-Od Purevjav: conceptualization, methodology, software, formal analysis, writing.
+\noindent\textbf{Author contributions (CRediT).} Avralt-Od Purevjav: conceptualization, methodology, software, formal analysis, writing. Jeronimo Luza: software, validation.
 
-\noindent\textbf{Conflict of interest.} The author intends to win the pool.
+\noindent\textbf{Conflict of interest.} The first author intends to win the pool.
 
 \noindent\textbf{Funding.} None.
 
-\noindent\textbf{AI disclosure.} Model design, data collection, simulation code, and manuscript drafting were carried out with the assistance of Claude (Anthropic); all modeling decisions and the final predictions were reviewed and approved by the author.
+\noindent\textbf{AI disclosure.} Model design, data collection, simulation code, and manuscript drafting were carried out with the assistance of Claude (Anthropic); all modeling decisions and the final predictions were reviewed and approved by the authors.
 
 \appendix
 
