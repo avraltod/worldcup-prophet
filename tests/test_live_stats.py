@@ -29,3 +29,51 @@ def test_render_macros_are_consistent():
     assert r"\def\liveMeanBrier{0.28}" in tex
     assert r"\def\liveDocumented{2}" in tex
     assert r"\def\liveReEvDelta{+0}" in tex
+
+
+# ---------------- live-edition macros (version line, abstract, update log) ---
+
+E_FULL = {"match": 2, "fixture": "South Korea v Czechia", "result": [2, 1],
+          "kickoff": "2026-06-12T02:00:00Z", "failure_mode": None,
+          "pre": {"pick": [1, 1]}, "post": {"points": 0, "brier": 0.613}}
+
+
+def test_version_line_pre_kickoff_when_nothing_documented():
+    s = ls.compute([], latest_champion={"Spain": 0.27})
+    assert ls._version_line(s) == r"Pre-kickoff version, \today"
+    tex = ls.render_macros(s)
+    assert r"\def\liveAbstractRevision{}" in tex      # degrades to empty
+    assert r"\def\liveUpdateLog{}" in tex
+
+
+def test_version_line_self_describes_the_edition():
+    s = ls.compute([E_FULL], latest_champion={"Spain": 0.27})
+    line = ls._version_line(s)
+    assert line == ("Live edition --- after match 2, "
+                    "South Korea 2--1 Czechia (12 June 2026)")
+
+
+def test_abstract_revision_grammar_and_names():
+    s = ls.compute([E_FULL], latest_champion={"Spain": 0.27})
+    s["champ_now_top"] = [("Spain", 0.269), ("Argentina", 0.179), ("France", 0.143)]
+    one = ls._abstract_revision(s)
+    assert "the 1 result played" in one                # singular
+    assert "Spain at 26.9 percent" in one
+    assert ", and France at 14.3." in one              # Oxford 'and' before last
+    s2 = ls.compute([E_FULL, dict(E_FULL, match=3)], latest_champion={"Spain": 0.27})
+    s2["champ_now_top"] = s["champ_now_top"]
+    assert "the 2 results played" in ls._abstract_revision(s2)
+
+
+def test_abstract_revision_empty_without_conditional_forecast():
+    s = ls.compute([E_FULL], latest_champion={"Spain": 0.27})
+    assert ls._abstract_revision(s) == ""              # no champ_now_top passed
+
+
+def test_update_log_names_every_result_and_the_lock_tag():
+    s = ls.compute([E_FULL], latest_champion={"Spain": 0.27})
+    log = ls._update_log(s) if hasattr(ls, "_update_log") else ""
+    s["entries"] = [E_FULL]
+    log = ls._update_log(s)
+    assert "M2 South Korea 2--1 Czechia" in log
+    assert "prereg-2026" in log
