@@ -4,12 +4,6 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 import render_evolution as re_
 
-SAMPLE = ("FROZEN ABOVE\n"
-          "% LIVE-EVOLUTION-TABLE:START\n"
-          "old table\n"
-          "% LIVE-EVOLUTION-TABLE:END\n"
-          "FROZEN BELOW\n")
-
 ENTRIES = [
     {"match": 1, "fixture": "Mexico v South Africa", "result": [2, 0],
      "failure_mode": None,
@@ -17,24 +11,6 @@ ENTRIES = [
      "post": {"points": 1, "brier": 0.1655, "info_bits": 0.0011},
      "interpretation": "A likely home win arrived; the title race barely moved."},
 ]
-
-def test_replace_markers_only_touches_the_block():
-    out = re_.replace_markers(SAMPLE, "LIVE-EVOLUTION-TABLE", "NEW\nROWS")
-    assert "FROZEN ABOVE" in out and "FROZEN BELOW" in out
-    assert "old table" not in out
-    assert "NEW\nROWS" in out
-
-def test_missing_marker_raises():
-    try:
-        re_.replace_markers("no markers here", "LIVE-EVOLUTION-TABLE", "x")
-        assert False, "expected ValueError"
-    except ValueError:
-        pass
-
-def test_frozen_hash_ignores_marker_contents():
-    h1 = re_.frozen_hash(SAMPLE)
-    changed = re_.replace_markers(SAMPLE, "LIVE-EVOLUTION-TABLE", "totally different")
-    assert re_.frozen_hash(changed) == h1     # frozen text unchanged
 
 def test_ledger_table_has_one_row_per_entry():
     tex = re_.ledger_table(ENTRIES)
@@ -107,23 +83,3 @@ def test_trajfig_falls_back_to_demo():
     assert "fig_trajectory_live" in live
     assert "label{fig:trajectory}" in live                # label preserved
     assert "1 of 104" in live
-
-
-FULL = ("HEAD\n"
-        "% LIVE-EVOLUTION-TABLE:START\nx\n% LIVE-EVOLUTION-TABLE:END\n"
-        "% LIVE-EVOLUTION-NARRATIVE:START\nx\n% LIVE-EVOLUTION-NARRATIVE:END\n"
-        "% LIVE-EVOLUTION-TRAJFIG:START\nx\n% LIVE-EVOLUTION-TRAJFIG:END\n"
-        "% LIVE-EVOLUTION-DIVERGENCE:START\nx\n% LIVE-EVOLUTION-DIVERGENCE:END\n"
-        "% LIVE-EVOLUTION-CHAMPTABLE:START\nx\n% LIVE-EVOLUTION-CHAMPTABLE:END\n"
-        "TAIL\n")
-
-
-def test_render_paper_fills_all_five_regions_and_frozen_hash_is_invariant():
-    h0 = re_.frozen_hash(FULL)
-    out = re_.render_paper(FULL, ENTRIES, frozen=FROZEN, now=NOW,
-                           group_state=GS, live_fig=True)
-    assert re_.frozen_hash(out) == h0
-    assert "HEAD" in out and "TAIL" in out
-    for token in ("longtable", "fig_trajectory_live", "Champion (lock)",
-                  "diverges from the locked baseline"):
-        assert token in out, token

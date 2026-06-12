@@ -1,6 +1,7 @@
 """Driver: turn a finalized match into a paper revision. In CI it runs hands-off;
 locally `--reopen M` lets the author replace an interpretation (the only human
-step). Writes only the living layer; a frozen-hash check guards the rest."""
+step). Renders every living unit to paper/live/*.tex; the skeleton
+WC2026_paper.tex is never written and a sha256 check proves it byte-identical."""
 import argparse
 import json
 import subprocess
@@ -14,8 +15,11 @@ sys.path.insert(0, str(HERE))
 import condition as cond
 import match_book as mb
 import live_stats as ls
-import render_evolution as rev
 import draft_interpretation as di
+import fetch_stats_espn as fse
+import live_state as lst
+import render_live as rl
+import vintages as vin
 from ev321 import best_pick
 from realism_backtest import score_321
 
@@ -27,9 +31,11 @@ INDEX = PAPER / "match_book" / "index.json"
 CORRECTIONS = PAPER / "match_book" / "corrections.md"
 REVISIONS = PAPER / "REVISIONS.md"
 PAPER_TEX = PAPER / "WC2026_paper.tex"
-LIVE_STATS_TEX = PAPER / "live_stats.tex"
 FROZEN_PATH = DATA / "frozen_stage_probs.json"
 COND_N = 50000   # sims for the per-snapshot conditional forecast
+LIVE_DIR = PAPER / "live"
+SKELETON_SHA = DATA / "skeleton_sha256.txt"
+TWO_TRACK_N = 20000   # per-track sims for the live A-vs-B
 
 
 def _load(p, default):
@@ -132,10 +138,47 @@ def group_state(results):
     return state
 
 
-def _write_living_layer(trajectory, entries, match, expectations):
-    """The full per-edition revision: stats + macros, conditional forecast,
-    realized trajectory figure, and every living tex region — conditioned
-    through `match`."""
+def _assert_skeleton():
+    if not SKELETON_SHA.exists():
+        raise SystemExit("ABORT: data/skeleton_sha256.txt missing — run the migration first")
+    import hashlib
+    actual = hashlib.sha256(PAPER_TEX.read_bytes()).hexdigest()
+    if actual != SKELETON_SHA.read_text().strip():
+        raise SystemExit("ABORT: skeleton WC2026_paper.tex changed — refusing to render")
+
+
+def _stats_lookup(trajectory):
+    """match -> box-score stats (cache-first ESPN fetch), or None."""
+    def lookup(m):
+        post = next((r for r in trajectory
+                     if r["phase"] == "post" and r["match"] == m), None)
+        if post is None:
+            return None
+        return fse.get_stats(m, post["kickoff"])
+    return lookup
+
+
+def _implications(latest_entry, expectations, results, learn_ratings):
+    """Remaining fixtures of the just-played group: lock odds + learning odds."""
+    from learn import lambda_expected
+    grp = next((e.get("group") for e in expectations
+                if e["match"] == latest_entry["match"]), None)
+    out = []
+    if grp is None or learn_ratings is None:
+        return out
+    for e in expectations:
+        if e.get("group") != grp or str(e["match"]) in results["group"]:
+            continue
+        lh, la = lambda_expected(learn_ratings[e["home"]], learn_ratings[e["away"]])
+        out.append({"match": e["match"], "fixture": f"{e['home']} v {e['away']}",
+                    "lock_HDA": e["probs_HDA"],
+                    "learn_HDA": list(rl.outcome_probs(lh, la))})
+    return out
+
+
+def _write_living_layer(trajectory, entries, match, expectations, use_api=False):
+    """Build one context and render every living unit to paper/live/."""
+    _assert_skeleton()
     latest_champ = next((r["champion"] for r in reversed(trajectory)
                          if r["phase"] == "post" and r["match"] <= match), None)
     if latest_champ is None:
@@ -145,35 +188,113 @@ def _write_living_layer(trajectory, entries, match, expectations):
         re_ev_delta_for(next(x for x in expectations if x["match"] == en["match"]),
                         en["result"], en["post"]["points"]) for en in entries)
     stats["entries"] = entries
+    latest = max(entries, key=lambda e: e["match"])
+    if latest["match"] != match:
+        raise SystemExit(f"ABORT: edition M{match:03d} requested but the latest "
+                         f"documented match is M{latest['match']:03d} — refusing "
+                         f"an out-of-order render")
 
     frozen = _load(FROZEN_PATH, {}).get("stages")
-    now_probs = group_st = None
-    if frozen:
-        res = results_through(trajectory, match)
-        now_probs = cond.conditional_probs(res, N=COND_N, seed=2026)
-        group_st = group_state(res)
-        stats["champ_now_top"] = sorted(
-            ((t, d["champion"]) for t, d in now_probs.items()),
-            key=lambda kv: -kv[1])[:3]
-    LIVE_STATS_TEX.write_text(ls.render_macros(stats))
+    if not frozen:
+        raise SystemExit("frozen_stage_probs.json missing — cannot render")
+    res = results_through(trajectory, match)
+    now_probs = cond.conditional_probs(res, N=COND_N, seed=2026)
+    prev_res = results_through(trajectory, latest["match"] - 1)
+    prev_now = (cond.conditional_probs(prev_res, N=COND_N, seed=2026)
+                if prev_res["group"] or prev_res["ko"] else frozen)
+    group_st = group_state(res)
+    stats["champ_now_top"] = sorted(
+        ((t, d["champion"]) for t, d in now_probs.items()),
+        key=lambda kv: -kv[1])[:3]
 
-    live_fig = False
+    # learning state: drain the queue, then the two-track re-simulation
+    state = lst.load_state()
+    state = lst.sync(state, entries, _stats_lookup(trajectory))
+    two_track = None
+    learn_ratings = None
+    if state["processed"]:
+        learn_ratings = lst.ratings(state)
+        froz_dist = {t: d["champion"] for t, d in cond.conditional_probs(
+            res, N=TWO_TRACK_N, seed=2026, ratings=state["baseline"]).items()}
+        learn_dist = {t: d["champion"] for t, d in cond.conditional_probs(
+            res, N=TWO_TRACK_N, seed=2026, ratings=learn_ratings).items()}
+        two_track = {"frozen": froz_dist, "learning": learn_dist}
+        top8 = sorted(froz_dist, key=lambda t: -froz_dist[t])[:8]
+        hist_row = {"match": match,
+                    "frozen_top": {t: round(froz_dist[t], 4) for t in top8},
+                    "learning_top": {t: round(learn_dist.get(t, 0.0), 4) for t in top8}}
+        hist_last = state["history"][-1]["match"] if state["history"] else 0
+        if match > hist_last:    # monotonic: re-issues never zigzag the path
+            state["history"].append(hist_row)
+    lst.save_state(state)
+
+    # vintages
+    if not vin.load():
+        vin.upsert(vin.m000_row(frozen))
+    top5 = [(t, d["champion"]) for t, d in sorted(
+        now_probs.items(), key=lambda kv: -kv[1]["champion"])[:5]]
+    rows = vin.upsert(vin.row_for_edition(match, entries, stats, top5))
+
+    # revision narrative (grounded pack -> Claude or template)
+    rec = next((r for r in state["processed"] if r["match"] == latest["match"]), None)
+    pack = {"edition": match, "fixture": latest["fixture"],
+            "result": latest["result"], "points": latest["post"]["points"],
+            "info_bits": latest["post"]["info_bits"],
+            "champ_deltas": [[t, round(prev_now[t]["champion"], 4),
+                              round(now_probs[t]["champion"], 4)]
+                             for t in sorted(now_probs, key=lambda t: -now_probs[t]["champion"])[:5]
+                             if t in prev_now],
+            "lam_obs": rec["lam_obs"] if rec else None,
+            "lam_exp": rec["lam_exp"] if rec else None}
+    corrections = CORRECTIONS.read_text() if CORRECTIONS.exists() else ""
+    narrative_text, _src = di.draft_revision(pack, corrections, use_api)
+
+    # figures (optional, never block)
+    live_fig = two_fig = False
     try:
         import plot_trajectory_live
         plot_trajectory_live.build(trajectory, through_match=match,
                                    out=PAPER / "figs" / "fig_trajectory_live.pdf")
         live_fig = True
-    except Exception as ex:                      # noqa: BLE001 — figure is optional
-        print(f"trajectory figure skipped ({ex}); keeping the dress rehearsal")
+    except Exception as ex:                      # noqa: BLE001
+        print(f"trajectory figure skipped ({ex})")
+    try:
+        import make_live_figures as mlf
+        groups = {g: sorted({cond.RATES[r][2] for r in cond.GROUPS[g]}
+                            | {cond.RATES[r][3] for r in cond.GROUPS[g]})
+                  for g in sorted(cond.GROUPS)}
+        mlf.group_qual_fig(frozen, now_probs, groups,
+                           PAPER / "figs" / "fig_group_qual_live.pdf")
+        if state["history"]:
+            mlf.two_track_fig(state["history"],
+                              PAPER / "figs" / "fig_two_track_live.pdf")
+            two_fig = True
+    except Exception as ex:                      # noqa: BLE001
+        print(f"live figures skipped ({ex})")
 
-    tex = PAPER_TEX.read_text()
-    before = rev.frozen_hash(tex)
-    tex = rev.render_paper(tex, entries, frozen=frozen, now=now_probs,
-                           group_state=[g for g in group_st if g["played"]] if group_st else None,
-                           live_fig=live_fig)
-    if rev.frozen_hash(tex) != before:
-        raise SystemExit("ABORT: frozen region changed — refusing to write paper")
-    PAPER_TEX.write_text(tex)
+    # render every unit
+    match_stats = {}
+    s = _stats_lookup(trajectory)(latest["match"])
+    if s is not None:
+        match_stats[latest["match"]] = s
+    ctx = {"match": match, "entries": entries, "match_stats": match_stats,
+           "learning": state, "prev_now": prev_now, "now": now_probs,
+           "vintages_rows": rows, "revision_narrative": narrative_text,
+           "implications": _implications(latest, expectations, res, learn_ratings)}
+    rl.write_unit(LIVE_DIR, "stats", ls.render_macros(stats))
+    rl.write_unit(LIVE_DIR, "champ_table", rl.champ_table_unit(frozen, now_probs, len(entries)))
+    rl.write_unit(LIVE_DIR, "trajfig", rl.trajfig_unit(entries, live_fig))
+    rl.write_unit(LIVE_DIR, "ledger", rl.ledger(entries))
+    rl.write_unit(LIVE_DIR, "narrative", rl.narrative_unit(entries))
+    rl.write_unit(LIVE_DIR, "divergence", rl.divergence_unit(frozen, now_probs, entries, group_st))
+    rl.write_unit(LIVE_DIR, "revision_report", rl.revision_report(ctx))
+    rl.write_unit(LIVE_DIR, "tracker", rl.tracker(group_st, frozen, now_probs))
+    rl.write_unit(LIVE_DIR, "two_track", rl.two_track_unit(two_track, state, fig=two_fig))
+    rl.write_unit(LIVE_DIR, "survival", rl.survival_unit(frozen, now_probs))
+    for g in group_st:
+        rl.write_unit(LIVE_DIR, f"group_{g['group']}",
+                      rl.group_box(g, res, expectations, frozen, now_probs))
+    _assert_skeleton()
     return stats
 
 
@@ -217,13 +338,14 @@ def revise(match, use_api=True, reopen_text=None):
     mb.mark_documented(INDEX, match)
 
     entries = _entries_for_stats(INDEX)
-    stats = _write_living_layer(trajectory, entries, match, expectations)
+    stats = _write_living_layer(trajectory, entries, match, expectations,
+                                use_api=use_api)
 
     with REVISIONS.open("a") as fh:
         fh.write(f"\n**Rev M{match:03d} ({e['fixture']} {e['result'][0]}-{e['result'][1]}).** "
                  f"Cumulative {stats['cum_points']} pts, mean Brier {stats['mean_brier']:.2f}; "
                  f"failure-mode {e['failure_mode'] or 'none'}. "
-                 f"Updated evolution table + narrative; no frozen content changed.\n")
+                 f"Full living layer re-rendered (edition M{match:03d}); skeleton unchanged.\n")
     print(f"Paper revised through Match {match} — {stats['documented']} documented · "
           f"{stats['cum_points']} pts · mean Brier {stats['mean_brier']:.3f} · "
           f"failure {e['failure_mode'] or 'none'}")
