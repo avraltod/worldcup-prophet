@@ -150,3 +150,116 @@ def survival_unit(frozen, now):
         "\\begin{footnotesize}\n\\begin{longtable}{lrrrrrr}\n\\toprule\n"
         "Team & KO & R16 & QF & SF & Final & Champion \\\\\n\\midrule\n\\endhead\n"
         + "\n".join(rows) + "\n\\bottomrule\n\\end{longtable}\n\\end{footnotesize}")
+
+
+def two_track_unit(two_track, learning, fig):
+    """The live A-vs-B: frozen-track vs learning-track champion odds, the
+    largest accumulated drifts, and the per-match performance records."""
+    if two_track is None:
+        return ("\\textit{Two-track live results begin with the first match "
+                "whose box score is collected.}")
+    teams = sorted(two_track["frozen"], key=lambda t: -two_track["frozen"][t])[:8]
+    rows = "\n".join(
+        f"{t} & {_pct(two_track['frozen'][t])} & "
+        f"{_pct(two_track['learning'].get(t, 0.0))} & "
+        f"{100 * (two_track['learning'].get(t, 0.0) - two_track['frozen'][t]):+.1f} \\\\"
+        for t in teams)
+    drifts = sorted(learning["drift"].items(), key=lambda kv: -abs(kv[1]))[:8]
+    drift_rows = "\n".join(f"{t} & {d:+.1f} \\\\" for t, d in drifts)
+    pend = (f" Stats pending for matches: "
+            f"{', '.join(f'M{m:03d}' for m in learning['pending'])}."
+            if learning["pending"] else "")
+    fig_block = ("\\begin{figure}[!t]\n  \\caption{Two tracks live: frozen vs "
+                 "learning champion paths}\\label{fig:twotracklive}\n"
+                 "  {\\centering\\includegraphics[width=0.94\\textwidth]"
+                 "{figs/fig_two_track_live.pdf}\\par}\n\\end{figure}\n" if fig else "")
+    n = len(learning["processed"])
+    return (
+        "\\subsection{The two tracks live: 2026 as it speaks}"
+        "\\label{sec:twotracklive}\n"
+        f"The pre-registered A-vs-B study of Appendix~D, running on the real "
+        f"tournament: after each match the observed shot performance "
+        f"($\\lambda_{{\\mathrm{{obs}}}}$, Appendix~D.2) updates the learning "
+        f"track's ratings (k=50, locked), while the frozen track re-conditions "
+        f"on results alone. {n} match(es) processed so far.{pend}\n\n"
+        + fig_block +
+        "\\begin{footnotesize}\n"
+        "\\begin{tabular}{lrrr}\n\\toprule\n"
+        "Team & Frozen (\\%) & Learning (\\%) & $\\Delta$ (pp) \\\\\n\\midrule\n"
+        + rows + "\n\\bottomrule\n\\end{tabular}\\qquad\n"
+        "\\begin{tabular}{lr}\n\\toprule\nTeam & Drift (Elo) \\\\\n\\midrule\n"
+        + drift_rows + "\n\\bottomrule\n\\end{tabular}\n\\end{footnotesize}")
+
+
+def _stats_release(match, match_stats, learning):
+    s = match_stats.get(match)
+    rec = next((r for r in learning["processed"] if r["match"] == match), None)
+    if s is None:
+        return ("\\textit{Box-score statistics for this match are pending; the "
+                "performance analysis will appear in the next edition.}")
+    def _row(label, key, fmt="{:.0f}"):
+        return (f"{label} & " + fmt.format(s['home'][key]) + " & "
+                + fmt.format(s['away'][key]) + " \\\\")
+    lines = [_row("Shots", "total_shots"), _row("On target", "sot")]
+    if (s["home"].get("possession") is not None
+            and s["away"].get("possession") is not None):
+        lines.append(_row("Possession (\\%)", "possession", "{:.0f}"))
+    perf = ""
+    if rec:
+        perf = (f"\\\\[2pt] Performance vs.\\ expectation: "
+                f"$\\lambda_{{\\mathrm{{obs}}}}$ = {rec['lam_obs']['home']:.2f} / "
+                f"{rec['lam_obs']['away']:.2f} against "
+                f"$\\lambda_{{\\mathrm{{exp}}}}$ = {rec['lam_exp']['home']:.2f} / "
+                f"{rec['lam_exp']['away']:.2f} "
+                f"({rec['lam_obs']['source']} signal); the learning track moves "
+                f"{rec['home']} by {rec['drift_after'].get(rec['home'], 0):+.1f} and "
+                f"{rec['away']} by {rec['drift_after'].get(rec['away'], 0):+.1f} Elo.")
+    return ("\\begin{footnotesize}\\begin{tabular}{lrr}\\toprule\n"
+            f" & {s['home']['team']} & {s['away']['team']} \\\\\n\\midrule\n"
+            + "\n".join(lines) + "\n\\bottomrule\\end{tabular}\\end{footnotesize}"
+            + perf)
+
+
+def revision_report(ctx):
+    """The central-bank release: data release, forecast revision vs the
+    previous edition, implications, vintages. Driver contract: ctx
+    vintages_rows already contains THIS edition's row (so [-2] is the
+    previous edition) and ctx['match'] equals the latest entry's match."""
+    import vintages as vin
+    m = ctx["match"]
+    latest = max(ctx["entries"], key=lambda e: e["match"])
+    deltas = []
+    prev, now = ctx["prev_now"], ctx["now"]
+    for t in sorted(now, key=lambda t: -now[t]["champion"])[:8]:
+        if t in prev:
+            d = 100 * (now[t]["champion"] - prev[t]["champion"])
+            if abs(d) >= 0.05:
+                deltas.append(f"{t} {d:+.1f}")
+    delta_line = ("; ".join(deltas) if deltas
+                  else "no contender moved by 0.1 pp or more")
+    imp_lines = "\n".join(
+        f"{i['fixture']} & {'/'.join(_pct(p) for p in i['lock_HDA'])} & "
+        f"{'/'.join(_pct(p) for p in i['learn_HDA'])} \\\\"
+        for i in ctx["implications"])
+    imp_block = ("" if not ctx["implications"] else
+        "\\paragraph{Implications for upcoming fixtures.} Lock odds are the "
+        "frozen track's (they move only through qualification scenarios); the "
+        "revised odds are the learning track's.\n"
+        "\\begin{footnotesize}\\begin{tabular}{lcc}\\toprule\n"
+        "Fixture & Lock H/D/A (\\%) & Learning H/D/A (\\%) \\\\\n\\midrule\n"
+        + imp_lines + "\n\\bottomrule\\end{tabular}\\end{footnotesize}\n")
+    return (
+        f"\\subsection{{Revision report: edition M{m:03d}}}\\label{{sec:revreport}}\n"
+        f"\\paragraph{{The data release.}} Match {latest['match']}, "
+        f"{latest['fixture']}: predicted {latest['pre']['pick'][0]}--"
+        f"{latest['pre']['pick'][1]}, actual {latest['result'][0]}--"
+        f"{latest['result'][1]}; {latest['post']['points']} of 3 points, Brier "
+        f"{latest['post']['brier']:.3f}, {latest['post']['info_bits']:.3f} bits.\n\n"
+        + _stats_release(latest["match"], ctx["match_stats"], ctx["learning"]) + "\n\n"
+        f"\\paragraph{{Forecast revision (vs.\\ edition M{ctx['vintages_rows'][-2]['edition']:03d}).}} "
+        f"Champion-probability movement: {delta_line}.\n\n"
+        + ctx["revision_narrative"] + "\n\n"
+        + imp_block +
+        "\\paragraph{Forecast vintages.} One column per issued edition; the "
+        "locked M000 column never changes.\n\n"
+        + vin.latex_table(ctx["vintages_rows"]))

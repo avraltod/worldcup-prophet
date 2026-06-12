@@ -46,3 +46,47 @@ def _build_prompt(e, corrections):
         + (f"Prior accepted notes (match the style):\n{corrections}\n" if corrections else "")
         + "Return only the interpretation text."
     )
+
+
+def templated_revision(pack):
+    """Deterministic 'changes since the previous edition' paragraph."""
+    moved = ", ".join(f"{t} {100 * (b - a):+.1f} pp" for t, a, b in pack["champ_deltas"])
+    perf = ""
+    if pack.get("lam_obs") and pack.get("lam_exp"):
+        perf = (f" Performance signal (home/away): observed "
+                f"{pack['lam_obs']['home']:.2f}/{pack['lam_obs']['away']:.2f} "
+                f"expected goals against "
+                f"{pack['lam_exp']['home']:.2f}/{pack['lam_exp']['away']:.2f} "
+                f"expected.")
+    return (f"Edition M{pack['edition']:03d} conditions on {pack['fixture']} "
+            f"{pack['result'][0]}--{pack['result'][1]} "
+            f"({pack['points']} of 3 points, {pack['info_bits']:.3f} bits)."
+            f"{(' Champion movement: ' + moved + '.') if moved else ''}{perf}")
+
+
+def draft_revision(pack, corrections, use_api):
+    """Claude-drafted revision narrative grounded ONLY in the pack's numbers;
+    deterministic fallback so an edition never blocks."""
+    if not use_api or not os.environ.get("ANTHROPIC_API_KEY"):
+        return templated_revision(pack), "template"
+    try:
+        import json as _json
+        import anthropic
+        client = anthropic.Anthropic()
+        prompt = (
+            "Write 2-4 sentences for the 'Revision report' section of a "
+            "pre-registered live-forecasting paper: what this match changed in "
+            "the forecast and why, in the author's voice (measured; size effects "
+            "by comparison, not adjectives; reason with 'because'; no em-dash "
+            "asides). HARD RULE: use ONLY numbers present in the JSON below; do "
+            "not invent or recompute any quantity.\n\n"
+            + _json.dumps(pack, ensure_ascii=False)
+            + ("\n\nPrior accepted notes (match the style):\n" + corrections
+               if corrections else "")
+            + "\n\nReturn only the narrative text.")
+        msg = client.messages.create(
+            model="claude-opus-4-8", max_tokens=400,
+            messages=[{"role": "user", "content": prompt}])
+        return msg.content[0].text.strip(), "claude"
+    except Exception:
+        return templated_revision(pack), "template"

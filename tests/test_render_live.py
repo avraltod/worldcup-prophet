@@ -109,3 +109,50 @@ def test_survival_unit_restates_all_teams():
     frozen, now = _stages(), _stages(0.30)
     tex = rl.survival_unit(frozen, now)
     assert "Spain" in tex and "30.0" in tex and "longtable" in tex
+
+
+def _learning():
+    return {"drift": {"Mexico": 6.2, "South Africa": -6.2},
+            "pending": [],
+            "processed": [{"match": 1, "home": "Mexico", "away": "South Africa",
+                           "lam_obs": {"home": 1.9, "away": 0.4, "source": "proxy"},
+                           "lam_exp": {"home": 1.5, "away": 0.7},
+                           "drift_after": {"Mexico": 6.2, "South Africa": -6.2}}]}
+
+
+def test_two_track_unit():
+    two = {"frozen": {"Spain": 0.27, "Argentina": 0.18},
+           "learning": {"Spain": 0.28, "Argentina": 0.17}}
+    tex = rl.two_track_unit(two, _learning(), fig=False)
+    assert "Spain" in tex and "27.0" in tex and "28.0" in tex
+    assert "Spain & 27.0 & 28.0 & +1.0" in tex   # frozen | learning | delta order
+    assert "Mexico" in tex                    # drift table
+    tex_fig = rl.two_track_unit(two, _learning(), fig=True)
+    assert "fig_two_track_live" in tex_fig
+
+
+def test_revision_report_unit():
+    ctx = {"match": 3, "entries": [_entry(1), _entry(3, pts=3, bits=0.02)],
+           "match_stats": {3: {"home": {"team": "Canada", "sot": 5, "other_shots": 6,
+                                        "total_shots": 11, "possession": 58.0},
+                               "away": {"team": "Bosnia and Herzegovina", "sot": 2,
+                                        "other_shots": 2, "total_shots": 4,
+                                        "possession": 42.0}}},
+           "learning": _learning(),
+           "prev_now": _stages(0.27), "now": _stages(0.28),
+           "vintages_rows": [
+               {"edition": 0, "match": None, "fixture": None, "result": None,
+                "points": None, "cum_points": 0, "mean_brier": None,
+                "cum_bits": 0.0, "champ_top5": [["Spain", 0.269]]},
+               {"edition": 3, "match": 3, "fixture": "Canada v Bosnia and Herzegovina",
+                "result": [2, 0], "points": 3, "cum_points": 4, "mean_brier": 0.2,
+                "cum_bits": 0.02, "champ_top5": [["Spain", 0.28]]}],
+           "revision_narrative": "The forecast moved because of the result.",
+           "implications": [{"match": 5, "fixture": "Canada v Qatar",
+                             "lock_HDA": [0.5, 0.3, 0.2], "learn_HDA": [0.55, 0.27, 0.18]}]}
+    tex = rl.revision_report(ctx)
+    assert "Revision report: edition M003" in tex
+    assert "Shots" in tex and "Canada" in tex
+    assert "The forecast moved because of the result." in tex
+    assert "M000" in tex                       # vintages table embedded
+    assert "Canada v Qatar" in tex             # implications
