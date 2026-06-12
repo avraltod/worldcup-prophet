@@ -61,7 +61,8 @@ def build(trajectory, through_match=None, out=None):
         ax2.spines[s].set_visible(False)
 
     fig.tight_layout()
-    out = out or (FIGS / "fig_trajectory_live.pdf")
+    out = Path(out) if out else (FIGS / "fig_trajectory_live.pdf")
+    out.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out)
     fig.savefig(Path(str(out).replace(".pdf", ".png")), dpi=150)
     plt.close(fig)

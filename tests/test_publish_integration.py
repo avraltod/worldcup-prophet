@@ -19,25 +19,25 @@ LEDGER = EXPERIMENT / "ledger.csv"
 
 @pytest.fixture
 def restore_repo():
-    # snapshot
+    # snapshot EVERY file the publish path mutates — including the ledger,
+    # which holds real tournament rows the test must never destroy. Bytes,
+    # not text: the csv module writes CRLF and read_text would normalize it.
     saved = {}
-    for p in (RESULTS_LOG, TRAJ, README):
-        saved[p] = p.read_text() if p.exists() else None
+    for p in (RESULTS_LOG, TRAJ, README, LEDGER):
+        saved[p] = p.read_bytes() if p.exists() else None
     experiment_existed = EXPERIMENT.exists()
     yield
-    # restore files
-    for p, text in saved.items():
-        if text is None:
+    # restore files (delete any the test created that did not exist before)
+    for p, data in saved.items():
+        if data is None:
             if p.exists():
                 p.unlink()
         else:
-            p.write_text(text)
-    # remove experiment/ if the test created it
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_bytes(data)
+    # remove experiment/ entirely only if the test created it
     if not experiment_existed and EXPERIMENT.exists():
         shutil.rmtree(EXPERIMENT)
-    elif experiment_existed and LEDGER.exists():
-        # if experiment/ pre-existed, leave it but drop a ledger we appended to only if it was absent before
-        pass
 
 
 def test_full_publish_creates_ledger_and_updates_readme(restore_repo, monkeypatch):

@@ -159,7 +159,8 @@ def _write_living_layer(trajectory, entries, match, expectations):
     live_fig = False
     try:
         import plot_trajectory_live
-        plot_trajectory_live.build(trajectory, through_match=match)
+        plot_trajectory_live.build(trajectory, through_match=match,
+                                   out=PAPER / "figs" / "fig_trajectory_live.pdf")
         live_fig = True
     except Exception as ex:                      # noqa: BLE001 — figure is optional
         print(f"trajectory figure skipped ({ex}); keeping the dress rehearsal")
