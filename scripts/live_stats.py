@@ -50,7 +50,9 @@ def _abstract_revision(s):
     parts = ([f"{top[0][0]} at {100*top[0][1]:.1f} percent"]
              + [f"{t} at {100*p:.1f}" for t, p in top[1:3]])
     inner = ", ".join(parts[:-1]) + f", and {parts[-1]}"
-    return (f" Conditioned on the {s['documented']} results played so far, "
+    n = s["documented"]
+    word = "result" if n == 1 else "results"
+    return (f" Conditioned on the {n} {word} played so far, "
             f"this edition's forecast has {inner}.")
 
 
