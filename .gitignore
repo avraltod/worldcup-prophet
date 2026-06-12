@@ -47,3 +47,6 @@ paper/*.out
 paper/*.fls
 paper/*.fdb_latexmk
 paper/*.xdv
+
+# Local-only workspace: process docs, drafts, exploration scripts (never committed)
+/internal/
