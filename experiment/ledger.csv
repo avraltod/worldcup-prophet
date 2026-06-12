@@ -1,0 +1,3 @@
+date,match,home,away,pred,actual,pts,ev,p_outcome_real,p_score_real,brier,code
+2026-06-12,1,Mexico,South Africa,2-1,2-0,1,1.0243,0.672,0.1409,0.1655,S
+2026-06-12,2,South Korea,Czechia,1-1,2-1,0,0.7428,0.361,0.071,0.6128,P?
