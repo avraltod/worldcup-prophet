@@ -8,7 +8,7 @@
 
 | M | Fixture | Pick | Result | Points | E[points] | P(outcome) | Brier |
 |---|---------|------|--------|--------|-----------|------------|-------|
-| 1 | Mexico – South Africa | 1-0 | **2-0** | 1 | 1.02 | 0.672 | 0.166 |
+| 1 | Mexico – South Africa | 2-1 | **2-0** | 1 | 1.02 | 0.672 | 0.166 |
 | 2 | South Korea – Czechia | 1-1 | **2-1** | 0 | 0.74 | 0.361 | 0.613 |
 | | **Cumulative** | | | **1** | **1.77** | | mean 0.389 |
 
