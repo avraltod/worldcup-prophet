@@ -16,14 +16,14 @@ first match (**2026-06-11**). The forecast has not been altered since the lock.
 
 ## What's predicted
 
-- **The picks:** [`Avraa_Prediction_WC2026.md`](Avraa_Prediction_WC2026.md) — full match-by-match
+- **The picks:** [`PREDICTION_WC2026.md`](PREDICTION_WC2026.md) — full match-by-match
   and tournament predictions.
 - **Champion call:** Spain.
 
 ## How it works
 
 - **Method writeup:** [`HOW_THE_MODEL_WORKS.md`](HOW_THE_MODEL_WORKS.md)
-- **Full paper:** [`paper/Avraa_WC2026_paper.pdf`](paper/Avraa_WC2026_paper.pdf)
+- **Full paper:** [`paper/WC2026_paper.pdf`](paper/WC2026_paper.pdf)
 
 The forecast starts from public bookmaker odds (converted to fair probabilities), applies a
 Poisson goal model, and optimizes picks under the pool's 3/2/1 scoring rule.
@@ -38,9 +38,9 @@ Poisson goal model, and optimizes picks under the pool's 3/2/1 scoring rule.
 
 | Path | Contents |
 |------|----------|
-| `Avraa_Prediction_WC2026.md` | The locked predictions |
+| `PREDICTION_WC2026.md` | The locked predictions |
 | `HOW_THE_MODEL_WORKS.md` | Plain-language method |
-| `paper/` | The formal paper (`Avraa_WC2026_paper.pdf` + LaTeX source + figures) |
+| `paper/` | The formal paper (`WC2026_paper.pdf` + LaTeX source + figures) |
 | `data/` | Locked input odds and generated predictions |
 | `scripts/` | Model, simulation, and analysis code |
 | `tests/` | Test suite |

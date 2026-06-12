@@ -1,5 +1,5 @@
 """Generate a two-sided TikZ knockout bracket (mini-flag + 3-letter code) for the
-locked 2026 entry, resolved from the submitted picks (Avraa_Prediction_WC2026.md /
+locked 2026 entry, resolved from the submitted picks (PREDICTION_WC2026.md /
 ko_scores_321.json) and the slot allocation in condition.py (R32 m73-88 -> R16 ->
 QF -> SF -> Final m103). Spain emerges from the left half, Argentina from the
 right; Spain is champion. Flags are drawn inline in TikZ (simplified but

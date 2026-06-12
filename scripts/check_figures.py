@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).parent.parent
-tex = (ROOT / "paper" / "Avraa_WC2026_paper.tex").read_text()
+tex = (ROOT / "paper" / "WC2026_paper.tex").read_text()
 used = sorted(set(re.findall(r"figs/([A-Za-z0-9_]+)\.(?:pdf|png)", tex)))
 src = "\n".join(p.read_text(errors="ignore") for p in (ROOT / "scripts").glob("*.py")
                 if p.name != "check_figures.py")

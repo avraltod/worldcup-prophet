@@ -50,17 +50,17 @@ def test_opener_revision_updates_living_not_frozen(tmp_path, monkeypatch):
 
     # redirect the driver's paper paths into tmp
     paper = tmp_path / "paper"; (paper / "match_book").mkdir(parents=True)
-    shutil.copy(ROOT / "paper" / "Avraa_WC2026_paper.tex", paper / "Avraa_WC2026_paper.tex")
+    shutil.copy(ROOT / "paper" / "WC2026_paper.tex", paper / "WC2026_paper.tex")
     monkeypatch.setattr(uam, "PAPER", paper)
     monkeypatch.setattr(uam, "INDEX", paper / "match_book" / "index.json")
     monkeypatch.setattr(uam, "CORRECTIONS", paper / "match_book" / "corrections.md")
     monkeypatch.setattr(uam, "REVISIONS", paper / "REVISIONS.md")
-    monkeypatch.setattr(uam, "PAPER_TEX", paper / "Avraa_WC2026_paper.tex")
+    monkeypatch.setattr(uam, "PAPER_TEX", paper / "WC2026_paper.tex")
     monkeypatch.setattr(uam, "LIVE_STATS_TEX", paper / "live_stats.tex")
 
-    frozen_before = rev.frozen_hash((paper / "Avraa_WC2026_paper.tex").read_text())
+    frozen_before = rev.frozen_hash((paper / "WC2026_paper.tex").read_text())
     stats = uam.revise(m, use_api=False)
-    tex_after = (paper / "Avraa_WC2026_paper.tex").read_text()
+    tex_after = (paper / "WC2026_paper.tex").read_text()
 
     assert stats["documented"] == 1
     assert (paper / "match_book" / f"M{m:03d}.md").exists()

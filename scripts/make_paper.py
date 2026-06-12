@@ -204,5 +204,5 @@ md.append("- Model: odds research + Poisson fitting + Elo Monte Carlo, built Jun
 md.append("")
 
 text = "\n".join(md)
-(ROOT / "Avraa_Prediction_WC2026.md").write_text(text, encoding="utf-8")
-print(f"written: Avraa_Prediction_WC2026.md ({len(text.splitlines())} lines)")
+(ROOT / "PREDICTION_WC2026.md").write_text(text, encoding="utf-8")
+print(f"written: PREDICTION_WC2026.md ({len(text.splitlines())} lines)")

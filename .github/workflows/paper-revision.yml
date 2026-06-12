@@ -62,16 +62,16 @@ jobs:
               print("revising match", m)
               uam.revise(m, use_api=bool(os.environ.get("ANTHROPIC_API_KEY")))
               uam._latexmk()
-              shutil.copy("paper/Avraa_WC2026_paper.pdf",
-                          f"paper/_snapshots/Avraa_WC2026_paper_M{m:03d}.pdf")
+              shutil.copy("paper/WC2026_paper.pdf",
+                          f"paper/_snapshots/WC2026_paper_M{m:03d}.pdf")
           if not pending:  # manual dispatch with nothing new: re-render
               want = os.environ.get("REBUILD_MATCH") or ""
               target = int(want) if want.strip() else None
               uam.rerender(target)
               uam._latexmk()
               m = target or max(mb.documented_matches(uam.INDEX))
-              shutil.copy("paper/Avraa_WC2026_paper.pdf",
-                          f"paper/_snapshots/Avraa_WC2026_paper_M{m:03d}.pdf")
+              shutil.copy("paper/WC2026_paper.pdf",
+                          f"paper/_snapshots/WC2026_paper_M{m:03d}.pdf")
               if target is not None:  # restore the latest state before the commit step
                   uam.rerender()
           PY
@@ -86,17 +86,17 @@ jobs:
         if: steps.detect.outputs.pending != '0' || github.event_name == 'workflow_dispatch'
         run: |
           CHANGED=$(git status --porcelain \
-            paper/Avraa_WC2026_paper.tex paper/live_stats.tex paper/REVISIONS.md paper/match_book)
+            paper/WC2026_paper.tex paper/live_stats.tex paper/REVISIONS.md paper/match_book)
           if [ -z "$CHANGED" ]; then echo "no changes."; exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          for f in paper/Avraa_WC2026_paper.tex paper/live_stats.tex paper/REVISIONS.md; do
+          for f in paper/WC2026_paper.tex paper/live_stats.tex paper/REVISIONS.md; do
             [ -f "$f" ] && git add "$f"
           done
           git add paper/match_book
           for f in $(git diff --cached --name-only); do
             case "$f" in
-              paper/Avraa_WC2026_paper.tex|paper/live_stats.tex|paper/REVISIONS.md|paper/match_book/*) ;;
+              paper/WC2026_paper.tex|paper/live_stats.tex|paper/REVISIONS.md|paper/match_book/*) ;;
               *) echo "REFUSING: non-allowlisted file staged: $f"; exit 1 ;;
             esac
           done

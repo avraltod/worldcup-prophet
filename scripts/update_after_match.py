@@ -26,7 +26,7 @@ EXP_PATH = DATA / "match_expectations.json"
 INDEX = PAPER / "match_book" / "index.json"
 CORRECTIONS = PAPER / "match_book" / "corrections.md"
 REVISIONS = PAPER / "REVISIONS.md"
-PAPER_TEX = PAPER / "Avraa_WC2026_paper.tex"
+PAPER_TEX = PAPER / "WC2026_paper.tex"
 LIVE_STATS_TEX = PAPER / "live_stats.tex"
 FROZEN_PATH = DATA / "frozen_stage_probs.json"
 COND_N = 50000   # sims for the per-snapshot conditional forecast
@@ -84,7 +84,7 @@ def _entries_for_stats(index_path):
 
 def _latexmk():
     subprocess.run(["latexmk", "-xelatex", "-interaction=nonstopmode",
-                    "Avraa_WC2026_paper.tex"], cwd=PAPER, check=True)
+                    "WC2026_paper.tex"], cwd=PAPER, check=True)
 
 
 def results_through(trajectory, match):
