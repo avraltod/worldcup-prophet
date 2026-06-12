@@ -1,0 +1,28 @@
+import matplotlib
+matplotlib.use("Agg")
+
+import make_live_figures as mlf
+
+
+def _stages(c):
+    return {t: {"advance_KO": 0.5 + i * 0.01, "champion": c}
+            for i, t in enumerate(["Spain", "Argentina", "France", "Mexico"])}
+
+
+def test_group_qual_fig(tmp_path):
+    out = tmp_path / "q.pdf"
+    mlf.group_qual_fig(_stages(0.2), _stages(0.25),
+                       {"A": ["Spain", "Argentina"], "B": ["France", "Mexico"]}, out)
+    assert out.exists() and out.stat().st_size > 0
+
+
+def test_two_track_fig(tmp_path):
+    out = tmp_path / "t.pdf"
+    history = [{"match": 1,
+                "frozen_top": {"Spain": 0.27, "France": 0.14},
+                "learning_top": {"Spain": 0.28, "France": 0.13}},
+               {"match": 2,
+                "frozen_top": {"Spain": 0.27, "France": 0.14},
+                "learning_top": {"Spain": 0.29, "France": 0.12}}]
+    mlf.two_track_fig(history, out)
+    assert out.exists() and out.stat().st_size > 0
