@@ -29,3 +29,17 @@ update-log stamp, and the commented Mongolian abstract).
 
 To make a new version: copy the working .tex to `versions/..._vN-<label>_<date>.tex`,
 compile, and add a row above.
+
+## Post-kickoff: per-match CI snapshots (`_Mnnn`)
+
+A second lineage, separate from the drafting versions above: once the
+tournament started, the paper-revision CI recompiles the paper after each
+graded match (live scorecard macros + match-book entry) and uploads the PDF as
+a workflow artifact. Fetched copies are kept here, one per match, named
+`Avraa_WC2026_paper_Mnnn.pdf`. The repo's `paper/Avraa_WC2026_paper.pdf`
+remains the locked pre-kickoff build.
+
+| Snapshot | State | Scorecard | CI artifact |
+|----------|-------|-----------|-------------|
+| M001 | after M1, Mexico 2-0 South Africa | 1 pt / 1 graded / Brier 0.17 | `build-check`, 2026-06-12T00:28Z |
+| M002 | after M2, South Korea 2-1 Czechia | 1 pt / 2 graded / Brier 0.39 | `paper-versions`, 2026-06-12T04:18Z |
