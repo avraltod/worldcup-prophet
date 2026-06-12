@@ -70,8 +70,10 @@ NOW = {
     "Czechia":     {"champion": .000, "final": .002, "SF": .008, "advance_KO": .508},
 }
 GS = [{"group": "A", "played": 2, "total": 6,
-       "rows": [("Mexico", 3, 2), ("South Korea", 3, 1),
-                ("Czechia", 0, -1), ("South Africa", 0, -2)]}]
+       "rows": [{"team": "Mexico",       "P": 2, "W": 1, "D": 0, "L": 0, "GF": 3, "GA": 1, "Pts": 3},
+                {"team": "South Korea",  "P": 2, "W": 1, "D": 0, "L": 0, "GF": 3, "GA": 2, "Pts": 3},
+                {"team": "Czechia",      "P": 2, "W": 0, "D": 0, "L": 1, "GF": 1, "GA": 2, "Pts": 0},
+                {"team": "South Africa", "P": 2, "W": 0, "D": 0, "L": 1, "GF": 1, "GA": 3, "Pts": 0}]}]
 
 
 def test_divergence_lists_movers_and_pins_frozen_column():

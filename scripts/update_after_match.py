@@ -103,30 +103,31 @@ def results_through(trajectory, match):
 
 
 def group_state(results):
-    """Standings rows for every group with at least one revealed result."""
-    played_groups = {}
-    for m_str in results["group"]:
-        row = cond.MATCH_ROW[int(m_str)]
-        grp = next(g for g, rows in cond.GROUPS.items() if row in rows)
-        played_groups.setdefault(grp, 0)
-        played_groups[grp] += 1
+    """Full standings for ALL 12 groups (played or not): rows carry
+    P/W/D/L/GF/GA/Pts dicts sorted by (Pts, GD, GF)."""
     state = []
-    for grp in sorted(played_groups):
+    for grp in sorted(cond.GROUPS):
         teams = {}
+        played = 0
         for row in cond.GROUPS[grp]:
             _, _, h, a = cond.RATES[row]
-            teams.setdefault(h, [0, 0]); teams.setdefault(a, [0, 0])
-            m = cond.ROW_MATCH[row]
-            res = results["group"].get(str(m))
-            if res:
-                hg, ag = res
-                teams[h][1] += hg - ag; teams[a][1] += ag - hg
-                if hg > ag: teams[h][0] += 3
-                elif hg < ag: teams[a][0] += 3
-                else: teams[h][0] += 1; teams[a][0] += 1
-        rows = sorted(((t, pts, gd) for t, (pts, gd) in teams.items()),
-                      key=lambda x: (-x[1], -x[2]))
-        state.append({"group": grp, "played": played_groups[grp],
+            for t in (h, a):
+                teams.setdefault(t, {"team": t, "P": 0, "W": 0, "D": 0, "L": 0,
+                                     "GF": 0, "GA": 0, "Pts": 0})
+            res = results["group"].get(str(cond.ROW_MATCH[row]))
+            if not res:
+                continue
+            played += 1
+            hg, ag = res
+            for t, f, g in ((h, hg, ag), (a, ag, hg)):
+                r = teams[t]
+                r["P"] += 1; r["GF"] += f; r["GA"] += g
+                if f > g: r["W"] += 1; r["Pts"] += 3
+                elif f == g: r["D"] += 1; r["Pts"] += 1
+                else: r["L"] += 1
+        rows = sorted(teams.values(),
+                      key=lambda r: (-r["Pts"], -(r["GF"] - r["GA"]), -r["GF"]))
+        state.append({"group": grp, "played": played,
                       "total": len(cond.GROUPS[grp]), "rows": rows})
     return state
 
@@ -168,7 +169,8 @@ def _write_living_layer(trajectory, entries, match, expectations):
     tex = PAPER_TEX.read_text()
     before = rev.frozen_hash(tex)
     tex = rev.render_paper(tex, entries, frozen=frozen, now=now_probs,
-                           group_state=group_st, live_fig=live_fig)
+                           group_state=[g for g in group_st if g["played"]] if group_st else None,
+                           live_fig=live_fig)
     if rev.frozen_hash(tex) != before:
         raise SystemExit("ABORT: frozen region changed — refusing to write paper")
     PAPER_TEX.write_text(tex)

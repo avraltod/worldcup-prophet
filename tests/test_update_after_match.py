@@ -71,12 +71,17 @@ def test_results_through_includes_ko_only_with_winner():
 
 def test_group_state_standings_arithmetic():
     state = uam.group_state({"group": {"1": [2, 0], "2": [2, 1]}, "ko": {}})
-    assert len(state) == 1 and state[0]["group"] == "A"
-    assert state[0]["played"] == 2 and state[0]["total"] == 6
-    rows = {t: (pts, gd) for t, pts, gd in state[0]["rows"]}
+    # new behaviour: all 12 groups returned; Group A has played=2
+    grp_a = next(g for g in state if g["group"] == "A")
+    assert len(state) == 12
+    assert grp_a["played"] == 2 and grp_a["total"] == 6
+    rows = {r["team"]: (r["Pts"], r["GF"] - r["GA"]) for r in grp_a["rows"]}
     assert rows["Mexico"] == (3, 2)
     assert rows["South Korea"] == (3, 1)
     assert rows["Czechia"] == (0, -1)
     assert rows["South Africa"] == (0, -2)
     # sorted by points then GD
-    assert [t for t, _, _ in state[0]["rows"]][:2] == ["Mexico", "South Korea"]
+    assert [r["team"] for r in grp_a["rows"]][:2] == ["Mexico", "South Korea"]
+    # unplayed groups are present with played=0
+    unplayed = [g for g in state if g["played"] == 0]
+    assert len(unplayed) == 11

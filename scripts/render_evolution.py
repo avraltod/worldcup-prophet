@@ -76,7 +76,7 @@ def _delta(a, b):
 def divergence_section(frozen, now, entries, group_state):
     """Frozen-vs-conditional stage probabilities and revealed group state.
     frozen/now: {team: {advance_KO, R16, QF, SF, final, champion}};
-    group_state: [{group, played, total, rows: [(team, pts, gd)]}]. Pure."""
+    group_state: [{group, played, total, rows: [{team, P, W, D, L, GF, GA, Pts}]}]. Pure."""
     if not entries:
         return r"\textit{No matches revealed yet; the conditional forecast equals the baseline.}"
     n_results = len(entries)
@@ -106,8 +106,9 @@ def divergence_section(frozen, now, entries, group_state):
 
     gs = []
     for g in group_state:
-        line = "; ".join(f"{t} {pts} pts ({'+' if gd >= 0 else ''}{gd})"
-                         for t, pts, gd in g["rows"])
+        line = "; ".join(
+            f"{r['team']} {r['Pts']} pts ({'+' if r['GF'] - r['GA'] >= 0 else ''}{r['GF'] - r['GA']})"
+            for r in g["rows"])
         gs.append(f"\\textit{{Group {g['group']}}} ({g['played']} of {g['total']} played): {line}.")
     group_par = ("\n\n" + "\n".join(gs)) if gs else ""
 
