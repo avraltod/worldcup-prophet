@@ -26,7 +26,7 @@ jobs:
           echo "pending matches: $PENDING"
       - name: Install anthropic SDK
         if: steps.detect.outputs.pending != '0'
-        run: pip install anthropic
+        run: pip install anthropic || true   # optional; pipeline falls back to templated without it
       - name: Install TeX Live (XeLaTeX) + MS core fonts
         if: steps.detect.outputs.pending != '0'
         run: |
@@ -50,7 +50,7 @@ jobs:
           os.makedirs("paper/_snapshots", exist_ok=True)
           for m in uam.pending_matches(traj, uam.INDEX):
               print("revising match", m)
-              uam.revise(m, use_api=True)
+              uam.revise(m, use_api=bool(os.environ.get("ANTHROPIC_API_KEY")))
               uam._latexmk()
               shutil.copy("paper/Avraa_WC2026_paper.pdf",
                           f"paper/_snapshots/Avraa_WC2026_paper_M{m:03d}.pdf")
