@@ -1,0 +1,20 @@
+{
+ "match": 1,
+ "event_id": "760415",
+ "stats": {
+  "home": {
+   "team": "Mexico",
+   "sot": 4.0,
+   "other_shots": 12.0,
+   "total_shots": 16.0,
+   "possession": 60.5
+  },
+  "away": {
+   "team": "South Africa",
+   "sot": 2.0,
+   "other_shots": 1.0,
+   "total_shots": 3.0,
+   "possession": 39.5
+  }
+ }
+}

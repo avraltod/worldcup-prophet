@@ -1,0 +1,145 @@
+{
+ "k": 50.0,
+ "decay": 0.95,
+ "bound": 75.0,
+ "baseline": {
+  "Mexico": 1868,
+  "South Africa": 1517,
+  "South Korea": 1756,
+  "Czechia": 1733,
+  "Canada": 1793,
+  "Bosnia and Herzegovina": 1591,
+  "Qatar": 1423,
+  "Switzerland": 1894,
+  "Brazil": 1968,
+  "Morocco": 1822,
+  "Haiti": 1532,
+  "Scotland": 1770,
+  "United States": 1733,
+  "Paraguay": 1833,
+  "Australia": 1775,
+  "Turkey": 1906,
+  "Germany": 1925,
+  "Curaçao": 1433,
+  "Ivory Coast": 1676,
+  "Ecuador": 1935,
+  "Netherlands": 1938,
+  "Japan": 1896,
+  "Sweden": 1714,
+  "Tunisia": 1633,
+  "Belgium": 1866,
+  "Egypt": 1699,
+  "Iran": 1764,
+  "New Zealand": 1585,
+  "Spain": 2160,
+  "Cape Verde": 1576,
+  "Saudi Arabia": 1566,
+  "Uruguay": 1892,
+  "France": 2081,
+  "Senegal": 1866,
+  "Iraq": 1608,
+  "Norway": 1917,
+  "Argentina": 2113,
+  "Algeria": 1743,
+  "Austria": 1830,
+  "Jordan": 1685,
+  "Portugal": 2050,
+  "Congo DR": 1655,
+  "Uzbekistan": 1718,
+  "Colombia": 1910,
+  "England": 2020,
+  "Croatia": 1920,
+  "Ghana": 1503,
+  "Panama": 1733
+ },
+ "drift": {
+  "Mexico": -49.943249701314194,
+  "South Africa": 49.943249701314194,
+  "South Korea": 25.056750298685802,
+  "Czechia": -25.056750298685802,
+  "Canada": -41.22162485065709,
+  "Bosnia and Herzegovina": 41.22162485065709
+ },
+ "processed": [
+  {
+   "match": 1,
+   "home": "Mexico",
+   "away": "South Africa",
+   "lam_obs": {
+    "home": 1.302,
+    "away": 0.651,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 1.8,
+    "away": 0.15
+   },
+   "drift_after": {
+    "Mexico": -49.94,
+    "South Africa": 49.94
+   }
+  },
+  {
+   "match": 2,
+   "home": "South Korea",
+   "away": "Czechia",
+   "lam_obs": {
+    "home": 1.953,
+    "away": 1.302,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 1.2,
+    "away": 1.05
+   },
+   "drift_after": {
+    "South Korea": 25.06,
+    "Czechia": -25.06
+   }
+  },
+  {
+   "match": 3,
+   "home": "Canada",
+   "away": "Bosnia and Herzegovina",
+   "lam_obs": {
+    "home": 1.302,
+    "away": 0.977,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 1.75,
+    "away": 0.6
+   },
+   "drift_after": {
+    "Canada": -41.22,
+    "Bosnia and Herzegovina": 41.22
+   }
+  }
+ ],
+ "pending": [],
+ "history": [
+  {
+   "match": 3,
+   "frozen_top": {
+    "Spain": 0.2713,
+    "Argentina": 0.1782,
+    "France": 0.1422,
+    "Portugal": 0.0967,
+    "England": 0.0732,
+    "Brazil": 0.0344,
+    "Ecuador": 0.0232,
+    "Netherlands": 0.0223
+   },
+   "learning_top": {
+    "Spain": 0.2697,
+    "Argentina": 0.1781,
+    "France": 0.1442,
+    "Portugal": 0.0969,
+    "England": 0.0743,
+    "Brazil": 0.0356,
+    "Ecuador": 0.0239,
+    "Netherlands": 0.0236
+   }
+  }
+ ]
+}

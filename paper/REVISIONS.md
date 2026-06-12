@@ -15,3 +15,18 @@ run from this baseline forward. This entry exists so the mid-tournament
 authorship change is transparent and non-retroactive.
 
 **Rev M003 (Canada v Bosnia and Herzegovina 1-1).** Cumulative 1 pts, mean Brier 0.56; failure-mode none. Updated evolution table + narrative; no frozen content changed.
+
+**Structural revision (12 June 2026, post-M003).** The living layer moves from
+marker-delimited blocks inside the paper source to generated files under
+`paper/live/`, and it widens substantially: every edition now re-states the
+champion table, the divergence table, per-group appendix boxes with real
+results and standings, the stage-distribution table, a group-stage tracker, a
+live two-track (frozen vs. learning) section, and a per-edition revision
+report with a forecast-vintages table. This is a presentation-layer change:
+the model, the locked picks, and all frozen prose are untouched, and the
+pre-registration guarantee strengthens — the entire skeleton file is now
+hash-pinned (`data/skeleton_sha256.txt`) and asserted on every pipeline run,
+where previously only the text outside the marker blocks was. This advances
+the frozen-hash baseline one step, exactly as the 12 June authorship entry
+did. Editions M000–M003 are issued artifacts and are not regenerated; their
+headline numbers are backfilled into the vintages table.

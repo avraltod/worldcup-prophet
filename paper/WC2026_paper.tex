@@ -27,7 +27,7 @@
 \and Jeronimo Luza\\ \small \texttt{github.com/jeronimoluza}}
 \date{\liveVersionLine\thanks{\itshape Update log --- forecast built 7 June 2026 from bookmaker odds collected 5--7 June; Group~K recalibrated to prediction-market prices the evening of 7 June; squad and injury news monitored through 9 June, when the confirmed withdrawals of Jurri\"en Timber (Netherlands) and several Brazil attackers were already in the pre-kickoff ratings and the remaining late losses (e.g.\ Germany's Lennart Karl) fall on non-decisive squad members, so the entry is confirmed unchanged; group scorelines re-derived on 10 June with a realistic rounded-expected-goals readout that matches the points-optimal pick at no cost in pool points while resembling actual scores more closely (Section~\ref{sec:objective}), leaving champion, bracket, and podium unchanged; predictions lock at the 11 June kickoff. Code and data timestamped for the out-of-sample record.\liveUpdateLog{}}}
 
-\input{live_stats}
+\input{live/stats}
 \begin{document}
 \maketitle
 
@@ -171,33 +171,7 @@ These measures are not new, and the contribution here is their application to a 
 
 Table~\ref{tab:champ} reports champion, finalist, and semi-finalist probabilities; once the tournament is under way, each live edition of this paper re-states the table conditioned on the results revealed so far, beside the locked baseline column. At the lock, Spain is the modal champion at 27.4\%, ahead of Argentina at 18.6\% and France at 14.8\%, and the predicted Spain--Argentina final is the single most likely pairing at 10.8\% of simulations.\footnote{This is the original locked forecast. Two later numbers in the paper differ by about a percentage point: the pre-deadline Group~K recalibration of Section~\ref{sec:postscript} revises Spain to 26.8\%, and Monte Carlo variation across runs is about 0.5~pp (Section~\ref{sec:robust}). I report the original 27.4\% as the headline and the recalibrated 26.8\% wherever the recalibrated model is the explicit subject; the two are the same forecast before and after that single localized update.} The forecast is consistent with the outright betting market, which priced Spain as favorite at decimal odds near 5.5.
 
-% LIVE-EVOLUTION-CHAMPTABLE:START
-\begin{table}[!t]
-  \centering
-  \caption{Simulated tournament probabilities, top eight teams (live edition)}\label{tab:champ}
-  \begin{footnotesize}
-  \begin{threeparttable}
-    {\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} lcccc}
-      \toprule
-      Team & Champion (lock) & Champion (now) & Finalist (now) & Semi-finalist (now) \\
-      \midrule
-      Spain          & 26.9\% & 26.9\% & 38.9\% & 51.5\% \\
-      Argentina      & 18.1\% & 17.8\% & 29.9\% & 42.7\% \\
-      France         & 14.3\% & 14.5\% & 24.9\% & 43.6\% \\
-      Portugal       & 9.4\% & 9.3\% & 18.0\% & 29.0\% \\
-      England        & 7.0\% & 6.9\% & 14.4\% & 28.3\% \\
-      Brazil         & 3.5\% & 3.6\% & 8.8\% & 20.3\% \\
-      Germany        & 2.2\% & 2.3\% & 6.5\% & 17.0\% \\
-      Netherlands    & 2.4\% & 2.2\% & 6.1\% & 15.7\% \\
-      \bottomrule
-    \end{tabular*}}
-    \begin{tablenotes}\notesize
-      \item \textit{Notes}: ``now'' columns conditioned on the 3 results revealed to date ($N$ = 50{,}000, seed 2026); the lock column is the $N$ = 200{,}000 pre-kickoff baseline (\texttt{data/frozen\_stage\_probs.json}) and never changes.
-    \end{tablenotes}
-  \end{threeparttable}
-  \end{footnotesize}
-\end{table}
-% LIVE-EVOLUTION-CHAMPTABLE:END
+\input{live/champ_table}
 
 \begin{figure}[!t]
   \caption{Champion probability distribution}\label{fig:champdist}
@@ -273,78 +247,27 @@ I register three hypotheses before the tournament. First, the information is con
 
 To verify that the recording machinery behaves as registered, I ran it once as a dress rehearsal, treating a single simulated tournament as if it were the real one and feeding its 104 results through the pipeline in order. Figure~\ref{fig:trajectory} shows the result. The synthetic run reproduces all three hypothesized patterns. The information is concentrated, because the ten most informative matches carry 69 percent of the total; the information arrives late, because the group stage accounts for only 19 percent of the movement against 81 percent for the knockouts; and the largest single spike, 0.52 bits, falls on a semi-final that eliminates a likely finalist. The champion probabilities stay nearly flat through the group stage, then move sharply once elimination begins, with the eventual champion's probability climbing from the low twenties to one over the final two weeks. This is a demonstration on simulated data and not a forecast of the real tournament, but it confirms that the instrument measures what it is meant to. The realized trajectory will confirm or refute the same three hypotheses on real results, and the data, the conditional-simulation code, and the per-match information series are retained for that evaluation.
 
-% LIVE-EVOLUTION-TRAJFIG:START
-\begin{figure}[!t]
-  \caption{Forecast evolution: the realized trajectory}\label{fig:trajectory}
-  \begin{threeparttable}
-    {\centering
-      \includegraphics[width=0.94\textwidth]{figs/fig_trajectory_live.pdf}\par}
-    \begin{tablenotes}\notesize
-      \item \textit{Notes}: The live study on real results, through 3 of 104 matches. Upper panel: each contender's champion probability after every recorded result, starting from the pre-tournament baseline. Lower panel: the information content of each result in bits (Equation~\ref{eq:kl}). The figure is regenerated after every match; the dress-rehearsal version of this instrument, validated on a simulated tournament, is retained in the locked pre-kickoff edition.
-    \end{tablenotes}
-  \end{threeparttable}
-\end{figure}
-% LIVE-EVOLUTION-TRAJFIG:END
+\input{live/trajfig}
 
 \medskip
 \noindent\textit{Live results ledger (updated after each match).}
 
-% LIVE-EVOLUTION-TABLE:START
-\begin{longtable}{rlcccccl}
-\toprule
-M & Fixture & Pick & Result & Pts & Brier & Info & Mode \\
-\midrule
-\endhead
-1 & Mexico v South Africa & 2--1 & 2--0 & 1 & 0.166 & 0.001 & -- \\
-2 & South Korea v Czechia & 1--1 & 2--1 & 0 & 0.613 & 0.001 & -- \\
-3 & Canada v Bosnia and Herzegovina & 2--1 & 1--1 & 0 & 0.888 & 0.001 & -- \\
-\bottomrule
-\end{longtable}
-% LIVE-EVOLUTION-TABLE:END
+\input{live/ledger}
 
 \medskip
 \noindent\textit{Match-by-match notes (informative results).}
 
-% LIVE-EVOLUTION-NARRATIVE:START
-No individually decisive results yet; see the ledger for the full record.
-% LIVE-EVOLUTION-NARRATIVE:END
+\input{live/narrative}
 
 \medskip
 \noindent\textit{Divergence from the frozen baseline (recomputed after each match; the
 frozen column never changes, so successive versions are directly comparable).}
 
-% LIVE-EVOLUTION-DIVERGENCE:START
-With 3 of 104 results revealed (0.003 bits of championship information), the conditional forecast diverges from the locked baseline as follows. The table lists the baseline top ten plus any team whose advance probability moved by at least three percentage points or whose champion probability moved by at least half a point; the frozen column is fixed for the whole tournament, so successive versions of this table are directly comparable.
+\input{live/divergence}
 
-\begin{longtable}{lrrrrrr}
-\toprule
- & \multicolumn{3}{c}{Champion (\%)} & \multicolumn{3}{c}{Advance (\%)} \\
-\cmidrule(lr){2-4}\cmidrule(lr){5-7}
-Team & frozen & now & $\Delta$ & frozen & now & $\Delta$ \\
-\midrule
-\endhead
-Spain & 26.9 & 26.9 & 0.0 & 98.9 & 98.9 & 0.0 \\
-Argentina & 18.1 & 17.8 & $-0.3$ & 98.9 & 98.8 & $-0.1$ \\
-France & 14.3 & 14.5 & $+0.3$ & 98.5 & 98.5 & 0.0 \\
-Portugal & 9.4 & 9.3 & $-0.1$ & 97.3 & 97.3 & 0.0 \\
-England & 7.0 & 6.9 & $-0.1$ & 99.0 & 99.0 & 0.0 \\
-Brazil & 3.5 & 3.6 & $+0.1$ & 98.4 & 98.3 & $-0.1$ \\
-Germany & 2.2 & 2.3 & 0.0 & 98.8 & 98.8 & 0.0 \\
-Netherlands & 2.4 & 2.2 & $-0.1$ & 91.0 & 91.1 & $+0.2$ \\
-Ecuador & 2.0 & 2.0 & 0.0 & 87.7 & 87.6 & $-0.1$ \\
-Norway & 1.7 & 1.8 & $+0.1$ & 89.4 & 89.2 & $-0.2$ \\
-Mexico & 1.2 & 1.3 & $+0.1$ & 91.6 & 98.7 & $+7.1$ \\
-Canada & 0.4 & 0.4 & 0.0 & 88.4 & 84.8 & $-3.6$ \\
-South Korea & 0.1 & 0.1 & 0.0 & 66.2 & 92.3 & $+26.1$ \\
-Czechia & 0.1 & 0.0 & 0.0 & 68.3 & 51.0 & $-17.3$ \\
-Bosnia and Herzegovina & 0.0 & 0.0 & 0.0 & 62.4 & 67.2 & $+4.7$ \\
-South Africa & 0.0 & 0.0 & 0.0 & 45.3 & 32.2 & $-13.1$ \\
-\bottomrule
-\end{longtable}
+\input{live/revision_report}
 
-\textit{Group A} (2 of 6 played): Mexico 3 pts (+2); South Korea 3 pts (+1); Czechia 0 pts (-1); South Africa 0 pts (-2).
-\textit{Group B} (1 of 6 played): Canada 1 pts (+0); Bosnia and Herzegovina 1 pts (+0); Qatar 0 pts (+0); Switzerland 0 pts (+0).
-% LIVE-EVOLUTION-DIVERGENCE:END
+\input{live/tracker}
 
 \subsection{Model against market: a benchmarked trajectory}\label{sec:market}
 
@@ -553,6 +476,8 @@ A decomposition separates the two kinds of information a game carries. The resul
     \end{tablenotes}
   \end{threeparttable}
 \end{figure}
+
+\input{live/two_track}
 
 \section{Discussion}
 
@@ -827,6 +752,8 @@ The group-by-group rationale follows; each paragraph states the decisive evidenc
 \end{threeparttable}
 
 
+\input{live/group_A}
+
 \paragraph{Group B (Switzerland, Canada, Bosnia and Herzegovina, Qatar).} Switzerland carries the group's highest rating (Elo 1894) and a 50\% vs.\ 30\% market edge in the decider against host Canada. Qatar is the weakest side in the field (Elo 1423), making goal difference against them the implicit tiebreaker currency. Bosnia advances third via the Qatar fixture.
 
 
@@ -847,6 +774,8 @@ The group-by-group rationale follows; each paragraph states the decisive evidenc
 \end{tablenotes}
 \end{threeparttable}
 
+
+\input{live/group_B}
 
 \paragraph{Group C (Brazil, Morocco, Scotland, Haiti).} Brazil wins the group despite the Rodrygo injury (rating adjusted $-20$); an Elo of 1988 and an 87\% market price against Haiti absorb the loss. The pivotal fixture is Scotland--Morocco for second, where the market is unambiguous (50\% vs.\ 23\% for Morocco). Scotland's three points are eliminated on goal difference.
 
@@ -869,6 +798,8 @@ The group-by-group rationale follows; each paragraph states the decisive evidenc
 \end{threeparttable}
 
 
+\input{live/group_C}
+
 \paragraph{Group D (United States, Turkey, Paraguay, Australia).} The tightest group in the tournament and the bracket's largest group-stage risk. Turkey holds the higher rating (Elo 1906), but the United States carries the host adjustment and the group-winner market (40\% vs.\ 35\%). The head-to-head was priced at an exact tie (36.3\%/36.3\%); the submitted scoreline is the realistic level 1--1, and the entry assigns the group-winner slot to the United States because simulation showed that routing places both teams in bracket slots they survive more often (Section 4.2). Paraguay advances third.
 
 
@@ -889,6 +820,8 @@ The group-by-group rationale follows; each paragraph states the decisive evidenc
 \end{tablenotes}
 \end{threeparttable}
 
+
+\input{live/group_D}
 
 \paragraph{Group E (Germany, Ecuador, Ivory Coast, Curaçao).} Germany--Curaçao is the tournament's heaviest mismatch at 92 percent, and it produces the forecast's only 3--0. Ecuador's rating of Elo 1935 exceeds several traditional powers', and the 42 against 28 percent market edge over Ivory Coast settles second. Ivory Coast advances as one of the two strongest third-placers.
 
@@ -911,6 +844,8 @@ The group-by-group rationale follows; each paragraph states the decisive evidenc
 \end{threeparttable}
 
 
+\input{live/group_E}
+
 \paragraph{Group F (Netherlands, Japan, Sweden, Tunisia).} The opening Netherlands--Japan fixture effectively decides the group (46\% vs.\ 28\%). The Dutch absorb the Xavi Simons loss ($-15$); Japan's Mitoma absence ($-10$) trims a key attacking channel but leaves second place secure. Sweden advances third on the Tunisia result.
 
 
@@ -931,6 +866,8 @@ The group-by-group rationale follows; each paragraph states the decisive evidenc
 \end{tablenotes}
 \end{threeparttable}
 
+
+\input{live/group_F}
 
 \paragraph{Group G (Belgium, Egypt, Iran, New Zealand).} This is the weakest group by aggregate rating. Belgium wins it at modest strength, and this matters later, because the soft path inflates Belgium's slot emergence in the knockout phase (Section 4.2). Egypt over Iran decides second at 42 against 27 percent, and Iran advances third.
 
@@ -953,6 +890,8 @@ The group-by-group rationale follows; each paragraph states the decisive evidenc
 \end{threeparttable}
 
 
+\input{live/group_G}
+
 \paragraph{Group H (Spain, Uruguay, Cape Verde, Saudi Arabia).} The champion pick's runway: Spain is the field's highest-rated team (Elo 2165) and an 85\%+ market favorite in two of three fixtures. Uruguay's healthy squad takes second. Cape Verde's three points fall on goal difference.
 
 
@@ -973,6 +912,8 @@ The group-by-group rationale follows; each paragraph states the decisive evidenc
 \end{tablenotes}
 \end{threeparttable}
 
+
+\input{live/group_H}
 
 \paragraph{Group I (France, Norway, Senegal, Iraq).} France tops the group at a 66 percent market price. Norway is at a first World Cup since 1998 and the group-winner market puts it at 24 percent against Senegal's 10 percent, so Norway takes second via the matchday-2 meeting with Senegal (Elo 1917 against 1866). Senegal advances as the tournament's strongest third-placer, which is consequential, because it is the predicted Round-of-32 opponent in Portugal's slot.
 
@@ -995,6 +936,8 @@ The group-by-group rationale follows; each paragraph states the decisive evidenc
 \end{threeparttable}
 
 
+\input{live/group_I}
+
 \paragraph{Group J (Argentina, Austria, Algeria, Jordan).} The lowest-variance group for the bracket: Argentina (Elo 2113) is a 63\%+ favorite in every fixture. Austria (Elo 1830) beats Algeria in the decider for second (43\% vs.\ 28\%); Algeria advances third.
 
 
@@ -1015,6 +958,8 @@ The group-by-group rationale follows; each paragraph states the decisive evidenc
 \end{tablenotes}
 \end{threeparttable}
 
+
+\input{live/group_J}
 
 \paragraph{Group K (Portugal, Colombia, Uzbekistan, Congo DR).} This is the recalibrated group (Section 5.4). Raw Elo priced Portugal--Colombia as a tie, but the group-winner prediction markets priced Portugal at 63 percent against Colombia's 32 percent, which implies a 140-point effective gap. Portugal therefore tops the group via a 1--0 in the direct meeting, and this is the single revision that converts Portugal's predicted tournament from a Round-of-32 exit to a quarter-final run. It remains the bracket's most explicitly flagged sensitivity.
 
@@ -1037,6 +982,8 @@ The group-by-group rationale follows; each paragraph states the decisive evidenc
 \end{threeparttable}
 
 
+\input{live/group_K}
+
 \paragraph{Group L (England, Croatia, Ghana, Panama).} England's dominance, at a 68 percent group-winner price with no injury concerns, is the bracket's quiet engine, because England nearly always wins the group, so Croatia nearly always finishes second and its probability mass concentrates in one Round-of-32 slot. This is the basis of the Croatia-over-Portugal slot decision before the Group K recalibration and of Croatia-over-Colombia after it. Croatia's poor warm-up form, worth a $-10$ adjustment, does not threaten second place against Ghana (Elo 1503) and Panama.
 
 
@@ -1057,6 +1004,8 @@ The group-by-group rationale follows; each paragraph states the decisive evidenc
 \end{tablenotes}
 \end{threeparttable}
 
+
+\input{live/group_L}
 
 \section{Knockout bracket rationale}\label{app:bracket}
 
@@ -1199,6 +1148,8 @@ The same instrumentation reveals the bracket's structural landmine. Slot M84 pai
 \subsection*{C.3 \quad Which group results most swing the entry: a value-of-information estimate}
 
 A complementary question to the single-team risk traces above is which group-stage outcomes most determine the success of the \emph{whole entry}, which is the score-metric pivotality of Section~\ref{sec:general}: how much each group call is worth to the entry's expected knockout points. I estimate it with a surrogate global sensitivity analysis, treating each of 40{,}000 simulated tournaments as one observation, with 24 binary features for whether the entry named each group's winner and runner-up correctly and a target equal to the number of the 31 knockout picks that occupy and win their slot. A random forest fit to this data explains 47 percent of the variance in the entry's knockout score from group-stage correctness alone, so the majority of the score is decided later in knockout ties the group stage cannot anticipate, the same wide-distribution message stated as a variance share; a gradient-boosted tree agrees on the ranking (Spearman 0.83) and reaches the same ceiling, so this is not an artifact of one model. The importances concentrate on the winners of the groups feeding the deepest predicted runs, Groups H, I, J, L, and K, with naming Spain out of Group~H worth about 0.8 of a knockout point against barely a quarter of that for the lowest-leverage call. Not all group calls are equally valuable, and the one to protect is the call feeding the longest bracket run, which for this entry is Spain out of Group~H. A fuller treatment would compute the value of information directly rather than through a surrogate, as Section~\ref{sec:general} notes.
+
+\input{live/survival}
 
 \section{The living two-track forecaster: implementation, tuning, and validation}\label{app:prophet}
 

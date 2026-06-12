@@ -1,0 +1,20 @@
+{
+ "match": 2,
+ "event_id": "760414",
+ "stats": {
+  "home": {
+   "team": "South Korea",
+   "sot": 6.0,
+   "other_shots": 9.0,
+   "total_shots": 15.0,
+   "possession": 61.5
+  },
+  "away": {
+   "team": "Czechia",
+   "sot": 4.0,
+   "other_shots": 3.0,
+   "total_shots": 7.0,
+   "possession": 38.5
+  }
+ }
+}
