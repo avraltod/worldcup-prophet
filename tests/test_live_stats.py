@@ -28,3 +28,4 @@ def test_render_macros_are_consistent():
     assert r"\def\liveCumPoints{4}" in tex
     assert r"\def\liveMeanBrier{0.28}" in tex
     assert r"\def\liveDocumented{2}" in tex
+    assert r"\def\liveReEvDelta{+0}" in tex

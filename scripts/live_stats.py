@@ -31,5 +31,6 @@ def render_macros(s):
         r"\def\liveCumPoints{%d}" % s["cum_points"],
         r"\def\liveMeanBrier{%.2f}" % s["mean_brier"],
         r"\def\liveExactRate{%.2f}" % s["exact_rate"],
+        r"\def\liveReEvDelta{%+d}" % s["re_ev_delta"],
     ]
     return "\n".join(lines) + "\n"

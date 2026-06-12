@@ -8,7 +8,6 @@ import os
 def templated(e):
     pts = e["post"]["points"]
     bits = e["post"]["info_bits"]
-    ph, pd, pa = e["pre"]["probs_HDA"]
     res = e["result"]
     outcome = "home win" if res[0] > res[1] else ("draw" if res[0] == res[1] else "away win")
     moved = "barely moved the forecast" if bits < 0.05 else "moved the forecast materially"
