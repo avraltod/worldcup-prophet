@@ -1,8 +1,9 @@
 """Pre-register the model's per-match expectations for the daily experiment.
 
 For each group match: the pick, P(exact pick), P(pick's outcome), expected
-points under (3,1) scoring [EV = 2*P(exact) + P(outcome)], and the full
-fitted scoreline distribution stats needed for surprise metrics later.
+points under the pool's nested 3/2/1 scoring [EV = P(exact) + P(result&GD)
++ P(result), via ev321.ev_321], and the full fitted scoreline distribution
+stats needed for surprise metrics later.
 Output: data/match_expectations.json
 """
 import json
@@ -10,6 +11,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
+from ev321 import ev_321
 from fixtures import GROUP_FIXTURES
 from poisson_model import fit_rates, pois, MAX_G, outcome_probs
 
@@ -34,7 +36,7 @@ for row, grp, h, a in GROUP_FIXTURES:
     p_exact = pois(hg, lh) * pois(ag, la)
     out_pick = "H" if hg > ag else ("D" if hg == ag else "A")
     p_out = {"H": fH, "D": fD, "A": fA}[out_pick]
-    ev = 2 * p_exact + p_out
+    ev = ev_321(hg, ag, lh, la)
     total_ev += ev
     out.append({
         "match": ROW_MATCH[row], "row": row, "group": grp,

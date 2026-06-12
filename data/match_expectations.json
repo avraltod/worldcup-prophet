@@ -11,7 +11,7 @@
   ],
   "p_exact": 0.0916,
   "p_outcome": 0.6718,
-  "ev_points": 0.855,
+  "ev_points": 1.0243,
   "lh": 1.9,
   "la": 0.65,
   "probs_HDA": [
@@ -32,7 +32,7 @@
   ],
   "p_exact": 0.1352,
   "p_outcome": 0.3038,
-  "ev_points": 0.5742,
+  "ev_points": 0.7428,
   "lh": 1.05,
   "la": 1.0,
   "probs_HDA": [
@@ -53,7 +53,7 @@
   ],
   "p_exact": 0.0868,
   "p_outcome": 0.4599,
-  "ev_points": 0.6334,
+  "ev_points": 0.7895,
   "lh": 1.35,
   "la": 0.95,
   "probs_HDA": [
@@ -74,7 +74,7 @@
   ],
   "p_exact": 0.0856,
   "p_outcome": 0.5245,
-  "ev_points": 0.6957,
+  "ev_points": 0.8751,
   "lh": 1.4,
   "la": 0.75,
   "probs_HDA": [
@@ -95,7 +95,7 @@
   ],
   "p_exact": 0.0878,
   "p_outcome": 0.4985,
-  "ev_points": 0.6741,
+  "ev_points": 0.8409,
   "lh": 0.85,
   "la": 1.4,
   "probs_HDA": [
@@ -116,7 +116,7 @@
   ],
   "p_exact": 0.0797,
   "p_outcome": 0.4172,
-  "ev_points": 0.5766,
+  "ev_points": 0.733,
   "lh": 0.95,
   "la": 1.2,
   "probs_HDA": [
@@ -137,7 +137,7 @@
   ],
   "p_exact": 0.0949,
   "p_outcome": 0.5256,
-  "ev_points": 0.7155,
+  "ev_points": 0.8678,
   "lh": 1.6,
   "la": 0.95,
   "probs_HDA": [
@@ -158,7 +158,7 @@
   ],
   "p_exact": 0.0927,
   "p_outcome": 0.7256,
-  "ev_points": 0.9111,
+  "ev_points": 1.0566,
   "lh": 0.7,
   "la": 2.25,
   "probs_HDA": [
@@ -179,7 +179,7 @@
   ],
   "p_exact": 0.0918,
   "p_outcome": 0.6143,
-  "ev_points": 0.7978,
+  "ev_points": 0.9721,
   "lh": 1.7,
   "la": 0.7,
   "probs_HDA": [
@@ -200,7 +200,7 @@
   ],
   "p_exact": 0.0889,
   "p_outcome": 0.7235,
-  "ev_points": 0.9014,
+  "ev_points": 1.0633,
   "lh": 2.1,
   "la": 0.6,
   "probs_HDA": [
@@ -221,7 +221,7 @@
   ],
   "p_exact": 0.092,
   "p_outcome": 0.493,
-  "ev_points": 0.677,
+  "ev_points": 0.7973,
   "lh": 1.95,
   "la": 1.45,
   "probs_HDA": [
@@ -242,7 +242,7 @@
   ],
   "p_exact": 0.0902,
   "p_outcome": 0.5381,
-  "ev_points": 0.7186,
+  "ev_points": 0.889,
   "lh": 1.5,
   "la": 0.8,
   "probs_HDA": [
@@ -263,7 +263,7 @@
   ],
   "p_exact": 0.0967,
   "p_outcome": 0.587,
-  "ev_points": 0.7803,
+  "ev_points": 0.9375,
   "lh": 1.75,
   "la": 0.85,
   "probs_HDA": [
@@ -284,7 +284,7 @@
   ],
   "p_exact": 0.0983,
   "p_outcome": 0.6418,
-  "ev_points": 0.8385,
+  "ev_points": 0.9863,
   "lh": 0.85,
   "la": 2.0,
   "probs_HDA": [
@@ -305,7 +305,7 @@
   ],
   "p_exact": 0.0878,
   "p_outcome": 0.4985,
-  "ev_points": 0.6741,
+  "ev_points": 0.8409,
   "lh": 0.85,
   "la": 1.4,
   "probs_HDA": [
@@ -326,7 +326,7 @@
   ],
   "p_exact": 0.2426,
   "p_outcome": 0.8642,
-  "ev_points": 1.3495,
+  "ev_points": 1.3678,
   "lh": 2.2,
   "la": 0.1,
   "probs_HDA": [
@@ -347,7 +347,7 @@
   ],
   "p_exact": 0.0958,
   "p_outcome": 0.6766,
-  "ev_points": 0.8683,
+  "ev_points": 1.0209,
   "lh": 0.75,
   "la": 2.05,
   "probs_HDA": [
@@ -368,7 +368,7 @@
   ],
   "p_exact": 0.2096,
   "p_outcome": 0.7708,
-  "ev_points": 1.1899,
+  "ev_points": 1.2241,
   "lh": 1.85,
   "la": 0.25,
   "probs_HDA": [
@@ -389,7 +389,7 @@
   ],
   "p_exact": 0.0864,
   "p_outcome": 0.4721,
-  "ev_points": 0.645,
+  "ev_points": 0.8067,
   "lh": 1.35,
   "la": 0.9,
   "probs_HDA": [
@@ -410,7 +410,7 @@
   ],
   "p_exact": 0.0886,
   "p_outcome": 0.5249,
-  "ev_points": 0.7022,
+  "ev_points": 0.8739,
   "lh": 0.8,
   "la": 1.45,
   "probs_HDA": [
@@ -431,7 +431,7 @@
   ],
   "p_exact": 0.0794,
   "p_outcome": 0.4292,
-  "ev_points": 0.5879,
+  "ev_points": 0.7505,
   "lh": 1.2,
   "la": 0.9,
   "probs_HDA": [
@@ -452,7 +452,7 @@
   ],
   "p_exact": 0.0902,
   "p_outcome": 0.5381,
-  "ev_points": 0.7186,
+  "ev_points": 0.889,
   "lh": 1.5,
   "la": 0.8,
   "probs_HDA": [
@@ -473,7 +473,7 @@
   ],
   "p_exact": 0.1306,
   "p_outcome": 0.2766,
-  "ev_points": 0.5379,
+  "ev_points": 0.6839,
   "lh": 1.2,
   "la": 1.2,
   "probs_HDA": [
@@ -494,7 +494,7 @@
   ],
   "p_exact": 0.0753,
   "p_outcome": 0.4388,
-  "ev_points": 0.5893,
+  "ev_points": 0.7654,
   "lh": 1.15,
   "la": 0.8,
   "probs_HDA": [
@@ -515,7 +515,7 @@
   ],
   "p_exact": 0.1828,
   "p_outcome": 0.9235,
-  "ev_points": 1.289,
+  "ev_points": 1.3197,
   "lh": 3.15,
   "la": 0.2,
   "probs_HDA": [
@@ -536,7 +536,7 @@
   ],
   "p_exact": 0.0761,
   "p_outcome": 0.4264,
-  "ev_points": 0.5785,
+  "ev_points": 0.7476,
   "lh": 0.85,
   "la": 1.15,
   "probs_HDA": [
@@ -557,7 +557,7 @@
   ],
   "p_exact": 0.0841,
   "p_outcome": 0.7695,
-  "ev_points": 0.9377,
+  "ev_points": 1.0905,
   "lh": 2.3,
   "la": 0.55,
   "probs_HDA": [
@@ -578,7 +578,7 @@
   ],
   "p_exact": 0.0925,
   "p_outcome": 0.6259,
-  "ev_points": 0.8109,
+  "ev_points": 0.9828,
   "lh": 1.75,
   "la": 0.7,
   "probs_HDA": [
@@ -599,7 +599,7 @@
   ],
   "p_exact": 0.095,
   "p_outcome": 0.5632,
-  "ev_points": 0.7531,
+  "ev_points": 0.9135,
   "lh": 0.85,
   "la": 1.65,
   "probs_HDA": [
@@ -620,7 +620,7 @@
   ],
   "p_exact": 0.0841,
   "p_outcome": 0.7695,
-  "ev_points": 0.9377,
+  "ev_points": 1.0905,
   "lh": 0.55,
   "la": 2.3,
   "probs_HDA": [
@@ -641,7 +641,7 @@
   ],
   "p_exact": 0.0919,
   "p_outcome": 0.4642,
-  "ev_points": 0.648,
+  "ev_points": 0.7885,
   "lh": 1.5,
   "la": 1.1,
   "probs_HDA": [
@@ -662,7 +662,7 @@
   ],
   "p_exact": 0.0858,
   "p_outcome": 0.4847,
-  "ev_points": 0.6563,
+  "ev_points": 0.824,
   "lh": 1.35,
   "la": 0.85,
   "probs_HDA": [
@@ -683,7 +683,7 @@
   ],
   "p_exact": 0.0837,
   "p_outcome": 0.5106,
-  "ev_points": 0.6779,
+  "ev_points": 0.8586,
   "lh": 0.75,
   "la": 1.35,
   "probs_HDA": [
@@ -704,7 +704,7 @@
   ],
   "p_exact": 0.0978,
   "p_outcome": 0.6097,
-  "ev_points": 0.8053,
+  "ev_points": 0.9588,
   "lh": 1.85,
   "la": 0.85,
   "probs_HDA": [
@@ -725,7 +725,7 @@
   ],
   "p_exact": 0.0925,
   "p_outcome": 0.6259,
-  "ev_points": 0.8109,
+  "ev_points": 0.9828,
   "lh": 0.7,
   "la": 1.75,
   "probs_HDA": [
@@ -746,7 +746,7 @@
   ],
   "p_exact": 0.0798,
   "p_outcome": 0.4055,
-  "ev_points": 0.5651,
+  "ev_points": 0.7157,
   "lh": 1.2,
   "la": 1.0,
   "probs_HDA": [
@@ -767,7 +767,7 @@
   ],
   "p_exact": 0.098,
   "p_outcome": 0.586,
-  "ev_points": 0.7819,
+  "ev_points": 0.9332,
   "lh": 1.8,
   "la": 0.9,
   "probs_HDA": [
@@ -788,7 +788,7 @@
   ],
   "p_exact": 0.0896,
   "p_outcome": 0.512,
-  "ev_points": 0.6912,
+  "ev_points": 0.857,
   "lh": 1.45,
   "la": 0.85,
   "probs_HDA": [
@@ -809,7 +809,7 @@
   ],
   "p_exact": 0.0873,
   "p_outcome": 0.5647,
-  "ev_points": 0.7392,
+  "ev_points": 0.9221,
   "lh": 0.7,
   "la": 1.5,
   "probs_HDA": [
@@ -830,7 +830,7 @@
   ],
   "p_exact": 0.094,
   "p_outcome": 0.6692,
-  "ev_points": 0.8573,
+  "ev_points": 1.019,
   "lh": 1.95,
   "la": 0.7,
   "probs_HDA": [
@@ -851,7 +851,7 @@
   ],
   "p_exact": 0.0887,
   "p_outcome": 0.7616,
-  "ev_points": 0.9389,
+  "ev_points": 1.0789,
   "lh": 0.65,
   "la": 2.4,
   "probs_HDA": [
@@ -872,7 +872,7 @@
   ],
   "p_exact": 0.0761,
   "p_outcome": 0.4264,
-  "ev_points": 0.5785,
+  "ev_points": 0.7476,
   "lh": 1.15,
   "la": 0.85,
   "probs_HDA": [
@@ -893,7 +893,7 @@
   ],
   "p_exact": 0.1357,
   "p_outcome": 0.8547,
-  "ev_points": 1.1261,
+  "ev_points": 1.183,
   "lh": 2.9,
   "la": 0.5,
   "probs_HDA": [
@@ -914,7 +914,7 @@
   ],
   "p_exact": 0.0943,
   "p_outcome": 0.6127,
-  "ev_points": 0.8013,
+  "ev_points": 0.968,
   "lh": 0.75,
   "la": 1.75,
   "probs_HDA": [
@@ -935,7 +935,7 @@
   ],
   "p_exact": 0.0913,
   "p_outcome": 0.6612,
-  "ev_points": 0.8438,
+  "ev_points": 1.0159,
   "lh": 1.85,
   "la": 0.65,
   "probs_HDA": [
@@ -956,7 +956,7 @@
   ],
   "p_exact": 0.0733,
   "p_outcome": 0.8252,
-  "ev_points": 0.9717,
+  "ev_points": 1.1198,
   "lh": 2.8,
   "la": 0.6,
   "probs_HDA": [
@@ -977,7 +977,7 @@
   ],
   "p_exact": 0.0903,
   "p_outcome": 0.5642,
-  "ev_points": 0.7449,
+  "ev_points": 0.9196,
   "lh": 0.75,
   "la": 1.55,
   "probs_HDA": [
@@ -998,7 +998,7 @@
   ],
   "p_exact": 0.0797,
   "p_outcome": 0.3942,
-  "ev_points": 0.5535,
+  "ev_points": 0.6986,
   "lh": 1.2,
   "la": 1.05,
   "probs_HDA": [
@@ -1019,7 +1019,7 @@
   ],
   "p_exact": 0.0898,
   "p_outcome": 0.5901,
-  "ev_points": 0.7698,
+  "ev_points": 0.9486,
   "lh": 1.6,
   "la": 0.7,
   "probs_HDA": [
@@ -1040,7 +1040,7 @@
   ],
   "p_exact": 0.0756,
   "p_outcome": 0.7796,
-  "ev_points": 0.9309,
+  "ev_points": 1.075,
   "lh": 0.7,
   "la": 2.6,
   "probs_HDA": [
@@ -1061,7 +1061,7 @@
   ],
   "p_exact": 0.0884,
   "p_outcome": 0.4859,
-  "ev_points": 0.6627,
+  "ev_points": 0.8238,
   "lh": 1.4,
   "la": 0.9,
   "probs_HDA": [
@@ -1082,7 +1082,7 @@
   ],
   "p_exact": 0.1915,
   "p_outcome": 0.9105,
-  "ev_points": 1.2935,
+  "ev_points": 1.3145,
   "lh": 2.8,
   "la": 0.15,
   "probs_HDA": [
@@ -1103,7 +1103,7 @@
   ],
   "p_exact": 0.0939,
   "p_outcome": 0.5508,
-  "ev_points": 0.7386,
+  "ev_points": 0.9005,
   "lh": 0.85,
   "la": 1.6,
   "probs_HDA": [
@@ -1124,7 +1124,7 @@
   ],
   "p_exact": 0.0776,
   "p_outcome": 0.7758,
-  "ev_points": 0.9311,
+  "ev_points": 1.0704,
   "lh": 2.65,
   "la": 0.75,
   "probs_HDA": [
@@ -1145,7 +1145,7 @@
   ],
   "p_exact": 0.0861,
   "p_outcome": 0.6295,
-  "ev_points": 0.8017,
+  "ev_points": 0.991,
   "lh": 1.65,
   "la": 0.6,
   "probs_HDA": [
@@ -1166,7 +1166,7 @@
   ],
   "p_exact": 0.0941,
   "p_outcome": 0.6793,
-  "ev_points": 0.8675,
+  "ev_points": 1.0266,
   "lh": 2.0,
   "la": 0.7,
   "probs_HDA": [
@@ -1187,7 +1187,7 @@
   ],
   "p_exact": 0.0797,
   "p_outcome": 0.3942,
-  "ev_points": 0.5535,
+  "ev_points": 0.6986,
   "lh": 1.05,
   "la": 1.2,
   "probs_HDA": [
@@ -1208,7 +1208,7 @@
   ],
   "p_exact": 0.0744,
   "p_outcome": 0.7969,
-  "ev_points": 0.9456,
+  "ev_points": 1.0931,
   "lh": 2.65,
   "la": 0.65,
   "probs_HDA": [
@@ -1229,7 +1229,7 @@
   ],
   "p_exact": 0.0847,
   "p_outcome": 0.434,
-  "ev_points": 0.6034,
+  "ev_points": 0.7542,
   "lh": 1.0,
   "la": 1.3,
   "probs_HDA": [
@@ -1250,7 +1250,7 @@
   ],
   "p_exact": 0.1357,
   "p_outcome": 0.8547,
-  "ev_points": 1.1261,
+  "ev_points": 1.183,
   "lh": 0.5,
   "la": 2.9,
   "probs_HDA": [
@@ -1271,7 +1271,7 @@
   ],
   "p_exact": 0.0932,
   "p_outcome": 0.7169,
-  "ev_points": 0.9033,
+  "ev_points": 1.0516,
   "lh": 2.2,
   "la": 0.7,
   "probs_HDA": [
@@ -1292,7 +1292,7 @@
   ],
   "p_exact": 0.094,
   "p_outcome": 0.6692,
-  "ev_points": 0.8573,
+  "ev_points": 1.019,
   "lh": 0.7,
   "la": 1.95,
   "probs_HDA": [
@@ -1313,7 +1313,7 @@
   ],
   "p_exact": 0.0733,
   "p_outcome": 0.8252,
-  "ev_points": 0.9717,
+  "ev_points": 1.1198,
   "lh": 2.8,
   "la": 0.6,
   "probs_HDA": [
@@ -1334,7 +1334,7 @@
   ],
   "p_exact": 0.0756,
   "p_outcome": 0.7796,
-  "ev_points": 0.9309,
+  "ev_points": 1.075,
   "lh": 2.6,
   "la": 0.7,
   "probs_HDA": [
@@ -1355,7 +1355,7 @@
   ],
   "p_exact": 0.0974,
   "p_outcome": 0.5744,
-  "ev_points": 0.7691,
+  "ev_points": 0.922,
   "lh": 0.9,
   "la": 1.75,
   "probs_HDA": [
@@ -1376,7 +1376,7 @@
   ],
   "p_exact": 0.0797,
   "p_outcome": 0.3942,
-  "ev_points": 0.5535,
+  "ev_points": 0.6986,
   "lh": 1.05,
   "la": 1.2,
   "probs_HDA": [
@@ -1397,7 +1397,7 @@
   ],
   "p_exact": 0.0939,
   "p_outcome": 0.5508,
-  "ev_points": 0.7386,
+  "ev_points": 0.9005,
   "lh": 1.6,
   "la": 0.85,
   "probs_HDA": [
@@ -1418,7 +1418,7 @@
   ],
   "p_exact": 0.0907,
   "p_outcome": 0.4748,
-  "ev_points": 0.6562,
+  "ev_points": 0.8061,
   "lh": 1.45,
   "la": 1.0,
   "probs_HDA": [
@@ -1439,7 +1439,7 @@
   ],
   "p_exact": 0.0957,
   "p_outcome": 0.5998,
-  "ev_points": 0.7911,
+  "ev_points": 0.9528,
   "lh": 0.8,
   "la": 1.75,
   "probs_HDA": [
@@ -1460,7 +1460,7 @@
   ],
   "p_exact": 0.2013,
   "p_outcome": 0.9194,
-  "ev_points": 1.322,
+  "ev_points": 1.3365,
   "lh": 2.8,
   "la": 0.1,
   "probs_HDA": [
@@ -1481,7 +1481,7 @@
   ],
   "p_exact": 0.0939,
   "p_outcome": 0.7274,
-  "ev_points": 0.9153,
+  "ev_points": 1.0484,
   "lh": 0.8,
   "la": 2.4,
   "probs_HDA": [
@@ -1502,7 +1502,7 @@
   ],
   "p_exact": 0.1657,
   "p_outcome": 0.8912,
-  "ev_points": 1.2225,
+  "ev_points": 1.2619,
   "lh": 2.9,
   "la": 0.3,
   "probs_HDA": [
