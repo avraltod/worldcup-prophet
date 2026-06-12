@@ -141,6 +141,7 @@ def rerender(match=None):
         raise SystemExit("nothing documented yet")
     if match is None:
         match = max(e["match"] for e in entries)
+    entries = [e for e in entries if e["match"] <= match]   # historical re-issue
     latest_champ = next((r["champion"] for r in reversed(trajectory)
                          if r["phase"] == "post"), None)
     stats = ls.compute(entries, latest_champ)
