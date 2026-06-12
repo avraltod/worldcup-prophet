@@ -181,18 +181,18 @@ Table~\ref{tab:champ} reports champion, finalist, and semi-finalist probabilitie
       \toprule
       Team & Champion (lock) & Champion (now) & Finalist (now) & Semi-finalist (now) \\
       \midrule
-      Spain          & 26.9\% & 26.9\% & 38.8\% & 51.7\% \\
-      Argentina      & 18.1\% & 17.9\% & 30.1\% & 43.1\% \\
-      France         & 14.3\% & 14.3\% & 24.6\% & 43.3\% \\
-      Portugal       & 9.4\% & 9.3\% & 18.1\% & 29.2\% \\
-      England        & 7.0\% & 7.1\% & 14.6\% & 28.3\% \\
-      Brazil         & 3.5\% & 3.6\% & 8.6\% & 20.3\% \\
-      Netherlands    & 2.4\% & 2.3\% & 6.1\% & 15.9\% \\
-      Germany        & 2.2\% & 2.2\% & 6.3\% & 16.6\% \\
+      Spain          & 26.9\% & 26.9\% & 38.9\% & 51.5\% \\
+      Argentina      & 18.1\% & 17.8\% & 29.9\% & 42.7\% \\
+      France         & 14.3\% & 14.5\% & 24.9\% & 43.6\% \\
+      Portugal       & 9.4\% & 9.3\% & 18.0\% & 29.0\% \\
+      England        & 7.0\% & 6.9\% & 14.4\% & 28.3\% \\
+      Brazil         & 3.5\% & 3.6\% & 8.8\% & 20.3\% \\
+      Germany        & 2.2\% & 2.3\% & 6.5\% & 17.0\% \\
+      Netherlands    & 2.4\% & 2.2\% & 6.1\% & 15.7\% \\
       \bottomrule
     \end{tabular*}}
     \begin{tablenotes}\notesize
-      \item \textit{Notes}: ``now'' columns conditioned on the 2 results revealed to date ($N$ = 50{,}000, seed 2026); the lock column is the $N$ = 200{,}000 pre-kickoff baseline (\texttt{data/frozen\_stage\_probs.json}) and never changes.
+      \item \textit{Notes}: ``now'' columns conditioned on the 3 results revealed to date ($N$ = 50{,}000, seed 2026); the lock column is the $N$ = 200{,}000 pre-kickoff baseline (\texttt{data/frozen\_stage\_probs.json}) and never changes.
     \end{tablenotes}
   \end{threeparttable}
   \end{footnotesize}
@@ -280,7 +280,7 @@ To verify that the recording machinery behaves as registered, I ran it once as a
     {\centering
       \includegraphics[width=0.94\textwidth]{figs/fig_trajectory_live.pdf}\par}
     \begin{tablenotes}\notesize
-      \item \textit{Notes}: The live study on real results, through 2 of 104 matches. Upper panel: each contender's champion probability after every recorded result, starting from the pre-tournament baseline. Lower panel: the information content of each result in bits (Equation~\ref{eq:kl}). The figure is regenerated after every match; the dress-rehearsal version of this instrument, validated on a simulated tournament, is retained in the locked pre-kickoff edition.
+      \item \textit{Notes}: The live study on real results, through 3 of 104 matches. Upper panel: each contender's champion probability after every recorded result, starting from the pre-tournament baseline. Lower panel: the information content of each result in bits (Equation~\ref{eq:kl}). The figure is regenerated after every match; the dress-rehearsal version of this instrument, validated on a simulated tournament, is retained in the locked pre-kickoff edition.
     \end{tablenotes}
   \end{threeparttable}
 \end{figure}
@@ -297,6 +297,7 @@ M & Fixture & Pick & Result & Pts & Brier & Info & Mode \\
 \endhead
 1 & Mexico v South Africa & 2--1 & 2--0 & 1 & 0.166 & 0.001 & -- \\
 2 & South Korea v Czechia & 1--1 & 2--1 & 0 & 0.613 & 0.001 & -- \\
+3 & Canada v Bosnia and Herzegovina & 2--1 & 1--1 & 0 & 0.888 & 0.001 & -- \\
 \bottomrule
 \end{longtable}
 % LIVE-EVOLUTION-TABLE:END
@@ -313,7 +314,7 @@ No individually decisive results yet; see the ledger for the full record.
 frozen column never changes, so successive versions are directly comparable).}
 
 % LIVE-EVOLUTION-DIVERGENCE:START
-With 2 of 104 results revealed (0.002 bits of championship information), the conditional forecast diverges from the locked baseline as follows. The table lists the baseline top ten plus any team whose advance probability moved by at least three percentage points or whose champion probability moved by at least half a point; the frozen column is fixed for the whole tournament, so successive versions of this table are directly comparable.
+With 3 of 104 results revealed (0.003 bits of championship information), the conditional forecast diverges from the locked baseline as follows. The table lists the baseline top ten plus any team whose advance probability moved by at least three percentage points or whose champion probability moved by at least half a point; the frozen column is fixed for the whole tournament, so successive versions of this table are directly comparable.
 
 \begin{longtable}{lrrrrrr}
 \toprule
@@ -323,23 +324,26 @@ Team & frozen & now & $\Delta$ & frozen & now & $\Delta$ \\
 \midrule
 \endhead
 Spain & 26.9 & 26.9 & 0.0 & 98.9 & 98.9 & 0.0 \\
-Argentina & 18.1 & 17.9 & $-0.2$ & 98.9 & 98.9 & 0.0 \\
-France & 14.3 & 14.3 & $+0.1$ & 98.5 & 98.5 & 0.0 \\
-Portugal & 9.4 & 9.3 & $-0.1$ & 97.3 & 97.2 & 0.0 \\
-England & 7.0 & 7.1 & $+0.1$ & 99.0 & 99.0 & 0.0 \\
+Argentina & 18.1 & 17.8 & $-0.3$ & 98.9 & 98.8 & $-0.1$ \\
+France & 14.3 & 14.5 & $+0.3$ & 98.5 & 98.5 & 0.0 \\
+Portugal & 9.4 & 9.3 & $-0.1$ & 97.3 & 97.3 & 0.0 \\
+England & 7.0 & 6.9 & $-0.1$ & 99.0 & 99.0 & 0.0 \\
 Brazil & 3.5 & 3.6 & $+0.1$ & 98.4 & 98.3 & $-0.1$ \\
-Netherlands & 2.4 & 2.3 & $-0.1$ & 91.0 & 91.1 & $+0.1$ \\
-Germany & 2.2 & 2.2 & 0.0 & 98.8 & 98.8 & 0.0 \\
-Ecuador & 2.0 & 2.1 & 0.0 & 87.7 & 87.6 & $-0.1$ \\
-Norway & 1.7 & 1.7 & 0.0 & 89.4 & 89.4 & $+0.1$ \\
-Mexico & 1.2 & 1.3 & $+0.1$ & 91.6 & 98.7 & $+7.2$ \\
-South Korea & 0.1 & 0.1 & $+0.1$ & 66.2 & 92.5 & $+26.3$ \\
-Czechia & 0.1 & 0.0 & 0.0 & 68.3 & 50.8 & $-17.5$ \\
+Germany & 2.2 & 2.3 & 0.0 & 98.8 & 98.8 & 0.0 \\
+Netherlands & 2.4 & 2.2 & $-0.1$ & 91.0 & 91.1 & $+0.2$ \\
+Ecuador & 2.0 & 2.0 & 0.0 & 87.7 & 87.6 & $-0.1$ \\
+Norway & 1.7 & 1.8 & $+0.1$ & 89.4 & 89.2 & $-0.2$ \\
+Mexico & 1.2 & 1.3 & $+0.1$ & 91.6 & 98.7 & $+7.1$ \\
+Canada & 0.4 & 0.4 & 0.0 & 88.4 & 84.8 & $-3.6$ \\
+South Korea & 0.1 & 0.1 & 0.0 & 66.2 & 92.3 & $+26.1$ \\
+Czechia & 0.1 & 0.0 & 0.0 & 68.3 & 51.0 & $-17.3$ \\
+Bosnia and Herzegovina & 0.0 & 0.0 & 0.0 & 62.4 & 67.2 & $+4.7$ \\
 South Africa & 0.0 & 0.0 & 0.0 & 45.3 & 32.2 & $-13.1$ \\
 \bottomrule
 \end{longtable}
 
 \textit{Group A} (2 of 6 played): Mexico 3 pts (+2); South Korea 3 pts (+1); Czechia 0 pts (-1); South Africa 0 pts (-2).
+\textit{Group B} (1 of 6 played): Canada 1 pts (+0); Bosnia and Herzegovina 1 pts (+0); Qatar 0 pts (+0); Switzerland 0 pts (+0).
 % LIVE-EVOLUTION-DIVERGENCE:END
 
 \subsection{Model against market: a benchmarked trajectory}\label{sec:market}

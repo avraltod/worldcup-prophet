@@ -13,3 +13,5 @@ step; CI's frozen-hash guard (render_evolution.frozen_hash) continues to
 enforce byte-identity of the frozen region within every subsequent revision
 run from this baseline forward. This entry exists so the mid-tournament
 authorship change is transparent and non-retroactive.
+
+**Rev M003 (Canada v Bosnia and Herzegovina 1-1).** Cumulative 1 pts, mean Brier 0.56; failure-mode none. Updated evolution table + narrative; no frozen content changed.
