@@ -24,7 +24,7 @@ def draft(e, corrections, use_api):
         client = anthropic.Anthropic()
         prompt = _build_prompt(e, corrections)
         msg = client.messages.create(
-            model="claude-opus-4-8", max_tokens=220,
+            model="claude-sonnet-4-6", max_tokens=220,
             messages=[{"role": "user", "content": prompt}])
         text = msg.content[0].text.strip()
         return text, "claude"
@@ -85,7 +85,7 @@ def draft_revision(pack, corrections, use_api):
                if corrections else "")
             + "\n\nReturn only the narrative text.")
         msg = client.messages.create(
-            model="claude-opus-4-8", max_tokens=400,
+            model="claude-sonnet-4-6", max_tokens=400,
             messages=[{"role": "user", "content": prompt}])
         return msg.content[0].text.strip(), "claude"
     except Exception:
