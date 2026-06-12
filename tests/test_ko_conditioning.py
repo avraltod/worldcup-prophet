@@ -71,3 +71,31 @@ def test_baseline_unchanged_by_deterministic_assign():
     base = C.conditional_probs({"group": {}, "ko": {}}, N=N)
     assert 0.24 < base["Spain"]["champion"] < 0.30           # ~27%, within MC noise
     assert base["Argentina"]["champion"] > base["France"]["champion"]
+
+
+def test_conditional_probs_ratings_override():
+    import condition as cond
+    import live_state as lst
+    base = lst.baseline_2026()
+    out = cond.conditional_probs({"group": {}, "ko": {}}, N=300, seed=7,
+                                 ratings=base)
+    assert set(out) == set(cond.ELO)
+    assert abs(sum(d["champion"] for d in out.values()) - 1.0) < 1e-6
+    # a recorded result is still respected under ratings mode
+    out2 = cond.conditional_probs({"group": {"1": [9, 0]}, "ko": {}}, N=300,
+                                  seed=7, ratings=base)
+    assert out2["Mexico"]["advance_KO"] >= out["Mexico"]["advance_KO"]
+    # sensitivity: the override must actually drive the simulation — +75 Elo
+    # to Spain moves its champion probability far outside MC noise
+    boosted = dict(base); boosted["Spain"] = base["Spain"] + 75
+    out3 = cond.conditional_probs({"group": {}, "ko": {}}, N=300, seed=7,
+                                  ratings=boosted)
+    assert out3["Spain"]["champion"] > out["Spain"]["champion"] + 0.03
+
+
+def test_conditional_probs_default_path_unchanged():
+    import condition as cond
+    a = cond.conditional_probs({"group": {}, "ko": {}}, N=300, seed=7)
+    b = cond.conditional_probs({"group": {}, "ko": {}}, N=300, seed=7,
+                               ratings=None)
+    assert a == b

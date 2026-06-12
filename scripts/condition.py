@@ -145,9 +145,23 @@ def realized_bracket(results, seed=2026):
     return slots, am
 
 
-def conditional_probs(results, N=50000, seed=2026):
-    """Return {team: {stage: prob}} given observed results (group + ko)."""
+def conditional_probs(results, N=50000, seed=2026, ratings=None):
+    """Return {team: {stage: prob}} given observed results (group + ko).
+    ratings: optional {team: Elo} override — group scorelines then come from
+    learn.lambda_expected and knockout winners from the Elo expectancy on these
+    ratings (no host bonus), which is the Learning-track re-simulation. The
+    default (None) is the locked market-rate path and is unchanged. A-vs-B
+    contract: BOTH tracks of a two-track comparison must use ratings= (frozen
+    leg = baseline_2026()), never one leg through the default market path."""
     random.seed(seed)
+    if ratings is not None:
+        from learn import lambda_expected
+
+        def _kw(a, b, late=False):     # late unused: no host bonus in ratings mode
+            e = 1 / (1 + 10 ** (-(ratings[a] - ratings[b]) / 400))
+            return a if random.random() < e else b
+    else:
+        _kw = kw
     g_obs = {int(k): v for k, v in results.get("group", {}).items()}
     ko_obs = {int(k): v for k, v in results.get("ko", {}).items()}
     reach = defaultdict(Counter)   # team -> stage(1..6) count; champion=6
@@ -161,6 +175,9 @@ def conditional_probs(results, N=50000, seed=2026):
                 lh, la, home, away = RATES[row]
                 if m in g_obs:
                     hg, ag = g_obs[m]
+                elif ratings is not None:
+                    le_h, le_a = lambda_expected(ratings[home], ratings[away])
+                    hg, ag = sample(le_h), sample(le_a)
                 else:
                     hg, ag = sample(lh), sample(la)
                 for t, f, gg in ((home, hg, ag), (away, ag, hg)):
@@ -184,17 +201,17 @@ def conditional_probs(results, N=50000, seed=2026):
         W = {}
         for m, (s1, s2) in R32.items():
             a, b = slots[s1], slots[s2]
-            W[m] = ko_obs[m] if (m in ko_obs and ko_obs[m] in (a, b)) else kw(a, b)
+            W[m] = ko_obs[m] if (m in ko_obs and ko_obs[m] in (a, b)) else _kw(a, b)
             reach[W[m]][2] += 1
         for tab, late in KO_TABLES:
             stg = {89: 3, 93: 3, 91: 3, 95: 3, 90: 3, 94: 3, 92: 3, 96: 3,
                    97: 4, 98: 4, 99: 4, 100: 4, 101: 5, 102: 5}
             for m, (m1, m2) in tab.items():
                 a, b = W[m1], W[m2]
-                W[m] = ko_obs[m] if (m in ko_obs and ko_obs[m] in (a, b)) else kw(a, b, late)
+                W[m] = ko_obs[m] if (m in ko_obs and ko_obs[m] in (a, b)) else _kw(a, b, late)
                 reach[W[m]][stg[m]] += 1
         a, b = W[101], W[102]
-        champ = ko_obs[104] if (104 in ko_obs and ko_obs[104] in (a, b)) else kw(a, b, True)
+        champ = ko_obs[104] if (104 in ko_obs and ko_obs[104] in (a, b)) else _kw(a, b, True)
         reach[champ][6] += 1
 
     out = {}
