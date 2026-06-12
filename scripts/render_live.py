@@ -56,3 +56,97 @@ def champ_table_unit(frozen, now, n_results):
 def divergence_unit(frozen, now, entries, group_state):
     played = [g for g in group_state if g["played"]]
     return rev.divergence_section(frozen, now, entries, played)
+
+
+# ---- new units ----
+
+def tracker(group_state, frozen, now):
+    """Main-text 'state of the group stage': one row per group. frozen is
+    accepted for signature symmetry with the other units; the table shows
+    only current values."""
+    rows = []
+    for g in group_state:
+        top2 = g["rows"][:2]
+        if g["played"]:
+            standing = "; ".join(f"{r['team']} {r['Pts']}" for r in top2)
+        else:
+            standing = "--"
+        leaders = sorted((r for r in g["rows"] if r["team"] in now),
+                         key=lambda r: -now[r["team"]]["advance_KO"])[:2]
+        qual = "; ".join(
+            f"{r['team']} {_pct(now[r['team']]['advance_KO'])}" for r in leaders)
+        rows.append(f"{g['group']} & {g['played']}/{g['total']} & {standing} & {qual} \\\\")
+    return (
+        "\\begin{table}[!t]\n  \\centering\n"
+        "  \\caption{State of the group stage (live edition)}\\label{tab:tracker}\n"
+        "  \\begin{footnotesize}\n"
+        "  {\\begin{tabular*}{\\textwidth}{@{\\extracolsep{\\fill}} clll}\n"
+        "    \\toprule\n"
+        "    Group & Played & Standings (top two, real points) & Advance now (top two) \\\\\n"
+        "    \\midrule\n    " + "\n    ".join(rows) + "\n"
+        "    \\bottomrule\n  \\end{tabular*}}\n  \\end{footnotesize}\n\\end{table}")
+
+
+def group_box(g_state, results, expectations, frozen, now):
+    """Appendix-A living box for one group: real results beside the picks, real
+    standings, qualification lock -> now, remaining fixtures with lock odds."""
+    grp = g_state["group"]
+    exps = sorted((e for e in expectations if e.get("group") == grp),
+                  key=lambda e: e["match"])
+    if not g_state["played"]:
+        qual = "; ".join(f"{r['team']} {_pct(frozen[r['team']]['advance_KO'])}"
+                         for r in g_state["rows"] if r["team"] in frozen)
+        return (f"\\paragraph{{Group {grp} — live.}} No results yet; the locked "
+                f"qualification odds stand ({qual}).")
+    played_lines, remaining_lines = [], []
+    for e in exps:
+        res = results["group"].get(str(e["match"]))
+        if res:
+            played_lines.append(
+                f"M{e['match']} {e['home']}--{e['away']}: predicted "
+                f"{e['pick'][0]}--{e['pick'][1]}, actual {res[0]}--{res[1]} \\\\")
+        else:
+            ph, pd, pa = e["probs_HDA"]
+            remaining_lines.append(
+                f"M{e['match']} {e['home']} v {e['away']} "
+                f"({_pct(ph)}/{_pct(pd)}/{_pct(pa)}) \\\\")
+    stand = " ".join(
+        f"{r['team']} & {r['P']} & {r['W']} & {r['D']} & {r['L']} & "
+        f"{r['GF']} & {r['GA']} & {r['Pts']} \\\\" for r in g_state["rows"])
+    qual_rows = " ".join(
+        f"{r['team']} & {_pct(frozen[r['team']]['advance_KO'])} & "
+        f"{_pct(now[r['team']]['advance_KO'])} \\\\"
+        for r in g_state["rows"] if r["team"] in frozen and r["team"] in now)
+    parts = [f"\\paragraph{{Group {grp} — live ({g_state['played']} of {g_state['total']} played).}}",
+             "\\begin{footnotesize}",
+             "\\begin{tabular}{l} " + " ".join(played_lines) + " \\end{tabular}\\quad",
+             "\\begin{tabular}{lrrrrrrr} \\toprule "
+             "Team & P & W & D & L & GF & GA & Pts \\\\ \\midrule "
+             + stand + " \\bottomrule \\end{tabular}\\quad",
+             "\\begin{tabular}{lrr} \\toprule Team & Qual (lock) & Qual (now) \\\\ "
+             "\\midrule " + qual_rows + " \\bottomrule \\end{tabular}"]
+    if remaining_lines:
+        parts.append("\\\\[2pt] Remaining (lock H/D/A \\%): "
+                     "\\begin{tabular}{l} " + " ".join(remaining_lines) + " \\end{tabular}")
+    parts.append("\\end{footnotesize}")
+    return "\n".join(parts)
+
+
+def survival_unit(frozen, now):
+    """Appendix-B 'now' restatement of the stage-by-stage outcome table.
+    frozen is intentionally unused: the locked table sits directly above in
+    the paper, so only the conditioned values are printed here."""
+    teams = sorted(now, key=lambda t: (-now[t]["champion"], -now[t]["advance_KO"]))
+    rows = [f"{t} & {_pct(now[t]['advance_KO'])} & {_pct(now[t]['R16'])} & "
+            f"{_pct(now[t]['QF'])} & {_pct(now[t]['SF'])} & "
+            f"{_pct(now[t]['final'])} & {_pct(now[t]['champion'])} \\\\"
+            for t in teams]
+    return (
+        "\\subsection*{B.live \\quad The same distribution, conditioned on the "
+        "results so far}\n"
+        "The table restates the stage-reached probabilities of the locked table "
+        "above, conditioned on every result revealed to date; the locked table "
+        "never changes, so the pair is directly comparable.\n\n"
+        "\\begin{footnotesize}\n\\begin{longtable}{lrrrrrr}\n\\toprule\n"
+        "Team & KO & R16 & QF & SF & Final & Champion \\\\\n\\midrule\n\\endhead\n"
+        + "\n".join(rows) + "\n\\bottomrule\n\\end{longtable}\n\\end{footnotesize}")
