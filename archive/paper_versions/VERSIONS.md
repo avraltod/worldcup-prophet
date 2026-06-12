@@ -42,4 +42,10 @@ remains the locked pre-kickoff build.
 | Snapshot | State | Scorecard | CI artifact |
 |----------|-------|-----------|-------------|
 | M001 | after M1, Mexico 2-0 South Africa | 1 pt / 1 graded / Brier 0.17 | `build-check`, 2026-06-12T00:28Z |
-| M002 | after M2, South Korea 2-1 Czechia | 1 pt / 2 graded / Brier 0.39 | `paper-versions`, 2026-06-12T04:18Z |
+| M002 | after M2, South Korea 2-1 Czechia | 1 pt / 2 graded / Brier 0.39 | `paper-versions`, run 27418484887 (re-rendered 2026-06-12 as the first full conditional edition: divergence table + group state) |
+
+M002 onward are *conditional editions*: alongside the scorecard and ledger they
+carry the frozen-vs-conditional divergence table (champion + advance, with the
+frozen column pinned to `data/frozen_stage_probs.json`, N=200k) and the
+revealed standings of every group in play, conditioned through that match
+(N=50k, seed 2026). M001 predates the divergence region.
