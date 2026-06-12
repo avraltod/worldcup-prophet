@@ -121,10 +121,75 @@ def divergence_section(frozen, now, entries, group_state):
     return intro + "\n\n" + table + group_par
 
 
-def render_paper(tex, entries, frozen=None, now=None, group_state=None):
+def champ_table(frozen, now, n_results):
+    """The paper's headline probability table, re-stated conditionally:
+    top eight by current champion probability, locked baseline beside it."""
+    teams = sorted(now, key=lambda t: -now[t]["champion"])[:8]
+    rows = []
+    for t in teams:
+        f = frozen.get(t, {"champion": 0.0})
+        c = now[t]
+        rows.append(f"      {t:<14} & {100*f['champion']:.1f}\\% & "
+                    f"{100*c['champion']:.1f}\\% & {100*c['final']:.1f}\\% & "
+                    f"{100*c['SF']:.1f}\\% \\\\")
+    return (
+        "\\begin{table}[!t]\n  \\centering\n"
+        "  \\caption{Simulated tournament probabilities, top eight teams "
+        "(live edition)}\\label{tab:champ}\n"
+        "  \\begin{footnotesize}\n  \\begin{threeparttable}\n"
+        "    {\\begin{tabular*}{\\textwidth}{@{\\extracolsep{\\fill}} lcccc}\n"
+        "      \\toprule\n"
+        "      Team & Champion (lock) & Champion (now) & Finalist (now) & Semi-finalist (now) \\\\\n"
+        "      \\midrule\n"
+        + "\n".join(rows) + "\n"
+        "      \\bottomrule\n    \\end{tabular*}}\n"
+        "    \\begin{tablenotes}\\notesize\n"
+        f"      \\item \\textit{{Notes}}: ``now'' columns conditioned on the "
+        f"{n_results} results revealed to date ($N$ = 50{{,}}000, seed 2026); "
+        "the lock column is the $N$ = 200{,}000 pre-kickoff baseline "
+        "(\\texttt{data/frozen\\_stage\\_probs.json}) and never changes.\n"
+        "    \\end{tablenotes}\n  \\end{threeparttable}\n  \\end{footnotesize}\n"
+        "\\end{table}")
+
+
+def trajfig(entries, live_fig=True):
+    """Realized-trajectory figure once real results exist; demo until then."""
+    if not entries or not live_fig:
+        return (
+            "\\begin{figure}[!t]\n"
+            "  \\caption{Forecast evolution dress rehearsal}\\label{fig:trajectory}\n"
+            "  \\begin{threeparttable}\n    {\\centering\n"
+            "      \\includegraphics[width=0.94\\textwidth]{figs/fig_trajectory_demo.pdf}\\par}\n"
+            "    \\begin{tablenotes}\\notesize\n"
+            "      \\item \\textit{Notes}: Illustrative dress rehearsal on one simulated "
+            "tournament (not the real forecast). The same figure is regenerated on real "
+            "results after each match.\n"
+            "    \\end{tablenotes}\n  \\end{threeparttable}\n\\end{figure}")
+    n = len(entries)
+    return (
+        "\\begin{figure}[!t]\n"
+        "  \\caption{Forecast evolution: the realized trajectory}\\label{fig:trajectory}\n"
+        "  \\begin{threeparttable}\n    {\\centering\n"
+        "      \\includegraphics[width=0.94\\textwidth]{figs/fig_trajectory_live.pdf}\\par}\n"
+        "    \\begin{tablenotes}\\notesize\n"
+        f"      \\item \\textit{{Notes}}: The live study on real results, through "
+        f"{n} of 104 matches. Upper panel: each contender's champion probability after "
+        "every recorded result, starting from the pre-tournament baseline. Lower panel: "
+        "the information content of each result in bits (Equation~\\ref{eq:kl}). The "
+        "figure is regenerated after every match; the dress-rehearsal version of this "
+        "instrument, validated on a simulated tournament, is retained in the locked "
+        "pre-kickoff edition.\n"
+        "    \\end{tablenotes}\n  \\end{threeparttable}\n\\end{figure}")
+
+
+def render_paper(tex, entries, frozen=None, now=None, group_state=None,
+                 live_fig=True):
     tex = replace_markers(tex, "LIVE-EVOLUTION-TABLE", ledger_table(entries))
     tex = replace_markers(tex, "LIVE-EVOLUTION-NARRATIVE", narrative(entries))
+    tex = replace_markers(tex, "LIVE-EVOLUTION-TRAJFIG", trajfig(entries, live_fig))
     if frozen is not None and now is not None:
         tex = replace_markers(tex, "LIVE-EVOLUTION-DIVERGENCE",
                               divergence_section(frozen, now, entries, group_state or []))
+        tex = replace_markers(tex, "LIVE-EVOLUTION-CHAMPTABLE",
+                              champ_table(frozen, now, len(entries)))
     return tex

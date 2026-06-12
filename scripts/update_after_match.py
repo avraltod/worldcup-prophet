@@ -131,25 +131,19 @@ def group_state(results):
     return state
 
 
-def rerender(match=None):
-    """Regenerate stats + living tex regions from already-documented entries,
-    without creating a new match-book entry. `match` defaults to the latest
-    documented; conditioning runs through that match."""
-    trajectory = _load(TRAJ_PATH, [])
-    entries = _entries_for_stats(INDEX)
-    if not entries:
-        raise SystemExit("nothing documented yet")
-    if match is None:
-        match = max(e["match"] for e in entries)
-    entries = [e for e in entries if e["match"] <= match]   # historical re-issue
+def _write_living_layer(trajectory, entries, match, expectations):
+    """The full per-edition revision: stats + macros, conditional forecast,
+    realized trajectory figure, and every living tex region — conditioned
+    through `match`."""
     latest_champ = next((r["champion"] for r in reversed(trajectory)
-                         if r["phase"] == "post"), None)
+                         if r["phase"] == "post" and r["match"] <= match), None)
+    if latest_champ is None:
+        raise SystemExit("no post record in trajectory — cannot compute stats")
     stats = ls.compute(entries, latest_champ)
-    expectations = _load(EXP_PATH, [])
     stats["re_ev_delta"] = sum(
         re_ev_delta_for(next(x for x in expectations if x["match"] == en["match"]),
                         en["result"], en["post"]["points"]) for en in entries)
-    LIVE_STATS_TEX.write_text(ls.render_macros(stats))
+    stats["entries"] = entries
 
     frozen = _load(FROZEN_PATH, {}).get("stages")
     now_probs = group_st = None
@@ -157,13 +151,41 @@ def rerender(match=None):
         res = results_through(trajectory, match)
         now_probs = cond.conditional_probs(res, N=COND_N, seed=2026)
         group_st = group_state(res)
+        stats["champ_now_top"] = sorted(
+            ((t, d["champion"]) for t, d in now_probs.items()),
+            key=lambda kv: -kv[1])[:3]
+    LIVE_STATS_TEX.write_text(ls.render_macros(stats))
+
+    live_fig = False
+    try:
+        import plot_trajectory_live
+        plot_trajectory_live.build(trajectory, through_match=match)
+        live_fig = True
+    except Exception as ex:                      # noqa: BLE001 — figure is optional
+        print(f"trajectory figure skipped ({ex}); keeping the dress rehearsal")
+
     tex = PAPER_TEX.read_text()
     before = rev.frozen_hash(tex)
     tex = rev.render_paper(tex, entries, frozen=frozen, now=now_probs,
-                           group_state=group_st)
+                           group_state=group_st, live_fig=live_fig)
     if rev.frozen_hash(tex) != before:
         raise SystemExit("ABORT: frozen region changed — refusing to write paper")
     PAPER_TEX.write_text(tex)
+    return stats
+
+
+def rerender(match=None):
+    """Regenerate the full living layer from already-documented entries,
+    without creating a new match-book entry. `match` defaults to the latest
+    documented; ledger, scorecard, and conditioning all run through it."""
+    trajectory = _load(TRAJ_PATH, [])
+    entries = _entries_for_stats(INDEX)
+    if not entries:
+        raise SystemExit("nothing documented yet")
+    if match is None:
+        match = max(e["match"] for e in entries)
+    entries = [e for e in entries if e["match"] <= match]   # historical re-issue
+    stats = _write_living_layer(trajectory, entries, match, _load(EXP_PATH, []))
     print(f"Living layer re-rendered through Match {match} "
           f"({stats['documented']} documented)")
     return stats
@@ -192,31 +214,7 @@ def revise(match, use_api=True, reopen_text=None):
     mb.mark_documented(INDEX, match)
 
     entries = _entries_for_stats(INDEX)
-    latest_champ = next((r["champion"] for r in reversed(trajectory)
-                         if r["phase"] == "post"), None)
-    if latest_champ is None:
-        raise SystemExit("no post record in trajectory — cannot compute stats")
-    stats = ls.compute(entries, latest_champ)
-    stats["re_ev_delta"] = sum(
-        re_ev_delta_for(next(x for x in expectations if x["match"] == en["match"]),
-                        en["result"], en["post"]["points"]) for en in entries)
-    LIVE_STATS_TEX.write_text(ls.render_macros(stats))
-
-    frozen = _load(FROZEN_PATH, {}).get("stages")
-    now_probs = group_st = None
-    if frozen:
-        res = results_through(trajectory, match)
-        now_probs = cond.conditional_probs(res, N=COND_N, seed=2026)
-        group_st = group_state(res)
-
-    tex = PAPER_TEX.read_text()
-    before = rev.frozen_hash(tex)
-    tex = rev.render_paper(tex, entries, frozen=frozen, now=now_probs,
-                           group_state=group_st)
-    after = rev.frozen_hash(tex)
-    if before != after:
-        raise SystemExit("ABORT: frozen region changed — refusing to write paper")
-    PAPER_TEX.write_text(tex)
+    stats = _write_living_layer(trajectory, entries, match, expectations)
 
     with REVISIONS.open("a") as fh:
         fh.write(f"\n**Rev M{match:03d} ({e['fixture']} {e['result'][0]}-{e['result'][1]}).** "

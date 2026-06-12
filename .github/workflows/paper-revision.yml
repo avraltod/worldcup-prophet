@@ -29,9 +29,11 @@ jobs:
           PENDING=$(python3 -c "import sys, os, json; sys.path.insert(0, 'scripts'); import update_after_match as u; t = json.load(open('data/trajectory_v2.json')) if os.path.exists('data/trajectory_v2.json') else []; print(len(u.pending_matches(t, u.INDEX)))")
           echo "pending=$PENDING" >> "$GITHUB_OUTPUT"
           echo "pending matches: $PENDING"
-      - name: Install anthropic SDK
-        if: steps.detect.outputs.pending != '0'
-        run: pip install anthropic || true   # optional; pipeline falls back to templated without it
+      - name: Install Python deps (anthropic optional, matplotlib for the live figure)
+        if: steps.detect.outputs.pending != '0' || github.event_name == 'workflow_dispatch'
+        run: |
+          pip install matplotlib
+          pip install anthropic || true   # optional; pipeline falls back to templated without it
       - name: Install TeX Live (XeLaTeX) + MS core fonts
         if: steps.detect.outputs.pending != '0' || github.event_name == 'workflow_dispatch'
         run: |

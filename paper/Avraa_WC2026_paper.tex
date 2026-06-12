@@ -24,14 +24,14 @@
 
 \title{\textbf{Forecasting the 2026 FIFA World Cup: A Market-Calibrated Poisson--Elo Model and the Information Each Result Reveals}}
 \author{Avralt-Od Purevjav\\ \small Washington, DC, USA \\ \small \texttt{avraltod@gmail.com}}
-\date{\liveVersionLine\thanks{\itshape Update log --- forecast built 7 June 2026 from bookmaker odds collected 5--7 June; Group~K recalibrated to prediction-market prices the evening of 7 June; squad and injury news monitored through 9 June, when the confirmed withdrawals of Jurri\"en Timber (Netherlands) and several Brazil attackers were already in the pre-kickoff ratings and the remaining late losses (e.g.\ Germany's Lennart Karl) fall on non-decisive squad members, so the entry is confirmed unchanged; group scorelines re-derived on 10 June with a realistic rounded-expected-goals readout that matches the points-optimal pick at no cost in pool points while resembling actual scores more closely (Section~\ref{sec:objective}), leaving champion, bracket, and podium unchanged; predictions lock at the 11 June kickoff. Code and data timestamped for the out-of-sample record.}}
+\date{\liveVersionLine\thanks{\itshape Update log --- forecast built 7 June 2026 from bookmaker odds collected 5--7 June; Group~K recalibrated to prediction-market prices the evening of 7 June; squad and injury news monitored through 9 June, when the confirmed withdrawals of Jurri\"en Timber (Netherlands) and several Brazil attackers were already in the pre-kickoff ratings and the remaining late losses (e.g.\ Germany's Lennart Karl) fall on non-decisive squad members, so the entry is confirmed unchanged; group scorelines re-derived on 10 June with a realistic rounded-expected-goals readout that matches the points-optimal pick at no cost in pool points while resembling actual scores more closely (Section~\ref{sec:objective}), leaving champion, bracket, and podium unchanged; predictions lock at the 11 June kickoff. Code and data timestamped for the out-of-sample record.\liveUpdateLog{}}}
 
 \input{live_stats}
 \begin{document}
 \maketitle
 
 \begin{abstract}
-\noindent This paper documents a forecasting framework I built to predict all 104 matches of the 2026 FIFA World Cup, the first edition with 48 teams. A private prediction pool scores each entry in three tiers, 3 points for an exact scoreline, 2 for the correct result and goal difference, and 1 for the correct result, so the target is a full scoreline and not merely the winner. For each match I report a realistic rounded-expected-goals scoreline, and a backtest on the 2018 and 2022 World Cups suggests it scores as well in pool points as the points-optimal pick while landing closer to the actual scores. The group-stage forecasts derive from bookmaker odds collected four days before kickoff, margin-stripped and fitted to independent Poisson goal distributions, and the knockout forecasts use World Football Elo ratings adjusted for confirmed squad injuries and host advantage. I then simulate 200{,}000 full tournaments to stress-test the bracket. Because a knockout prediction can score only if the named team actually occupies its bracket slot, I optimize the picks for \emph{slot emergence}, the joint probability of reaching and winning a slot, following the expected-pool-score principle of the office-pool literature and applying it to the 48-team format's constrained third-place allocation. This criterion overturned three knockout picks, and two of them survive a full sensitivity sweep over the framework's hand-set constants. The model forecasts Spain as champion in 27.4 percent of simulations, defeating Argentina (18.6 percent) in the final, with France (14.8 percent) third. The paper's central pre-registered analysis treats this static forecast as a baseline and studies how it revises as the tournament is played. After each result I fix the played matches and re-simulate the rest, which updates every team's probability of reaching each stage, and I measure the information each result carries by the Kullback--Leibler divergence between the champion distribution before and after it. I register the hypothesis that this information is highly uneven across the 104 matches, near zero through most of the group stage and concentrated at the eliminations of likely champions. All predictions are locked before kickoff, so the forecast trajectory is an out-of-sample record, and all data and code are retained for that evaluation. As of the live scorecard, the entry has accrued \liveCumPoints{} pool points across \liveDocumented{} graded matches at a mean Brier score of \liveMeanBrier{}.
+\noindent This paper documents a forecasting framework I built to predict all 104 matches of the 2026 FIFA World Cup, the first edition with 48 teams. A private prediction pool scores each entry in three tiers, 3 points for an exact scoreline, 2 for the correct result and goal difference, and 1 for the correct result, so the target is a full scoreline and not merely the winner. For each match I report a realistic rounded-expected-goals scoreline, and a backtest on the 2018 and 2022 World Cups suggests it scores as well in pool points as the points-optimal pick while landing closer to the actual scores. The group-stage forecasts derive from bookmaker odds collected four days before kickoff, margin-stripped and fitted to independent Poisson goal distributions, and the knockout forecasts use World Football Elo ratings adjusted for confirmed squad injuries and host advantage. I then simulate 200{,}000 full tournaments to stress-test the bracket. Because a knockout prediction can score only if the named team actually occupies its bracket slot, I optimize the picks for \emph{slot emergence}, the joint probability of reaching and winning a slot, following the expected-pool-score principle of the office-pool literature and applying it to the 48-team format's constrained third-place allocation. This criterion overturned three knockout picks, and two of them survive a full sensitivity sweep over the framework's hand-set constants. At the pre-kickoff lock the model forecast Spain as champion in 27.4 percent of simulations, defeating Argentina (18.6 percent) in the final, with France (14.8 percent) third.\liveAbstractRevision{} The paper's central pre-registered analysis treats this static forecast as a baseline and studies how it revises as the tournament is played. After each result I fix the played matches and re-simulate the rest, which updates every team's probability of reaching each stage, and I measure the information each result carries by the Kullback--Leibler divergence between the champion distribution before and after it. I register the hypothesis that this information is highly uneven across the 104 matches, near zero through most of the group stage and concentrated at the eliminations of likely champions. All predictions are locked before kickoff, so the forecast trajectory is an out-of-sample record, and all data and code are retained for that evaluation. As of the live scorecard, the entry has accrued \liveCumPoints{} pool points across \liveDocumented{} graded matches at a mean Brier score of \liveMeanBrier{}.
 
 \medskip
 \noindent\textbf{Keywords:} association football, betting odds, Poisson model, Elo ratings, Monte Carlo simulation, FIFA World Cup
@@ -59,7 +59,7 @@ The problem of choosing a bracket entry to maximize expected pool score is not n
 
 Three further results motivate the design. First, bookmaker odds are among the strongest publicly available probability forecasts for football matches \citep{strumbelj2014, leitner2010}, although hybrid statistical models have matched or beaten them in recent tournaments \citep{groll2018, groll2019}. Second, independent Poisson distributions calibrated to match-level win probabilities reproduce observed scoreline frequencies well at the international level \citep{maher1982, dixoncoles1997}. Third, ratings systems give serviceable strength estimates where market odds do not yet exist, such as hypothetical knockout pairings \citep{hvattum2010, elo1978, constantinou2019}. Bookmaker-consensus methods that simulate tournaments from market-implied abilities \citep{zeileis2018} are the main alternative, and I use Elo for the knockout stage because the market had not yet priced those pairings at submission time, not because Elo is superior.
 
-In this paper I combine these components and add a tournament-structure layer, a Monte Carlo simulation that scores candidate bracket entries by slot emergence. The model forecasts Spain as champion in 27.4 percent of 200{,}000 simulated tournaments, ahead of Argentina at 18.6 percent and France at 14.8 percent, and it produces a submitted bracket in which Spain defeats Argentina in the final. The slot-emergence criterion overturns three of the 31 knockout picks that a head-to-head rule would have made, and two of the three survive a sensitivity sweep over every hand-set constant in the framework.
+In this paper I combine these components and add a tournament-structure layer, a Monte Carlo simulation that scores candidate bracket entries by slot emergence. The model's pre-kickoff forecast has Spain as champion in 27.4 percent of 200{,}000 simulated tournaments, ahead of Argentina at 18.6 percent and France at 14.8 percent, and it produces a submitted bracket in which Spain defeats Argentina in the final.\liveAbstractRevision{} The slot-emergence criterion overturns three of the 31 knockout picks that a head-to-head rule would have made, and two of the three survive a sensitivity sweep over every hand-set constant in the framework.
 
 The static forecast is only the starting point. The paper's central contribution is to treat it as a baseline, a prior fixed before any match is played, and to study how the forecast revises as results arrive. After each match I condition on the played results and re-simulate the rest, which moves every team's probability of reaching each stage, and I measure the information each result carries by the divergence between the champion distribution before and after it. Because the format lets strong teams advance even after an early loss, I expect most group-stage matches to carry almost no information and the forecast to be reshaped late, at the eliminations of likely champions. This turns a one-shot prediction into a study of probability revision under a known information-arrival schedule, and because every prediction is locked before kickoff the resulting trajectory is an honest out-of-sample record.
 
@@ -168,33 +168,35 @@ These measures are not new, and the contribution here is their application to a 
 
 \subsection{Tournament-level forecasts}
 
-Table~\ref{tab:champ} reports champion, finalist, and semi-finalist probabilities. Spain is the modal champion at 27.4\%, ahead of Argentina at 18.6\% and France at 14.8\%, and the predicted Spain--Argentina final is the single most likely pairing at 10.8\% of simulations.\footnote{This is the original locked forecast. Two later numbers in the paper differ by about a percentage point: the pre-deadline Group~K recalibration of Section~\ref{sec:postscript} revises Spain to 26.8\%, and Monte Carlo variation across runs is about 0.5~pp (Section~\ref{sec:robust}). I report the original 27.4\% as the headline and the recalibrated 26.8\% wherever the recalibrated model is the explicit subject; the two are the same forecast before and after that single localized update.} The forecast is consistent with the outright betting market, which priced Spain as favorite at decimal odds near 5.5.
+Table~\ref{tab:champ} reports champion, finalist, and semi-finalist probabilities; once the tournament is under way, each live edition of this paper re-states the table conditioned on the results revealed so far, beside the locked baseline column. At the lock, Spain is the modal champion at 27.4\%, ahead of Argentina at 18.6\% and France at 14.8\%, and the predicted Spain--Argentina final is the single most likely pairing at 10.8\% of simulations.\footnote{This is the original locked forecast. Two later numbers in the paper differ by about a percentage point: the pre-deadline Group~K recalibration of Section~\ref{sec:postscript} revises Spain to 26.8\%, and Monte Carlo variation across runs is about 0.5~pp (Section~\ref{sec:robust}). I report the original 27.4\% as the headline and the recalibrated 26.8\% wherever the recalibrated model is the explicit subject; the two are the same forecast before and after that single localized update.} The forecast is consistent with the outright betting market, which priced Spain as favorite at decimal odds near 5.5.
 
+% LIVE-EVOLUTION-CHAMPTABLE:START
 \begin{table}[!t]
   \centering
-  \caption{Simulated tournament probabilities, top eight teams}\label{tab:champ}
+  \caption{Simulated tournament probabilities, top eight teams (live edition)}\label{tab:champ}
   \begin{footnotesize}
   \begin{threeparttable}
-    {\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} lccc}
+    {\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} lcccc}
       \toprule
-      Team & Champion & Finalist & Semi-finalist \\
+      Team & Champion (lock) & Champion (now) & Finalist (now) & Semi-finalist (now) \\
       \midrule
-      Spain          & 27.4\% & 39.0\% & 51.8\% \\
-      Argentina      & 18.6\% & 30.9\% & 44.3\% \\
-      France         & 14.8\% & 25.2\% & 43.6\% \\
-      England        &  7.3\% & 15.1\% & 29.0\% \\
-      Portugal       &  4.2\% &  9.8\% & 18.6\% \\
-      Colombia       &  4.1\% &  9.5\% & 18.4\% \\
-      Brazil         &  3.6\% &  8.7\% & 20.3\% \\
-      Netherlands    &  2.7\% &  6.7\% & 16.6\% \\
+      Spain          & 26.9\% & 26.9\% & 38.8\% & 51.7\% \\
+      Argentina      & 18.1\% & 17.9\% & 30.1\% & 43.1\% \\
+      France         & 14.3\% & 14.3\% & 24.6\% & 43.3\% \\
+      Portugal       & 9.4\% & 9.3\% & 18.1\% & 29.2\% \\
+      England        & 7.0\% & 7.1\% & 14.6\% & 28.3\% \\
+      Brazil         & 3.5\% & 3.6\% & 8.6\% & 20.3\% \\
+      Netherlands    & 2.4\% & 2.3\% & 6.1\% & 15.9\% \\
+      Germany        & 2.2\% & 2.2\% & 6.3\% & 16.6\% \\
       \bottomrule
     \end{tabular*}}
     \begin{tablenotes}\notesize
-      \item \textit{Notes}: $N$ = 200{,}000; standard errors $\le$ 0.11 pp.
+      \item \textit{Notes}: ``now'' columns conditioned on the 2 results revealed to date ($N$ = 50{,}000, seed 2026); the lock column is the $N$ = 200{,}000 pre-kickoff baseline (\texttt{data/frozen\_stage\_probs.json}) and never changes.
     \end{tablenotes}
   \end{threeparttable}
   \end{footnotesize}
 \end{table}
+% LIVE-EVOLUTION-CHAMPTABLE:END
 
 \begin{figure}[!t]
   \caption{Champion probability distribution}\label{fig:champdist}
@@ -270,16 +272,18 @@ I register three hypotheses before the tournament. First, the information is con
 
 To verify that the recording machinery behaves as registered, I ran it once as a dress rehearsal, treating a single simulated tournament as if it were the real one and feeding its 104 results through the pipeline in order. Figure~\ref{fig:trajectory} shows the result. The synthetic run reproduces all three hypothesized patterns. The information is concentrated, because the ten most informative matches carry 69 percent of the total; the information arrives late, because the group stage accounts for only 19 percent of the movement against 81 percent for the knockouts; and the largest single spike, 0.52 bits, falls on a semi-final that eliminates a likely finalist. The champion probabilities stay nearly flat through the group stage, then move sharply once elimination begins, with the eventual champion's probability climbing from the low twenties to one over the final two weeks. This is a demonstration on simulated data and not a forecast of the real tournament, but it confirms that the instrument measures what it is meant to. The realized trajectory will confirm or refute the same three hypotheses on real results, and the data, the conditional-simulation code, and the per-match information series are retained for that evaluation.
 
+% LIVE-EVOLUTION-TRAJFIG:START
 \begin{figure}[!t]
-  \caption{Forecast evolution dress rehearsal}\label{fig:trajectory}
+  \caption{Forecast evolution: the realized trajectory}\label{fig:trajectory}
   \begin{threeparttable}
     {\centering
-      \includegraphics[width=0.94\textwidth]{figs/fig_trajectory_demo.pdf}\par}
+      \includegraphics[width=0.94\textwidth]{figs/fig_trajectory_live.pdf}\par}
     \begin{tablenotes}\notesize
-      \item \textit{Notes}: Illustrative dress rehearsal of the live study on one simulated tournament (not the real forecast). Upper panel: each contender's champion probability, traced from the pre-tournament prior on the left to the realized outcome on the right, flat through the group stage and moving sharply once eliminations begin. Lower panel: the information content of each result in bits (Equation~\ref{eq:kl}), orange for group matches and blue for knockouts, near zero through the group stage and spiking at knockout eliminations. The same figure will be regenerated on real results after each matchday.
+      \item \textit{Notes}: The live study on real results, through 2 of 104 matches. Upper panel: each contender's champion probability after every recorded result, starting from the pre-tournament baseline. Lower panel: the information content of each result in bits (Equation~\ref{eq:kl}). The figure is regenerated after every match; the dress-rehearsal version of this instrument, validated on a simulated tournament, is retained in the locked pre-kickoff edition.
     \end{tablenotes}
   \end{threeparttable}
 \end{figure}
+% LIVE-EVOLUTION-TRAJFIG:END
 
 \medskip
 \noindent\textit{Live results ledger (updated after each match).}
