@@ -58,7 +58,9 @@
   "South Korea": 25.056750298685802,
   "Czechia": -25.056750298685802,
   "Canada": -41.22162485065709,
-  "Bosnia and Herzegovina": 41.22162485065709
+  "Bosnia and Herzegovina": 41.22162485065709,
+  "United States": 75.0,
+  "Paraguay": -75.0
  },
  "processed": [
   {
@@ -114,6 +116,24 @@
     "Canada": -41.22,
     "Bosnia and Herzegovina": 41.22
    }
+  },
+  {
+   "match": 4,
+   "home": "United States",
+   "away": "Paraguay",
+   "lam_obs": {
+    "home": 1.953,
+    "away": 0.326,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 0.9,
+    "away": 1.5
+   },
+   "drift_after": {
+    "United States": 75.0,
+    "Paraguay": -75.0
+   }
   }
  ],
  "pending": [],
@@ -139,6 +159,29 @@
     "Brazil": 0.0356,
     "Ecuador": 0.0239,
     "Netherlands": 0.0236
+   }
+  },
+  {
+   "match": 4,
+   "frozen_top": {
+    "Spain": 0.2787,
+    "Argentina": 0.1775,
+    "France": 0.1414,
+    "Portugal": 0.0992,
+    "England": 0.0721,
+    "Brazil": 0.0315,
+    "Netherlands": 0.0221,
+    "Ecuador": 0.0217
+   },
+   "learning_top": {
+    "Spain": 0.2785,
+    "Argentina": 0.1749,
+    "France": 0.1438,
+    "Portugal": 0.0999,
+    "England": 0.0737,
+    "Brazil": 0.0324,
+    "Netherlands": 0.0235,
+    "Ecuador": 0.0221
    }
   }
  ]

@@ -30,3 +30,5 @@ where previously only the text outside the marker blocks was. This advances
 the frozen-hash baseline one step, exactly as the 12 June authorship entry
 did. Editions M000–M003 are issued artifacts and are not regenerated; their
 headline numbers are backfilled into the vintages table.
+
+**Rev M004 (United States v Paraguay 4-1).** Cumulative 2 pts, mean Brier 0.52; failure-mode none. Full living layer re-rendered (edition M004); skeleton unchanged.

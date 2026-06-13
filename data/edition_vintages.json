@@ -135,5 +135,40 @@
     0.0688
    ]
   ]
+ },
+ {
+  "edition": 4,
+  "match": 4,
+  "fixture": "United States v Paraguay",
+  "result": [
+   4,
+   1
+  ],
+  "points": 1,
+  "cum_points": 2,
+  "mean_brier": 0.5213,
+  "cum_bits": 0.0054,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2701
+   ],
+   [
+    "Argentina",
+    0.1801
+   ],
+   [
+    "France",
+    0.1423
+   ],
+   [
+    "Portugal",
+    0.0939
+   ],
+   [
+    "England",
+    0.0703
+   ]
+  ]
  }
 ]
