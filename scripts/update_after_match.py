@@ -92,7 +92,7 @@ def _entries_for_stats(index_path):
 
 
 def _latexmk():
-    subprocess.run(["latexmk", "-xelatex", "-interaction=nonstopmode",
+    subprocess.run(["latexmk", "-xelatex", "-bibtex", "-interaction=nonstopmode",
                     "WC2026_paper.tex"], cwd=PAPER, check=True)
 
 
