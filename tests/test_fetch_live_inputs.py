@@ -70,3 +70,72 @@ def test_fetch_clubelo_empty_result_triggers_fallback_in_main(tmp_path, monkeypa
     # Should fall back to June 10 Elo
     assert len(out["live_elo"]) == len(cond.ELO)
     assert out["source_freshness"]["elo_updated_at"] == "2026-06-10T00:00:00Z"
+
+
+import condition as cond
+
+# Sample odds API response for Mexico v South Africa (match 1, row 4 in our data)
+_MEX_HOME = cond.RATES[4][2]  # "Mexico"
+_RSA_AWAY = cond.RATES[4][3]  # "South Africa"
+
+ODDS_API_RESPONSE = json.dumps([{
+    "id": "abc123",
+    "sport_key": "soccer_fifa_world_cup",
+    "home_team": _MEX_HOME,
+    "away_team": _RSA_AWAY,
+    "bookmakers": [{
+        "key": "fanduel",
+        "markets": [{
+            "key": "h2h",
+            "outcomes": [
+                {"name": _MEX_HOME,  "price": 1.55},
+                {"name": "Draw",     "price": 3.90},
+                {"name": _RSA_AWAY,  "price": 6.50},
+            ]
+        }]
+    }]
+}]).encode()
+
+
+def _odds_opener(resp_bytes):
+    class Resp:
+        def read(self): return resp_bytes
+        def __enter__(self): return self
+        def __exit__(self, *a): pass
+    return lambda req, timeout=30: Resp()
+
+
+def test_fetch_odds_returns_empty_without_key():
+    result = fli.fetch_odds(api_key=None, unplayed_rows=set(),
+                            opener=_odds_opener(ODDS_API_RESPONSE))
+    assert result == ({}, [])
+
+
+def test_fetch_odds_maps_fixture_to_row():
+    unplayed = {4}  # row 4 = Mexico v South Africa
+    rates, details = fli.fetch_odds(
+        api_key="TESTKEY", unplayed_rows=unplayed,
+        opener=_odds_opener(ODDS_API_RESPONSE))
+    assert 4 in rates
+    lh, la = rates[4]
+    assert lh > la        # Mexico is heavy favorite at these odds
+
+
+def test_fetch_odds_devig_produces_valid_rates():
+    unplayed = {4}
+    rates, details = fli.fetch_odds(
+        api_key="TESTKEY", unplayed_rows=unplayed,
+        opener=_odds_opener(ODDS_API_RESPONSE))
+    lh, la = rates[4]
+    assert 0.1 <= lh <= 3.4
+    assert 0.1 <= la <= 3.4
+    assert 1.6 <= lh + la <= 3.4   # within fit_rates total_goals_range
+
+
+def test_fetch_odds_skips_already_played_rows():
+    # Row 4 is played (match 1 already in results), should not appear
+    unplayed = set()   # no unplayed rows
+    rates, details = fli.fetch_odds(
+        api_key="TESTKEY", unplayed_rows=unplayed,
+        opener=_odds_opener(ODDS_API_RESPONSE))
+    assert 4 not in rates
