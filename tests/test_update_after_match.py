@@ -85,3 +85,89 @@ def test_group_state_standings_arithmetic():
     # unplayed groups are present with played=0
     unplayed = [g for g in state if g["played"] == 0]
     assert len(unplayed) == 11
+
+
+# ---------------- new ctx keys / draft_sections wiring ----------------------
+
+import draft_sections as ds
+
+
+def _ctx():
+    """Minimal ctx matching what _write_living_layer now provides."""
+    entries = [
+        {"match": 1, "fixture": "Mexico v Ecuador", "result": [2, 0],
+         "pre": {"probs_HDA": [0.55, 0.25, 0.20]},
+         "post": {"points": 2, "brier": 0.30, "info_bits": 0.05,
+                  "p_outcome": 0.55}},
+        {"match": 2, "fixture": "South Korea v Czechia", "result": [2, 1],
+         "pre": {"probs_HDA": [0.40, 0.28, 0.32]},
+         "post": {"points": 1, "brier": 0.55, "info_bits": 0.12,
+                  "p_outcome": 0.20},
+         "failure_mode": None},
+    ]
+    frozen = {"Spain": {"advance_KO": 0.99, "R16": 0.80, "QF": 0.62,
+                         "SF": 0.52, "final": 0.39, "champion": 0.27},
+              "Argentina": {"advance_KO": 0.98, "R16": 0.71, "QF": 0.59,
+                            "SF": 0.43, "final": 0.30, "champion": 0.18}}
+    now = {"Spain": {"advance_KO": 0.99, "R16": 0.81, "QF": 0.63,
+                     "SF": 0.53, "final": 0.40, "champion": 0.28},
+           "Argentina": {"advance_KO": 0.97, "R16": 0.70, "QF": 0.58,
+                         "SF": 0.42, "final": 0.29, "champion": 0.17}}
+    return {
+        "match": 2,
+        "entries": entries,
+        "match_stats": {},
+        "learning": {"drift": {"Spain": 0.5}, "processed": [], "history": []},
+        "prev_now": {"Spain": {"champion": 0.27}, "Argentina": {"champion": 0.18}},
+        "now": now,
+        "frozen": frozen,
+        "results": {"group": {"1": [2, 0], "2": [2, 1]}, "ko": {}},
+        "n_results": 2,
+        "cum_points": 3,
+        "mean_brier": 0.425,
+        "champ_now_top": [["Spain", 0.28], ["Argentina", 0.17]],
+        "two_track": None,
+        "champion_movers": [["Spain", 0.27, 0.28], ["Argentina", 0.18, 0.17]],
+        "vintages_rows": [{"edition": 0}, {"edition": 2}],
+        "revision_narrative": "Test narrative.",
+        "implications": [],
+    }
+
+
+def test_abstract_live_uses_champ_now_top():
+    text, src = ds.draft_abstract_live(_ctx(), use_api=False)
+    assert "Spain" in text
+    assert src == "template"
+
+
+def test_simulation_note_uses_n_results():
+    text, _ = ds.draft_simulation_note(_ctx(), use_api=False)
+    assert "2" in text  # n_results = 2
+
+
+def test_data_revealed_has_label():
+    text, _ = ds.draft_data_revealed(_ctx(), use_api=False)
+    assert r"\label{tab:live_data_revealed}" in text
+
+
+def test_failure_analysis_has_label():
+    text, _ = ds.draft_failure_analysis(_ctx(), use_api=False)
+    assert r"\label{sec:live_failure}" in text
+
+
+def test_failure_analysis_catches_high_brier():
+    """M2 has brier=0.55 > threshold; should appear in failure log."""
+    text, _ = ds.draft_failure_analysis(_ctx(), use_api=False)
+    assert "M2" in text
+
+
+def test_discussion_live_uses_n_results():
+    text, _ = ds.draft_discussion_live(_ctx(), use_api=False)
+    assert "2" in text  # n_results
+
+
+def test_champion_movers_in_sec36():
+    ctx = _ctx()
+    ctx["champion_movers"] = [["Spain", 0.20, 0.28]]
+    text, _ = ds.draft_sec36_live(ctx, use_api=False)
+    assert "2" in text  # n_results present

@@ -283,7 +283,19 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     ctx = {"match": match, "entries": entries, "match_stats": match_stats,
            "learning": state, "prev_now": prev_now, "now": now_probs,
            "vintages_rows": rows, "revision_narrative": narrative_text,
-           "implications": _implications(latest, expectations, res, learn_ratings)}
+           "implications": _implications(latest, expectations, res, learn_ratings),
+           "frozen": frozen, "results": res,
+           "n_results": stats["documented"],
+           "cum_points": stats["cum_points"],
+           "mean_brier": stats["mean_brier"],
+           "champ_now_top": stats["champ_now_top"],
+           "two_track": two_track,
+           "champion_movers": sorted(
+               [[t, round(prev_now.get(t, {}).get("champion", 0.0), 4),
+                 round(now_probs[t]["champion"], 4)]
+                for t in now_probs if t in prev_now],
+               key=lambda x: -abs(x[2] - x[1])),
+           }
     rl.write_unit(LIVE_DIR, "stats", ls.render_macros(stats))
     rl.write_unit(LIVE_DIR, "champ_table", rl.champ_table_unit(frozen, now_probs, len(entries)))
     rl.write_unit(LIVE_DIR, "trajfig", rl.trajfig_unit(entries, live_fig))
@@ -297,6 +309,18 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     for g in group_st:
         rl.write_unit(LIVE_DIR, f"group_{g['group']}",
                       rl.group_box(g, res, expectations, frozen, now_probs))
+    rl.write_unit(LIVE_DIR, "abstract_live", rl.abstract_live_unit(ctx, use_api))
+    rl.write_unit(LIVE_DIR, "intro_data_note", rl.intro_data_note_unit(ctx, use_api))
+    rl.write_unit(LIVE_DIR, "data_revealed", rl.data_revealed_unit(ctx, use_api))
+    rl.write_unit(LIVE_DIR, "simulation_note", rl.simulation_note_unit(ctx, use_api))
+    rl.write_unit(LIVE_DIR, "sec36_live", rl.sec36_live_unit(ctx, use_api))
+    rl.write_unit(LIVE_DIR, "champdist_live", rl.champdist_live_unit(ctx))
+    rl.write_unit(LIVE_DIR, "robustness_live", rl.robustness_live_unit(ctx, use_api))
+    rl.write_unit(LIVE_DIR, "failure_analysis", rl.failure_analysis_unit(ctx, use_api))
+    rl.write_unit(LIVE_DIR, "discussion_live", rl.discussion_live_unit(ctx, use_api))
+    rl.write_unit(LIVE_DIR, "groupqual_live", rl.groupqual_live_unit(ctx))
+    rl.write_unit(LIVE_DIR, "bracket_live", rl.bracket_live_unit(ctx))
+    rl.write_unit(LIVE_DIR, "survival_colcomp", rl.survival_colcomp_unit(ctx))
     _assert_skeleton()
     return stats
 
