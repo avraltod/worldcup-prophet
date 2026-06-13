@@ -277,3 +277,129 @@ def revision_report(ctx):
         "\\paragraph{Forecast vintages.} One column per issued edition; the "
         "locked M000 column never changes.\n\n"
         + vin.latex_table(ctx["vintages_rows"]))
+
+
+# ---- new units (design spec 2026-06-13) ----
+import draft_sections as _ds
+
+
+def abstract_live_unit(ctx, use_api=False):
+    text, _ = _ds.draft_abstract_live(ctx, use_api)
+    return text
+
+
+def intro_data_note_unit(ctx, use_api=False):
+    text, _ = _ds.draft_intro_data_note(ctx, use_api)
+    return text
+
+
+def simulation_note_unit(ctx, use_api=False):
+    text, _ = _ds.draft_simulation_note(ctx, use_api)
+    return text
+
+
+def data_revealed_unit(ctx, use_api=False):
+    text, _ = _ds.draft_data_revealed(ctx, use_api)
+    validate_labels("data_revealed", text, ["tab:live_data_revealed"])
+    return text
+
+
+def sec36_live_unit(ctx, use_api=False):
+    text, _ = _ds.draft_sec36_live(ctx, use_api)
+    return text
+
+
+def robustness_live_unit(ctx, use_api=False):
+    text, _ = _ds.draft_robustness_live(ctx, use_api)
+    validate_labels("robustness_live", text, ["sec:live_robust"])
+    return text
+
+
+def failure_analysis_unit(ctx, use_api=False):
+    text, _ = _ds.draft_failure_analysis(ctx, use_api)
+    validate_labels("failure_analysis", text, ["sec:live_failure"])
+    return text
+
+
+def discussion_live_unit(ctx, use_api=False):
+    text, _ = _ds.draft_discussion_live(ctx, use_api)
+    return text
+
+
+def champdist_live_unit(ctx):
+    """Figure block: live champion probability distribution."""
+    return (
+        "\\begin{figure}[!t]\n"
+        "  \\caption{Champion probability distribution, conditioned on "
+        "\\liveDocumented{} results (live edition M\\liveEditionNum{})}"
+        "\\label{fig:live_champdist}\n"
+        "  {\\centering\\includegraphics[width=0.94\\textwidth]"
+        "{figs/fig_live_champdist.pdf}\\par}\n"
+        "  \\small\\textit{Note:} The frozen baseline (Figure~\\ref{fig:champdist}) "
+        "is unchanged; this figure conditions on all played results.\n"
+        "\\end{figure}"
+    )
+
+
+def groupqual_live_unit(ctx):
+    """Figure block: live group qualification probability."""
+    return (
+        "\\begin{figure}[!t]\n"
+        "  \\caption{Qualification probability by team, conditioned on "
+        "\\liveDocumented{} results (live edition M\\liveEditionNum{})}"
+        "\\label{fig:live_groupqual}\n"
+        "  {\\centering\\includegraphics[width=0.94\\textwidth]"
+        "{figs/fig_live_groupqual.pdf}\\par}\n"
+        "\\end{figure}"
+    )
+
+
+def bracket_live_unit(ctx):
+    """Knockout bracket: placeholder during group stage, live figure once KO begins."""
+    ko_results = ctx.get("results", {}).get("ko", {})
+    if not ko_results:
+        return (
+            "\\textit{No knockout results yet; the frozen bracket "
+            "(Figure~\\ref{fig:bracket}) remains the current best estimate.}"
+        )
+    return (
+        "\\begin{figure}[!t]\n"
+        "  \\caption{The submitted bracket updated through M\\liveEditionNum{}; "
+        "shaded cells are confirmed results}\\label{fig:live_bracket}\n"
+        "  {\\centering\\includegraphics[width=0.94\\textwidth]"
+        "{figs/fig_live_bracket.pdf}\\par}\n"
+        "\\end{figure}"
+    )
+
+
+def survival_colcomp_unit(ctx):
+    """Appendix B.live: side-by-side frozen vs conditioned survival probabilities.
+    Accepts ctx dict (extracts frozen and now internally)."""
+    frozen = ctx["frozen"]
+    now = ctx["now"]
+    teams = sorted(now, key=lambda t: (-now[t]["champion"], -now[t]["advance_KO"]))
+    stages = ["advance_KO", "R16", "QF", "SF", "final", "champion"]
+    headers = "Team & KO & R16 & QF & SF & Final & Champion \\\\"
+
+    def pair(t, stage):
+        f = frozen.get(t, {}).get(stage, 0.0)
+        n = now[t].get(stage, 0.0)
+        delta = abs(n - f)
+        now_str = f"\\textbf{{{_pct(n)}}}" if delta > 3.0 else _pct(n)
+        return f"{_pct(f)}/{now_str}"
+
+    rows = [
+        t + " & " + " & ".join(pair(t, s) for s in stages) + " \\\\"
+        for t in teams if t in frozen
+    ]
+    return (
+        "\\section*{Appendix B.live\\quad The same distribution, "
+        "frozen and conditioned side by side}\\label{app:survlive}\n"
+        "Each cell shows Frozen\\% / Now\\%; bold Now when $|\\Delta| > 3$ pp.\n\n"
+        "\\begin{footnotesize}\n\\begin{longtable}{lrrrrrr}\n"
+        "\\caption{Frozen vs.\\ conditioned stage probabilities, all 48 teams "
+        "(live edition M\\liveEditionNum{})}\\label{tab:live_survcomp}\\\\\n"
+        "\\toprule\n" + headers + "\n\\midrule\n\\endhead\n"
+        + "\n".join(rows) + "\n"
+        "\\bottomrule\n\\end{longtable}\n\\end{footnotesize}"
+    )

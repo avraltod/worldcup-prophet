@@ -3,6 +3,7 @@ skeleton is asserted byte-identical via its stored sha256."""
 import hashlib
 
 import render_live as rl
+import draft_sections as ds
 
 
 def _entry(m=1, pts=1, bits=0.001):
@@ -219,3 +220,84 @@ def test_revision_report_snapshot_table_has_label():
 def test_revision_report_vintages_table_has_label():
     tex = rl.revision_report(_ctx_for_report())
     assert r"\label{tab:live_vintages}" in tex
+
+
+def _full_ctx():
+    """Shared context object for testing new units."""
+    entries = [_entry(1, pts=1, bits=0.001), _entry(4, pts=1, bits=0.002)]
+    for e in entries:
+        e["post"]["p_outcome"] = 0.43 if e["match"] == 4 else 0.67
+    return {
+        "match": 4, "n_results": 4, "cum_points": 2, "mean_brier": 0.52,
+        "champ_now_top": [("Spain", 0.270), ("Argentina", 0.180), ("France", 0.142)],
+        "entries": entries,
+        "champion_movers": [["Spain", 0.269, 0.270], ["South Korea", 0.08, 0.20]],
+        "two_track": {"frozen": {"Spain": 0.270}, "learning": {"Spain": 0.268}},
+        "learning": {"drift": {"United States": 75.0, "Paraguay": -75.0},
+                     "processed": [{"match": 4,
+                                    "lam_obs": {"home": 1.95, "away": 0.33},
+                                    "lam_exp": {"home": 0.90, "away": 1.50}}]},
+        "frozen": {"Spain": {"advance_KO": 0.99, "champion": 0.269},
+                   "South Korea": {"advance_KO": 0.50, "champion": 0.08},
+                   "Argentina": {"advance_KO": 0.98, "champion": 0.179}},
+        "now": {"Spain": {"advance_KO": 0.99, "champion": 0.270},
+                "South Korea": {"advance_KO": 0.77, "champion": 0.20},
+                "Argentina": {"advance_KO": 0.98, "champion": 0.180}},
+        "expectations": [],
+        "group_state": [],
+        "results": {"group": {"1": [2, 0], "4": [4, 1]}, "ko": {}},
+    }
+
+def test_abstract_live_unit():
+    tex = rl.abstract_live_unit(_full_ctx())
+    assert "Spain" in tex and "27.0" in tex
+
+def test_intro_data_note_unit():
+    tex = rl.intro_data_note_unit(_full_ctx())
+    assert "4" in tex and "learning track" in tex.lower()
+
+def test_simulation_note_unit():
+    tex = rl.simulation_note_unit(_full_ctx())
+    assert "100" in tex  # 104-4 remaining
+
+def test_data_revealed_unit():
+    tex = rl.data_revealed_unit(_full_ctx())
+    assert r"\label{tab:live_data_revealed}" in tex
+
+def test_sec36_live_unit():
+    tex = rl.sec36_live_unit(_full_ctx())
+    assert "bits" in tex.lower()
+
+def test_robustness_live_unit():
+    tex = rl.robustness_live_unit(_full_ctx())
+    assert r"\label{sec:live_robust}" in tex
+
+def test_failure_analysis_unit_no_key(monkeypatch):
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    tex = rl.failure_analysis_unit(_full_ctx())
+    assert r"\label{sec:live_failure}" in tex
+
+def test_discussion_live_unit():
+    tex = rl.discussion_live_unit(_full_ctx())
+    assert len(tex) > 20
+
+def test_champdist_live_unit():
+    tex = rl.champdist_live_unit(_full_ctx())
+    assert r"\label{fig:live_champdist}" in tex
+
+def test_groupqual_live_unit():
+    tex = rl.groupqual_live_unit(_full_ctx())
+    assert r"\label{fig:live_groupqual}" in tex
+
+def test_bracket_live_unit_group_stage_is_placeholder():
+    ctx = _full_ctx()
+    ctx["results"] = {"group": {}, "ko": {}}
+    tex = rl.bracket_live_unit(ctx)
+    assert "No knockout results" in tex
+
+def test_survival_colcomp_unit():
+    ctx = _full_ctx()
+    tex = rl.survival_colcomp_unit(ctx)
+    assert r"\label{tab:live_survcomp}" in tex
+    assert "Spain" in tex
+    assert "/" in tex  # frozen/now pair format
