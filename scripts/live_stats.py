@@ -82,5 +82,6 @@ def render_macros(s):
         r"\def\liveMeanBrier{%.2f}" % s["mean_brier"],
         r"\def\liveExactRate{%.2f}" % s["exact_rate"],
         r"\def\liveReEvDelta{%+d}" % s["re_ev_delta"],
+        r"\def\liveEditionNum{M%03d}" % (s["latest"]["match"] if s.get("latest") else 0),
     ]
     return "\n".join(lines) + "\n"

@@ -77,3 +77,28 @@ def test_update_log_names_every_result_and_the_lock_tag():
     log = ls._update_log(s)
     assert "M2 South Korea 2--1 Czechia" in log
     assert "prereg-2026" in log
+
+
+# -------------------- live edition number macro ---
+
+def _s(n=4):
+    entries = [{"match": i, "result": [2, 0], "pre": {"pick": [2, 1]},
+                "post": {"points": 1, "brier": 0.2, "info_bits": 0.01},
+                "fixture": "A v B", "kickoff": "2026-06-11T19:00:00Z",
+                "failure_mode": None}
+               for i in range(1, n+1)]
+    s = ls.compute(entries, {"Spain": 0.27})
+    s["entries"] = entries
+    return s
+
+
+def test_live_edition_num_macro_present():
+    tex = ls.render_macros(_s(4))
+    assert r"\def\liveEditionNum{M004}" in tex
+
+
+def test_live_edition_num_zero_when_no_entries():
+    s = ls.compute([], {})
+    s["entries"] = []
+    tex = ls.render_macros(s)
+    assert r"\def\liveEditionNum{M000}" in tex
