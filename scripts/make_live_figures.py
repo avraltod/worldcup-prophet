@@ -25,6 +25,21 @@ def group_qual_fig(frozen, now, groups, out):
     fig.tight_layout(); fig.savefig(out); plt.close(fig)
 
 
+def champdist_fig(frozen, now, out):
+    """Bar chart: champion probability now vs frozen lock, top 12 teams."""
+    teams = sorted(now, key=lambda t: -now[t]["champion"])[:12]
+    x = range(len(teams))
+    fig, ax = plt.subplots(figsize=(8, 4.5))
+    ax.bar([i - 0.18 for i in x], [frozen.get(t, {}).get("champion", 0) for t in teams],
+           width=0.35, color="#d08415", alpha=0.85, label="lock")
+    ax.bar([i + 0.18 for i in x], [now[t]["champion"] for t in teams],
+           width=0.35, color="#3b6ea5", alpha=0.85, label="now")
+    ax.set_xticks(list(x)); ax.set_xticklabels(teams, rotation=35, ha="right", fontsize=8)
+    ax.set_ylabel("P(champion)")
+    ax.legend(fontsize=9)
+    fig.tight_layout(); fig.savefig(out); plt.close(fig)
+
+
 def two_track_fig(history, out):
     """Champion probability paths per processed match, frozen vs learning."""
     teams = sorted(history[-1]["frozen_top"],

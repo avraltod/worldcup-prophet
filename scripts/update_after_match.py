@@ -268,6 +268,8 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
                   for g in sorted(cond.GROUPS)}
         mlf.group_qual_fig(frozen, now_probs, groups,
                            PAPER / "figs" / "fig_group_qual_live.pdf")
+        mlf.champdist_fig(frozen, now_probs,
+                          PAPER / "figs" / "fig_live_champdist.pdf")
         if state["history"]:
             mlf.two_track_fig(state["history"],
                               PAPER / "figs" / "fig_two_track_live.pdf")

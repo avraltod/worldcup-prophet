@@ -26,3 +26,13 @@ def test_two_track_fig(tmp_path):
                 "learning_top": {"Spain": 0.29, "France": 0.12}}]
     mlf.two_track_fig(history, out)
     assert out.exists() and out.stat().st_size > 0
+
+
+def test_champdist_fig_creates_file(tmp_path):
+    frozen = {"Spain": {"champion": 0.269}, "Argentina": {"champion": 0.179},
+              "France": {"champion": 0.143}}
+    now = {"Spain": {"champion": 0.270}, "Argentina": {"champion": 0.180},
+           "France": {"champion": 0.142}}
+    out = tmp_path / "fig_live_champdist.pdf"
+    mlf.champdist_fig(frozen, now, str(out))
+    assert out.exists()
