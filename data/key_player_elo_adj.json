@@ -1,0 +1,10 @@
+{
+  "France":    {"Kylian Mbappe": 20, "Antoine Griezmann": 12},
+  "Argentina": {"Lionel Messi": 25, "Julian Alvarez": 10},
+  "Spain":     {"Pedri": 10, "Rodri": 15},
+  "England":   {"Jude Bellingham": 18, "Harry Kane": 15},
+  "Brazil":    {"Vinicius Jr": 18, "Rodrygo": 10},
+  "Portugal":  {"Bruno Fernandes": 12, "Bernardo Silva": 10},
+  "Germany":   {"Florian Wirtz": 12, "Kai Havertz": 10},
+  "Netherlands": {"Virgil van Dijk": 10, "Cody Gakpo": 10}
+}
