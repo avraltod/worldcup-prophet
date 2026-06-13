@@ -148,7 +148,7 @@ for grp in "ABCDEFGHIJKL":
     md.append("")
     md.append("**Predicted scores:**")
     md.append("")
-    md.append("| # | Date (UB) | Match | Pick | Exp. | Actual | Pts |")
+    md.append("| # | Date (ET) | Match | Pick | Exp. | Actual | Pts |")
     md.append("|---|-----------|-------|:----:|:---:|:------:|:---:|")
     rows = [r for r, g, h, a in GROUP_FIXTURES if g == grp]
     for r in sorted(rows, key=lambda x: ROW_MATCH[x]):
@@ -163,7 +163,7 @@ md.append("")
 for rnd, matches in KO.items():
     md.append(f"### {rnd}")
     md.append("")
-    md.append("| M# | Date (UB) | Match | Prediction | Advances | Exp. | Actual | Pts |")
+    md.append("| M# | Date (ET) | Match | Prediction | Advances | Exp. | Actual | Pts |")
     md.append("|----|-----------|-------|:---------:|----------|:---:|:------:|:---:|")
     for num, a, b, _score, adv in matches:
         rr = REAL[num]                       # realistic scoreline from the canonical source
