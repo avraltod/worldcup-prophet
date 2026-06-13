@@ -59,6 +59,8 @@
   "Czechia": -25.056750298685802,
   "Canada": -41.22162485065709,
   "Bosnia and Herzegovina": 41.22162485065709,
+  "Qatar": 46.16487455197128,
+  "Switzerland": -46.16487455197128,
   "United States": 75.0,
   "Paraguay": -75.0
  },
@@ -134,6 +136,24 @@
     "United States": 75.0,
     "Paraguay": -75.0
    }
+  },
+  {
+   "match": 8,
+   "home": "Qatar",
+   "away": "Switzerland",
+   "lam_obs": {
+    "home": 1.302,
+    "away": 2.279,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 0.1,
+    "away": 2.0
+   },
+   "drift_after": {
+    "Qatar": 46.16,
+    "Switzerland": -46.16
+   }
   }
  ],
  "pending": [],
@@ -182,6 +202,29 @@
     "Brazil": 0.0324,
     "Netherlands": 0.0235,
     "Ecuador": 0.0221
+   }
+  },
+  {
+   "match": 8,
+   "frozen_top": {
+    "Spain": 0.2811,
+    "Argentina": 0.1769,
+    "France": 0.1411,
+    "Portugal": 0.0984,
+    "England": 0.0697,
+    "Brazil": 0.0295,
+    "Netherlands": 0.0249,
+    "Ecuador": 0.0244
+   },
+   "learning_top": {
+    "Spain": 0.2806,
+    "Argentina": 0.1774,
+    "France": 0.1409,
+    "Portugal": 0.1017,
+    "England": 0.0714,
+    "Brazil": 0.0314,
+    "Netherlands": 0.0254,
+    "Ecuador": 0.0247
    }
   }
  ]

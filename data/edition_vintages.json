@@ -170,5 +170,40 @@
     0.0703
    ]
   ]
+ },
+ {
+  "edition": 8,
+  "match": 8,
+  "fixture": "Qatar v Switzerland",
+  "result": [
+   1,
+   1
+  ],
+  "points": 0,
+  "cum_points": 2,
+  "mean_brier": 0.661,
+  "cum_bits": 0.0081,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2729
+   ],
+   [
+    "Argentina",
+    0.1807
+   ],
+   [
+    "France",
+    0.1425
+   ],
+   [
+    "Portugal",
+    0.0955
+   ],
+   [
+    "England",
+    0.0671
+   ]
+  ]
  }
 ]

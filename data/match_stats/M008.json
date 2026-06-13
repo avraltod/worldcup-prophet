@@ -1,0 +1,20 @@
+{
+ "match": 8,
+ "event_id": "760420",
+ "stats": {
+  "home": {
+   "team": "Qatar",
+   "sot": 4.0,
+   "other_shots": 3.0,
+   "total_shots": 7.0,
+   "possession": 31.8
+  },
+  "away": {
+   "team": "Switzerland",
+   "sot": 7.0,
+   "other_shots": 19.0,
+   "total_shots": 26.0,
+   "possession": 68.2
+  }
+ }
+}
