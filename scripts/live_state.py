@@ -36,6 +36,36 @@ def save_state(state):
     STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=1))
 
 
+def load_live_inputs():
+    """Load data/live_inputs.json. Returns {} if file absent (graceful degradation)."""
+    p = ROOT / "data" / "live_inputs.json"
+    return json.loads(p.read_text()) if p.exists() else {}
+
+
+def build_eff_elo(state, live):
+    """Track B effective ratings: live_elo + live_injury_adj + lineup_adj + host_bonus + drift.
+
+    Falls back to raw june10_elo (not state["baseline"]) for teams absent from live_elo,
+    because baseline already includes june10_adj — using baseline + inj would double-count.
+    Drift (proxy xG signal) is added on top; it captures shot quality not in ClubElo.
+    """
+    from condition import HOSTS, ADJ as june10_adj, ELO as june10_elo
+    live_elo = live.get("live_elo", {})
+    live_inj = live.get("live_injury_adj")   # None means "key absent" → use june10 fallback
+    lineup_adj = live.get("lineup_adj", {})
+    drift = state.get("drift", {})
+    out = {}
+    for t in state["baseline"]:
+        base = live_elo.get(t, june10_elo[t])
+        if live_inj is None:
+            inj = june10_adj.get(t, 0)
+        else:
+            inj = live_inj.get(t, 0)
+        host = 60 if t in HOSTS else 0
+        out[t] = base + inj + lineup_adj.get(t, 0) + host + drift.get(t, 0)
+    return out
+
+
 def _track(state):
     lt = LearningTrack(state["baseline"], k=state["k"],
                        decay=state["decay"], bound=state["bound"])
