@@ -145,14 +145,17 @@ def realized_bracket(results, seed=2026):
     return slots, am
 
 
-def conditional_probs(results, N=50000, seed=2026, ratings=None):
+def conditional_probs(results, N=50000, seed=2026, ratings=None, live_rates=None):
     """Return {team: {stage: prob}} given observed results (group + ko).
     ratings: optional {team: Elo} override — group scorelines then come from
     learn.lambda_expected and knockout winners from the Elo expectancy on these
     ratings (no host bonus), which is the Learning-track re-simulation. The
     default (None) is the locked market-rate path and is unchanged. A-vs-B
     contract: BOTH tracks of a two-track comparison must use ratings= (frozen
-    leg = baseline_2026()), never one leg through the default market path."""
+    leg = baseline_2026()), never one leg through the default market path.
+    live_rates: optional {row_int: [lh, la]} for unplayed group games — used
+    by Track B to inject current bookmaker odds. Takes priority over ratings-
+    based lambda_expected but is always overridden by an observed result."""
     random.seed(seed)
     if ratings is not None:
         from learn import lambda_expected
@@ -175,6 +178,8 @@ def conditional_probs(results, N=50000, seed=2026, ratings=None):
                 lh, la, home, away = RATES[row]
                 if m in g_obs:
                     hg, ag = g_obs[m]
+                elif live_rates is not None and row in live_rates:
+                    hg, ag = sample(live_rates[row][0]), sample(live_rates[row][1])
                 elif ratings is not None:
                     le_h, le_a = lambda_expected(ratings[home], ratings[away])
                     hg, ag = sample(le_h), sample(le_a)
