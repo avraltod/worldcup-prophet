@@ -67,14 +67,190 @@ Prophet, Figure~\ref{fig:part2}) repeats after each of 104 matches.}
 \addcontentsline{toc}{section}{\S 0\enspace Notation and contract}
 \label{sec:notation}
 
-% STUB-S0
+Throughout, $i$ indexes teams and $R_i$ is team $i$'s Elo rating (a scalar
+strength, e.g.\ Spain~2165, Qatar~1423). A match between designated home
+side $H$ and away side $A$ produces a scoreline
+$(h,a)\in\mathbb{Z}_{\ge0}^2$. The model's prediction is $(\hat h,\hat a)$.
+Goal rates $\lambda_H,\lambda_A>0$ are the expected goals of each side under a
+Poisson model. Outcome probabilities are the triple
+$(p_H,p_D,p_A)$~--- home win, draw, away win~--- and $o_j$ denotes a decimal
+bookmaker odds quote for outcome $j\in\{H,D,A\}$. The pool score function is
+$S(\hat h,\hat a;\,h,a)\in\{0,1,2,3\}$ (defined in \S\ref{sec:notation}).
+In Part~II, $p_t$ denotes the champion probability distribution over all 48
+teams after conditioning on the first $t$ played games, and $d_i$ is team
+$i$'s learned rating drift.
+
+Two contracts hold throughout this document:
+\begin{enumerate}
+\item \textbf{Anchor contract.} Every displayed equation is followed by an
+anchor naming the code that implements it --- \texttt{scripts/file.py:function}
+--- with the constants as locked before kickoff (2026-06-10). The formulas
+are extracted from the code, not from an idealized model.
+\item \textbf{Honesty rule.} Where the code is a pragmatic shortcut rather
+than clean statistics (an independence assumption, a proportional vig split,
+a memoized grid), the note says so explicitly rather than dressing it up.
+\end{enumerate}
 
 % ── §0.5 ────────────────────────────────────────────────────────────────────
 \section*{\S 0.5\quad Complete variable inventory}
 \addcontentsline{toc}{section}{\S 0.5\enspace Complete variable inventory}
 \label{sec:inventory}
 
-% STUB-S05
+\subsection*{Tier 1 --- Pre-tournament inputs (locked 2026-06-10)}
+
+\begin{table}[H]
+\centering
+\caption{Pre-tournament inputs. All files are committed before kickoff
+(tag \texttt{prereg-2026}) and never re-read from the outside world.}
+\label{tab:tier1}
+\small
+\begin{tabular}{p{2.8cm}p{3.5cm}p{3.5cm}p{2.5cm}p{2cm}}
+\toprule
+Symbol & What & How measured & Values / range & File \\
+\midrule
+$o_H, o_D, o_A$ &
+  Bookmaker decimal odds &
+  Hand-collected Jun 2--7 from bet365, FanDuel, DraftKings, Betfair,
+  Kalshi/Polymarket; one source per fixture, recorded in \texttt{source} field &
+  e.g.\ Mexico--S.Africa: 1.40 / 4.60 / 8.00 &
+  \texttt{data/odds\_AD.json}, \texttt{odds\_EH.json}, \texttt{odds\_IL.json} \\[4pt]
+$R_i$ &
+  Elo rating, 48 teams &
+  Read from ClubElo/EloRatings.net, Jun 5--7 &
+  Spain 2165 \ldots\ Qatar 1423 &
+  \texttt{data/elo\_outright\_news.json} \\[4pt]
+$\delta_i^{\mathrm{inj}}$ &
+  Injury Elo deduction &
+  Hand-set scalar per confirmed absence &
+  NED $-23$, BRA $-20$, JPN $-10$, CRO $-10$, ESP $-5$ &
+  \texttt{data/elo\_outright\_news.json} \\[4pt]
+$\delta_i^{\mathrm{mkt}}$ &
+  Market recalibration &
+  Prediction-market implied 140-pt Portugal--Colombia gap vs.\ Elo
+  7-pt $\to$ split &
+  POR $+66$, COL $-67$ &
+  \texttt{scripts/condition.py} \\[4pt]
+$\delta_{\mathrm{host}}$ &
+  Host venue bonus &
+  Fixed rule; decays in late rounds &
+  $+40$ R32/R16; $+20$ QF onward &
+  \texttt{scripts/condition.py} \\[4pt]
+\textsc{group\_fixtures} &
+  72 group fixtures &
+  Static table (row, group, home, away) &
+  --- &
+  \texttt{scripts/fixtures.py} \\[4pt]
+\textsc{knockout} &
+  32-slot bracket wiring &
+  Directed graph, FIFA R32/R16/QF/SF/Final &
+  --- &
+  \texttt{scripts/fixtures.py} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection*{Tier 2 --- Intermediate computed values}
+
+\begin{table}[H]
+\centering
+\caption{Intermediate values derived during pipeline execution.}
+\label{tab:tier2}
+\small
+\begin{tabular}{p{2.6cm}p{3.2cm}p{5cm}p{2.4cm}}
+\toprule
+Symbol & What & Formula / source & Range \\
+\midrule
+$p_H, p_D, p_A$ &
+  Fair outcome probabilities &
+  $p_j = (1/o_j)/\sum_k(1/o_k)$; or Elo synthesis for odds-free matches &
+  $[0,1]$, sum $=1$ \\[4pt]
+$\lambda_H, \lambda_A$ &
+  Expected goal rates &
+  \texttt{fit\_rates}: grid search minimise $\sum(\tilde p_j-p_j)^2$,
+  step 0.05, total goals $\in[1.6,3.4]$ &
+  0.10--3.50 each \\[4pt]
+$P(h,a)$ &
+  Scoreline distribution &
+  $\mathrm{Pois}(h;\lambda_H)\cdot\mathrm{Pois}(a;\lambda_A)$,
+  $(h,a)\in\{0,\ldots,8\}^2$ &
+  81 values, sums to $\approx1$ \\[4pt]
+$\hat h, \hat a$ &
+  Match prediction &
+  $\arg\max\,\mathbb{E}[S]$ over $9\times9$ grid (EV rule);
+  or modal-conditional; or realistic readout &
+  integers 0--8 \\[4pt]
+$\mathbb{E}[S(\hat h,\hat a)]$ &
+  Expected pool points &
+  $p_{\mathrm{exact}}+p_{\mathrm{result+GD}}+p_{\mathrm{result}}$
+  (exact, no simulation) &
+  $[0,3]$ \\[4pt]
+$\lambda_{\mathrm{obs}}$ &
+  Observed performance (proxy xG) &
+  $0.3256\times\mathrm{SoT}$; calibrated OLS on 236 WC team-matches &
+  $\ge0$ \\[4pt]
+$\lambda_{\mathrm{exp}}$ &
+  Expected performance &
+  Elo synthesis $+$ \texttt{fit\_rates} at current $R_i^{\mathrm{eff}}$;
+  memoised on integer Elo diff &
+  0.10--3.50 \\[4pt]
+$s$ &
+  Net surprise (home) &
+  $(\lambda_{\mathrm{obs}}^H - \lambda_{\mathrm{exp}}^H)
+   -(\lambda_{\mathrm{obs}}^A - \lambda_{\mathrm{exp}}^A)$;
+  zero-sum by construction &
+  $\mathbb{R}$ \\[4pt]
+$d_i$ &
+  Per-team rating drift &
+  $d \leftarrow 0.95\,d + \mathrm{clip}(50\,s,\pm75)$;
+  initialised 0 at kickoff &
+  $\approx\pm214$ max over group stage \\[4pt]
+$R_i^{\mathrm{eff}}$ &
+  Effective rating &
+  $R_i+\delta_i^{\mathrm{inj}}+\delta_i^{\mathrm{host}}
+   +\delta_i^{\mathrm{mkt}}+d_i$ &
+  --- \\[4pt]
+$p_t$ &
+  Champion distribution at time $t$ &
+  Monte Carlo counter over $N$ simulations &
+  $[0,1]$ over 48 teams, sum $=1$ \\[4pt]
+$D_{\mathrm{KL}}(p_t\|p_{t-1})$ &
+  Per-game information (bits) &
+  $\sum_i p_t(i)\log_2[p_t(i)/\max(p_{t-1}(i),\varepsilon)]$,
+  $\varepsilon=10^{-12}$ &
+  $\ge0$ bits \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection*{Tier 3 --- Hyperparameters and tuning constants (locked pre-tournament)}
+
+\begin{table}[H]
+\centering
+\caption{All constants locked at kickoff (2026-06-10).}
+\label{tab:tier3}
+\small
+\begin{tabular}{llp{7cm}}
+\toprule
+Constant & Value & Rationale \\
+\midrule
+\texttt{MAX\_G}       & 8      & Poisson tail $<2.4\times10^{-4}$ at $\lambda=2$ \\
+$N_{\mathrm{pre}}$    & 200{,}000 & MC SE $\approx\pm0.1$ pp at champion scale \\
+$N_{\mathrm{cond}}$   & 50{,}000  & Per-track post-match re-simulation \\
+$N_{\mathrm{replay}}$ & 4{,}000   & Per-snapshot in 2022 replay validation \\
+seed                  & 2026   & Fixed for reproducibility \\
+$\lambda$ grid step   & 0.05   & Balances inversion precision vs.\ compute \\
+total goals band      & $[1.6,3.4]$ & WC group games average $\approx2.5$--2.7 total goals \\
+$k$ (learning gain)   & 50     & Midpoint of 2022 optimum (40) and 2018 optimum (60) \\
+$\gamma$ (decay)      & 0.95   & Drift half-life $\approx13.5$ matches \\
+$B$ (drift bound)     & 75     & Hard clip on per-match step \\
+$\varepsilon$ (KL floor) & $10^{-12}$ & Prevents $\log0$ in divergence \\
+host bonus early      & $+40$  & R32 and R16 rounds \\
+host bonus late       & $+20$  & QF, SF, Final \\
+draw share base       & 0.30   & Decays as $e^{-|d|/700}$ with Elo gap \\
+pen threshold         & 0.25   & Winner's rate edge $<0.25$ goals $\Rightarrow$ penalties pick \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 % ── §0.6 ────────────────────────────────────────────────────────────────────
 \section*{\S 0.6\quad Match lifecycle variables}
