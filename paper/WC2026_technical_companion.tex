@@ -257,7 +257,148 @@ pen threshold         & 0.25   & Winner's rate edge $<0.25$ goals $\Rightarrow$ 
 \addcontentsline{toc}{section}{\S 0.6\enspace Match lifecycle variables}
 \label{sec:lifecycle}
 
-% STUB-S06
+\subsection*{\S 0.6a --- Before-game state (entering match $m$)}
+
+\begin{table}[H]
+\centering
+\caption{Variables the model knows entering match $m$, and whether they update
+after each prior match.}
+\label{tab:before}
+\small
+\begin{tabular}{p{2.8cm}p{3.2cm}p{4.5cm}p{2cm}}
+\toprule
+Symbol & What & How determined & Updated\\
+ & & & each match? \\
+\midrule
+$R_i$ &
+  Baseline Elo &
+  Locked Jun 10, from \texttt{elo\_outright\_news.json} &
+  No \\[4pt]
+$\delta_i^{\mathrm{inj}}$ &
+  Injury deduction &
+  Hand-set pre-tournament &
+  No \\[4pt]
+$\delta_i^{\mathrm{host}}$ &
+  Host venue bonus &
+  Fixed rule applied at sim time &
+  No \\[4pt]
+$\delta_i^{\mathrm{mkt}}$ &
+  Market recalibration &
+  Set once from prediction-market gap &
+  No \\[4pt]
+$d_i$ &
+  Accumulated drift (Track~B; Track~A: always 0) &
+  \S\ref{sec:drift} update after each prior match &
+  Yes --- every match \\[4pt]
+$R_i^{\mathrm{eff}}=R_i+\delta^{\mathrm{inj}}
+  +\delta^{\mathrm{host}}+\delta^{\mathrm{mkt}}+d_i$ &
+  Effective rating entering $m$ &
+  Composition of above &
+  Yes (via $d_i$) \\[4pt]
+$o_H, o_D, o_A$ &
+  Bookmaker odds for match $m$ &
+  Hand-collected Jun 2--7 (group matches only) &
+  No \\[4pt]
+$p_H, p_D, p_A$ &
+  Fair outcome probabilities &
+  Normalised odds; or Elo synthesis (KO / odds-free) &
+  No \\[4pt]
+$\lambda_H, \lambda_A$ &
+  Expected goal rates for match $m$ &
+  \texttt{fit\_rates} from $(p_H,p_D,p_A)$ &
+  No (group) / derived from $R_i^{\mathrm{eff}}$ (KO) \\[4pt]
+$P(h,a)$ &
+  Scoreline distribution, 81 values &
+  $\mathrm{Pois}(h;\lambda_H)\cdot\mathrm{Pois}(a;\lambda_A)$ &
+  No \\[4pt]
+$\hat h, \hat a$ &
+  Published prediction for match $m$ &
+  $\arg\max\,\mathbb{E}[S]$ or realistic readout &
+  No \\[4pt]
+$p_{t-1}$ &
+  Champion distribution entering $m$ &
+  Previous match's re-simulation output &
+  Yes --- previous match \\[4pt]
+$\mathrm{Piv}(m)$ &
+  Pre-match pivotality (expected KL, bits) &
+  $\sum_o w_o\,D_{\mathrm{KL}}(p^{\mathrm{post}(o)}\|p^{\mathrm{pre}})$,
+  $N=5{,}000$ per fork &
+  Computed fresh \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection*{\S 0.6b --- After-game variables (once the whistle blows)}
+
+\begin{table}[H]
+\centering
+\caption{Variables that arrive or are computed after match $m$ is completed.}
+\label{tab:after}
+\small
+\begin{tabular}{p{2.8cm}p{3.2cm}p{3.8cm}p{2.5cm}}
+\toprule
+Symbol & What & Source & Available when \\
+\midrule
+$h, a$ &
+  Final score &
+  ESPN scoreboard API $\to$ \texttt{fetch\_results.py} &
+  $\sim$5 min after FT \\[4pt]
+$r=\mathrm{sgn}(h-a)$ &
+  Realized result $\in\{+1,0,-1\}$ &
+  Derived &
+  Same \\[4pt]
+$S(\hat h,\hat a;\,h,a)$ &
+  Pool points earned $\in\{0,1,2,3\}$ &
+  \texttt{scoring.py:score\_match} &
+  Same \\[4pt]
+$\mathrm{SoT}_H,\mathrm{SoT}_A$ &
+  Shots on target &
+  ESPN summary API $\to$ \texttt{fetch\_stats\_espn.py} &
+  $\sim$15 min after FT \\[4pt]
+$\mathrm{otherShots}_H,\mathrm{otherShots}_A$ &
+  Off-target $+$ blocked shots &
+  Same &
+  Same \\[4pt]
+$\mathrm{poss}_H,\mathrm{poss}_A$ &
+  Possession \% &
+  Same (scraped; $\beta_2=0$, not used in proxy) &
+  Same \\[4pt]
+$\lambda_{\mathrm{obs}}^H,\lambda_{\mathrm{obs}}^A$ &
+  Observed performance (proxy xG) &
+  $0.3256\times\mathrm{SoT}$; from shot stats &
+  After stats arrive \\[4pt]
+$\lambda_{\mathrm{exp}}^H,\lambda_{\mathrm{exp}}^A$ &
+  Expected performance &
+  Elo synthesis $+$ \texttt{fit\_rates} at pre-match $R_i^{\mathrm{eff}}$ &
+  Pre-computed \\[4pt]
+$s_H$ &
+  Net surprise &
+  $(\lambda_{\mathrm{obs}}^H-\lambda_{\mathrm{exp}}^H)
+   -(\lambda_{\mathrm{obs}}^A-\lambda_{\mathrm{exp}}^A)$; zero-sum &
+  Derived \\[4pt]
+$d_i^{\mathrm{new}}$ (Track~B) &
+  Updated drift &
+  $0.95\,d_i+\mathrm{clip}(50\,s_i,\pm75)$ &
+  Derived from $s$ \\[4pt]
+$p_t^{\mathrm{frozen}}$ &
+  Champion dist., Track~A &
+  Re-sim $N=50{,}000$, results pinned, ratings fixed &
+  $\sim$min after FT \\[4pt]
+$p_t^{\mathrm{learn}}$ &
+  Champion dist., Track~B &
+  Re-sim $N=50{,}000$, results pinned, $R_i^{\mathrm{eff}}$ updated &
+  Same \\[4pt]
+$D_{\mathrm{KL}}(p_t^{\mathrm{frozen}}\|p_{t-1}^{\mathrm{frozen}})$ &
+  Result-channel information (bits) &
+  Scoreline conditioning alone &
+  Derived \\[4pt]
+$D_{\mathrm{KL}}(p_t^{\mathrm{learn}}\|p_t^{\mathrm{frozen}})$ &
+  Performance-channel information (bits) &
+  Gap between tracks after match $m$ &
+  Derived \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \part{The Locked Forecast}
 
