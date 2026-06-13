@@ -404,15 +404,179 @@ $D_{\mathrm{KL}}(p_t^{\mathrm{learn}}\|p_t^{\mathrm{frozen}})$ &
 
 \section{From information to numbers}
 \label{sec:inputs}
-% STUB-S1
+Everything downstream is arithmetic on numbers, so the first modeling step is
+\emph{measurement}: turning four kinds of worldly information into typed
+numerical objects.
+
+\paragraph{(a) Bookmaker odds $\to$ probability triples.}
+Each group fixture is one JSON record carrying decimal odds and normalised fair
+probabilities: $(o_H,o_D,o_A)\mapsto(p_H,p_D,p_A)$ with $p_j\propto1/o_j$
+(the normalisation is \S\ref{sec:devig}'s subject). Odds were hand-collected
+June 2--7, 2026 from bet365, FanDuel, DraftKings, Betfair, and
+Kalshi/Polymarket composites --- one source per fixture, recorded in a
+\texttt{source} field, not averaged across books. Coverage: 55 of 72 group
+fixtures. The loader merges three files (\texttt{odds\_AD.json},
+\texttt{odds\_EH.json}, \texttt{odds\_IL.json}), keys by canonicalised team
+pair, and defensively renormalises $p_j\leftarrow p_j/(p_H+p_D+p_A)$. The 17
+matchday-3 fixtures with no published odds at collection time receive an Elo
+estimate instead (flagged in \texttt{source}).
+
+\anchor{scripts/predict\_groups.py:load\_odds + main --- pair-keyed merge,
+orientation flip, renormalisation.}
+
+\paragraph{(b) Elo table $\to$ ratings $R_i$.}
+One integer per team for all 48 teams (Spain 2165 down to Qatar 1423), read
+from \texttt{data/elo\_outright\_news.json}. The effective knockout rating adds
+two deterministic corrections:
+\begin{equation}
+R_i^{\mathrm{eff}} = R_i + \delta_i^{\mathrm{inj}} + \delta_i^{\mathrm{host}}.
+\label{eq:reff}
+\end{equation}
+
+\paragraph{(c) Team news $\to$ additive rating penalties.}
+Qualitative injury reports are encoded as fixed Elo deductions
+$\delta_i^{\mathrm{inj}}$, set once at collection time:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lrl}
+\toprule
+Team & $\delta^{\mathrm{inj}}$ & Reason \\
+\midrule
+Netherlands & $-23$ & Xavi Simons out \\
+Brazil      & $-20$ & Rodrygo out \\
+Japan       & $-10$ & Mitoma out \\
+Croatia     & $-10$ & squad fitness \\
+Spain       & $-5$  & Ferm\'in L\'opez out (metatarsal) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{honesty}
+This is the bluntest measurement in the pipeline --- a hand-set scalar per
+absence, not a player-value model.
+\end{honesty}
+
+\paragraph{(d) Tournament structure $\to$ fixture list + bracket graph.}
+The 72 group fixtures are a static table \texttt{(row, group, home, away)}; the
+knockout is a directed graph encoded as the sheet's slot layout. Two auxiliary
+encodings matter: a deterministic alias map (\texttt{"T\"urkiye"$\to$"Turkey"},
+\texttt{"Korea Republic"$\to$"South Korea"}, \ldots) and a fixed bijection
+between sheet rows 4--75 and FIFA's official group-match numbers 1--72,
+cross-checked by a unit test.
+
+\anchor{scripts/fixtures.py:GROUP\_FIXTURES/KNOCKOUT/ALIASES/canon/ROW\_MATCH
+(numbering guarded by tests/test\_match\_numbering.py).}
 
 \section{Clean the odds}
 \label{sec:devig}
-% STUB-S2
+A decimal quote $o_j$ implies probability $1/o_j$, but a book's implied
+probabilities sum to more than one. The excess is the \emph{overround} (vig),
+\begin{equation}
+V = \sum_{j\in\{H,D,A\}}\frac{1}{o_j} - 1 > 0.
+\label{eq:vig}
+\end{equation}
+The model strips it by \emph{proportional normalisation}:
+\begin{equation}
+p_j = \frac{1/o_j}{\displaystyle\sum_{k\in\{H,D,A\}}1/o_k},
+\qquad j\in\{H,D,A\}.
+\label{eq:devig}
+\end{equation}
+
+\textbf{Worked example.} Mexico--South Africa at $(1.40,4.60,8.00)$ implies
+$(0.714,0.217,0.125)$, $V=5.6\%$, normalising to $(0.676,0.206,0.118)$.
+
+\begin{honesty}
+Proportional de-vigging spreads the vig across outcomes in proportion to their
+implied probability. Books are known to shade longshots more than favourites
+(the favourite--longshot bias), which Shin-type methods would correct. The
+pipeline knowingly uses the proportional map: the bias is second-order at World
+Cup group-match prices, and the downstream pick rule is insensitive to
+probability perturbations of that size.
+\end{honesty}
+
+\anchor{data/odds\_*.json (fields \texttt{odds\_*} and \texttt{p\_*});
+scripts/predict\_groups.py:main --- \texttt{ph,pd,pa = ph/s, pd/s, pa/s}.}
 
 \section{The Poisson scoreline model}
 \label{sec:poisson}
-% STUB-S3
+\subsection*{The model}
+Goals are independent Poisson counts:
+\begin{equation}
+P(h,a) = \mathrm{Pois}(h;\lambda_H)\,\mathrm{Pois}(a;\lambda_A)
+= e^{-\lambda_H}\frac{\lambda_H^h}{h!}\cdot
+  e^{-\lambda_A}\frac{\lambda_A^a}{a!},
+\label{eq:poisson}
+\end{equation}
+truncated to $(h,a)\in\{0,\ldots,8\}^2$ everywhere.
+
+\anchor{scripts/poisson\_model.py:pois (\texttt{MAX\_G = 8}).}
+
+\begin{honesty}
+Real scorelines exhibit mild dependence between the two counts
+(bivariate-Poisson and Dixon--Coles corrections exist for exactly this); the
+pipeline uses independence throughout.
+\end{honesty}
+
+\subsection*{The inverse problem}
+The market gives $(p_H,p_D,p_A)$; the model needs rates. Outcome probabilities
+under the model are the grid sums
+$\tilde p_H=\sum_{h>a}P(h,a)$, $\tilde p_D=\sum_{h=a}P(h,a)$,
+$\tilde p_A=\sum_{h<a}P(h,a)$,
+and \texttt{fit\_rates} inverts the map by constrained least squares on a
+lattice:
+\begin{equation}
+(\hat\lambda_H,\hat\lambda_A)=
+\underset{\substack{\lambda_H,\lambda_A\in\{0.10,0.15,\ldots,3.50\}\\
+1.6\le\lambda_H+\lambda_A\le3.4}}{\arg\min}
+\sum_{j\in\{H,D,A\}}\bigl(\tilde p_j(\lambda_H,\lambda_A)-p_j\bigr)^2.
+\label{eq:fitrates}
+\end{equation}
+The lattice step is 0.05; the total-goals band $[1.6,3.4]$ encodes the prior
+that World Cup group games average roughly 2.5--2.7 total goals.
+
+\anchor{scripts/poisson\_model.py:outcome\_probs/fit\_rates ---
+\texttt{steps = 0.05k, k = 2..70}; \texttt{outcome\_probs} is
+\texttt{lru\_cache}d so the $69\times69$ grid search costs one pass.}
+
+\subsection*{The EV-optimal pick rule}
+The model's pick is the expected-points maximiser:
+\begin{equation}
+(\hat h,\hat a) = \underset{(\hat h,\hat a)\in\{0,\ldots,8\}^2}{\arg\max}
+\;\mathbb{E}\bigl[S(\hat h,\hat a;\,h,a)\bigr],
+\label{eq:evpick}
+\end{equation}
+found by brute force over all 81 candidate scorelines.
+
+\anchor{scripts/ev321.py:best\_pick --- exhaustive search over the $9\times9$
+grid.}
+
+\subsection*{The modal-conditional rule (published picks)}
+The most likely exact score conditional on the most likely outcome:
+\begin{equation}
+(\hat h,\hat a) =
+\underset{(h,a):\,\mathrm{sgn}(h-a)=r^*}{\arg\max}\;P(h,a),
+\qquad r^*=\underset{j}{\arg\max}\;p_j.
+\label{eq:modal}
+\end{equation}
+Matches rule~\eqref{eq:evpick} on 71 of 72 group fixtures.
+
+\anchor{scripts/poisson\_model.py:modal\_score.}
+
+\subsection*{Knockout Elo synthesis}
+Undrawn knockout ties have no odds, so $(p_H,p_D,p_A)$ is synthesised from
+effective Elo ratings ($d=R_H^{\mathrm{eff}}-R_A^{\mathrm{eff}}$):
+\begin{align}
+e &= \frac{1}{1+10^{-d/400}}, \label{eq:elowin}\\
+p_D &= 0.30\,e^{-|d|/700}, \label{eq:elodraw}\\
+p_H &= \max\!\bigl(0.01,\;e-\tfrac{p_D}{2}\bigr), \label{eq:elohome}\\
+p_A &= \max(0.01,\;1-p_H-p_D), \label{eq:eloaway}
+\end{align}
+renormalised to sum to one, then fed through \texttt{fit\_rates}.
+
+\anchor{scripts/realistic\_scores.py:main (KO branch);
+scripts/predict\_knockout.py:probs.}
 
 \section{Monte Carlo simulation}
 \label{sec:mc}
