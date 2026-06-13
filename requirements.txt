@@ -1,1 +1,2 @@
+# python-graphviz binding; also requires the 'dot' binary: brew install graphviz (macOS) / apt install graphviz (Linux)
 graphviz

@@ -426,12 +426,17 @@ orientation flip, renormalisation.}
 
 \paragraph{(b) Elo table $\to$ ratings $R_i$.}
 One integer per team for all 48 teams (Spain 2165 down to Qatar 1423), read
-from \texttt{data/elo\_outright\_news.json}. The effective knockout rating adds
-two deterministic corrections:
+from \texttt{data/elo\_outright\_news.json}. The effective rating entering any
+match sums four corrections:
 \begin{equation}
-R_i^{\mathrm{eff}} = R_i + \delta_i^{\mathrm{inj}} + \delta_i^{\mathrm{host}}.
+R_i^{\mathrm{eff}} = R_i + \delta_i^{\mathrm{inj}} + \delta_i^{\mathrm{host}}
+  + \delta_i^{\mathrm{mkt}} + d_i.
 \label{eq:reff}
 \end{equation}
+In Part~I the drift is initialised to zero ($d_i=0$) so the locked forecast
+uses $R_i+\delta_i^{\mathrm{inj}}+\delta_i^{\mathrm{host}}+\delta_i^{\mathrm{mkt}}$.
+The market recalibration $\delta_i^{\mathrm{mkt}}$ and drift $d_i$ are defined
+in Tables~\ref{tab:tier1} and~\ref{tab:tier2} respectively.
 
 \paragraph{(c) Team news $\to$ additive rating penalties.}
 Qualitative injury reports are encoded as fixed Elo deductions

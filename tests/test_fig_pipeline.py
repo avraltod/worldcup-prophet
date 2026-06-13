@@ -81,7 +81,8 @@ def test_part2_source_has_two_tracks():
 def test_part2_source_has_feedback_arrow():
     import fig_pipeline_part2 as m
     src = m.build().source
-    assert "next match" in src   # cross-match dashed feedback label
+    assert "next match" in src        # cross-match dashed feedback label
+    assert "constraint=false" in src  # must not bend layout into a cycle
 
 
 def test_node_colors_consistent_across_figures():
