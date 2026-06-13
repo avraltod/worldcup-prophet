@@ -55,3 +55,18 @@ def test_clubelo_deltas_vs_june10():
     assert spain_d["june10"] == cond.ELO["Spain"]
     assert spain_d["current"] == 1882.0
     assert abs(spain_d["delta"] - (1882.0 - cond.ELO["Spain"])) < 0.01
+
+
+def test_fetch_clubelo_empty_result_triggers_fallback_in_main(tmp_path, monkeypatch):
+    """When ClubElo returns 0 national teams, main() falls back to JUNE10_ELO."""
+    import fetch_live_inputs as fli
+    import condition as cond
+    # Patch fetch_clubelo to return an empty dict (simulating club-only response)
+    monkeypatch.setattr(fli, "fetch_clubelo", lambda date_str, opener=None: {})
+    monkeypatch.setattr(fli, "OUT_PATH", tmp_path / "live_inputs.json")
+    monkeypatch.setattr(fli, "DATA", tmp_path)
+    fli.main(["--pre"])
+    out = json.loads((tmp_path / "live_inputs.json").read_text())
+    # Should fall back to June 10 Elo
+    assert len(out["live_elo"]) == len(cond.ELO)
+    assert out["source_freshness"]["elo_updated_at"] == "2026-06-10T00:00:00Z"

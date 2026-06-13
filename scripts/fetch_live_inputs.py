@@ -99,6 +99,10 @@ def main(argv=None):
     elo_updated_at = None
     try:
         live_elo = fetch_clubelo(today)
+        if len(live_elo) < 10:
+            # ClubElo date endpoint returns club teams only when national teams
+            # are unavailable; <10 teams signals a club-only or empty response.
+            raise ValueError(f"ClubElo returned {len(live_elo)} teams (expected national teams)")
         elo_updated_at = now
         print(f"fetch_live_inputs: ClubElo fetched {len(live_elo)} teams")
     except Exception as e:
