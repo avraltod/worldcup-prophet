@@ -92,6 +92,7 @@ def make_pre_record(e, now):
            "n_recorded": len(log["group"]) + len(log.get("ko", {})),
            "champion": champ, "market_champion": market_snapshot.fetch_market_champion(),
            "info_bits": _kl_bits(champ, _prev_champion()),
+           "event_id": e.get("event_id"),
            "lineup": lineups.fetch_lineup(e["event_id"]) if e.get("event_id") else None,
            "result": None, "performance": None}
     _append(rec)
@@ -135,6 +136,27 @@ def _date_window(now, back=1, fwd=1):
             for i in range(-back, fwd + 1)]
 
 
+def backfill_lineups():
+    """Patch null lineups in pre-records whenever ESPN now has them.
+    Uses the event_id stored in the record — no date-window dependency."""
+    traj = _load(TRAJ, [])
+    patched = 0
+    for rec in traj:
+        if rec.get("phase") != "pre" or rec.get("lineup") is not None:
+            continue
+        eid = rec.get("event_id")
+        if not eid:
+            continue
+        lu = lineups.fetch_lineup(eid)
+        if lu:
+            rec["lineup"] = lu
+            patched += 1
+            print(f"v2: backfilled lineup for pre M{rec['match']}")
+    if patched:
+        TRAJ.write_text(json.dumps(traj, ensure_ascii=False, indent=1))
+    return patched
+
+
 def main(argv):
     dry = "--dry-run" in argv
     now = dt.datetime.now(dt.timezone.utc)
@@ -143,6 +165,8 @@ def main(argv):
     actions = plan_records(events, _load(INDEX, {"pre": [], "post": []}), now)
     if not actions:
         print("v2: nothing due.")
+        if not dry:
+            backfill_lineups()
         return 0
     by_match = {e["match"]: e for e in events}
     for m, phase in actions:
@@ -151,6 +175,8 @@ def main(argv):
             continue
         (make_pre_record if phase == "pre" else make_post_record)(by_match[m], now)
         print(f"v2: recorded {phase} M{m}")
+    if not dry:
+        backfill_lineups()
     return 0
 
 

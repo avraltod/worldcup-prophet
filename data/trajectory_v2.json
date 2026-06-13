@@ -952,8 +952,36 @@
    "Sweden": 0.0034
   },
   "info_bits": 0.0,
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Mahmoud Abunada",
+    "Boualem Khoukhi",
+    "Pedro Miguel",
+    "Ayoub Al-Oui",
+    "Homam Ahmed",
+    "Assim Madibo",
+    "Issa Laye",
+    "Jassem Gaber",
+    "Akram Afif",
+    "Edmílson Junior",
+    "Yusuf Abdurisag"
+   ],
+   "away": [
+    "Gregor Kobel",
+    "Nico Elvedi",
+    "Denis Zakaria",
+    "Manuel Akanji",
+    "Ricardo Rodríguez",
+    "Michel Aebischer",
+    "Rubén Vargas",
+    "Granit Xhaka",
+    "Dan Ndoye",
+    "Remo Freuler",
+    "Breel Embolo"
+   ]
+  },
   "result": null,
-  "performance": null
+  "performance": null,
+  "event_id": "760420"
  }
 ]
