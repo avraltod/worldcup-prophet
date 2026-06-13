@@ -98,8 +98,8 @@ def tracker(group_state, frozen, now):
 
 
 def group_box(g_state, results, expectations, frozen, now):
-    """Appendix-A living box for one group: real results beside the picks, real
-    standings, qualification lock -> now, remaining fixtures with lock odds."""
+    """Appendix-A living box for one group: round-robin with pred->actual for
+    played matches, predictions for unplayed, standings, and qualification comparison."""
     grp = g_state["group"]
     exps = sorted((e for e in expectations if e.get("group") == grp),
                   key=lambda e: e["match"])
@@ -108,18 +108,25 @@ def group_box(g_state, results, expectations, frozen, now):
                          for r in g_state["rows"] if r["team"] in frozen)
         return (f"\\paragraph{{Group {grp} — live.}} No results yet; the locked "
                 f"qualification odds stand ({qual}).")
-    played_lines, remaining_lines = [], []
+    played_rows, remaining_rows = [], []
     for e in exps:
         res = results["group"].get(str(e["match"]))
+        pick = e["pick"]
+        ph, pd, pa = e["probs_HDA"]
         if res:
-            played_lines.append(
-                f"M{e['match']} {e['home']}--{e['away']}: predicted "
-                f"{e['pick'][0]}--{e['pick'][1]}, actual {res[0]}--{res[1]} \\\\")
+            correct = (pick[0] - pick[1] == res[0] - res[1]
+                       if pick[0] - pick[1] != 0 else res[0] == res[1])
+            icon = r"\checkmark" if correct else r"\(\times\)"
+            played_rows.append(
+                f"M{e['match']} {e['home']} v {e['away']} & "
+                f"pred {pick[0]}--{pick[1]} & "
+                f"actual {res[0]}--{res[1]} & {icon} \\\\"
+            )
         else:
-            ph, pd, pa = e["probs_HDA"]
-            remaining_lines.append(
-                f"M{e['match']} {e['home']} v {e['away']} "
-                f"({_pct(ph)}/{_pct(pd)}/{_pct(pa)}) \\\\")
+            remaining_rows.append(
+                f"M{e['match']} {e['home']} v {e['away']} & "
+                f"{_pct(ph)}/{_pct(pd)}/{_pct(pa)} \\\\"
+            )
     stand = " ".join(
         f"{r['team']} & {r['P']} & {r['W']} & {r['D']} & {r['L']} & "
         f"{r['GF']} & {r['GA']} & {r['Pts']} \\\\" for r in g_state["rows"])
@@ -127,17 +134,21 @@ def group_box(g_state, results, expectations, frozen, now):
         f"{r['team']} & {_pct(frozen[r['team']]['advance_KO'])} & "
         f"{_pct(now[r['team']]['advance_KO'])} \\\\"
         for r in g_state["rows"] if r["team"] in frozen and r["team"] in now)
-    parts = [f"\\paragraph{{Group {grp} — live ({g_state['played']} of {g_state['total']} played).}}",
+    parts = [f"\\paragraph{{Group {grp} — live ({g_state['played']} of "
+             f"{g_state['total']} played).}}",
              "\\begin{footnotesize}",
-             "\\begin{tabular}{l} " + " ".join(played_lines) + " \\end{tabular}\\quad",
+             "\\begin{tabular}{lllc} \\toprule "
+             "Match & Predicted & Actual & \\\\ \\midrule "
+             + " ".join(played_rows) + " \\bottomrule \\end{tabular}\\quad",
              "\\begin{tabular}{lrrrrrrr} \\toprule "
              "Team & P & W & D & L & GF & GA & Pts \\\\ \\midrule "
              + stand + " \\bottomrule \\end{tabular}\\quad",
              "\\begin{tabular}{lrr} \\toprule Team & Qual (lock) & Qual (now) \\\\ "
              "\\midrule " + qual_rows + " \\bottomrule \\end{tabular}"]
-    if remaining_lines:
+    if remaining_rows:
         parts.append("\\\\[2pt] Remaining (lock H/D/A \\%): "
-                     "\\begin{tabular}{l} " + " ".join(remaining_lines) + " \\end{tabular}")
+                     "\\begin{tabular}{ll} "
+                     + " ".join(remaining_rows) + " \\end{tabular}")
     parts.append("\\end{footnotesize}")
     return "\n".join(parts)
 

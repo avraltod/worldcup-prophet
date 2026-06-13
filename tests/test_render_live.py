@@ -106,6 +106,22 @@ def test_group_box_played_and_unplayed():
     assert "No results yet" in tex_b
 
 
+def test_group_box_shows_pred_vs_actual_in_table():
+    frozen, now = _stages(), _stages(0.27)
+    for t in ("Mexico", "South Korea", "Czechia", "South Africa"):
+        frozen[t] = {"advance_KO": 0.9, "champion": 0.01, "R16": 0, "QF": 0, "SF": 0, "final": 0}
+        now[t] = {"advance_KO": 0.95, "champion": 0.01, "R16": 0, "QF": 0, "SF": 0, "final": 0}
+    exps = [{"match": 1, "group": "A", "home": "Mexico", "away": "South Africa",
+              "pick": [2, 1], "probs_HDA": [0.67, 0.21, 0.12]},
+             {"match": 2, "group": "A", "home": "South Korea", "away": "Czechia",
+              "pick": [1, 1], "probs_HDA": [0.35, 0.33, 0.32]}]
+    gA = next(g for g in _gs12() if g["group"] == "A")
+    tex = rl.group_box(gA, {"group": {"1": [2, 0]}}, exps, frozen, now)
+    assert "pred 2--1" in tex and "actual 2--0" in tex   # played match
+    assert r"\checkmark" in tex or r"\(\times\)" in tex or "0.67" in tex  # outcome annotation
+    assert "South Korea v Czechia" in tex   # remaining
+
+
 def test_survival_unit_restates_all_teams():
     frozen, now = _stages(), _stages(0.30)
     tex = rl.survival_unit(frozen, now)
