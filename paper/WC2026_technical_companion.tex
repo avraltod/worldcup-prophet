@@ -714,15 +714,100 @@ feeds both the EV-optimal match prediction and the 200k-tournament Monte Carlo.}
 
 \section{Measurement: from match events to \texorpdfstring{$\lambda_{\mathrm{obs}}$}{lambda-obs}}
 \label{sec:lambdaobs}
-% STUB-S7
+Real xG is not freely available for World Cups. The free signal that survives
+is the box score: shots on target and other shots. Define the observed
+performance rate of a team as
+\begin{equation}
+\hat\lambda_{\mathrm{obs}} = \max\!\bigl(0,\;
+\beta_1\cdot\mathrm{SoT}+\beta_2\cdot\mathrm{otherShots}\bigr),
+\qquad \beta_1=0.3256,\quad\beta_2=0,
+\label{eq:proxy}
+\end{equation}
+where $\mathrm{otherShots}=\text{off-target}+\text{blocked}$.
+The calibrated $\beta_2$ is exactly zero: each shot on target is worth about
+a third of an expected goal; off-target and blocked shots carry no incremental
+information once shots on target are counted.
+
+\paragraph{Calibration.} The coefficients are a one-time least-squares fit of
+realised goals on shot counts over the 2018 and 2022 World Cups
+($n=236$ team-matches of free ESPN box-score data):
+\begin{equation}
+(\beta_1,\beta_2) = \underset{\beta\ge0}{\arg\min}
+\sum_{i=1}^{236}\bigl(\mathrm{goals}_i
+-\beta_1\,\mathrm{SoT}_i-\beta_2\,\mathrm{otherShots}_i\bigr)^2,
+\label{eq:calibrate}
+\end{equation}
+OLS through the origin, clipped to non-negative coefficients.
+
+\anchor{scripts/performance.py:proxy\_xg; coefficients in
+data/proxy\_coef.json --- \texttt{sot: 0.32557, other: 0.0}.}
+
+\paragraph{Fallback.} If a real xG number is available for a match, it takes
+precedence, with the source recorded per match so the two never mix silently.
+
+\anchor{scripts/performance.py:compute\_lambda\_obs ---
+\texttt{source: 'real' | 'proxy'}.}
 
 \section{The expectation model: \texorpdfstring{$\lambda_{\mathrm{exp}}$}{lambda-exp} from ratings}
 \label{sec:lambdaexp}
-% STUB-S8
+Given two teams' current ratings, the expected performance rates are produced
+by the same chain Part~I uses for odds-free matchups --- one composition of
+three maps applied to the rating difference $d=R_{\mathrm{home}}-R_{\mathrm{away}}$:
+\begin{equation}
+d
+\xrightarrow[\text{Elo logistic + draw}]{\text{(i)}}
+(p_H,p_D,p_A)
+\xrightarrow[\texttt{fit\_rates}]{\text{(ii)}}
+(\lambda_{\mathrm{exp}}^{\mathrm{home}},\lambda_{\mathrm{exp}}^{\mathrm{away}}),
+\label{eq:lambdaexp}
+\end{equation}
+where step~(i) is the synthesis of equations~\eqref{eq:elowin}--\eqref{eq:eloaway}
+and step~(ii) is the lattice least-squares inversion of equation~\eqref{eq:fitrates}.
+Nothing new is fitted here: the Prophet inherits Part~I's match model wholesale.
+
+\paragraph{Numerics.} $\lambda_{\mathrm{exp}}$ depends only on $d$ rounded to
+the nearest integer Elo point, and \texttt{\_lambda\_for\_diff} is memoised on
+that integer. A half-point rating change moves the win expectancy by under
+$10^{-3}$, far below the lattice resolution (0.05 goals) of the inversion it
+feeds, so the cache is lossless in effect.
+
+\anchor{scripts/learn.py:\_lambda\_for\_diff/lambda\_expected.}
 
 \section{The learning update: net surprise and regularized drift}
 \label{sec:drift}
-% STUB-S9
+\subsection*{Net surprise}
+After a match, each team's performance is compared to expectation on both sides
+of the ball and netted:
+\begin{equation}
+s_{\mathrm{home}} =
+\underbrace{\bigl(\lambda_{\mathrm{obs}}^H-\lambda_{\mathrm{exp}}^H\bigr)}_{\text{attack surplus}}
+-\underbrace{\bigl(\lambda_{\mathrm{obs}}^A-\lambda_{\mathrm{exp}}^A\bigr)}_{\text{defence leak}},
+\qquad s_{\mathrm{away}}=-s_{\mathrm{home}}.
+\label{eq:surprise}
+\end{equation}
+The construction is zero-sum by definition: one team's positive surprise is
+exactly the other's negative, so learning redistributes strength rather than
+inflating it.
+
+\anchor{scripts/learn.py:net\_surprise and LearningTrack.apply\_match.}
+
+\subsection*{The drift update}
+Each team carries an accumulated drift $d_i$ (initialised to 0) on top of its
+frozen baseline, $R_i^{\mathrm{learn}}=R_i+d_i$. One match updates it as
+\begin{equation}
+d_i \leftarrow \gamma\,d_i +
+\operatorname{clip}(k\,s_i,\,-B,\,+B),
+\qquad k=50,\quad\gamma=0.95,\quad B=75.
+\label{eq:drift}
+\end{equation}
+The clip binds the per-match \emph{step} $ks_i$, not the accumulated drift.
+Setting $k=0$ makes the step vanish and the drift stay at zero: the frozen
+track is exactly the learning track at zero gain, which is what makes the A/B
+comparison clean.
+
+\anchor{scripts/learn.py:update\_drift ---
+\texttt{step = max(-bound, min(bound, k*surprise)); return decay*drift + step};
+defaults in \texttt{LearningTrack.\_\_init\_\_} (\texttt{k=50.0, decay=0.95, bound=75.0}).}
 
 \section{Re-simulation and the two-track trajectory}
 \label{sec:twotrack}
