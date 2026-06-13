@@ -1,0 +1,159 @@
+% Compile with XeLaTeX: latexmk -xelatex WC2026_technical_companion.tex
+% Reads side-by-side with WC2026_paper.tex.
+\documentclass[11pt,letterpaper]{article}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage[letterpaper,margin=1in]{geometry}
+\usepackage{caption}
+\usepackage{multirow}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{pdflscape}
+\usepackage{avtables}
+\usepackage[hidelinks]{hyperref}
+\captionsetup{font=small,labelfont=bf}
+
+% Prefix companion tables/figures with C to avoid collision with main paper
+\renewcommand{\thetable}{C\arabic{table}}
+\renewcommand{\thefigure}{C\arabic{figure}}
+
+% Code anchor: \anchor{scripts/file.py:function — constants}
+\newcommand{\anchor}[1]{%
+  \smallskip\noindent\textsc{Anchor.}~\texttt{#1}\smallskip}
+
+% Honesty note block
+\newenvironment{honesty}{%
+  \begin{quote}\textit{Honesty note.}~}{%
+  \end{quote}}
+
+\title{\textbf{Technical Companion:}\\[4pt]
+  \large Forecasting the 2026 FIFA World Cup:
+  A Market-Calibrated Poisson--Elo Model and
+  the Information Each Result Reveals}
+\author{Avralt-Od Purevjav \and Jeronimo Luza}
+\date{June 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This document is the mathematical companion to the above paper.
+Every pipeline step is presented as the mathematics it implements,
+every modeling assumption is stated with its known limitations,
+and every formula is anchored to the exact code that executes it.
+It reads side-by-side with the paper; section numbers mirror the
+paper's stages~0--6 (Part~I) and~7--12 (Part~II).
+\end{abstract}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figs/fig_pipeline_overview.pdf}
+\caption{Master overview of the two-phase pipeline. Part~I (locked forecast,
+Figure~\ref{fig:part1}) runs once before the tournament; Part~II (live
+Prophet, Figure~\ref{fig:part2}) repeats after each of 104 matches.}
+\label{fig:overview}
+\end{figure}
+
+\tableofcontents
+\clearpage
+
+% ── §0 ──────────────────────────────────────────────────────────────────────
+\section*{\S 0\quad Notation and contract}
+\addcontentsline{toc}{section}{\S 0\enspace Notation and contract}
+\label{sec:notation}
+
+% STUB-S0
+
+% ── §0.5 ────────────────────────────────────────────────────────────────────
+\section*{\S 0.5\quad Complete variable inventory}
+\addcontentsline{toc}{section}{\S 0.5\enspace Complete variable inventory}
+\label{sec:inventory}
+
+% STUB-S05
+
+% ── §0.6 ────────────────────────────────────────────────────────────────────
+\section*{\S 0.6\quad Match lifecycle variables}
+\addcontentsline{toc}{section}{\S 0.6\enspace Match lifecycle variables}
+\label{sec:lifecycle}
+
+% STUB-S06
+
+\part{The Locked Forecast}
+
+\section{From information to numbers}
+\label{sec:inputs}
+% STUB-S1
+
+\section{Clean the odds}
+\label{sec:devig}
+% STUB-S2
+
+\section{The Poisson scoreline model}
+\label{sec:poisson}
+% STUB-S3
+
+\section{Monte Carlo simulation}
+\label{sec:mc}
+% STUB-S4
+
+\section{Slot emergence and pivotality}
+\label{sec:slot}
+% STUB-S5
+
+\section{The machine learning risk layer}
+\label{sec:ml}
+% STUB-S6
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figs/fig_pipeline_part1.pdf}
+\caption{Part~I locked forecast pipeline in detail. Two input lanes (market odds
+for group matches; Elo synthesis for knockout matches and the 17 odds-free group
+fixtures) merge at the fitted goal-rate pair $(\lambda_H, \lambda_A)$, which
+feeds both the EV-optimal match prediction and the 200k-tournament Monte Carlo.}
+\label{fig:part1}
+\end{figure}
+
+\part{The Live Prophet}
+
+\section{Measurement: from match events to \texorpdfstring{$\lambda_{\mathrm{obs}}$}{lambda-obs}}
+\label{sec:lambdaobs}
+% STUB-S7
+
+\section{The expectation model: \texorpdfstring{$\lambda_{\mathrm{exp}}$}{lambda-exp} from ratings}
+\label{sec:lambdaexp}
+% STUB-S8
+
+\section{The learning update: net surprise and regularized drift}
+\label{sec:drift}
+% STUB-S9
+
+\section{Re-simulation and the two-track trajectory}
+\label{sec:twotrack}
+% STUB-S10
+
+\section{Information accounting: KL divergence in bits}
+\label{sec:kl}
+% STUB-S11
+
+\section{How we know it works: validation}
+\label{sec:validation}
+% STUB-S12
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figs/fig_pipeline_part2.pdf}
+\caption{Part~II live Prophet pipeline in detail. After each match, ESPN APIs
+supply the result and shot statistics. Track~A (frozen) conditions on results
+with fixed ratings; Track~B (learning) first updates per-team rating drift from
+the observed/expected goal-rate gap, then conditions. The dashed feedback arrow
+marks the cross-match accumulation of drift.}
+\label{fig:part2}
+\end{figure}
+
+\end{document}
