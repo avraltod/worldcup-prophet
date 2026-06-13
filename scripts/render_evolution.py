@@ -16,7 +16,7 @@ def ledger_table(entries):
         return r"\textit{No matches documented yet.}"
     rows = []
     for e in entries:
-        fm = e["failure_mode"] or "--"
+        fm = (e["failure_mode"] or "--").replace("_", r"\_")
         rows.append(
             f"{e['match']} & {e['fixture']} & {e['pre']['pick'][0]}--{e['pre']['pick'][1]} "
             f"& {_score(e['result'])} & {e['post']['points']} & {e['post']['brier']:.3f} "
