@@ -22,6 +22,7 @@ def ledger_table(entries):
             f"& {_score(e['result'])} & {e['post']['points']} & {e['post']['brier']:.3f} "
             f"& {e['post']['info_bits']:.3f} & {fm} \\\\")
     head = ("\\begin{longtable}{rlcccccl}\n"
+            "\\caption{Match record (live edition)}\\label{tab:live_ledger}\\\\\n"
             "\\toprule\n"
             "M & Fixture & Pick & Result & Pts & Brier & Info & Mode \\\\\n"
             "\\midrule\n"
@@ -76,7 +77,10 @@ def divergence_section(frozen, now, entries, group_state):
             f"{t} & {_pct(f['champion'])} & {_pct(c['champion'])} & {_delta(f['champion'], c['champion'])}"
             f" & {_pct(f['advance_KO'])} & {_pct(c['advance_KO'])} & {_delta(f['advance_KO'], c['advance_KO'])} \\\\")
     table = (
-        "\\begin{longtable}{lrrrrrr}\n\\toprule\n"
+        "\\begin{longtable}{lrrrrrr}\n"
+        "\\caption{Champion and advance probability divergence from the locked baseline "
+        "(live edition)}\\label{tab:live_divergence}\\\\\n"
+        "\\toprule\n"
         " & \\multicolumn{3}{c}{Champion (\\%)} & \\multicolumn{3}{c}{Advance (\\%)} \\\\\n"
         "\\cmidrule(lr){2-4}\\cmidrule(lr){5-7}\n"
         "Team & frozen & now & $\\Delta$ & frozen & now & $\\Delta$ \\\\\n"

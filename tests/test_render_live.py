@@ -170,3 +170,24 @@ def test_validate_labels_raises_when_missing():
 
 def test_validate_labels_empty_requirements_always_passes():
     rl.validate_labels("test", "any content", [])
+
+
+def test_survival_unit_has_label():
+    frozen, now = _stages(), _stages(0.30)
+    tex = rl.survival_unit(frozen, now)
+    assert r"\label{tab:live_survival}" in tex
+
+
+def test_ledger_has_label():
+    entries = [_entry()]
+    tex = rl.ledger(entries)
+    assert r"\label{tab:live_ledger}" in tex
+
+
+def test_divergence_has_label():
+    frozen, now = _stages(), _stages(0.27)
+    gs = [{"group": "A", "played": 1, "total": 6,
+           "rows": [{"team": "Mexico", "P": 1, "W": 1, "D": 0, "L": 0,
+                     "GF": 2, "GA": 0, "Pts": 3}]}]
+    tex = rl.divergence_unit(frozen, now, [_entry()], gs)
+    assert r"\label{tab:live_divergence}" in tex

@@ -156,8 +156,10 @@ def survival_unit(frozen, now):
         "The table restates the stage-reached probabilities of the locked table "
         "above, conditioned on every result revealed to date; the locked table "
         "never changes, so the pair is directly comparable.\n\n"
-        "\\begin{footnotesize}\n\\begin{longtable}{lrrrrrr}\n\\toprule\n"
-        "Team & KO & R16 & QF & SF & Final & Champion \\\\\n\\midrule\n\\endhead\n"
+        "\\begin{footnotesize}\n\\begin{longtable}{lrrrrrr}\n"
+        "\\caption{Stage-reached probabilities conditioned on results so far "
+        "(live edition)}\\label{tab:live_survival}\\\\\n"
+        "\\toprule\nTeam & KO & R16 & QF & SF & Final & Champion \\\\\n\\midrule\n\\endhead\n"
         + "\n".join(rows) + "\n\\bottomrule\n\\end{longtable}\n\\end{footnotesize}")
 
 
