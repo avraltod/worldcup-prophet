@@ -114,8 +114,8 @@ def group_box(g_state, results, expectations, frozen, now):
         pick = e["pick"]
         ph, pd, pa = e["probs_HDA"]
         if res:
-            correct = (pick[0] - pick[1] == res[0] - res[1]
-                       if pick[0] - pick[1] != 0 else res[0] == res[1])
+            def _sgn(d): return 1 if d > 0 else (-1 if d < 0 else 0)
+            correct = _sgn(pick[0] - pick[1]) == _sgn(res[0] - res[1])
             icon = r"\checkmark" if correct else r"\(\times\)"
             played_rows.append(
                 f"M{e['match']} {e['home']} v {e['away']} & "

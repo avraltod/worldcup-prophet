@@ -118,7 +118,7 @@ def test_group_box_shows_pred_vs_actual_in_table():
     gA = next(g for g in _gs12() if g["group"] == "A")
     tex = rl.group_box(gA, {"group": {"1": [2, 0]}}, exps, frozen, now)
     assert "pred 2--1" in tex and "actual 2--0" in tex   # played match
-    assert r"\checkmark" in tex or r"\(\times\)" in tex or "0.67" in tex  # outcome annotation
+    assert r"\checkmark" in tex   # pick 2-1 (home win) matches actual 2-0 (home win)
     assert "South Korea v Czechia" in tex   # remaining
 
 
