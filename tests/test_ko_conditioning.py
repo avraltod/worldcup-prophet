@@ -24,6 +24,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import condition as C
 
 N = 20000
+FROZEN = json.loads((ROOT / "data" / "frozen_stage_probs.json").read_text())["stages"]
 
 
 def _predicted_groups():
@@ -103,10 +104,9 @@ def test_conditional_probs_default_path_unchanged():
 
 def test_south_korea_advance_jumps_after_m2_win():
     """M2: South Korea 2-1 Czechia should lift South Korea advance_KO by >=15pp."""
-    frozen = json.loads((ROOT / "data" / "frozen_stage_probs.json").read_text())["stages"]
     results_m2 = {"group": {"1": [2, 0], "2": [2, 1]}, "ko": {}}
     now = C.conditional_probs(results_m2, N=20000, seed=42)
-    frozen_ko = frozen.get("South Korea", {}).get("advance_KO", 0.5)
+    frozen_ko = FROZEN.get("South Korea", {}).get("advance_KO", 0.5)
     now_ko = now.get("South Korea", {}).get("advance_KO", 0.0)
     assert now_ko > frozen_ko + 0.15, (
         f"South Korea advance_KO should jump >15pp after M2 win; "
@@ -115,10 +115,9 @@ def test_south_korea_advance_jumps_after_m2_win():
 
 def test_paraguay_advance_drops_after_m4_loss():
     """M4: US 4-1 Paraguay should cut Paraguay's advance_KO by >=15pp."""
-    frozen = json.loads((ROOT / "data" / "frozen_stage_probs.json").read_text())["stages"]
     results_m4 = {"group": {"1": [2, 0], "2": [2, 1], "3": [1, 1], "4": [4, 1]}, "ko": {}}
     now = C.conditional_probs(results_m4, N=20000, seed=42)
-    frozen_ko = frozen.get("Paraguay", {}).get("advance_KO", 0.5)
+    frozen_ko = FROZEN.get("Paraguay", {}).get("advance_KO", 0.5)
     now_ko = now.get("Paraguay", {}).get("advance_KO", 0.5)
     assert now_ko < frozen_ko - 0.15, (
         f"Paraguay advance_KO should drop >15pp after M4 loss; "
