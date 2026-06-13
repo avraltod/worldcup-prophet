@@ -32,7 +32,7 @@
 \maketitle
 
 \begin{abstract}
-\noindent This paper documents a forecasting framework I built to predict all 104 matches of the 2026 FIFA World Cup, the first edition with 48 teams. A private prediction pool scores each entry in three tiers, 3 points for an exact scoreline, 2 for the correct result and goal difference, and 1 for the correct result, so the target is a full scoreline and not merely the winner. For each match I report a realistic rounded-expected-goals scoreline, and a backtest on the 2018 and 2022 World Cups suggests it scores as well in pool points as the points-optimal pick while landing closer to the actual scores. The group-stage forecasts derive from bookmaker odds collected four days before kickoff, margin-stripped and fitted to independent Poisson goal distributions, and the knockout forecasts use World Football Elo ratings adjusted for confirmed squad injuries and host advantage. I then simulate 200{,}000 full tournaments to stress-test the bracket. Because a knockout prediction can score only if the named team actually occupies its bracket slot, I optimize the picks for \emph{slot emergence}, the joint probability of reaching and winning a slot, following the expected-pool-score principle of the office-pool literature and applying it to the 48-team format's constrained third-place allocation. This criterion overturned three knockout picks, and two of them survive a full sensitivity sweep over the framework's hand-set constants. At the pre-kickoff lock the model forecast Spain as champion in 27.4 percent of simulations, defeating Argentina (18.6 percent) in the final, with France (14.8 percent) third.\liveAbstractRevision{} The paper's central pre-registered analysis treats this static forecast as a baseline and studies how it revises as the tournament is played. After each result I fix the played matches and re-simulate the rest, which updates every team's probability of reaching each stage, and I measure the information each result carries by the Kullback--Leibler divergence between the champion distribution before and after it. I register the hypothesis that this information is highly uneven across the 104 matches, near zero through most of the group stage and concentrated at the eliminations of likely champions. All predictions are locked before kickoff, so the forecast trajectory is an out-of-sample record, and all data and code are retained for that evaluation. As of the live scorecard, the entry has accrued \liveCumPoints{} pool points across \liveDocumented{} graded matches at a mean Brier score of \liveMeanBrier{}.
+\noindent This paper documents a forecasting framework I built to predict all 104 matches of the 2026 FIFA World Cup, the first edition with 48 teams. A private prediction pool scores each entry in three tiers, 3 points for an exact scoreline, 2 for the correct result and goal difference, and 1 for the correct result, so the target is a full scoreline and not merely the winner. For each match I report a realistic rounded-expected-goals scoreline, and a backtest on the 2018 and 2022 World Cups suggests it scores as well in pool points as the points-optimal pick while landing closer to the actual scores. The group-stage forecasts derive from bookmaker odds collected four days before kickoff, margin-stripped and fitted to independent Poisson goal distributions, and the knockout forecasts use World Football Elo ratings adjusted for confirmed squad injuries and host advantage. I then simulate 200{,}000 full tournaments to stress-test the bracket. Because a knockout prediction can score only if the named team actually occupies its bracket slot, I optimize the picks for \emph{slot emergence}, the joint probability of reaching and winning a slot, following the expected-pool-score principle of the office-pool literature and applying it to the 48-team format's constrained third-place allocation. This criterion overturned three knockout picks, and two of them survive a full sensitivity sweep over the framework's hand-set constants. At the pre-kickoff lock the model forecast Spain as champion in 27.4 percent of simulations, defeating Argentina (18.6 percent) in the final, with France (14.8 percent) third.\input{live/abstract_live} The paper's central pre-registered analysis treats this static forecast as a baseline and studies how it revises as the tournament is played. After each result I fix the played matches and re-simulate the rest, which updates every team's probability of reaching each stage, and I measure the information each result carries by the Kullback--Leibler divergence between the champion distribution before and after it. I register the hypothesis that this information is highly uneven across the 104 matches, near zero through most of the group stage and concentrated at the eliminations of likely champions. All predictions are locked before kickoff, so the forecast trajectory is an out-of-sample record, and all data and code are retained for that evaluation. As of the live scorecard, the entry has accrued \liveCumPoints{} pool points across \liveDocumented{} graded matches at a mean Brier score of \liveMeanBrier{}.
 
 \medskip
 \noindent\textbf{Keywords:} association football, betting odds, Poisson model, Elo ratings, Monte Carlo simulation, FIFA World Cup
@@ -66,6 +66,8 @@ The static forecast is only the starting point. The paper's central contribution
 
 The rest of the paper is organized as follows. Section~2 describes the data, Section~3 the methodology, and Section~4 the results, including the pre-registered forecast-evolution study, and Section~5 discusses the forecast, its objective, and the ways it can fail.
 
+\input{live/intro_data_note}
+
 \section{Data}
 
 I collected four datasets on June 5--7, 2026, four days before the opening match (Table~\ref{tab:data}).
@@ -93,6 +95,8 @@ I collected four datasets on June 5--7, 2026, four days before the opening match
 \end{table}
 
 I incorporate several squad facts as rating adjustments, including Brazil without Rodrygo (anterior cruciate ligament), the Netherlands without Xavi Simons, Japan without Kaoru Mitoma, Croatia in poor warm-up form, and a minor deduction for Spain (Fermín López). I take the fixture list, kickoff times, venues, and the official third-place allocation table from the tournament schedule.
+
+\input{live/data_revealed}
 
 \section{Methodology}\label{sec:method}
 
@@ -143,6 +147,8 @@ with a draw component for the 90-minute result, $p_D = 0.30\, e^{-|\Delta|/700}$
 
 The full tournament was simulated 200{,}000 times. Each iteration (i) samples every group match scoreline from its fitted Poisson pair; (ii) resolves group tables by points, goal difference, goals scored, head-to-head result, and random draw; (iii) ranks the twelve third-placed teams by points, goal difference, goals scored, and a random tiebreak, takes the best eight, and assigns their groups to the eight third-place bracket slots by backtracking bipartite matching against the official allocation table, in which each slot admits only a fixed subset of groups and slots are filled in order with the first feasible group; if the best eight admit no complete matching the search retries with the ninth-ranked group substituted for the eighth, which resolves every infeasible case that arises; and (iv) plays all 31 knockout matches as Elo-weighted Bernoulli draws. With $N = 200{,}000$, the Monte Carlo standard error of an estimated probability $p$ is $\sqrt{p(1-p)/N} \le 0.11$ percentage points. Beyond the headline probabilities of Section~4, the simulation yields each team's full distribution over exit stages; Appendix~\ref{app:survival} reports these survival distributions for sixteen teams.
 
+\input{live/simulation_note}
+
 \subsection{Slot-emergence optimization}\label{sec:slot}
 
 A knockout entry scores only if the named team contests the corresponding real match. The relevant decision quantity for bracket slot $s$ is therefore not head-to-head win probability but
@@ -165,6 +171,8 @@ measures, in bits, how far the forecast moved, and it is the central quantity of
 
 These measures are not new, and the contribution here is their application to a pre-registered live tournament record, not the measures themselves. The per-result divergence in Equation~\eqref{eq:kl} is the relative entropy that underlies the logarithmic scoring rule of \citet{gneiting2007}, and the expected version introduced as pivotality in Section~\ref{sec:pivotality} is the mutual information between a result and the champion's identity, which is the same quantity the sabermetric literature calls win-probability-added or leverage \citep{tango2007}. The belief-path object the trajectory traces, the cumulative movement of a forecast as uncertainty resolves, is studied formally by \citet{ely2015} as suspense and surprise. In their terms the pivotality of Section~\ref{sec:pivotality} is suspense, the movement of the champion belief a result is expected to produce, and the per-result divergence in Equation~\eqref{eq:kl} is surprise, the movement it actually produced; I measure both with the Kullback--Leibler divergence rather than the squared Euclidean distance of their baseline model, because the relative entropy is the version that coincides with the logarithmic scoring rule and gives a forecast's total movement an additive decomposition across sequential results. The divergence is taken from prior to posterior, $D(q \,\|\, p)$ with $q$ the updated distribution, which is the expected log-likelihood ratio of the observed update and the quantity that scoring rule rewards; the reverse direction and the symmetric Jensen--Shannon distance are defensible alternatives that would change the units but not the ordering of which results are informative. I use these established tools to instrument a forecast over a real tournament; the novelty I claim is the pre-registered record and the slot-emergence decision rule of Section~\ref{sec:slot}, not the information measures.
 
+\input{live/sec36_live}
+
 \section{Results}
 
 \subsection{Tournament-level forecasts}
@@ -172,6 +180,7 @@ These measures are not new, and the contribution here is their application to a 
 Table~\ref{tab:champ} reports champion, finalist, and semi-finalist probabilities; once the tournament is under way, each live edition of this paper re-states the table conditioned on the results revealed so far, beside the locked baseline column. At the lock, Spain is the modal champion at 27.4\%, ahead of Argentina at 18.6\% and France at 14.8\%, and the predicted Spain--Argentina final is the single most likely pairing at 10.8\% of simulations.\footnote{This is the original locked forecast. Two later numbers in the paper differ by about a percentage point: the pre-deadline Group~K recalibration of Section~\ref{sec:postscript} revises Spain to 26.8\%, and Monte Carlo variation across runs is about 0.5~pp (Section~\ref{sec:robust}). I report the original 27.4\% as the headline and the recalibrated 26.8\% wherever the recalibrated model is the explicit subject; the two are the same forecast before and after that single localized update.} The forecast is consistent with the outright betting market, which priced Spain as favorite at decimal odds near 5.5.
 
 \input{live/champ_table}
+\input{live/champdist_live}
 
 \begin{figure}[!t]
   \caption{Champion probability distribution}\label{fig:champdist}
@@ -221,6 +230,8 @@ Two objections apply to Table~\ref{tab:revisions} and deserve direct treatment. 
 A one-at-a-time sensitivity sweep addresses the second objection. I perturb each hand-set constant across a wide range, scaling the injury adjustments by 0, 0.5, 1.5, and 2 and setting host advantage to 0, 20, and 60 points, and I re-run the simulation at 20{,}000 iterations per configuration, which gives a standard error near 0.45 pp on each gap. The Norway--Ecuador gap is 3.5 pp in every configuration and the Belgium--Turkey gap stays between 8.3 and 9.1 pp, so these two revisions are insensitive to the framework's judgment inputs. The Croatia--Portugal gap remains positive in all configurations but shrinks from 3.0 pp with injuries off to 0.8 pp with injuries doubled, because Croatia carries one of the adjustments, so it is sign-stable but small and I report it as the least secure of the three. The champion forecast is unaffected throughout, and Spain wins in every configuration at between 26.8 and 27.9 percent. The draw-model constants are excluded from the sweep for cause rather than omission: because the knockout winner is sampled with probability $p_h + p_d/2$, which equals the raw Elo win expectancy regardless of how the draw mass is set, the constants $0.30$ and the 700-point decay cancel in every knockout and touch only the 24 Elo-estimated group fixtures, leaving the champion forecast unmoved. Because one-at-a-time perturbation can miss interactions, I also drew ten joint configurations of the injury scaling and host magnitude at random: Spain's champion probability stayed within a 0.8-point band of 26.2 to 27.1 percent, and all three slot-emergence revisions remained sign-stable in every configuration.
 
 The aggregate stake is worth stating plainly. Summed over the three slots, the revisions raise the expected number of correctly named slot winners by about 0.16, which is roughly one extra correct knockout call every six tournaments. The framework's value lies less in any single revision than in the systematic check, because without the simulation all three head-to-head favorites would have been entered, and two of those entries are robustly dominated.
+
+\input{live/robustness_live}
 
 \subsection{Final forecast}
 
@@ -340,6 +351,8 @@ One refinement carries a behavioral lesson. Penalizing clinched and eliminated t
     \end{tablenotes}
   \end{threeparttable}
 \end{figure}
+
+\input{live/failure_analysis}
 
 \subsection{Pivotality: the leverage of a single event}\label{sec:pivotality}
 
@@ -481,6 +494,8 @@ A decomposition separates the two kinds of information a game carries. The resul
 
 \section{Discussion}
 
+\input{live/discussion_live}
+
 My central design choice is to use market odds where they exist and Elo where they do not, and it follows the empirical finding that betting markets are difficult to beat for match-level football forecasting \citep{strumbelj2014, leitner2010, hvattum2010}. Well-designed hybrid models have outperformed market odds in recent tournaments \citep{groll2019}, so the market tier should be read as a strong baseline rather than an unbeatable one. The slot-emergence criterion itself is not new, because it instantiates the expected-pool-score objective of \citet{kaplangarstka2001}, but the 2026 format gives it unusual bite, because with twelve groups feeding a constrained third-place allocation the gap between head-to-head strength and slot-conditional expected points was large enough to overturn three of 31 knockout entries, two of them robustly (Section~\ref{sec:robust}). Because the group-stage probabilities are recovered from market odds, the entry's edge over a market-literate rival comes entirely from two structural layers, the points-efficient scoreline readout and the slot-emergence routing.
 
 \subsection{Expected points versus winning the pool}\label{sec:objective}
@@ -611,6 +626,8 @@ Figure~\ref{fig:groupqual} shows each team's qualification probability from 100{
     \end{tablenotes}
   \end{threeparttable}
 \end{figure}
+
+\input{live/groupqual_live}
 
 \begin{table}[!t]
   \centering
@@ -1024,6 +1041,8 @@ The complete submitted knockout entry is shown in Figure~\ref{fig:bracket}, with
 \end{figure}
 \end{landscape}
 
+\input{live/bracket_live}
+
 \paragraph{Round of 32.} Every entry maximizes slot emergence (Eq.~5) rather than head-to-head strength. Three entries go against the conditional favorite, all justified in Section 4.2: Norway over Ecuador ($+4.0$ pp, robust), Croatia in the K2--L2 slot ($+2.4$ pp, fragile), Belgium's path protected by the Group G draw. Portugal's emergence from the K1 slot (50.7\%) is the strongest single slot claim in the bracket. Host adjustments apply to Mexico (Azteca) and the United States (Arlington).
 
 \paragraph{Round of 16.} France ends Germany (Elo 2081 against 1925) in a tie of quarter-final quality drawn one round early. Belgium over the United States embodies the round's structural logic, because the 55.7 percent head-to-head favorite, Turkey, was replaced once its slot emergence of 14.3 percent turned out to be barely a third of its conditional win probability. England eliminates host Mexico, because the altitude and atmosphere adjustment does not close a 112-point rating gap. Portugal passes Switzerland in the slot the market recalibration opened.
@@ -1150,6 +1169,7 @@ The same instrumentation reveals the bracket's structural landmine. Slot M84 pai
 A complementary question to the single-team risk traces above is which group-stage outcomes most determine the success of the \emph{whole entry}, which is the score-metric pivotality of Section~\ref{sec:general}: how much each group call is worth to the entry's expected knockout points. I estimate it with a surrogate global sensitivity analysis, treating each of 40{,}000 simulated tournaments as one observation, with 24 binary features for whether the entry named each group's winner and runner-up correctly and a target equal to the number of the 31 knockout picks that occupy and win their slot. A random forest fit to this data explains 47 percent of the variance in the entry's knockout score from group-stage correctness alone, so the majority of the score is decided later in knockout ties the group stage cannot anticipate, the same wide-distribution message stated as a variance share; a gradient-boosted tree agrees on the ranking (Spearman 0.83) and reaches the same ceiling, so this is not an artifact of one model. The importances concentrate on the winners of the groups feeding the deepest predicted runs, Groups H, I, J, L, and K, with naming Spain out of Group~H worth about 0.8 of a knockout point against barely a quarter of that for the lowest-leverage call. Not all group calls are equally valuable, and the one to protect is the call feeding the longest bracket run, which for this entry is Spain out of Group~H. A fuller treatment would compute the value of information directly rather than through a surrogate, as Section~\ref{sec:general} notes.
 
 \input{live/survival}
+\input{live/survival_colcomp}
 
 \section{The living two-track forecaster: implementation, tuning, and validation}\label{app:prophet}
 
