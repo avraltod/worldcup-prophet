@@ -51,7 +51,7 @@ Poisson goal model, and optimizes picks under the pool's 3/2/1 scoring rule.
 ## Results tracking
 
 <!-- LIVE-RESULTS:START -->
-_Last updated: 2026-06-12 — 2/104 matches played._
+_Last updated: 2026-06-13 — 4/104 matches played._
 
 **Information gain in this update:** 0.002 bits
 
@@ -59,17 +59,19 @@ _Last updated: 2026-06-12 — 2/104 matches played._
 
 | Team | Model | Market |
 |---|---|---|
-| Spain | 26.9% | 16.4% |
-| Argentina | 17.9% | 8.5% |
-| France | 14.3% | 15.5% |
-| Portugal | 9.3% | 10.5% |
-| England | 7.1% | 10.1% |
-| Brazil | 3.6% | 8.2% |
-| Netherlands | 2.3% | 4.2% |
-| Germany | 2.2% | 5.0% |
+| Spain | 27.0% | 16.4% |
+| Argentina | 18.0% | 7.7% |
+| France | 14.2% | 15.7% |
+| Portugal | 9.4% | 10.3% |
+| England | 7.0% | 9.4% |
+| Brazil | 3.5% | 8.2% |
+| Germany | 2.3% | 5.0% |
+| Netherlands | 2.2% | 5.0% |
 
 **Recorded group results:**
 
 - M1: Mexico 2–0 South Africa
 - M2: South Korea 2–1 Czechia
+- M3: Canada 1–1 Bosnia and Herzegovina
+- M4: United States 4–1 Paraguay
 <!-- LIVE-RESULTS:END -->
