@@ -32,8 +32,7 @@ jobs:
       - name: Install Python deps (anthropic optional, matplotlib for the live figure)
         if: steps.detect.outputs.pending != '0' || github.event_name == 'workflow_dispatch'
         run: |
-          pip install matplotlib
-          pip install anthropic || true   # optional; pipeline falls back to templated without it
+          pip install matplotlib anthropic
       - name: Install TeX Live (XeLaTeX) + MS core fonts
         if: steps.detect.outputs.pending != '0' || github.event_name == 'workflow_dispatch'
         run: |
