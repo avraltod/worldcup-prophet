@@ -811,15 +811,115 @@ defaults in \texttt{LearningTrack.\_\_init\_\_} (\texttt{k=50.0, decay=0.95, bou
 
 \section{Re-simulation and the two-track trajectory}
 \label{sec:twotrack}
-% STUB-S10
+After $t$ games have been played, the forecast is the conditional distribution
+\begin{equation}
+p_t(\text{team}) = P\bigl(\text{team wins}\;\big|\;
+\mathrm{results}_{1..t},\;\mathrm{ratings}_t\bigr),
+\label{eq:cond}
+\end{equation}
+estimated by Monte Carlo with played games pinned and the future sampled.
+The two tracks differ \emph{only} in $\mathrm{ratings}_t$: the frozen track
+always passes the locked baseline $R_i$; the learning track passes
+$R_i+d_{i,t}$ with the drift of \S\ref{sec:drift}.
+
+\paragraph{The replay loop.} \texttt{run\_replay} steps an ordered game list.
+For each finished game it (i) pins the result, (ii) applies the drift update
+from the game's $\lambda_{\mathrm{obs}}$, and (iii) re-simulates the whole
+tournament twice --- once per track --- recording a snapshot
+$(p_t^{\mathrm{frozen}},p_t^{\mathrm{learn}})$. The trajectory is
+\begin{equation}
+\text{trajectory} =
+\Bigl\{\bigl(p_t^{\mathrm{frozen}},p_t^{\mathrm{learn}}\bigr)\Bigr\}_{t=0}^{T},
+\qquad\text{headline} = \text{the gap between the two paths.}
+\label{eq:traj}
+\end{equation}
+
+\anchor{scripts/replay.py:run\_replay --- $N=4{,}000$ per snapshot, seed 2026.}
 
 \section{Information accounting: KL divergence in bits}
 \label{sec:kl}
-% STUB-S11
+Each snapshot records how far the new champion distribution moved from the
+previous one, in bits:
+\begin{equation}
+D_{\mathrm{KL}}\bigl(p_t\,\big\|\,p_{t-1}\bigr)
+= \sum_{i:\,p_t(i)>0}p_t(i)\,\log_2\frac{p_t(i)}{\max(p_{t-1}(i),\varepsilon)},
+\qquad\varepsilon=10^{-12}.
+\label{eq:kl}
+\end{equation}
+Base 2 makes the unit \textbf{bits}: one bit is the information in one fair
+coin flip about the championship. This is the \emph{realised} counterpart of
+\S\ref{sec:slot}'s pivotality: pivotality is the expected KL before kickoff;
+\texttt{kl\_from\_prev} is what the match actually delivered.
+
+\paragraph{Channel decomposition.}
+\begin{itemize}
+\item \textbf{Result channel}: the frozen track's own per-game divergence,
+summed over a window --- what conditioning on scorelines alone teaches.
+\item \textbf{Performance channel}:
+$D_{\mathrm{KL}}(p_T^{\mathrm{learn}}\|p_T^{\mathrm{frozen}})$ --- what
+reading the shot counts added beyond the scorelines.
+\end{itemize}
+Across the 48 group games of the 2022 replay the per-game result and
+performance informations correlate at $-0.09$ --- essentially orthogonal. That
+near-orthogonality is the empirical licence for the learning track's existence.
+
+\anchor{scripts/snapshot.py:kl\_divergence; attached per snapshot as
+\texttt{kl\_from\_prev} in scripts/replay.py:\_snapshot.}
 
 \section{How we know it works: validation}
 \label{sec:validation}
-% STUB-S12
+The learning claim was stress-tested against the two complete free-data
+tournaments available, 2018 and 2022. The evaluation metric is
+\textbf{finalist lift}: replay a tournament's group stage, then compare how
+much champion-probability mass each track's end-of-groups forecast assigns to
+the two teams that actually reached that final,
+\begin{equation}
+\mathrm{lift} =
+\Bigl(\sum_{t\in\mathrm{finalists}}p_T^{\mathrm{learn}}(t)\Bigr)
+-\Bigl(\sum_{t\in\mathrm{finalists}}p_T^{\mathrm{frozen}}(t)\Bigr)
+\quad\text{percentage points.}
+\label{eq:lift}
+\end{equation}
+
+\paragraph{(1) Leave-one-tournament-out cross-validation.}
+Tune $k$ on one World Cup, test on the other. Train-2018 fixes $k=60$, tested
+on 2022; train-2022 fixes $k=40$, tested on 2018. Learning helps out-of-sample
+in both directions.
+
+\anchor{scripts/heldout\_validation.py part~(1) --- $N=4{,}000$, seed~7.}
+
+\paragraph{(2) Placebo control.}
+Shuffle the $\lambda_{\mathrm{obs}}$ values across the tournament's games
+(4 independent shuffles, seeds 0--3) and re-run at the locked $k=50$. The
+real-xG lift collapses to negative territory under shuffling, confirming the
+proxy carries real per-team information.
+
+\anchor{scripts/heldout\_validation.py part~(2) --- \texttt{rng.shuffle(lams)},
+$N=3{,}000$ per run.}
+
+\paragraph{(3) Proxy stability.}
+The $\beta_1$ coefficient refit on each tournament alone brackets the locked
+value (0.326); the cross-tournament goal RMSE beats the naive baseline
+(predict every team-match with the tournament mean goals) in both tournaments.
+
+\anchor{scripts/heldout\_validation.py part~(3) --- per-tournament refit
+$c=\sum s_ig_i/\sum s_i^2$ (OLS through the origin), RMSE comparisons.}
+
+\paragraph{The $k$-sweep.}
+Gain swept over $k\in\{0,20,40,60,80,120,160,220,300\}$ on full two-track
+replays of both tournaments. The curve is single-peaked in both years ---
+learning helps, then over-reacts. Optima: $k=40$ (2022), $k=60$ (2018);
+locked default: midpoint $k=50$.
+
+\anchor{scripts/sweep\_k.py ($N=3{,}000$, seed 2022),
+scripts/run\_2018\_ksweep.py, figure paper/figs/fig\_ksweep\_2tourn.pdf.}
+
+\paragraph{Limitations.}
+The sample is $n=2$ tournaments; every number above carries that caveat. The
+validation shows the learning signal is real and correctly signed out-of-sample
+--- it does not pin the optimal gain to better than ``somewhere around 50,'' and
+the study is framed as exploratory in the paper accordingly. The 2026 live run
+is the genuine test.
 
 \begin{figure}[H]
 \centering
