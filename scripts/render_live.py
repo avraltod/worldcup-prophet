@@ -23,6 +23,15 @@ def write_unit(live_dir, name, content):
                                                 encoding="utf-8")
 
 
+def validate_labels(name, content, required):
+    """Raise ValueError if any required \\label{tag} is absent from content."""
+    for label in required:
+        if f"\\label{{{label}}}" not in content:
+            raise ValueError(
+                f"render_live: {name}.tex missing \\label{{{label}}} — "
+                f"add it to the generator or the prompt template")
+
+
 def outcome_probs(lh, la):
     """Normalized P(H/D/A) for display (poisson_model's raw triple loses the
     truncated mass beyond MAX_G goals)."""

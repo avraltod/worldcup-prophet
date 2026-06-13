@@ -156,3 +156,17 @@ def test_revision_report_unit():
     assert "The forecast moved because of the result." in tex
     assert "M000" in tex                       # vintages table embedded
     assert "Canada v Qatar" in tex             # implications
+
+
+def test_validate_labels_passes_when_present():
+    rl.validate_labels("test", r"\label{tab:live_foo} content", ["tab:live_foo"])
+
+
+def test_validate_labels_raises_when_missing():
+    import pytest
+    with pytest.raises(ValueError, match="tab:live_bar"):
+        rl.validate_labels("test", "content without label", ["tab:live_bar"])
+
+
+def test_validate_labels_empty_requirements_always_passes():
+    rl.validate_labels("test", "any content", [])
