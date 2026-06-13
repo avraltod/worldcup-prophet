@@ -55,14 +55,14 @@ jobs:
           import update_after_match as uam
           import match_book as mb
           traj = json.load(open("data/trajectory_v2.json"))
-          os.makedirs("paper/_snapshots", exist_ok=True)
+          os.makedirs("archive/paper_versions", exist_ok=True)
           pending = uam.pending_matches(traj, uam.INDEX)
           for m in pending:
               print("revising match", m)
               uam.revise(m, use_api=bool(os.environ.get("ANTHROPIC_API_KEY")))
               uam._latexmk()
               shutil.copy("paper/WC2026_paper.pdf",
-                          f"paper/_snapshots/WC2026_paper_M{m:03d}.pdf")
+                          f"archive/paper_versions/WC2026_paper_M{m:03d}.pdf")
           if not pending:  # manual dispatch with nothing new: re-render
               want = os.environ.get("REBUILD_MATCH") or ""
               target = int(want) if want.strip() else None
@@ -70,33 +70,27 @@ jobs:
               uam._latexmk()
               m = target or max(mb.documented_matches(uam.INDEX))
               shutil.copy("paper/WC2026_paper.pdf",
-                          f"paper/_snapshots/WC2026_paper_M{m:03d}.pdf")
+                          f"archive/paper_versions/WC2026_paper_M{m:03d}.pdf")
               if target is not None:  # restore the latest state before the commit step
                   uam.rerender()
           PY
-      - name: Upload version snapshots (artifacts, not committed)
-        if: steps.detect.outputs.pending != '0' || github.event_name == 'workflow_dispatch'
-        uses: actions/upload-artifact@v4
-        with:
-          name: paper-versions
-          path: paper/_snapshots/*.pdf
-          retention-days: 90
       - name: Commit living layer only (allowlisted)
         if: steps.detect.outputs.pending != '0' || github.event_name == 'workflow_dispatch'
         run: |
           CHANGED=$(git status --porcelain \
             paper/live paper/REVISIONS.md paper/match_book \
-            data/edition_vintages.json data/learning_state_2026.json data/match_stats)
+            data/edition_vintages.json data/learning_state_2026.json data/match_stats \
+            archive/paper_versions)
           if [ -z "$CHANGED" ]; then echo "no changes."; exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add paper/live paper/match_book data/match_stats 2>/dev/null || true
+          git add paper/live paper/match_book data/match_stats archive/paper_versions 2>/dev/null || true
           for f in paper/REVISIONS.md data/edition_vintages.json data/learning_state_2026.json; do
             [ -f "$f" ] && git add "$f"
           done
           for f in $(git diff --cached --name-only); do
             case "$f" in
-              paper/live/*|paper/REVISIONS.md|paper/match_book/*|data/edition_vintages.json|data/learning_state_2026.json|data/match_stats/*) ;;
+              paper/live/*|paper/REVISIONS.md|paper/match_book/*|data/edition_vintages.json|data/learning_state_2026.json|data/match_stats/*|archive/paper_versions/*) ;;
               *) echo "REFUSING: non-allowlisted file staged: $f"; exit 1 ;;
             esac
           done
