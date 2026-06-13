@@ -580,15 +580,125 @@ scripts/predict\_knockout.py:probs.}
 
 \section{Monte Carlo simulation}
 \label{sec:mc}
-% STUB-S4
+Quantities like ``P(Spain champion)'' have no closed form. They are
+expectations over tournament realisations $\omega$:
+\begin{equation}
+\theta = \mathbb{E}[\mathbf{1}\{\mathrm{event}(\omega)\}]
+\approx \hat\theta_N = \frac{1}{N}\sum_{n=1}^N
+\mathbf{1}\{\mathrm{event}(\omega_n)\}.
+\label{eq:mc}
+\end{equation}
+The locked run used $N=200{,}000$, so the Monte Carlo standard error at a
+champion-scale probability is
+\begin{equation}
+\mathrm{SE}(\hat\theta) = \sqrt{\frac{\theta(1-\theta)}{N}}
+\approx\sqrt{\frac{0.27\times0.73}{200{,}000}}\approx0.001,
+\label{eq:mcse}
+\end{equation}
+i.e.\ about $\pm0.1$ percentage points.
+
+\anchor{scripts/simulate.py --- \texttt{N\_SIMS = 200{,}000}, \texttt{random.seed(2026)}.}
+
+\paragraph{One tournament draw.} Each $\omega_n$ is generated in four stages:
+
+\begin{enumerate}
+\item \textbf{Group scorelines.} Every group match draws from
+$\mathrm{Pois}(\lambda_H)\wedge8$ and $\mathrm{Pois}(\lambda_A)\wedge8$
+independently by inverse-CDF sampling.
+
+\item \textbf{Standings.} Group tables sort descending by
+$(\mathrm{Pts},\mathrm{GD},\mathrm{GF},U)$, $U\sim\mathrm{Unif}(0,1)$.
+
+\item \textbf{Third-place slotting.} Top 8 of 12 third-placed teams advance;
+placed by bipartite matching against FIFA's allocation constraints.
+
+\item \textbf{Knockouts.} Each tie is a Bernoulli draw from the Elo logistic
+\begin{equation}
+P(A\text{ beats }B) = \frac{1}{1+10^{-(R_A^{\mathrm{eff}}-R_B^{\mathrm{eff}})/400}},
+\label{eq:elobin}
+\end{equation}
+which is read as the probability of advancing by any means (extra time and
+shootout included).
+\end{enumerate}
+
+\anchor{scripts/sim\_tournament.py:group\_standings/simulate\_knockout/simulate.}
 
 \section{Slot emergence and pivotality}
 \label{sec:slot}
-% STUB-S5
+\subsection*{Slot emergence}
+A knockout pick at bracket slot $m$ scores only if the named team occupies the
+slot \emph{and} wins it. For team $t$ and slot $m$, define from the \S\ref{sec:mc}
+simulation
+\begin{equation}
+E_m(t) = P(t\text{ wins match }m)
+= P(t\text{ reaches }m)\cdot P(t\text{ wins}\mid t\text{ reaches }m).
+\label{eq:emergence}
+\end{equation}
+The pick rule is $\hat t_m = \arg\max_t\;E_m(t)$.
+
+\anchor{scripts/simulate.py (second pass, \texttt{slot\_win} counters);
+scripts/slot\_value.py:simulate/entries.}
+
+\subsection*{Pivotality}
+For an upcoming match $m$ with pre-match champion distribution
+$p^{\mathrm{pre}}$, fork the match across its possible outcomes $o$, recompute
+the conditioned champion distribution $p^{\mathrm{post}(o)}$, and average the
+information distance:
+\begin{equation}
+\mathrm{Piv}(m) = \sum_o w_o\,
+D_{\mathrm{KL}}\!\bigl(p^{\mathrm{post}(o)}\,\big\|\,p^{\mathrm{pre}}\bigr)
+\quad\text{bits},
+\label{eq:piv}
+\end{equation}
+with $\varepsilon=10^{-6}$ added to both distributions before the $\log_2$
+ratio. This is the ex-ante counterpart of the realised per-game KL of
+\S\ref{sec:kl}.
+
+\anchor{scripts/pivotality.py:kl/main --- $N=5{,}000$ per fork, seed 2026,
+output \texttt{data/pivotality.json}.}
 
 \section{The machine learning risk layer}
 \label{sec:ml}
-% STUB-S6
+The simulator is also a data generator. Each simulated tournament yields one
+labelled example of the question ``given which group calls came true, how many
+knockout picks scored?'':
+
+\begin{itemize}
+\item \textbf{Features} $x\in\{0,1\}^{24}$: for each group
+$g\in\{A,\ldots,L\}$, two indicators --- winner correct and runner-up correct.
+\item \textbf{Target} $y\in\{0,\ldots,31\}$: number of the sheet's 31 knockout
+advancers that advance in that simulation.
+\end{itemize}
+
+Dataset: $N=40{,}000$ draws (seed 7), split 75/25 train/test. Two regressors
+$\hat f(x)\approx\mathbb{E}[y\mid x]$:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{ll}
+\toprule
+Model & Hyperparameters \\
+\midrule
+Random Forest & 300 trees, max depth 12, min leaf 20 \\
+XGBoost       & 400 trees, max depth 4, learning rate 0.05,
+                subsample 0.8, colsample 0.8 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+SHAP values decompose each prediction additively,
+$\hat f(x)=\phi_0+\sum_{i=1}^{24}\phi_i(x)$; the report ranks features by
+mean $|\phi_i|$ and quantifies the directional effect
+$\mathbb{E}[\phi_i\mid x_i=1]$.
+
+\begin{honesty}
+The regression is trained on the simulator's own output: it is a sensitivity
+analysis of the model, not an independent second forecast. It changes no pick.
+\end{honesty}
+
+\anchor{scripts/ml\_risk\_xgb.py --- \texttt{shap.TreeExplainer}, output
+\texttt{data/ml\_risk\_xgb.json}.}
 
 \begin{figure}[H]
 \centering
