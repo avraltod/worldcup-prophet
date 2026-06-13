@@ -191,3 +191,31 @@ def test_divergence_has_label():
                      "GF": 2, "GA": 0, "Pts": 3}]}]
     tex = rl.divergence_unit(frozen, now, [_entry()], gs)
     assert r"\label{tab:live_divergence}" in tex
+
+
+def _ctx_for_report():
+    return {"match": 3, "entries": [_entry(1), _entry(3, pts=3, bits=0.02)],
+            "match_stats": {3: {"home": {"team": "Canada", "sot": 5, "other_shots": 6,
+                                         "total_shots": 11, "possession": 58.0},
+                                "away": {"team": "BIH", "sot": 2,
+                                         "other_shots": 2, "total_shots": 4,
+                                         "possession": 42.0}}},
+            "learning": _learning(),
+            "prev_now": _stages(0.27), "now": _stages(0.28),
+            "vintages_rows": [
+                {"edition": 0, "match": None, "fixture": None, "result": None,
+                 "points": None, "cum_points": 0, "mean_brier": None,
+                 "cum_bits": 0.0, "champ_top5": [["Spain", 0.269]]},
+                {"edition": 3, "match": 3, "fixture": "Canada v BIH", "result": [1, 1],
+                 "points": 0, "cum_points": 1, "mean_brier": 0.45,
+                 "cum_bits": 0.02, "champ_top5": [["Spain", 0.28]]}],
+            "revision_narrative": "Test narrative.",
+            "implications": []}
+
+def test_revision_report_snapshot_table_has_label():
+    tex = rl.revision_report(_ctx_for_report())
+    assert r"\label{tab:live_edition_snapshot}" in tex
+
+def test_revision_report_vintages_table_has_label():
+    tex = rl.revision_report(_ctx_for_report())
+    assert r"\label{tab:live_vintages}" in tex

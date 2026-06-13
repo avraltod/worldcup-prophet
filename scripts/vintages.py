@@ -73,6 +73,8 @@ def latex_table(rows, max_cols=9):
     colspec = "l" + "r" * len(shown)
     note = ("" if len(shown) == len(rows) else
             f"% {len(rows) - len(shown)} intermediate editions collapsed\n")
-    return (note + "\\begin{longtable}{" + colspec + "}\n\\toprule\n"
+    return (note + "\\begin{longtable}{" + colspec + "}\n"
+            "\\caption{Forecast vintages (all issued editions)}\\label{tab:live_vintages}\\\\\n"
+            "\\toprule\n"
             "Edition & " + heads + " \\\\\n\\midrule\n\\endhead\n"
             + "\n".join(lines) + "\n\\bottomrule\n\\end{longtable}")

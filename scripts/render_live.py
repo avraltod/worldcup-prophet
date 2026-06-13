@@ -225,10 +225,13 @@ def _stats_release(match, match_stats, learning):
                 f"({rec['lam_obs']['source']} signal); the learning track moves "
                 f"{rec['home']} by {rec['drift_after'].get(rec['home'], 0):+.1f} and "
                 f"{rec['away']} by {rec['drift_after'].get(rec['away'], 0):+.1f} Elo.")
-    return ("\\begin{footnotesize}\\begin{tabular}{lrr}\\toprule\n"
+    return ("\\begin{table}[!h]\\centering\n"
+            "\\caption{Match statistics (live edition M\\liveEditionNum{})}\\label{tab:live_edition_snapshot}\n"
+            "\\begin{footnotesize}\\begin{tabular}{lrr}\\toprule\n"
             f" & {s['home']['team']} & {s['away']['team']} \\\\\n\\midrule\n"
             + "\n".join(lines) + "\n\\bottomrule\\end{tabular}\\end{footnotesize}"
-            + perf)
+            + perf
+            + "\n\\end{table}")
 
 
 def revision_report(ctx):
