@@ -420,6 +420,16 @@ def templated_failure_analysis(ctx):
             "\\label{sec:live_failure}\n"
             "No material failures this edition; the ledger records all graded matches."
         )
+    n_failures = len(cases)
+    n_matches = len(ctx.get("entries", []))
+    rate_pct = f"{100 * n_failures / n_matches:.0f}" if n_matches else "0"
+    summary = (
+        f"{n_failures} failure case{'s' if n_failures != 1 else ''} "
+        f"(Brier~$>{_FAILURE_BRIER_THRESHOLD:.2f}$ or outcome "
+        f"probability~$<{int(_FAILURE_PROB_THRESHOLD * 100)}\\%$) "
+        f"in {n_matches} match{'es' if n_matches != 1 else ''} "
+        f"--- {rate_pct}\\% of graded matches.\n\n"
+    )
     paras = []
     for c in cases:
         fixture = c["fixture"]
@@ -454,6 +464,7 @@ def templated_failure_analysis(ctx):
     return (
         "\\subsection*{Live failure log: edition M\\liveEditionNum{}}"
         "\\label{sec:live_failure}\n"
+        + summary
         + "\n\n".join(paras)
     )
 

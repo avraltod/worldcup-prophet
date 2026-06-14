@@ -97,9 +97,11 @@ def tracker(group_state, frozen, now):
         "    \\bottomrule\n  \\end{tabular*}}\n  \\end{footnotesize}\n\\end{table}")
 
 
-def group_box(g_state, results, expectations, frozen, now):
+def group_box(g_state, results, expectations, frozen, now, now_b=None, implications=None):
     """Appendix-A living box for one group: unified round-robin matrix with
-    actual/prediction results + right-side standing + qual columns."""
+    actual/prediction results + right-side standing + qual columns.
+    now_b: Track B full stage probs {team: {advance_KO,...}}.
+    implications: list of {fixture, lock_HDA, learn_HDA} for upcoming fixtures."""
     grp = g_state["group"]
     teams = [r["team"] for r in g_state["rows"]]
     exps = {(e["home"], e["away"]): e
@@ -114,12 +116,16 @@ def group_box(g_state, results, expectations, frozen, now):
 
     def _sgn(d): return 1 if d > 0 else (-1 if d < 0 else 0)
 
+    # Index implications by fixture name for Track B H/D/A lookup
+    imp_by_fixture = {i["fixture"]: i for i in (implications or [])}
+
     # Build round-robin matrix: rows = teams, cols = opponent teams
-    # Extra right-side columns: Actual W/D/L/Pts/Qual% | Frozen Qual% | Track A Qual%
+    # Right-side columns: Actual W/D/L/Pts/Qual% | Frozen Qual% | Track A Qual% | Track B Qual%
     n = len(teams)
-    col_spec = "l" + "c" * n + "rrr"
+    col_spec = "l" + "c" * n + "rrrr"
     header_teams = " & ".join(f"\\tiny {t}" for t in teams)
-    header = f" & {header_teams} & \\makecell{{Actual\\\\W/D/L/Pts/Q\\%}} & Q\\%(F) & Q\\%(A) \\\\"
+    header = (f" & {header_teams} & \\makecell{{Actual\\\\W/D/L/Pts/Q\\%}} & "
+              f"Q\\%(F) & Q\\%(A) & Q\\%(B) \\\\")
 
     matrix_rows = []
     for home in teams:
@@ -147,12 +153,25 @@ def group_box(g_state, results, expectations, frozen, now):
                 icon = r"$\checkmark$" if correct else r"$\times$"
                 cells.append(f"\\textbf{{{score}}}{icon}")
             else:
-                # upcoming: Frozen H/D/A prediction
+                # upcoming: Frozen H/D/A; add Track B line if implications available
                 ph, pd, pa = e["probs_HDA"]
-                if e["home"] == home:
-                    cells.append(f"\\tiny {_pct(ph)}/{_pct(pd)}/{_pct(pa)}")
+                fixture_name = f"{e['home']} v {e['away']}"
+                imp = imp_by_fixture.get(fixture_name)
+                if imp:
+                    bh, bd, ba = imp["learn_HDA"]
+                    if e["home"] == home:
+                        cells.append(
+                            f"\\tiny F:{_pct(ph)}/{_pct(pd)}/{_pct(pa)}"
+                            f"\\\\B:{_pct(bh)}/{_pct(bd)}/{_pct(ba)}")
+                    else:
+                        cells.append(
+                            f"\\tiny F:{_pct(pa)}/{_pct(pd)}/{_pct(ph)}"
+                            f"\\\\B:{_pct(ba)}/{_pct(bd)}/{_pct(bh)}")
                 else:
-                    cells.append(f"\\tiny {_pct(pa)}/{_pct(pd)}/{_pct(ph)}")
+                    if e["home"] == home:
+                        cells.append(f"\\tiny {_pct(ph)}/{_pct(pd)}/{_pct(pa)}")
+                    else:
+                        cells.append(f"\\tiny {_pct(pa)}/{_pct(pd)}/{_pct(ph)}")
 
         # right-side standing columns
         row_data = next((r for r in g_state["rows"] if r["team"] == home), {})
@@ -160,10 +179,36 @@ def group_box(g_state, results, expectations, frozen, now):
         pts = row_data.get("Pts", 0)
         qual_a = _pct(now[home]["advance_KO"]) if home in now else "--"
         qual_f = _pct(frozen[home]["advance_KO"]) if home in frozen else "--"
+        qual_b = _pct(now_b[home]["advance_KO"]) if now_b and home in now_b else "--"
         actual_str = f"{w}/{d}/{l}/{pts}/{qual_a}\\%"
         matrix_rows.append(
             f"\\tiny {home} & " + " & ".join(cells)
-            + f" & \\tiny {actual_str} & \\tiny {qual_f}\\% & \\tiny {qual_a}\\% \\\\"
+            + f" & \\tiny {actual_str} & \\tiny {qual_f}\\% "
+            f"& \\tiny {qual_a}\\% & \\tiny {qual_b}\\% \\\\"
+        )
+
+    # Remaining fixtures block: upcoming matches in this group
+    remaining_lines = []
+    for e in expectations:
+        if e.get("group") != grp or str(e["match"]) in res_by_match:
+            continue
+        fixture_name = f"{e['home']} v {e['away']}"
+        lock_str = "/".join(_pct(p) for p in e["probs_HDA"])
+        imp = imp_by_fixture.get(fixture_name)
+        learn_str = "/".join(_pct(p) for p in imp["learn_HDA"]) if imp else "--"
+        remaining_lines.append(f"{fixture_name} & {lock_str} & {learn_str} \\\\")
+
+    fixtures_block = ""
+    if remaining_lines:
+        fixtures_block = (
+            "\n\\smallskip\n"
+            "\\begin{footnotesize}\n"
+            "\\begin{tabular}{lcc}\\toprule\n"
+            "Fixture & Frozen H/D/A (\\%) & Track~B H/D/A (\\%) \\\\\n"
+            "\\midrule\n"
+            + "\n".join(remaining_lines) + "\n"
+            "\\bottomrule\\end{tabular}\n"
+            "\\end{footnotesize}"
         )
 
     return (
@@ -178,6 +223,7 @@ def group_box(g_state, results, expectations, frozen, now):
         "\\bottomrule\n"
         "\\end{tabular}\n"
         "\\end{footnotesize}"
+        + fixtures_block
     )
 
 
@@ -342,15 +388,42 @@ def revision_report(ctx):
     import vintages as vin
     m = ctx["match"]
     latest = max(ctx["entries"], key=lambda e: e["match"])
-    deltas = []
     prev, now = ctx["prev_now"], ctx["now"]
+    frozen = ctx.get("frozen", {})
+    champion_b = ctx.get("champion_b", {})
+
+    # Delta vs previous edition (the "news" of this edition)
+    deltas_vs_prev = []
     for t in sorted(now, key=lambda t: -now[t]["champion"])[:8]:
         if t in prev:
             d = 100 * (now[t]["champion"] - prev[t]["champion"])
             if abs(d) >= 0.05:
-                deltas.append(f"{t} {d:+.1f}")
-    delta_line = ("; ".join(deltas) if deltas
+                deltas_vs_prev.append(f"{t} {d:+.1f}")
+    delta_line = ("; ".join(deltas_vs_prev) if deltas_vs_prev
                   else "no contender moved by 0.1 pp or more")
+
+    # Track A vs Frozen: cumulative shift from baseline
+    deltas_af = []
+    for t in sorted(now, key=lambda t: -now[t]["champion"])[:8]:
+        if t in frozen:
+            d = 100 * (now[t]["champion"] - frozen[t].get("champion", 0.0))
+            if abs(d) >= 0.05:
+                deltas_af.append(f"{t} {d:+.1f}")
+    delta_af = ("; ".join(deltas_af) if deltas_af
+                else "no contender has moved 0.1 pp or more from baseline")
+
+    # Track B vs Track A: gap between the two tracks
+    b_vs_a_line = ""
+    if champion_b:
+        deltas_ba = []
+        for t in sorted(now, key=lambda t: -now[t]["champion"])[:8]:
+            if t in champion_b:
+                d = 100 * (champion_b[t] - now[t]["champion"])
+                if abs(d) >= 0.05:
+                    deltas_ba.append(f"{t} {d:+.1f}")
+        delta_ba = ("; ".join(deltas_ba) if deltas_ba
+                    else "no contender diverged by 0.1 pp or more between tracks")
+        b_vs_a_line = f"\\\\\nTrack~B vs.\\ Track~A: {delta_ba}."
     imp_lines = "\n".join(
         f"{i['fixture']} & {'/'.join(_pct(p) for p in i['lock_HDA'])} & "
         f"{'/'.join(_pct(p) for p in i['learn_HDA'])} \\\\"
@@ -373,7 +446,8 @@ def revision_report(ctx):
             ctx["entries"], ctx["match_stats"],
             ctx.get("expectations", [])) + "\n\n"
         f"\\paragraph{{Forecast revision (vs.\\ edition M{ctx['vintages_rows'][-2]['edition']:03d}).}} "
-        f"Champion-probability movement: {delta_line}.\n\n"
+        f"Champion-probability movement (vs.\\ previous edition): {delta_line}.\\\\\n"
+        f"Track~A vs.\\ Frozen: {delta_af}.{b_vs_a_line}\n\n"
         + imp_block +
         "\\paragraph{Forecast vintages.} One column per issued edition; the "
         "locked M000 column never changes.\n\n"
@@ -557,6 +631,129 @@ def market_snap_unit(ctx):
             "Market and Track~A rank orderings broadly agree at this edition; "
             "divergence tracking (who-moves-first) continues through knockout stages."
         )
+        fig_block = (
+            "\n\n"
+            "\\begin{figure}[!t]\n"
+            "  \\caption{Four-bar champion probability: Frozen / Track~A / Track~B / Market, "
+            "top contenders (live edition M\\liveEditionNum{})}\\label{fig:live_market}\n"
+            "  {\\centering\\includegraphics[width=0.94\\textwidth]"
+            "{figs/fig_live_market.pdf}\\par}\n"
+            "\\end{figure}"
+        )
     else:
         status = "Market-probability data are not yet available for this edition."
-    return table + "\n\n" + status
+        fig_block = ""
+    return table + "\n\n" + status + fig_block
+
+
+def groupqual_table_unit(ctx):
+    """Table 10: Three-panel (Frozen / Track A / Track B) qualification probability,
+    all teams grouped by group. Requires ctx['group_state']."""
+    frozen = ctx.get("frozen", {})
+    now = ctx.get("now", {})
+    now_b = ctx.get("now_b", {})
+    has_b = bool(now_b)
+    group_state = ctx.get("group_state", [])
+
+    if not group_state:
+        return (r"\textit{Group-state not yet available; qualification table "
+                r"will appear once matches are recorded.}")
+
+    if has_b:
+        col_spec = "llrrr"
+        header = ("Grp & Team & Frozen (\\%) & Track~A (\\%) & Track~B (\\%) \\\\\n"
+                  "\\midrule\n")
+    else:
+        col_spec = "llrr"
+        header = "Grp & Team & Frozen (\\%) & Track~A (\\%) \\\\\n\\midrule\n"
+
+    rows = []
+    for g in group_state:
+        grp = g["group"]
+        teams = sorted(
+            [r["team"] for r in g["rows"]],
+            key=lambda t: -now.get(t, frozen.get(t, {})).get("advance_KO", 0))
+        for i, t in enumerate(teams):
+            grp_col = grp if i == 0 else ""
+            f_pct = _pct(frozen.get(t, {}).get("advance_KO", 0))
+            a_pct = _pct(now.get(t, {}).get("advance_KO", 0))
+            if has_b:
+                b_pct = _pct(now_b[t].get("advance_KO", 0)) if t in now_b else "---"
+                rows.append(f"{grp_col} & {t} & {f_pct} & {a_pct} & {b_pct} \\\\")
+            else:
+                rows.append(f"{grp_col} & {t} & {f_pct} & {a_pct} \\\\")
+        rows.append("\\midrule")
+    if rows and rows[-1] == "\\midrule":
+        rows.pop()
+
+    note = ("Qual~\\% = probability of advancing to the knockout round. "
+            "Frozen = pre-kickoff lock ($N$=200{,}000, never changes); "
+            "Track~A = result-conditioned, June~10 ratings ($N$=50{,}000); "
+            + ("Track~B = result-conditioning + live Elo + bookmaker odds ($N$=50{,}000)."
+               if has_b else
+               "Track~B column populated once box-score data is processed."))
+
+    return (
+        "\\begin{table}[!t]\\centering\n"
+        "\\caption{Qualification probability --- Frozen / Track~A / Track~B, "
+        "all teams (live edition M\\liveEditionNum{})}\\label{tab:live_groupqual_three}\n"
+        "\\begin{footnotesize}\\begin{threeparttable}\n"
+        f"\\begin{{tabular}}{{{col_spec}}}\\toprule\n"
+        + header
+        + "\n".join(rows) + "\n"
+        "\\bottomrule\\end{tabular}\n"
+        "\\begin{tablenotes}\\notesize\n"
+        f"\\item \\textit{{Notes}}: {note}\n"
+        "\\end{tablenotes}\\end{threeparttable}\\end{footnotesize}\n\\end{table}"
+    )
+
+
+def fixture_risk_unit(ctx):
+    """Table 11: Decisive upcoming fixtures — teams on the qualification bubble
+    (10\\% < Track~A advance~\\% < 90\\%) with Frozen and Track~B H/D/A odds."""
+    now = ctx.get("now", {})
+    expectations = ctx.get("expectations", [])
+    results = ctx.get("results", {})
+    implications = ctx.get("implications", [])
+    group_state = ctx.get("group_state", [])
+
+    played = set(results.get("group", {}).keys())
+    imp_by_fixture = {i["fixture"]: i for i in implications}
+
+    rows = []
+    for g in group_state:
+        grp = g["group"]
+        for e in expectations:
+            if e.get("group") != grp or str(e["match"]) in played:
+                continue
+            home, away = e["home"], e["away"]
+            h_adv = now.get(home, {}).get("advance_KO", 0)
+            a_adv = now.get(away, {}).get("advance_KO", 0)
+            bubble = [(t, adv) for t, adv in [(home, h_adv), (away, a_adv)]
+                      if 0.10 < adv < 0.90]
+            if not bubble:
+                continue
+            fixture = f"{home} v {away}"
+            bubble_str = "; ".join(f"{t} {_pct(adv)}\\%" for t, adv in bubble)
+            lock_str = "/".join(_pct(p) for p in e["probs_HDA"])
+            imp = imp_by_fixture.get(fixture)
+            b_hda = "/".join(_pct(p) for p in imp["learn_HDA"]) if imp else "--"
+            rows.append(
+                f"  {grp} & {fixture} & {bubble_str} & {lock_str} & {b_hda} \\\\"
+            )
+
+    if not rows:
+        return ("\\textit{No upcoming group fixtures with bubble teams; all "
+                "qualification spots are effectively decided at this stage.}")
+
+    return (
+        "\\begin{table}[!h]\\centering\n"
+        "\\caption{Decisive upcoming fixtures --- bubble teams and outcome odds "
+        "(live edition M\\liveEditionNum{})}\\label{tab:live_fixture_risk}\n"
+        "\\begin{footnotesize}\\begin{tabular}{lllll}\\toprule\n"
+        "Grp & Fixture & Bubble team(s) (Track~A Qual\\%) & "
+        "Frozen H/D/A (\\%) & Track~B H/D/A (\\%) \\\\\n"
+        "\\midrule\n"
+        + "\n".join(rows) + "\n"
+        "\\bottomrule\\end{tabular}\\end{footnotesize}\\end{table}"
+    )

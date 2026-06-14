@@ -359,6 +359,7 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
            "info_snapshot": latest_snap or {},
            "champion_b": champion_b,
            "market": _market,
+           "group_state": group_st,
            "champion_movers": sorted(
                [[t, round(prev_now.get(t, {}).get("champion", 0.0), 4),
                  round(now_probs[t]["champion"], 4)]
@@ -388,7 +389,9 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     # 5. per-group sections
     for g in group_st:
         rl.write_unit(LIVE_DIR, f"group_{g['group']}",
-                      rl.group_box(g, res, expectations, frozen, now_probs))
+                      rl.group_box(g, res, expectations, frozen, now_probs,
+                                   now_b=ctx.get("now_b", {}),
+                                   implications=ctx["implications"]))
     # 6. data and methodology sections
     rl.write_unit(LIVE_DIR, "data_revealed", rl.data_revealed_unit(ctx, use_api))
     rl.write_unit(LIVE_DIR, "simulation_note", rl.simulation_note_unit(ctx, use_api))
@@ -400,6 +403,8 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     rl.write_unit(LIVE_DIR, "discussion_live", rl.discussion_live_unit(ctx, use_api))
     # 8. group qual and bracket
     rl.write_unit(LIVE_DIR, "groupqual_live", rl.groupqual_live_unit(ctx))
+    rl.write_unit(LIVE_DIR, "groupqual_table", rl.groupqual_table_unit(ctx))
+    rl.write_unit(LIVE_DIR, "fixture_risk", rl.fixture_risk_unit(ctx))
     rl.write_unit(LIVE_DIR, "bracket_live", rl.bracket_live_unit(ctx))
     # 9. intro second-to-last, abstract last (both reference numbers from all other units)
     rl.write_unit(LIVE_DIR, "intro_data_note", rl.intro_data_note_unit(ctx, use_api))
