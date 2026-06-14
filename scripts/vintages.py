@@ -63,12 +63,12 @@ def latex_table(rows, max_rows=20):
         mean_b = "--" if r["mean_brier"] is None else f"{r['mean_brier']:.2f}"
         cum_b = f"{r['cum_bits']:.3f}"
         edition_rows.append(
-            f"\\makecell[l]{{{label}}} & {team_cells} & {cum_pts} & {mean_b} & {cum_b} \\\\"
+            f"{label} & {team_cells} & {cum_pts} & {mean_b} & {cum_b} \\\\"
         )
     colspec = "l" + "r" * len(teams) + "rrr"
     note = ("" if len(shown) == len(rows) else
             f"% {len(rows) - len(shown)} intermediate editions omitted\n")
-    _vin_colhdr = (f"\\makecell[l]{{Fixture \\\\\\\\ (play order)}} & {team_header}"
+    _vin_colhdr = (f"\\makecell{{Fixture \\\\ (play order)}} & {team_header}"
                   " & Cum.\\,pts & Mean Brier & Cum.\\,bits \\\\\n")
     return (note + "\\begin{scriptsize}\n\\begin{longtable}{" + colspec + "}\n"
             "\\caption{Forecast vintages --- champion probabilities by edition "

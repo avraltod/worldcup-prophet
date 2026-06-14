@@ -140,6 +140,7 @@ def divergence_section(frozen, now, entries, group_state, champion_b=None, now_b
     _div_subhdr = (f" & {champ_span} & {adv_span} \\\\\n"
                   f"{champ_rule}{adv_rule}\n" + col_header + "\\midrule\n")
     table = (
+        "\\begin{footnotesize}\n"
         f"\\begin{{longtable}}{{{col_spec}}}\n"
         "\\caption{Champion and advance probability divergence from the locked baseline "
         "(live edition)}\\label{tab:live_divergence}\\\\\n"
@@ -150,7 +151,7 @@ def divergence_section(frozen, now, entries, group_state, champion_b=None, now_b
         + _div_subhdr
         + "\\endhead\n"
         + "\n".join(rows)
-        + "\n\\bottomrule\n\\end{longtable}")
+        + "\n\\bottomrule\n\\end{longtable}\n\\end{footnotesize}")
 
     gs = []
     for g in group_state:

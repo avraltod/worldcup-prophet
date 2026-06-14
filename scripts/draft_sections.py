@@ -56,7 +56,7 @@ def templated_abstract_live(ctx):
         b_inner = " and ".join(b_parts)
         b_text = (f" Track~B (live Elo + bookmaker odds) leads with {b_inner}.")
     return (
-        f"Conditioned on {n} {word}, Track~A moves {inner}. "
+        f" Conditioned on {n} {word}, Track~A moves {inner}. "
         f"The {n} {word} have revealed {total_bits:.3f} bits "
         f"({pct_max:.1f}\\% of the {_TOTAL_TOURNAMENT_BITS:.1f}-bit tournament maximum)."
         + b_text

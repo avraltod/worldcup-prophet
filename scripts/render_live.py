@@ -446,9 +446,10 @@ def revision_report(ctx):
         "\\paragraph{Implications for upcoming fixtures.} Frozen odds are the "
         "pre-kickoff baseline (they move only through qualification scenarios); "
         "Track~B odds incorporate live Elo and bookmaker signals.\n\n"
-        "\\begin{footnotesize}\\begin{tabular}{p{0.40\\textwidth}cc}\\toprule\n"
+        "\\begin{center}\\begin{footnotesize}\\begin{tabular}"
+        "{p{0.40\\textwidth}p{0.22\\textwidth}p{0.22\\textwidth}}\\toprule\n"
         "Fixture & Frozen H/D/A (\\%) & Track~B H/D/A (\\%) \\\\\n\\midrule\n"
-        + imp_lines + "\n\\bottomrule\\end{tabular}\\end{footnotesize}\n\n")
+        + imp_lines + "\n\\bottomrule\\end{tabular}\\end{footnotesize}\\end{center}\n\n")
     return (
         f"\\subsection{{Revision report: edition M{m:03d}}}\\label{{sec:revreport}}\n"
         f"\\paragraph{{The data release.}} Match {latest['match']}, "
@@ -670,7 +671,7 @@ def survival_colcomp_unit(ctx):
         "\\section*{Appendix B.live\\quad The same distribution, "
         "all three tracks side by side}\\label{app:survlive}\n"
         + note + "\n\n"
-        "\\begin{footnotesize}\n\\begin{longtable}{lrrrrrr}\n"
+        "\\begin{scriptsize}\n\\begin{longtable}{lrrrrrr}\n"
         "\\caption{" + title + " "
         "(live edition M\\liveEditionNum{})}\\label{tab:live_survcomp}\\\\\n"
         "\\toprule\n" + headers + "\n\\midrule\n"
@@ -678,7 +679,7 @@ def survival_colcomp_unit(ctx):
         "\\toprule\n" + headers + "\n\\midrule\n"
         "\\endhead\n"
         + "\n".join(rows) + "\n"
-        "\\bottomrule\n\\end{longtable}\n\\end{footnotesize}"
+        "\\bottomrule\n\\end{longtable}\n\\end{scriptsize}"
     )
 
 
