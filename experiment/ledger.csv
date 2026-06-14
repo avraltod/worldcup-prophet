@@ -4,3 +4,5 @@ date,match,home,away,pred,actual,pts,ev,p_outcome_real,p_score_real,brier,code
 2026-06-13,3,Canada,Bosnia and Herzegovina,2-1,1-1,0,0.8678,0.25,0.1187,0.8885,P?
 2026-06-13,4,United States,Paraguay,2-1,4-1,1,0.8067,0.472,0.0131,0.4184,S
 2026-06-13,8,Qatar,Switzerland,1-2,1-1,0,1.0566,0.1735,0.0824,1.2197,L?
+2026-06-14,7,Brazil,Morocco,2-1,1-1,0,0.9375,0.2333,0.1105,0.9647,L?
+2026-06-14,5,Haiti,Scotland,1-2,0-1,2,0.9863,0.6418,0.1157,0.1939,P?
