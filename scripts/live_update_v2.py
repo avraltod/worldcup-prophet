@@ -15,6 +15,7 @@ import lineups
 import scoring
 import market_snapshot
 from condition import conditional_probs
+import live_state as lst
 
 TRAJ = ROOT / "data" / "trajectory_v2.json"
 RESULTS = ROOT / "data" / "results_log_v2.json"
@@ -48,6 +49,32 @@ def _iso(d):
 def _champion_dist(results_log):
     probs = conditional_probs(results_log, N=N_SIM)
     return {t: round(d["champion"], 4) for t, d in probs.items() if d["champion"] > 0}
+
+
+def _champion_dist_b(results_log):
+    """Track B champion distribution using full current information from live_inputs.json."""
+    live = lst.load_live_inputs()
+    if not live.get("live_elo") and not live.get("live_rates"):
+        return {}
+    state = lst.load_state()
+    eff_elo = lst.build_eff_elo(state, live)
+    live_rates = {int(k): v for k, v in live.get("live_rates", {}).items()}
+    probs = conditional_probs(results_log, N=N_SIM,
+                              ratings=eff_elo, live_rates=live_rates or None)
+    return {t: round(d["champion"], 4) for t, d in probs.items() if d["champion"] > 0}
+
+
+def _info_snapshot():
+    """Extract provenance summary from live_inputs.json. Returns {} if file absent."""
+    live = lst.load_live_inputs()
+    if not live:
+        return {}
+    summary = live.get("deltas", {}).get("summary", {})
+    return {
+        "fetched_at": live.get("fetched_at"),
+        **live.get("source_freshness", {}),
+        **summary,
+    }
 
 
 def _kl_bits(p_after, p_before):
@@ -95,6 +122,8 @@ def make_pre_record(e, now):
            "event_id": e.get("event_id"),
            "lineup": lineups.fetch_lineup(e["event_id"]) if e.get("event_id") else None,
            "result": None, "performance": None}
+    rec["champion_b"] = _champion_dist_b(log)
+    rec["info_snapshot"] = _info_snapshot()
     _append(rec)
     _mark(e["match"], "pre")
 
@@ -113,6 +142,8 @@ def make_post_record(e, now):
            "info_bits": _kl_bits(champ, _prev_champion()),
            "lineup": None, "result": [hg, ag],
            "performance": scoring.score_match(e["fh"], e["fa"], hg, ag)}
+    rec["champion_b"] = _champion_dist_b(log)
+    rec["info_snapshot"] = _info_snapshot()
     _append(rec)
     _mark(e["match"], "post")
 

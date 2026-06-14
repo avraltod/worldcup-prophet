@@ -223,9 +223,17 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
             res, N=TWO_TRACK_N, seed=2026, ratings=learn_ratings).items()}
         two_track = {"frozen": froz_dist, "learning": learn_dist}
         top8 = sorted(froz_dist, key=lambda t: -froz_dist[t])[:8]
+        from live_state import load_live_inputs
+        _live_snap = load_live_inputs()
+        _snap_summary = _live_snap.get("deltas", {}).get("summary", {})
         hist_row = {"match": match,
                     "frozen_top": {t: round(froz_dist[t], 4) for t in top8},
-                    "learning_top": {t: round(learn_dist.get(t, 0.0), 4) for t in top8}}
+                    "learning_top": {t: round(learn_dist.get(t, 0.0), 4) for t in top8},
+                    "info_snapshot": {
+                        "fetched_at": _live_snap.get("fetched_at"),
+                        **_live_snap.get("source_freshness", {}),
+                        **_snap_summary,
+                    } if _live_snap else {}}
         hist_last = state["history"][-1]["match"] if state["history"] else 0
         if match > hist_last:    # monotonic: re-issues never zigzag the path
             state["history"].append(hist_row)
