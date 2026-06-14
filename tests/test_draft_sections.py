@@ -56,7 +56,7 @@ def test_templated_intro_data_note_contains_n():
 
 def test_templated_simulation_note_contains_remaining():
     text = ds.templated_simulation_note(_ctx())
-    assert "100" in text  # 104 - 4 remaining
+    assert "100 matches" in text  # 104 - 4 remaining
 
 
 def test_templated_data_revealed_is_valid_latex():

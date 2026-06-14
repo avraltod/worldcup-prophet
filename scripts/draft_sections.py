@@ -76,7 +76,7 @@ def draft_abstract_live(ctx, use_api):
 
 
 # ========================================================================
-# Intro data note (one sentence)
+# Intro data note
 # ========================================================================
 
 def templated_intro_data_note(ctx):
