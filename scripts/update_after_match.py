@@ -260,6 +260,14 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     corrections = CORRECTIONS.read_text() if CORRECTIONS.exists() else ""
     narrative_text, _src = di.draft_revision(pack, corrections, use_api)
 
+    # Track B data — needed by figures and ctx
+    _latest_post = next(
+        (r for r in reversed(trajectory)
+         if r["phase"] == "post" and r["match"] == match), None)
+    champion_b = (_latest_post.get("champion_b") or {}) if _latest_post else {}
+    if champion_b:
+        stats["champ_b_top"] = sorted(champion_b.items(), key=lambda kv: -kv[1])[:3]
+
     # figures (optional, never block)
     live_fig = two_fig = False
     try:
@@ -309,13 +317,6 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
         if _s is not None:
             match_stats[_en["match"]] = _s
 
-    # Track B data from trajectory post record (written by live_update_v2)
-    _latest_post = next(
-        (r for r in reversed(trajectory)
-         if r["phase"] == "post" and r["match"] == match), None)
-    champion_b = (_latest_post.get("champion_b") or {}) if _latest_post else {}
-    if champion_b:
-        stats["champ_b_top"] = sorted(champion_b.items(), key=lambda kv: -kv[1])[:3]
     latest_snap = (state["history"][-1].get("info_snapshot")
                    if state["history"] else None) or None
 
