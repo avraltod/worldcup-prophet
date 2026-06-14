@@ -2310,7 +2310,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760422",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Manuel Neuer",
+    "Nico Schlotterbeck",
+    "Joshua Kimmich",
+    "Nathaniel Brown",
+    "Jonathan Tah",
+    "Felix Nmecha",
+    "Leroy Sané",
+    "Aleksandar Pavlovic",
+    "Florian Wirtz",
+    "Jamal Musiala",
+    "Kai Havertz"
+   ],
+   "away": [
+    "Eloy Room",
+    "Riechedly Bazoer",
+    "Deveron Fonville",
+    "Sherel Floranus",
+    "Armando Obispo",
+    "Livano Comenencia",
+    "Leandro Bacuna",
+    "Sontje Hansen",
+    "Juninho Bacuna",
+    "Tahith Chong",
+    "Jürgen Locadia"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
