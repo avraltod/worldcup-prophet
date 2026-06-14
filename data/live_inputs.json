@@ -1,6 +1,6 @@
 {
- "fetched_at": "2026-06-14T12:06:12Z",
- "mode": "post",
+ "fetched_at": "2026-06-14T20:01:16Z",
+ "mode": "pre",
  "source_freshness": {
   "elo_updated_at": "2026-06-10T00:00:00Z",
   "odds_fetched_at": null
@@ -370,6 +370,14 @@
     "drift": -75.0
    },
    {
+    "team": "Haiti",
+    "drift": 65.0
+   },
+   {
+    "team": "Scotland",
+    "drift": -65.0
+   },
+   {
     "team": "Mexico",
     "drift": -49.94
    },
@@ -392,6 +400,14 @@
    {
     "team": "Switzerland",
     "drift": -29.89
+   },
+   {
+    "team": "Australia",
+    "drift": -27.61
+   },
+   {
+    "team": "Turkey",
+    "drift": 27.61
    },
    {
     "team": "South Korea",
@@ -423,7 +439,7 @@
    "biggest_odds_mover": {},
    "n_new_injuries": 0,
    "n_lineup_adj": 0,
-   "n_teams_with_drift": 12
+   "n_teams_with_drift": 16
   }
  }
 }
