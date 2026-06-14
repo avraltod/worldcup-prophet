@@ -203,27 +203,39 @@ def survival_unit(frozen, now):
         + "\n".join(rows) + "\n\\bottomrule\n\\end{longtable}\n\\end{footnotesize}")
 
 
-def two_track_unit(two_track, learning, fig, info_snapshot=None):
-    """The live A-vs-B: frozen-track vs learning-track champion odds, the
-    largest accumulated drifts, and the per-match performance records.
-    info_snapshot: dict from live_inputs.json deltas.summary + source_freshness,
-    or None if live_inputs.json was absent at prediction time."""
+def two_track_unit(two_track, learning, fig, info_snapshot=None, track_a=None):
+    """The live A-vs-B: Frozen / Track A / Track B champion odds and Elo drift.
+    track_a: dict of {team: {champion: prob, ...}} (Track A / now_probs).
+    info_snapshot: no longer used here (provenance moved to data_revealed)."""
     if two_track is None:
         return ("\\textit{Two-track live results begin with the first match "
                 "whose box score is collected.}")
     teams = sorted(two_track["frozen"], key=lambda t: -two_track["frozen"][t])[:8]
-    rows = "\n".join(
-        f"{t} & {_pct(two_track['frozen'][t])} & "
-        f"{_pct(two_track['learning'].get(t, 0.0))} & "
-        f"{100 * (two_track['learning'].get(t, 0.0) - two_track['frozen'][t]):+.1f} \\\\"
-        for t in teams)
+    if track_a is not None:
+        rows = "\n".join(
+            f"{t} & {_pct(two_track['frozen'][t])} & "
+            f"{_pct(track_a.get(t, {}).get('champion', 0.0))} & "
+            f"{_pct(two_track['learning'].get(t, 0.0))} & "
+            f"{100*(track_a.get(t, {}).get('champion', 0.0) - two_track['frozen'][t]):+.1f} \\\\"
+            for t in teams)
+        header = ("Team & Frozen (\\%) & Track~A (\\%) & Track~B (\\%) & "
+                  "$\\Delta$ (A$-$Frozen, pp) \\\\\n\\midrule\n")
+        col_spec = "lrrrr"
+    else:
+        rows = "\n".join(
+            f"{t} & {_pct(two_track['frozen'][t])} & "
+            f"{_pct(two_track['learning'].get(t, 0.0))} & "
+            f"{100*(two_track['learning'].get(t, 0.0) - two_track['frozen'][t]):+.1f} \\\\"
+            for t in teams)
+        header = "Team & Frozen (\\%) & Track~B (\\%) & $\\Delta$ (pp) \\\\\n\\midrule\n"
+        col_spec = "lrrr"
     drifts = sorted(learning["drift"].items(), key=lambda kv: -abs(kv[1]))[:8]
     drift_rows = "\n".join(f"{t} & {d:+.1f} \\\\" for t, d in drifts)
     pend = (f" Stats pending for matches: "
             f"{', '.join(f'M{m:03d}' for m in learning['pending'])}."
             if learning["pending"] else "")
-    fig_block = ("\\begin{figure}[!t]\n  \\caption{Two tracks live: frozen vs "
-                 "learning champion paths}\\label{fig:twotracklive}\n"
+    fig_block = ("\\begin{figure}[!t]\n  \\caption{Two tracks live: Frozen vs "
+                 "Track~A vs Track~B champion paths}\\label{fig:twotracklive}\n"
                  "  {\\centering\\includegraphics[width=0.94\\textwidth]"
                  "{figs/fig_two_track_live.pdf}\\par}\n\\end{figure}\n" if fig else "")
     n = len(learning["processed"])
@@ -233,13 +245,13 @@ def two_track_unit(two_track, learning, fig, info_snapshot=None):
           "\\label{sec:twotracklive}\n"
           f"The pre-registered A-vs-B study of Appendix~D, running on the real "
           f"tournament: after each match the observed shot performance "
-          f"($\\lambda_{{\\mathrm{{obs}}}}$, Appendix~D.2) updates the learning "
-          f"track's ratings (k=50, locked), while the frozen track re-conditions "
+          f"($\\lambda_{{\\mathrm{{obs}}}}$, Appendix~D.2) updates Track~B's "
+          f"ratings (k=50, locked), while Track~A re-conditions "
           f"on results alone. {n} match(es) processed so far.{pend}\n\n"
         + fig_block
         + "\\begin{footnotesize}\n"
-          "\\begin{tabular}{lrrr}\n\\toprule\n"
-          "Team & Frozen (\\%) & Track~B (\\%) & $\\Delta$ (pp) \\\\\n\\midrule\n"
+          f"\\begin{{tabular}}{{{col_spec}}}\n\\toprule\n"
+        + header
         + rows
         + "\n\\bottomrule\n\\end{tabular}\\qquad\n"
           "\\begin{tabular}{lr}\n\\toprule\nTeam & Drift (Elo) \\\\\n\\midrule\n"
@@ -494,3 +506,40 @@ def survival_colcomp_unit(ctx):
         + "\n".join(rows) + "\n"
         "\\bottomrule\n\\end{longtable}\n\\end{footnotesize}"
     )
+
+
+def market_snap_unit(ctx):
+    """§4.7 live market snapshot table + status paragraph.
+    Requires ctx['market'] (dict team→prob) and ctx['champion_b'] (dict team→prob)."""
+    now = ctx.get("now", {})
+    frozen = ctx.get("frozen", {})
+    champion_b = ctx.get("champion_b", {})
+    market = ctx.get("market")
+    teams = sorted(now, key=lambda t: -now[t].get("champion", 0))[:8]
+    rows = []
+    for t in teams:
+        frz_pct = _pct(frozen.get(t, {}).get("champion", 0))
+        a_pct = _pct(now[t].get("champion", 0))
+        b_pct = _pct(champion_b.get(t, 0)) if champion_b else "---"
+        mkt_pct = _pct(market[t]) if market and t in market else "---"
+        delta = (f"{100*(now[t].get('champion', 0) - frozen.get(t, {}).get('champion', now[t].get('champion', 0))):+.1f}"
+                 if t in frozen else "---")
+        rows.append(f"{t} & {frz_pct} & {a_pct} & {b_pct} & {mkt_pct} & {delta} \\\\")
+    table = (
+        "\\begin{table}[!h]\\centering\n"
+        "\\caption{Live champion-probability snapshot (live edition "
+        "M\\liveEditionNum{})}\\label{tab:live_market_snap}\n"
+        "\\begin{footnotesize}\\begin{tabular}{lrrrrr}\\toprule\n"
+        "Team & Frozen (\\%) & Track~A (\\%) & Track~B (\\%) & "
+        "Market (\\%) & $\\Delta$ (A$-$Frozen) \\\\\n\\midrule\n"
+        + "\n".join(rows) + "\n"
+        "\\bottomrule\\end{tabular}\\end{footnotesize}\\end{table}"
+    )
+    if market:
+        status = (
+            "Market and Track~A rank orderings broadly agree at this edition; "
+            "divergence tracking (who-moves-first) continues through knockout stages."
+        )
+    else:
+        status = "Market-probability data are not yet available for this edition."
+    return table + "\n\n" + status

@@ -143,10 +143,24 @@ def test_two_track_unit():
            "learning": {"Spain": 0.28, "Argentina": 0.17}}
     tex = rl.two_track_unit(two, _learning(), fig=False)
     assert "Spain" in tex and "27.0" in tex and "28.0" in tex
-    assert "Spain & 27.0 & 28.0 & +1.0" in tex   # frozen | learning | delta order
+    # 3-col without track_a: Frozen | Track~B | Δ
+    assert "Spain & 27.0 & 28.0 & +1.0" in tex
     assert "Mexico" in tex                    # drift table
     tex_fig = rl.two_track_unit(two, _learning(), fig=True)
     assert "fig_two_track_live" in tex_fig
+
+
+def test_two_track_unit_with_track_a_four_cols():
+    two = {"frozen": {"Spain": 0.27, "Argentina": 0.18},
+           "learning": {"Spain": 0.28, "Argentina": 0.17}}
+    track_a = {"Spain": {"champion": 0.272}, "Argentina": {"champion": 0.179}}
+    tex = rl.two_track_unit(two, _learning(), fig=False, track_a=track_a)
+    # 4-col: Frozen | Track A | Track B | Δ(A-Frozen)
+    assert "Track~A" in tex and "Track~B" in tex
+    assert "27.2" in tex   # Track A Spain
+    assert "28.0" in tex   # Track B Spain (learning)
+    # Δ = Track A - Frozen = 27.2 - 27.0 = +0.2
+    assert "+0.2" in tex
 
 
 def test_revision_report_unit():
@@ -273,7 +287,7 @@ def test_abstract_live_unit():
 
 def test_intro_data_note_unit():
     tex = rl.intro_data_note_unit(_full_ctx())
-    assert "4" in tex and "learning track" in tex.lower()
+    assert "Track~A" in tex and "Track~B" in tex
 
 def test_simulation_note_unit():
     tex = rl.simulation_note_unit(_full_ctx())
@@ -345,3 +359,24 @@ def test_two_track_unit_no_provenance_when_snapshot_absent():
     learning = {"drift": {}, "processed": [], "pending": []}
     out = rl.two_track_unit(two_track, learning, fig=False, info_snapshot=None)
     assert "frozen" in out.lower() or "Track" in out   # still renders the table
+
+
+def test_market_snap_unit_no_market():
+    ctx = {"now": {"Spain": {"champion": 0.27}, "France": {"champion": 0.14}},
+           "frozen": {"Spain": {"champion": 0.269}, "France": {"champion": 0.143}},
+           "champion_b": {}, "market": None}
+    out = rl.market_snap_unit(ctx)
+    assert r"\label{tab:live_market_snap}" in out
+    assert "Spain" in out and "not yet available" in out
+
+
+def test_market_snap_unit_with_market():
+    ctx = {"now": {"Spain": {"champion": 0.27}, "France": {"champion": 0.14}},
+           "frozen": {"Spain": {"champion": 0.269}, "France": {"champion": 0.143}},
+           "champion_b": {"Spain": 0.275, "France": 0.135},
+           "market": {"Spain": 0.30, "France": 0.12}}
+    out = rl.market_snap_unit(ctx)
+    assert r"\label{tab:live_market_snap}" in out
+    assert "27.5" in out    # Track B Spain
+    assert "30.0" in out    # Market Spain
+    assert "Track~B" in out and "Market" in out

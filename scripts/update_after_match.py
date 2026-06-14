@@ -319,6 +319,9 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     latest_snap = (state["history"][-1].get("info_snapshot")
                    if state["history"] else None) or None
 
+    _market = next(
+        (r.get("market_champion") for r in reversed(trajectory)
+         if r.get("phase") == "post" and r.get("market_champion")), None)
     ctx = {"match": match, "entries": entries, "match_stats": match_stats,
            "learning": state, "prev_now": prev_now, "now": now_probs,
            "vintages_rows": rows, "revision_narrative": narrative_text,
@@ -328,8 +331,11 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
            "cum_points": stats["cum_points"],
            "mean_brier": stats["mean_brier"],
            "champ_now_top": stats["champ_now_top"],
+           "champ_b_top": stats.get("champ_b_top", []),
            "two_track": two_track,
            "info_snapshot": latest_snap or {},
+           "champion_b": champion_b,
+           "market": _market,
            "champion_movers": sorted(
                [[t, round(prev_now.get(t, {}).get("champion", 0.0), 4),
                  round(now_probs[t]["champion"], 4)]
@@ -352,7 +358,9 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     rl.write_unit(LIVE_DIR, "tracker", rl.tracker(group_st, frozen, now_probs))
     rl.write_unit(LIVE_DIR, "two_track",
                   rl.two_track_unit(two_track, state, fig=two_fig,
-                                    info_snapshot=latest_snap))
+                                    info_snapshot=latest_snap,
+                                    track_a=now_probs))
+    rl.write_unit(LIVE_DIR, "market_snap", rl.market_snap_unit(ctx))
     rl.write_unit(LIVE_DIR, "survival_colcomp", rl.survival_colcomp_unit(ctx))
     # 5. per-group sections
     for g in group_st:

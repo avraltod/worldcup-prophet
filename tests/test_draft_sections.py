@@ -44,14 +44,26 @@ def test_templated_abstract_live_contains_spain():
     assert "Spain" in text and "27.0" in text
 
 
-def test_templated_abstract_live_contains_brier():
+def test_templated_abstract_live_delta_framing_and_bits_pct():
+    # New: delta framing (frozen → Track A) and bits as % of max, no Brier
     text = ds.templated_abstract_live(_ctx())
-    assert "0.52" in text
+    assert "from" in text           # delta framing "from X% to Y%"
+    assert "%" in text              # bits pct of max
+    assert "0.003 bits" in text or "bits" in text   # bits value present
+    assert "0.52" not in text       # Brier moved out of abstract
 
 
-def test_templated_intro_data_note_contains_n():
+def test_templated_abstract_live_track_b_when_present():
+    ctx = _ctx()
+    ctx["champ_b_top"] = [("Spain", 0.275), ("Argentina", 0.182)]
+    text = ds.templated_abstract_live(ctx)
+    assert "Track~B" in text and "27.5" in text
+
+
+def test_templated_intro_data_note_track_a_and_track_b():
     text = ds.templated_intro_data_note(_ctx())
-    assert "4" in text and "learning track" in text.lower()
+    assert "Track~A" in text and "Track~B" in text
+    assert "ClubElo" in text
 
 
 def test_templated_simulation_note_contains_remaining():
@@ -68,6 +80,16 @@ def test_templated_data_revealed_is_valid_latex():
 def test_templated_sec36_live_mentions_bits():
     text = ds.templated_sec36_live(_ctx())
     assert "bits" in text.lower() and "South Korea" in text
+
+
+def test_templated_sec36_live_hypothesis_status():
+    text = ds.templated_sec36_live(_ctx())
+    assert "H1" in text and "H2" in text and "H3" in text
+
+
+def test_templated_sec36_live_track_ab_naming():
+    text = ds.templated_sec36_live(_ctx())
+    assert "Track~A" in text or "Track~B" in text
 
 
 def test_templated_robustness_live_covers_all_four_decisions():
@@ -99,6 +121,35 @@ def test_templated_failure_analysis_no_fabrication_when_all_ok():
 def test_templated_discussion_live_mentions_spain():
     text = ds.templated_discussion_live(_ctx())
     assert "Spain" in text
+
+
+def test_templated_discussion_live_four_beats():
+    text = ds.templated_discussion_live(_ctx())
+    # Beat 1: position
+    assert "leads at" in text
+    # Beat 2: performance
+    assert "pool points" in text or "Brier" in text
+    # Beat 3: at-risk call
+    assert any(t in text for t in ["Norway", "Croatia", "Belgium", "United States"])
+    # Beat 4: key question / H-hypothesis
+    assert "H1" in text or "H3" in text or "concentration" in text
+
+
+def test_templated_robustness_live_uses_track_a_probs():
+    ctx = _ctx()
+    # United States has known advance_KO in ctx["now"]
+    text = ds.templated_robustness_live(ctx)
+    # Should mention advance probability for United States (in now dict)
+    assert "Norway" in text and "Croatia" in text and "Belgium" in text
+    # Should mention verdict (confirmed / at risk / flipped)
+    assert any(v in text for v in ["confirmed", "at risk", "flipped"])
+
+
+def test_templated_failure_analysis_no_boilerplate():
+    ctx = _ctx()
+    ctx["entries"][1]["post"]["brier"] = 0.52
+    text = ds.templated_failure_analysis(ctx)
+    assert "documented failure case for post-tournament analysis" not in text
 
 
 def test_draft_abstract_live_falls_back_to_template_without_key(monkeypatch):

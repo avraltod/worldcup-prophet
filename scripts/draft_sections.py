@@ -17,6 +17,15 @@ _BRACKET_DECISIONS = [
 
 _TOTAL_TOURNAMENT_BITS = 6.6  # theoretical maximum (104 decisive matches)
 
+_HYPOTHESES = {
+    "H1": "Information concentration: few matches carry most bits",
+    "H2": "Elimination spikes: largest KL at high-probability team eliminations",
+    "H3": "Late arrival: KO stage carries >80% of total bits",
+}
+
+# Primary team for each bracket revision decision (for probability lookup)
+_DECISION_TEAMS = ["United States", "Norway", "Croatia", "Belgium"]
+
 
 def _pct(x): return f"{100 * x:.1f}"
 
@@ -27,18 +36,30 @@ def _pct(x): return f"{100 * x:.1f}"
 
 def templated_abstract_live(ctx):
     top = ctx["champ_now_top"]
+    frozen = ctx.get("frozen", {})
     n = ctx["n_results"]
     word = "result" if n == 1 else "results"
-    total_bits = sum(e["post"]["info_bits"] for e in ctx["entries"])
-    parts = ([f"{top[0][0]} at {_pct(top[0][1])} percent"]
-             + [f"{t} at {_pct(p)}" for t, p in top[1:3]])
+    total_bits = sum(e["post"].get("info_bits", 0.0) for e in ctx["entries"])
+    pct_max = 100 * total_bits / _TOTAL_TOURNAMENT_BITS
+    parts = []
+    for team, prob in top[:3]:
+        frz = frozen.get(team, {}).get("champion")
+        if frz is not None:
+            parts.append(f"{team} from {_pct(frz)}\\% to {_pct(prob)}\\%")
+        else:
+            parts.append(f"{team} at {_pct(prob)}\\%")
     inner = ", ".join(parts[:-1]) + f", and {parts[-1]}"
+    b_top = ctx.get("champ_b_top", [])
+    b_text = ""
+    if b_top:
+        b_parts = [f"{t} at {_pct(p)}\\%" for t, p in b_top[:2]]
+        b_inner = " and ".join(b_parts)
+        b_text = (f" Track~B (live Elo + bookmaker odds) leads with {b_inner}.")
     return (
-        f"Conditioned on the {n} {word} played so far, this edition's forecast "
-        f"places {inner}. "
-        f"The entry has accumulated {ctx['cum_points']} pool points at a mean "
-        f"Brier score of {ctx['mean_brier']:.2f}; the {n} results have revealed "
-        f"{total_bits:.3f} bits of information toward the champion distribution."
+        f"Conditioned on {n} {word}, Track~A moves {inner}. "
+        f"The {n} {word} have revealed {total_bits:.3f} bits "
+        f"({pct_max:.1f}\\% of the {_TOTAL_TOURNAMENT_BITS:.1f}-bit tournament maximum)."
+        + b_text
     )
 
 
@@ -80,12 +101,12 @@ def draft_abstract_live(ctx, use_api):
 # ========================================================================
 
 def templated_intro_data_note(ctx):
-    n = ctx["n_results"]
-    word = "result" if n == 1 else "results"
     return (
-        f"Since the pre-registration lock, {n} {word} have been observed; "
-        f"all post-lock information enters the learning track only and leaves "
-        f"the frozen forecast unchanged."
+        "Track~A conditions on all results to date; team ratings are frozen at "
+        "the June~10 pre-kickoff baseline and never change. "
+        "Track~B supplements result-conditioning with live ClubElo ratings "
+        "(updated daily), bookmaker odds for upcoming fixtures, and lineup "
+        "adjustments at T$-$90~min."
     )
 
 
@@ -199,37 +220,42 @@ def draft_data_revealed(ctx, use_api):
 
 def templated_sec36_live(ctx):
     entries = ctx["entries"]
-    total_bits = sum(e["post"]["info_bits"] for e in entries)
+    total_bits = sum(e["post"].get("info_bits", 0.0) for e in entries)
     n = ctx["n_results"]
     pct_resolved = 100 * total_bits / _TOTAL_TOURNAMENT_BITS
     movers = ctx.get("champion_movers", [])
     biggest = max(movers, key=lambda x: abs(x[2] - x[1]), default=None)
     two = ctx.get("two_track")
-    learn_gap = ""
+    track_ab_gap = ""
     if two:
         top_team = max(two["frozen"], key=lambda t: two["frozen"][t])
-        gap = abs(two["learning"].get(top_team, 0) - two["frozen"][top_team])
-        learn_gap = (
-            f" The learning and frozen tracks remain close: for {top_team}, "
-            f"the gap is {100*gap:.1f} percentage points."
+        a_prob = ctx.get("now", {}).get(top_team, {}).get("champion",
+                                                          two["frozen"][top_team])
+        b_prob = two["learning"].get(top_team, a_prob)
+        gap = abs(b_prob - a_prob)
+        track_ab_gap = (
+            f" Track~A and Track~B remain close for {top_team}: "
+            f"Track~A {_pct(a_prob)}\\%, Track~B {_pct(b_prob)}\\% "
+            f"(gap {100*gap:.1f}~pp)."
         )
     mover_text = ""
     if biggest:
         mover_text = (
-            f" The largest single movement is {biggest[0]} "
+            f" The largest movement is {biggest[0]} "
             f"({_pct(biggest[1])}\\% $\\to$ {_pct(biggest[2])}\\%), "
             f"driven primarily by the result channel."
         )
+    h_status = (
+        "H1 (information concentration) and H3 (late arrival) remain testable "
+        "only after KO-stage results; H2 (elimination spikes) is pending the "
+        "first high-probability team exit."
+    )
     return (
         f"With {n} of 104 results revealed, the tournament has delivered "
-        f"{total_bits:.3f} bits of information toward the champion distribution "
-        f"({pct_resolved:.1f}\\% of the theoretical maximum of "
-        f"{_TOTAL_TOURNAMENT_BITS:.1f} bits if every result were decisive)."
-        + mover_text + learn_gap +
-        " The pre-registered information-concentration hypothesis predicts that "
-        "the group stage will remain near-uninformative; the evidence so far is "
-        "consistent with that prediction, and the three hypotheses remain untested "
-        "until a likely champion is eliminated."
+        f"{total_bits:.3f} bits toward the champion distribution "
+        f"({pct_resolved:.1f}\\% of the {_TOTAL_TOURNAMENT_BITS:.1f}-bit maximum)."
+        + mover_text + track_ab_gap +
+        f" {h_status}"
     )
 
 
@@ -278,14 +304,31 @@ def draft_sec36_live(ctx, use_api):
 # Robustness live (main narrative investment)
 # ========================================================================
 
+def _verdict(adv_ko):
+    if adv_ko is None:
+        return "status unknown"
+    if adv_ko >= 0.70:
+        return "confirmed"
+    if adv_ko >= 0.30:
+        return "at risk"
+    return "flipped"
+
+
 def templated_robustness_live(ctx):
+    now = ctx.get("now", {})
     paras = []
-    for d in _BRACKET_DECISIONS:
+    for d, team in zip(_BRACKET_DECISIONS, _DECISION_TEAMS):
+        adv = now.get(team, {}).get("advance_KO")
+        verdict = _verdict(adv)
+        adv_text = (f" Current Track~A advance probability for {team}: "
+                    f"{_pct(adv)}\\% (flip threshold: 50\\%); verdict: {verdict}."
+                    if adv is not None else "")
         paras.append(
             f"\\paragraph{{{d['pick']}.}} "
             f"This pick was made because {d['reason']}. "
             f"With {ctx['n_results']} results now in, the relevant probabilities "
-            f"have not materially changed; the decision stands."
+            f"have not materially changed."
+            + adv_text
         )
     return (
         "\\subsection*{Robustness update: edition M\\liveEditionNum{}}"
@@ -391,12 +434,22 @@ def templated_failure_analysis(ctx):
                 f"the observed rates were {c['lam_obs']['home']:.2f} and "
                 f"{c['lam_obs']['away']:.2f} respectively."
             )
+        # Track B Elo response from learning.processed record
+        elo_resp = ""
+        rec_full = next((r for r in ctx["learning"].get("processed", [])
+                         if r.get("match") == c["match"]), None)
+        if rec_full and rec_full.get("drift_after"):
+            moves = sorted(rec_full["drift_after"].items(),
+                           key=lambda kv: -abs(kv[1]))[:2]
+            if moves:
+                elo_resp = (" Track~B moved "
+                            + " and ".join(f"{t} by {d:+.1f}~Elo" for t, d in moves)
+                            + " in response.")
         paras.append(
             f"\\paragraph{{M{c['match']} {fixture}.}} "
             f"The actual score was {result}; the model assigned this outcome "
             f"probability {_pct(p_out)}\\%, yielding a Brier score of {brier:.3f}."
-            + lam_text +
-            " This is a documented failure case for post-tournament analysis."
+            + lam_text + elo_resp
         )
     return (
         "\\subsection*{Live failure log: edition M\\liveEditionNum{}}"
@@ -451,15 +504,26 @@ def draft_failure_analysis(ctx, use_api):
 def templated_discussion_live(ctx):
     top = ctx["champ_now_top"]
     n = ctx["n_results"]
-    total_bits = sum(e["post"]["info_bits"] for e in ctx["entries"])
+    total_bits = sum(e["post"].get("info_bits", 0.0) for e in ctx["entries"])
     leader = top[0][0] if top else "Spain"
+    pct_max = 100 * total_bits / _TOTAL_TOURNAMENT_BITS
+    phase = "group stage" if n < 48 else "knockout stage"
+    now = ctx.get("now", {})
+    # Beat 3: most-at-risk bracket call
+    at_risk_team = min(_DECISION_TEAMS,
+                       key=lambda t: now.get(t, {}).get("advance_KO", 1.0))
+    at_risk_adv = now.get(at_risk_team, {}).get("advance_KO", None)
+    risk_text = (f"{at_risk_team} ({_pct(at_risk_adv)}\\% advance)"
+                 if at_risk_adv is not None else at_risk_team)
     return (
-        f"Through {n} matches and {total_bits:.3f} bits of revealed information, "
-        f"{leader}'s position as model-favourite remains intact. "
-        f"The bracket revision decisions made before kickoff have not yet been "
-        f"challenged by the results; the key open question is whether the group-stage "
-        f"upsets documented in Section~\\ref{{sec:live_failure}} signal a systematic "
-        f"rating error or are within the model's expected variance."
+        f"Through {n} matches and {total_bits:.3f} bits ({pct_max:.1f}\\% of maximum), "
+        f"{leader} leads at {_pct(top[0][1])}\\%. "
+        f"The entry has accumulated {ctx['cum_points']} pool points "
+        f"at a mean Brier of {ctx['mean_brier']:.2f}. "
+        f"The most pressure on a pre-registered revision comes from {risk_text}. "
+        f"The key question for the remainder of the {phase} is whether the "
+        f"information-concentration pattern (H1, H3) holds as elimination "
+        f"pressure intensifies."
     )
 
 

@@ -11,7 +11,7 @@ import fetch_stats_espn as fse
 
 EXPECTED_UNITS = ["stats", "champ_table", "trajfig", "ledger", "narrative",
                   "divergence", "revision_report", "tracker", "two_track",
-                  "survival_colcomp"] + [f"group_{g}" for g in "ABCDEFGHIJKL"]
+                  "market_snap", "survival_colcomp"] + [f"group_{g}" for g in "ABCDEFGHIJKL"]
 
 
 def _setup(tmp_path, monkeypatch):
