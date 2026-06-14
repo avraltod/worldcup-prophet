@@ -1,8 +1,8 @@
 {
- "fetched_at": "2026-06-14T00:01:53Z",
+ "fetched_at": "2026-06-14T02:42:56Z",
  "mode": "pre",
  "source_freshness": {
-  "elo_updated_at": "2026-06-14T00:01:53Z",
+  "elo_updated_at": "2026-06-14T02:42:56Z",
   "odds_fetched_at": null
  },
  "live_elo": {
@@ -459,12 +459,28 @@
     "drift": 41.22
    },
    {
+    "team": "Qatar",
+    "drift": 29.89
+   },
+   {
+    "team": "Switzerland",
+    "drift": -29.89
+   },
+   {
     "team": "South Korea",
     "drift": 25.06
    },
    {
     "team": "Czechia",
     "drift": -25.06
+   },
+   {
+    "team": "Brazil",
+    "drift": -9.94
+   },
+   {
+    "team": "Morocco",
+    "drift": 9.94
    }
   ],
   "summary": {
@@ -475,7 +491,7 @@
    "biggest_odds_mover": {},
    "n_new_injuries": 0,
    "n_lineup_adj": 0,
-   "n_teams_with_drift": 8
+   "n_teams_with_drift": 12
   }
  }
 }
