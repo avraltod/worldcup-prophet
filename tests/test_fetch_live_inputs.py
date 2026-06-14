@@ -61,13 +61,26 @@ def test_fetch_clubelo_empty_result_triggers_fallback_in_main(tmp_path, monkeypa
     """When ClubElo returns 0 national teams, main() falls back to JUNE10_ELO."""
     import fetch_live_inputs as fli
     import condition as cond
-    # Patch fetch_clubelo to return an empty dict (simulating club-only response)
     monkeypatch.setattr(fli, "fetch_clubelo", lambda date_str, opener=None: {})
     monkeypatch.setattr(fli, "OUT_PATH", tmp_path / "live_inputs.json")
     monkeypatch.setattr(fli, "DATA", tmp_path)
     fli.main(["--pre"])
     out = json.loads((tmp_path / "live_inputs.json").read_text())
-    # Should fall back to June 10 Elo
+    assert len(out["live_elo"]) == len(cond.ELO)
+    assert out["source_freshness"]["elo_updated_at"] == "2026-06-10T00:00:00Z"
+
+
+def test_fetch_clubelo_club_data_triggers_fallback_in_main(tmp_path, monkeypatch):
+    """When ClubElo returns club-level entries (Arsenal, Bayern…), main() falls back to JUNE10_ELO."""
+    import fetch_live_inputs as fli
+    import condition as cond
+    club_data = {"Arsenal": 1920.0, "Bayern": 1950.0, "Man City": 1910.0,
+                 "Real Madrid": 1940.0, "PSG": 1870.0}
+    monkeypatch.setattr(fli, "fetch_clubelo", lambda date_str, opener=None: club_data)
+    monkeypatch.setattr(fli, "OUT_PATH", tmp_path / "live_inputs.json")
+    monkeypatch.setattr(fli, "DATA", tmp_path)
+    fli.main(["--pre"])
+    out = json.loads((tmp_path / "live_inputs.json").read_text())
     assert len(out["live_elo"]) == len(cond.ELO)
     assert out["source_freshness"]["elo_updated_at"] == "2026-06-10T00:00:00Z"
 
