@@ -1,0 +1,20 @@
+{
+ "match": 6,
+ "event_id": "760421",
+ "stats": {
+  "home": {
+   "team": "Australia",
+   "sot": 4.0,
+   "other_shots": 5.0,
+   "total_shots": 9.0,
+   "possession": 28.4
+  },
+  "away": {
+   "team": "Türkiye",
+   "sot": 8.0,
+   "other_shots": 22.0,
+   "total_shots": 30.0,
+   "possession": 71.6
+  }
+ }
+}

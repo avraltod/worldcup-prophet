@@ -3,23 +3,26 @@
 \paragraph{The data release.} Match 8, Qatar v Switzerland: predicted 1--2, actual 1--1; 0 of 3 points, Brier 1.220, 0.003 bits.
 
 \begin{table}[!h]\centering
-\caption{Match statistics (live edition M\liveEditionNum{})}\label{tab:live_edition_snapshot}
-\begin{footnotesize}\begin{tabular}{lrr}\toprule
- & Qatar & Switzerland \\
+\caption{Cumulative match statistics (live edition M\liveEditionNum{})}\label{tab:live_match_stats}
+\begin{footnotesize}\begin{tabular}{lcccc}\toprule
+Game & Shots (H--A) & On target (H--A) & Poss\% (H--A) & Frozen H/D/A \\
 \midrule
-Shots & 7 & 26 \\
-On target & 4 & 7 \\
-Possession (\%) & 32 & 68 \\
-\bottomrule\end{tabular}\end{footnotesize}\\[2pt] Performance vs.\ expectation: $\lambda_{\mathrm{obs}}$ = 0.98 / 2.28 against $\lambda_{\mathrm{exp}}$ = 0.10 / 2.00 (proxy signal); the learning track moves Qatar by +29.9 and Switzerland by -29.9 Elo.
+M1 Mexico v South Africa & 16.0--3.0 & 4.0--2.0 & 60--40 & 67.2/20.9/11.9 \\
+M2 South Korea v Czechia & 15.0--7.0 & 6.0--4.0 & 62--38 & 36.1/30.4/33.5 \\
+M3 Canada v Bosnia and Herzegovina & 13.0--8.0 & 4.0--3.0 & 61--39 & 52.6/25.0/22.4 \\
+M4 United States v Paraguay & 16.0--9.0 & 6.0--1.0 & 65--35 & 47.2/27.8/25.0 \\
+M5 Haiti v Scotland & 15.0--9.0 & 2.0--2.0 & 54--46 & 15.1/20.7/64.2 \\
+M6 Australia v Turkey & 9.0--30.0 & 4.0--8.0 & 28--72 & 20.7/26.8/52.5 \\
+M7 Brazil v Morocco & 13.0--14.0 & 5.0--3.0 & 51--49 & 58.7/23.3/18.0 \\
+M8 Qatar v Switzerland & 7.0--26.0 & 4.0--7.0 & 32--68 & 10.0/17.3/72.6 \\
+\bottomrule\end{tabular}\end{footnotesize}
 \end{table}
 
 \paragraph{Forecast revision (vs.\ edition M007).} Champion-probability movement: Spain -0.1; Argentina -0.2; France +0.1; Portugal +0.4; England -0.1; Germany -0.1.
 
-Edition M008 conditions on Qatar v Switzerland 1--1 (0 of 3 points, 0.003 bits). Champion movement: Spain -0.1 pp, Argentina -0.2 pp, France +0.1 pp, Portugal +0.4 pp, England -0.1 pp. Performance signal (home/away): observed 0.98/2.28 expected goals against 0.10/2.00 expected.
-
-\paragraph{Implications for upcoming fixtures.} Lock odds are the frozen track's (they move only through qualification scenarios); the revised odds are the learning track's.
+\paragraph{Implications for upcoming fixtures.} Frozen odds are the pre-kickoff baseline (they move only through qualification scenarios); Track~B odds incorporate live Elo and bookmaker signals.
 \begin{footnotesize}\begin{tabular}{lcc}\toprule
-Fixture & Lock H/D/A (\%) & Learning H/D/A (\%) \\
+Fixture & Frozen H/D/A (\%) & Track~B H/D/A (\%) \\
 \midrule
 Switzerland v Bosnia and Herzegovina & 61.4/23.5/15.0 & 68.0/22.0/10.0 \\
 Canada v Qatar & 72.4/18.3/9.3 & 74.7/19.8/5.5 \\
@@ -28,20 +31,20 @@ Bosnia and Herzegovina v Qatar & 53.8/26.2/20.0 & 62.6/22.9/14.5 \\
 \bottomrule\end{tabular}\end{footnotesize}
 \paragraph{Forecast vintages.} One column per issued edition; the locked M000 column never changes.
 
-\begin{longtable}{lrrrrrrrrr}
-\caption{Forecast vintages (all issued editions)}\label{tab:live_vintages}\\
+\begin{longtable}{lrrrrrrrr}
+\caption{Forecast vintages --- champion probabilities by edition (live edition M\liveEditionNum{})}\label{tab:live_vintages}\\
 \toprule
-Edition & M000 & M001 & M002 & M003 & M004 & M005 & M006 & M007 & M008 \\
+\makecell[l]{Fixture \\\\ (play order)} & Spain & Argentina & France & Portugal & England & Cum.\,pts & Mean Brier & Cum.\,bits \\
 \midrule
 \endhead
-Spain & 26.9 & 27.1 & 26.9 & 26.9 & 27.0 & 27.3 & 27.2 & 27.2 & 27.2 \\
-Argentina & 18.1 & 18.1 & 17.9 & 17.8 & 18.0 & 18.1 & 18.1 & 18.1 & 18.0 \\
-France & 14.3 & 14.3 & 14.3 & 14.5 & 14.2 & 14.2 & 14.4 & 14.2 & 14.3 \\
-Portugal & 9.4 & 9.4 & 9.3 & 9.3 & 9.4 & 9.4 & 9.6 & 9.4 & 9.7 \\
-England & 7.0 & 6.9 & 7.1 & 6.9 & 7.0 & 6.8 & 7.0 & 6.8 & 6.8 \\
-\midrule
-Cum. points & 0 & 1 & 1 & 1 & 2 & 4 & 4 & 2 & 4 \\
-Mean Brier & -- & 0.17 & 0.39 & 0.56 & 0.52 & 0.46 & 0.54 & 0.61 & 0.68 \\
-Cum. bits & 0.000 & 0.001 & 0.002 & 0.003 & 0.005 & 0.006 & 0.011 & 0.007 & 0.015 \\
+\makecell[l]{M000 Lock} & 26.9 & 18.1 & 14.3 & 9.4 & 7.0 & 0 & -- & 0.000 \\
+\makecell[l]{M001 Mexico v South Africa} & 27.1 & 18.1 & 14.3 & 9.4 & 6.9 & 1 & 0.17 & 0.001 \\
+\makecell[l]{M002 South Korea v Czechia} & 26.9 & 17.9 & 14.3 & 9.3 & 7.1 & 1 & 0.39 & 0.002 \\
+\makecell[l]{M003 Canada v Bosnia and Herzegovina} & 26.9 & 17.8 & 14.5 & 9.3 & 6.9 & 1 & 0.56 & 0.003 \\
+\makecell[l]{M004 United States v Paraguay} & 27.0 & 18.0 & 14.2 & 9.4 & 7.0 & 2 & 0.52 & 0.005 \\
+\makecell[l]{M005 Haiti v Scotland} & 27.3 & 18.1 & 14.2 & 9.4 & 6.8 & 4 & 0.46 & 0.006 \\
+\makecell[l]{M006 Australia v Turkey} & 27.2 & 18.1 & 14.4 & 9.6 & 7.0 & 4 & 0.54 & 0.011 \\
+\makecell[l]{M007 Brazil v Morocco} & 27.2 & 18.1 & 14.2 & 9.4 & 6.8 & 2 & 0.61 & 0.007 \\
+\makecell[l]{M008 Qatar v Switzerland} & 27.2 & 18.0 & 14.3 & 9.7 & 6.8 & 4 & 0.68 & 0.015 \\
 \bottomrule
 \end{longtable}

@@ -12,7 +12,7 @@ def templated(e):
     outcome = "home win" if res[0] > res[1] else ("draw" if res[0] == res[1] else "away win")
     moved = "barely moved the forecast" if bits < 0.05 else "moved the forecast materially"
     p_real = e["post"]["p_outcome"]
-    return (f"A {round(p_real * 100)}%-likely {outcome} arrived; the result {moved} "
+    return (f"A {round(p_real * 100)}\\%-likely {outcome} arrived; the result {moved} "
             f"({bits:.3f} bits), and the pick scored {pts} of 3.")
 
 
