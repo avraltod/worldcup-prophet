@@ -7,6 +7,3 @@ date,match,home,away,pred,actual,pts,ev,p_outcome_real,p_score_real,brier,code
 2026-06-14,7,Brazil,Morocco,2-1,1-1,0,0.9375,0.2333,0.1105,0.9647,L?
 2026-06-14,5,Haiti,Scotland,1-2,0-1,2,0.9863,0.6418,0.1157,0.1939,P?
 2026-06-14,6,Australia,Turkey,1-2,2-0,0,0.8739,0.207,0.0337,0.9762,L?
-2026-06-14,8,Qatar,Switzerland,1-2,1-1,0,1.0566,0.173,0.0824,1.2197,L?
-2026-06-14,7,Brazil,Morocco,2-1,1-1,0,0.9375,0.233,0.1105,0.9647,L?
-2026-06-14,5,Haiti,Scotland,1-2,0-1,2,0.9863,0.642,0.1157,0.1939,P?

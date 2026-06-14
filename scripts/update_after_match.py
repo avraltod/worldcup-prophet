@@ -390,7 +390,7 @@ def revise(match, use_api=True, reopen_text=None):
     entry_path.write_text(mb.to_markdown(e))
     mb.mark_documented(INDEX, match)
 
-    entries = _entries_for_stats(INDEX)
+    entries = [e for e in _entries_for_stats(INDEX) if e["match"] <= match]
     stats = _write_living_layer(trajectory, entries, match, expectations,
                                 use_api=use_api)
 

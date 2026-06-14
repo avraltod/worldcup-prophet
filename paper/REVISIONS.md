@@ -36,3 +36,7 @@ headline numbers are backfilled into the vintages table.
 **Rev M007 (Brazil v Morocco 1-1).** Cumulative 2 pts, mean Brier 0.61; failure-mode systematic_rating_error. Full living layer re-rendered (edition M007); skeleton unchanged.
 
 **Rev M008 (Qatar v Switzerland 1-1).** Cumulative 2 pts, mean Brier 0.71; failure-mode systematic_rating_error. Full living layer re-rendered (edition M008); skeleton unchanged.
+
+**Rev M005 (Haiti v Scotland 0-1).** Cumulative 4 pts, mean Brier 0.46; failure-mode none. Full living layer re-rendered (edition M005); skeleton unchanged.
+
+**Rev M006 (Australia v Turkey 2-0).** Cumulative 4 pts, mean Brier 0.54; failure-mode systematic_rating_error. Full living layer re-rendered (edition M006); skeleton unchanged.

@@ -63,8 +63,12 @@
   "Switzerland": -29.88649940262838,
   "Brazil": -9.943249701314183,
   "Morocco": 9.943249701314183,
+  "Haiti": 65.00000000000001,
+  "Scotland": -65.00000000000001,
   "United States": 75.0,
-  "Paraguay": -75.0
+  "Paraguay": -75.0,
+  "Australia": -27.613500597371605,
+  "Turkey": 27.613500597371605
  },
  "processed": [
   {
@@ -173,6 +177,42 @@
    "drift_after": {
     "Qatar": 29.89,
     "Switzerland": -29.89
+   }
+  },
+  {
+   "match": 5,
+   "home": "Haiti",
+   "away": "Scotland",
+   "lam_obs": {
+    "home": 0.651,
+    "away": 0.651,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 0.5,
+    "away": 1.8
+   },
+   "drift_after": {
+    "Haiti": 65.0,
+    "Scotland": -65.0
+   }
+  },
+  {
+   "match": 6,
+   "home": "Australia",
+   "away": "Turkey",
+   "lam_obs": {
+    "home": 1.302,
+    "away": 2.605,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 0.85,
+    "away": 1.6
+   },
+   "drift_after": {
+    "Australia": -27.61,
+    "Turkey": 27.61
    }
   }
  ],

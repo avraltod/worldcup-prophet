@@ -63,6 +63,14 @@ jobs:
               uam._latexmk()
               shutil.copy("paper/WC2026_paper.pdf",
                           f"archive/paper_versions/WC2026_paper_M{m:03d}.pdf")
+          # After catch-up, restore living layer to the latest documented state
+          # so paper/live/ reflects all known results, not just the last pending one.
+          if pending:
+              latest = max(mb.documented_matches(uam.INDEX))
+              if latest > max(pending):
+                  print(f"restoring living layer to M{latest:03d} after catch-up")
+                  uam.rerender(latest)
+                  uam._latexmk()
           if not pending:  # manual dispatch with nothing new: re-render
               want = os.environ.get("REBUILD_MATCH") or ""
               target = int(want) if want.strip() else None

@@ -172,6 +172,76 @@
   ]
  },
  {
+  "edition": 5,
+  "match": 5,
+  "fixture": "Haiti v Scotland",
+  "result": [
+   0,
+   1
+  ],
+  "points": 2,
+  "cum_points": 4,
+  "mean_brier": 0.4558,
+  "cum_bits": 0.0063,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2726
+   ],
+   [
+    "Argentina",
+    0.1813
+   ],
+   [
+    "France",
+    0.1418
+   ],
+   [
+    "Portugal",
+    0.0945
+   ],
+   [
+    "England",
+    0.0678
+   ]
+  ]
+ },
+ {
+  "edition": 6,
+  "match": 6,
+  "fixture": "Australia v Turkey",
+  "result": [
+   2,
+   0
+  ],
+  "points": 0,
+  "cum_points": 4,
+  "mean_brier": 0.5425,
+  "cum_bits": 0.0106,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2722
+   ],
+   [
+    "Argentina",
+    0.1807
+   ],
+   [
+    "France",
+    0.1438
+   ],
+   [
+    "Portugal",
+    0.0958
+   ],
+   [
+    "England",
+    0.0701
+   ]
+  ]
+ },
+ {
   "edition": 7,
   "match": 7,
   "fixture": "Brazil v Morocco",
@@ -215,29 +285,29 @@
    1
   ],
   "points": 0,
-  "cum_points": 2,
-  "mean_brier": 0.7116,
-  "cum_bits": 0.0094,
+  "cum_points": 4,
+  "mean_brier": 0.68,
+  "cum_bits": 0.0146,
   "champ_top5": [
    [
     "Spain",
-    0.2704
+    0.2715
    ],
    [
     "Argentina",
-    0.1793
+    0.1798
    ],
    [
     "France",
-    0.1443
+    0.143
    ],
    [
     "Portugal",
-    0.0965
+    0.0969
    ],
    [
     "England",
-    0.0706
+    0.0684
    ]
   ]
  }
