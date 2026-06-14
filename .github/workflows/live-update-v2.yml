@@ -16,24 +16,33 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Fetch live inputs (ClubElo + odds + lineup)
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        run: python3 scripts/fetch_live_inputs.py --pre
+        continue-on-error: true
+
       - name: Run v2 recorder
         run: python3 scripts/live_update_v2.py
       - name: Commit and push v2 files only
         run: |
           CHANGED=$(git status --porcelain \
-            data/trajectory_v2.json data/results_log_v2.json data/records_index_v2.json)
+            data/trajectory_v2.json data/results_log_v2.json \
+            data/records_index_v2.json data/live_inputs.json)
           if [ -z "$CHANGED" ]; then
             echo "v2: no changes."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          for f in data/trajectory_v2.json data/results_log_v2.json data/records_index_v2.json; do
+          for f in data/trajectory_v2.json data/results_log_v2.json \
+                   data/records_index_v2.json data/live_inputs.json; do
             [ -f "$f" ] && git add "$f"   # results_log_v2 is absent on PRE-only runs
           done
           for f in $(git diff --cached --name-only); do
             case "$f" in
-              data/trajectory_v2.json|data/results_log_v2.json|data/records_index_v2.json) ;;
+              data/trajectory_v2.json|data/results_log_v2.json|\
+              data/records_index_v2.json|data/live_inputs.json) ;;
               *) echo "REFUSING: non-allowlisted file staged: $f"; exit 1 ;;
             esac
           done
