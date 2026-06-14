@@ -235,11 +235,14 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     learn_ratings = None
     if state["processed"]:
         learn_ratings = lst.ratings(state)
-        froz_dist = {t: d["champion"] for t, d in cond.conditional_probs(
-            res, N=TWO_TRACK_N, seed=2026, ratings=state["baseline"]).items()}
-        learn_dist = {t: d["champion"] for t, d in cond.conditional_probs(
-            res, N=TWO_TRACK_N, seed=2026, ratings=learn_ratings).items()}
-        two_track = {"frozen": froz_dist, "learning": learn_dist}
+        froz_probs_full = cond.conditional_probs(
+            res, N=TWO_TRACK_N, seed=2026, ratings=state["baseline"])
+        learn_probs_full = cond.conditional_probs(
+            res, N=TWO_TRACK_N, seed=2026, ratings=learn_ratings)
+        froz_dist = {t: d["champion"] for t, d in froz_probs_full.items()}
+        learn_dist = {t: d["champion"] for t, d in learn_probs_full.items()}
+        two_track = {"frozen": froz_dist, "learning": learn_dist,
+                     "learn_probs": learn_probs_full}
         top8 = sorted(froz_dist, key=lambda t: -froz_dist[t])[:8]
         from live_state import load_live_inputs
         _live_snap = load_live_inputs()
@@ -352,6 +355,7 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
            "champ_now_top": stats["champ_now_top"],
            "champ_b_top": stats.get("champ_b_top", []),
            "two_track": two_track,
+           "now_b": (two_track or {}).get("learn_probs", {}),
            "info_snapshot": latest_snap or {},
            "champion_b": champion_b,
            "market": _market,
@@ -371,7 +375,7 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     rl.write_unit(LIVE_DIR, "trajfig", rl.trajfig_unit(entries, live_fig))
     rl.write_unit(LIVE_DIR, "ledger", rl.ledger(entries))
     rl.write_unit(LIVE_DIR, "narrative", rl.narrative_unit(entries))
-    rl.write_unit(LIVE_DIR, "divergence", rl.divergence_unit(frozen, now_probs, entries, group_st, champion_b=champion_b))
+    rl.write_unit(LIVE_DIR, "divergence", rl.divergence_unit(frozen, now_probs, entries, group_st, champion_b=champion_b, now_b=ctx.get("now_b", {})))
     # 4. derived units
     rl.write_unit(LIVE_DIR, "revision_report", rl.revision_report(ctx))
     rl.write_unit(LIVE_DIR, "tracker", rl.tracker(group_st, frozen, now_probs))

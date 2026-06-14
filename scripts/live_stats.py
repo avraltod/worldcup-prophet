@@ -89,7 +89,7 @@ def render_macros(s):
         r"\def\liveMeanBrier{%.2f}" % s["mean_brier"],
         r"\def\liveExactRate{%.2f}" % s["exact_rate"],
         r"\def\liveRealVsEVDelta{%+d}" % s.get("real_vs_ev_delta", s.get("re_ev_delta", 0)),
-        r"\def\liveEditionNum{M%03d}" % (s["latest"]["match"] if s.get("latest") else 0),
+        r"\def\liveEditionNum{%03d}" % (s["latest"]["match"] if s.get("latest") else 0),
         r"\def\liveTotalBits{%.2f}" % s.get("total_bits", 0.0),
         r"\def\liveBitsOfMax{%.1f}" % s.get("bits_of_max", 0.0),
         r"\def\liveTrackBRevision{%s}" % b_revision,

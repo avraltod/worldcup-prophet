@@ -52,11 +52,12 @@ def _delta(a, b):
     return f"$+{d:.1f}$" if d >= 0.05 else (f"$-{abs(d):.1f}$" if d <= -0.05 else "0.0")
 
 
-def divergence_section(frozen, now, entries, group_state, champion_b=None):
+def divergence_section(frozen, now, entries, group_state, champion_b=None, now_b=None):
     """Frozen-vs-conditional stage probabilities and revealed group state.
     frozen/now: {team: {advance_KO, R16, QF, SF, final, champion}};
     group_state: [{group, played, total, rows: [{team, P, W, D, L, GF, GA, Pts}]}];
-    champion_b: {team: float} Track B champion probability (optional). Pure."""
+    champion_b: {team: float} Track B champion probability (optional).
+    now_b: {team: {advance_KO, ...}} Track B full stage probs (optional). Pure."""
     if not entries:
         return r"\textit{No matches revealed yet; the conditional forecast equals the baseline.}"
     n_results = len(entries)
@@ -72,15 +73,29 @@ def divergence_section(frozen, now, entries, group_state, champion_b=None):
     teams = sorted(set(top) | set(movers),
                    key=lambda t: (-now.get(t, frozen[t])["champion"], t))
 
-    has_b = bool(champion_b)
+    has_b_champ = bool(champion_b)
+    has_b_adv = bool(now_b)
+    has_b = has_b_champ  # whether to show Track B champion column
     rows = []
     for t in teams:
         f, c = frozen[t], now.get(t, frozen[t])
-        if has_b:
+        if has_b_champ:
             b_champ = champion_b.get(t)
-            b_str = _pct(b_champ) if b_champ is not None else "---"
+            b_champ_str = _pct(b_champ) if b_champ is not None else "---"
+        if has_b_adv and t in now_b:
+            b_adv = now_b[t].get("advance_KO", 0.0)
+            b_adv_str = _pct(b_adv)
+        elif has_b_champ:
+            b_adv_str = "---"
+        if has_b_champ and has_b_adv:
             rows.append(
-                f"{t} & {_pct(f['champion'])} & {_pct(c['champion'])} & {b_str} & "
+                f"{t} & {_pct(f['champion'])} & {_pct(c['champion'])} & {b_champ_str} & "
+                f"{_delta(f['champion'], c['champion'])}"
+                f" & {_pct(f['advance_KO'])} & {_pct(c['advance_KO'])} & {b_adv_str} & "
+                f"{_delta(f['advance_KO'], c['advance_KO'])} \\\\")
+        elif has_b_champ:
+            rows.append(
+                f"{t} & {_pct(f['champion'])} & {_pct(c['champion'])} & {b_champ_str} & "
                 f"{_delta(f['champion'], c['champion'])}"
                 f" & {_pct(f['advance_KO'])} & {_pct(c['advance_KO'])} & "
                 f"{_delta(f['advance_KO'], c['advance_KO'])} \\\\")
@@ -90,10 +105,21 @@ def divergence_section(frozen, now, entries, group_state, champion_b=None):
                 f"{_delta(f['champion'], c['champion'])}"
                 f" & {_pct(f['advance_KO'])} & {_pct(c['advance_KO'])} & "
                 f"{_delta(f['advance_KO'], c['advance_KO'])} \\\\")
-    if has_b:
+    if has_b_champ and has_b_adv:
+        col_spec = "lrrrrrrrr"
+        champ_span = "\\multicolumn{4}{c}{Champion (\\%)}"
+        champ_rule = "\\cmidrule(lr){2-5}"
+        adv_span = "\\multicolumn{4}{c}{Advance (\\%)}"
+        adv_rule = "\\cmidrule(lr){6-9}"
+        col_header = (
+            "Team & Frozen & Track~A & Track~B & $\\Delta$ (A$-$Frozen) & "
+            "Frozen & Track~A & Track~B & $\\Delta$ \\\\\n"
+        )
+    elif has_b_champ:
         col_spec = "lrrrrrrr"
         champ_span = "\\multicolumn{4}{c}{Champion (\\%)}"
         champ_rule = "\\cmidrule(lr){2-5}"
+        adv_span = "\\multicolumn{3}{c}{Advance (\\%)}"
         adv_rule = "\\cmidrule(lr){6-8}"
         col_header = (
             "Team & Frozen & Track~A & Track~B & $\\Delta$ (A$-$Frozen) & "
@@ -103,9 +129,10 @@ def divergence_section(frozen, now, entries, group_state, champion_b=None):
         col_spec = "lrrrrrr"
         champ_span = "\\multicolumn{3}{c}{Champion (\\%)}"
         champ_rule = "\\cmidrule(lr){2-4}"
+        adv_span = "\\multicolumn{3}{c}{Advance (\\%)}"
         adv_rule = "\\cmidrule(lr){5-7}"
         col_header = "Team & Frozen & Track~A & $\\Delta$ & Frozen & Track~A & $\\Delta$ \\\\\n"
-    _div_subhdr = (f" & {champ_span} & \\multicolumn{{3}}{{c}}{{Advance (\\%)}} \\\\\n"
+    _div_subhdr = (f" & {champ_span} & {adv_span} \\\\\n"
                   f"{champ_rule}{adv_rule}\n" + col_header + "\\midrule\n")
     table = (
         f"\\begin{{longtable}}{{{col_spec}}}\n"

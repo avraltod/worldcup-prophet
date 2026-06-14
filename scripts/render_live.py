@@ -63,9 +63,9 @@ def champ_table_unit(frozen, now, n_results, champion_b=None):
     return rev.champ_table(frozen, now, n_results, champion_b=champion_b)
 
 
-def divergence_unit(frozen, now, entries, group_state, champion_b=None):
+def divergence_unit(frozen, now, entries, group_state, champion_b=None, now_b=None):
     played = [g for g in group_state if g["played"]]
-    return rev.divergence_section(frozen, now, entries, played, champion_b=champion_b)
+    return rev.divergence_section(frozen, now, entries, played, champion_b=champion_b, now_b=now_b)
 
 
 # ---- new units ----
@@ -117,7 +117,7 @@ def group_box(g_state, results, expectations, frozen, now):
     # Build round-robin matrix: rows = teams, cols = opponent teams
     # Extra right-side columns: Actual W/D/L/Pts/Qual% | Frozen Qual% | Track A Qual%
     n = len(teams)
-    col_spec = "l" + "c" * n + "rrrr"
+    col_spec = "l" + "c" * n + "rrr"
     header_teams = " & ".join(f"\\tiny {t}" for t in teams)
     header = f" & {header_teams} & \\makecell{{Actual\\\\W/D/L/Pts/Q\\%}} & Q\\%(F) & Q\\%(A) \\\\"
 
@@ -479,31 +479,42 @@ def bracket_live_unit(ctx):
 
 
 def survival_colcomp_unit(ctx):
-    """Appendix B.live: side-by-side frozen vs conditioned survival probabilities.
-    Accepts ctx dict (extracts frozen and now internally)."""
+    """Appendix B.live: side-by-side Frozen / Track A / Track B survival probabilities.
+    Shows F/A/B when ctx['now_b'] is available, F/A otherwise."""
     frozen = ctx["frozen"]
     now = ctx["now"]
+    now_b = ctx.get("now_b", {})
+    has_b = bool(now_b)
     teams = sorted(now, key=lambda t: (-now[t]["champion"], -now[t]["advance_KO"]))
     stages = ["advance_KO", "R16", "QF", "SF", "final", "champion"]
     headers = "Team & KO & R16 & QF & SF & Final & Champion \\\\"
 
-    def pair(t, stage):
+    def triple(t, stage):
         f = frozen.get(t, {}).get(stage, 0.0)
         a = now[t].get(stage, 0.0)
         delta = abs(a - f)
         a_str = f"\\textbf{{{_pct(a)}}}" if delta > 3.0 else _pct(a)
+        if has_b and t in now_b:
+            b = now_b[t].get(stage, 0.0)
+            return f"{_pct(f)}/{a_str}/{_pct(b)}"
         return f"{_pct(f)}/{a_str}"
 
     rows = [
-        t + " & " + " & ".join(pair(t, s) for s in stages) + " \\\\"
+        t + " & " + " & ".join(triple(t, s) for s in stages) + " \\\\"
         for t in teams if t in frozen
     ]
+    if has_b:
+        note = "Each cell shows F/A/B = Frozen\\%{}/Track~A\\%/Track~B\\%; bold Track~A when $|\\Delta| > 3$ pp."
+        title = "Frozen / Track~A / Track~B stage probabilities, all 48 teams"
+    else:
+        note = "Each cell shows Frozen\\%{}~/{}Track~A\\%; bold Track~A when $|\\Delta| > 3$ pp."
+        title = "Frozen vs.\\ Track~A stage probabilities, all 48 teams"
     return (
         "\\section*{Appendix B.live\\quad The same distribution, "
-        "Frozen and Track~A side by side}\\label{app:survlive}\n"
-        "Each cell shows Frozen\\%{}~/{}Track~A\\%; bold Track~A when $|\\Delta| > 3$ pp.\n\n"
+        "all three tracks side by side}\\label{app:survlive}\n"
+        + note + "\n\n"
         "\\begin{footnotesize}\n\\begin{longtable}{lrrrrrr}\n"
-        "\\caption{Frozen vs.\\ Track~A stage probabilities, all 48 teams "
+        "\\caption{" + title + " "
         "(live edition M\\liveEditionNum{})}\\label{tab:live_survcomp}\\\\\n"
         "\\toprule\n" + headers + "\n\\midrule\n"
         "\\endfirsthead\n"

@@ -122,11 +122,11 @@ def _s(n=4):
 
 def test_live_edition_num_macro_present():
     tex = ls.render_macros(_s(4))
-    assert r"\def\liveEditionNum{M004}" in tex
+    assert r"\def\liveEditionNum{004}" in tex
 
 
 def test_live_edition_num_zero_when_no_entries():
     s = ls.compute([], {})
     s["entries"] = []
     tex = ls.render_macros(s)
-    assert r"\def\liveEditionNum{M000}" in tex
+    assert r"\def\liveEditionNum{000}" in tex
