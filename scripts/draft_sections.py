@@ -10,7 +10,7 @@ _BRACKET_DECISIONS = [
     {"pick": "Norway over Ecuador (M78)", "slot": "M78",
      "reason": "Norway's Elo edge + Ecuador's injury report"},
     {"pick": "Croatia over Portugal (M83)", "slot": "M83",
-     "reason": "Portugal's probability of occupying this slot was only 25.1% vs Croatia's 27.5%"},
+     "reason": "Portugal's probability of occupying this slot was only 25.1\\% vs Croatia's 27.5\\%"},
     {"pick": "Belgium over United States (M94)", "slot": "M94",
      "reason": "slot-emergence flipped the head-to-head call"},
 ]
@@ -102,27 +102,15 @@ def templated_simulation_note(ctx):
     remaining = 104 - n
     para1 = (
         f"Of the 104 group-stage fixtures, {n} results are now fixed; "
-        f"the simulator conditions on these outcomes and draws over the "
-        f"remaining {remaining} matches."
+        f"Track~A conditions on these outcomes and draws over the remaining "
+        f"{remaining} matches with June~10 ratings frozen."
     )
-    snap = ctx.get("info_snapshot") or {}
-    if not snap:
-        return para1
-    elo_ts = (snap.get("elo_updated_at") or "")[:10]   # YYYY-MM-DD
-    elo_rms = snap.get("elo_rms_delta", 0)
-    n_rates = snap.get("n_rate_changes", 0)
-    max_odds = snap.get("max_odds_shift_ph", 0)
-    n_lineup = snap.get("n_lineup_adj", 0)
-    n_drift = snap.get("n_teams_with_drift", 0)
     para2 = (
-        f"The full-information track (Track~B) supplements result-conditioning "
-        f"with: live ClubElo ratings fetched {elo_ts} "
-        f"(RMS $\\Delta$ = {elo_rms:.1f}~pts vs.\\ the June~10 baseline); "
-        f"bookmaker H2H odds de-vigged for {n_rates} unplayed fixture(s) "
-        f"(max $|{{\\Delta}}p_H|$ = {max_odds:.2f}); "
-        f"key-player Elo deductions where announced lineups are available "
-        f"({n_lineup} team(s) adjusted); "
-        f"and learning-track Elo drift on {n_drift} team(s)."
+        "Track~A conditions on results alone. Track~B replaces the June~10 "
+        "ratings with live ClubElo estimates after each match, incorporates "
+        "bookmaker H2H odds for unplayed fixtures as pre-match inputs, and "
+        "adjusts for confirmed lineup changes at T$-$90~min. Both tracks use "
+        "$N$~=~50{,}000 draws from the same Poisson simulator."
     )
     return para1 + "\n\n" + para2
 
@@ -137,18 +125,21 @@ def draft_simulation_note(ctx, use_api):
 
 def templated_data_revealed(ctx):
     rows = []
-    drift = ctx["learning"].get("drift", {})
     for e in ctx["entries"]:
-        parts = e["fixture"].split(" v ")
-        home = parts[0] if len(parts) == 2 else ""
-        away = parts[1] if len(parts) == 2 else ""
-        dh = drift.get(home, 0.0)
-        da = drift.get(away, 0.0)
         result = f"{e['result'][0]}--{e['result'][1]}"
         bits = e["post"]["info_bits"]
-        rows.append(
-            f"M{e['match']} & {e['fixture']} & {result} & "
-            f"{bits:.3f} & {dh:+.1f} & {da:+.1f} \\\\"
+        rows.append(f"M{e['match']} & {e['fixture']} & {result} & {bits:.3f} \\\\")
+    snap = ctx.get("info_snapshot") or {}
+    provenance = ""
+    if snap:
+        ft = (snap.get("fetched_at") or "")[:10]
+        elo_rms = snap.get("elo_rms_delta", 0)
+        n_rates = snap.get("n_rate_changes", 0)
+        n_lineup = snap.get("n_lineup_adj", 0)
+        provenance = (
+            f"\n\\medskip\\noindent{{\\small\\textit{{Track~B state:}} "
+            f"Elo fetched {ft}, RMS $\\Delta$ = {elo_rms:.1f}~pts vs.\\ June~10 baseline; "
+            f"{n_rates} fixture odds updated; {n_lineup} lineup adjustment(s) active.}}"
         )
     return (
         "The following matches have been played since the pre-registration lock "
@@ -156,15 +147,15 @@ def templated_data_revealed(ctx):
         "\\begin{table}[!h]\\centering\n"
         "\\caption{Information revealed since M000 (live edition "
         "M\\liveEditionNum{})}\\label{tab:live_data_revealed}\n"
-        "\\begin{footnotesize}\\begin{tabular}{rlllrr}\\toprule\n"
-        "Match & Fixture & Result & Bits & Elo shift (H) & Elo shift (A) \\\\\n"
+        "\\begin{footnotesize}\\begin{tabular}{rlllr}\\toprule\n"
+        "Match & Fixture & Result & Bits \\\\\n"
         "\\midrule\n"
         + "\n".join(rows) + "\n"
         "\\bottomrule\\end{tabular}\\end{footnotesize}\n"
         "\\begin{tablenotes}\\small\\item \\textit{Notes:} "
-        "Bits = KL divergence contribution of this result to the champion "
-        "distribution; Elo shift = learning-track rating change after the match.\n"
+        "Bits = KL divergence contribution of this result to the champion distribution.\n"
         "\\end{tablenotes}\\end{table}"
+        + provenance
     )
 
 

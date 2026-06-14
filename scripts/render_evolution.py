@@ -51,10 +51,11 @@ def _delta(a, b):
     return f"$+{d:.1f}$" if d >= 0.05 else (f"$-{abs(d):.1f}$" if d <= -0.05 else "0.0")
 
 
-def divergence_section(frozen, now, entries, group_state):
+def divergence_section(frozen, now, entries, group_state, champion_b=None):
     """Frozen-vs-conditional stage probabilities and revealed group state.
     frozen/now: {team: {advance_KO, R16, QF, SF, final, champion}};
-    group_state: [{group, played, total, rows: [{team, P, W, D, L, GF, GA, Pts}]}]. Pure."""
+    group_state: [{group, played, total, rows: [{team, P, W, D, L, GF, GA, Pts}]}];
+    champion_b: {team: float} Track B champion probability (optional). Pure."""
     if not entries:
         return r"\textit{No matches revealed yet; the conditional forecast equals the baseline.}"
     n_results = len(entries)
@@ -70,21 +71,48 @@ def divergence_section(frozen, now, entries, group_state):
     teams = sorted(set(top) | set(movers),
                    key=lambda t: (-now.get(t, frozen[t])["champion"], t))
 
+    has_b = bool(champion_b)
     rows = []
     for t in teams:
         f, c = frozen[t], now.get(t, frozen[t])
-        rows.append(
-            f"{t} & {_pct(f['champion'])} & {_pct(c['champion'])} & {_delta(f['champion'], c['champion'])}"
-            f" & {_pct(f['advance_KO'])} & {_pct(c['advance_KO'])} & {_delta(f['advance_KO'], c['advance_KO'])} \\\\")
+        if has_b:
+            b_champ = champion_b.get(t)
+            b_str = _pct(b_champ) if b_champ is not None else "---"
+            rows.append(
+                f"{t} & {_pct(f['champion'])} & {_pct(c['champion'])} & {b_str} & "
+                f"{_delta(f['champion'], c['champion'])}"
+                f" & {_pct(f['advance_KO'])} & {_pct(c['advance_KO'])} & "
+                f"{_delta(f['advance_KO'], c['advance_KO'])} \\\\")
+        else:
+            rows.append(
+                f"{t} & {_pct(f['champion'])} & {_pct(c['champion'])} & "
+                f"{_delta(f['champion'], c['champion'])}"
+                f" & {_pct(f['advance_KO'])} & {_pct(c['advance_KO'])} & "
+                f"{_delta(f['advance_KO'], c['advance_KO'])} \\\\")
+    if has_b:
+        col_spec = "lrrrrrrr"
+        champ_span = "\\multicolumn{4}{c}{Champion (\\%)}"
+        champ_rule = "\\cmidrule(lr){2-5}"
+        adv_rule = "\\cmidrule(lr){6-8}"
+        col_header = (
+            "Team & Frozen & Track~A & Track~B & $\\Delta$ (A$-$Frozen) & "
+            "Frozen & Track~A & $\\Delta$ \\\\\n"
+        )
+    else:
+        col_spec = "lrrrrrr"
+        champ_span = "\\multicolumn{3}{c}{Champion (\\%)}"
+        champ_rule = "\\cmidrule(lr){2-4}"
+        adv_rule = "\\cmidrule(lr){5-7}"
+        col_header = "Team & Frozen & Track~A & $\\Delta$ & Frozen & Track~A & $\\Delta$ \\\\\n"
     table = (
-        "\\begin{longtable}{lrrrrrr}\n"
+        f"\\begin{{longtable}}{{{col_spec}}}\n"
         "\\caption{Champion and advance probability divergence from the locked baseline "
         "(live edition)}\\label{tab:live_divergence}\\\\\n"
         "\\toprule\n"
-        " & \\multicolumn{3}{c}{Champion (\\%)} & \\multicolumn{3}{c}{Advance (\\%)} \\\\\n"
-        "\\cmidrule(lr){2-4}\\cmidrule(lr){5-7}\n"
-        "Team & Frozen & Track~A & $\\Delta$ & Frozen & Track~A & $\\Delta$ \\\\\n"
-        "\\midrule\n\\endhead\n"
+        f" & {champ_span} & \\multicolumn{{3}}{{c}}{{Advance (\\%)}} \\\\\n"
+        f"{champ_rule}{adv_rule}\n"
+        + col_header
+        + "\\midrule\n\\endhead\n"
         + "\n".join(rows)
         + "\n\\bottomrule\n\\end{longtable}")
 
@@ -117,20 +145,15 @@ def champ_table(frozen, now, n_results, champion_b=None):
         c = now[t]
         if has_b:
             b = champion_b.get(t)
-            if b is None:
-                rows.append(
-                    f"      {t:<14} & {100*f['champion']:.1f}\\% & "
-                    f"{100*c['champion']:.1f}\\% & --- & --- & "
-                    f"{100*c['final']:.1f}\\% & {100*c['SF']:.1f}\\% \\\\"
-                )
-            else:
-                delta = 100 * (b - c["champion"])
-                rows.append(
-                    f"      {t:<14} & {100*f['champion']:.1f}\\% & "
-                    f"{100*c['champion']:.1f}\\% & {100*b:.1f}\\% & "
-                    f"{delta:+.1f} & "
-                    f"{100*c['final']:.1f}\\% & {100*c['SF']:.1f}\\% \\\\"
-                )
+            delta = 100 * (c["champion"] - f["champion"])   # Track A − Frozen
+            b_str = f"{100*b:.1f}\\%" if b is not None else "---"
+            rows.append(
+                f"      {t:<14} & {100*f['champion']:.1f}\\% & "
+                f"{100*c['champion']:.1f}\\% & {b_str} & "
+                f"{delta:+.1f} & "
+                f"{100*c['final']:.1f}\\% & {100*c['SF']:.1f}\\% & "
+                f"{100*c.get('QF', 0.0):.1f}\\% \\\\"
+            )
         else:
             rows.append(
                 f"      {t:<14} & {100*f['champion']:.1f}\\% & "
@@ -138,10 +161,10 @@ def champ_table(frozen, now, n_results, champion_b=None):
                 f"{100*c['SF']:.1f}\\% \\\\"
             )
     if has_b:
-        col_spec = "lcccccc"
+        col_spec = "lccccccc"
         header = (
             "      Team & Frozen (\\%) & Track~A (\\%) & Track~B (\\%) & "
-            "$\\Delta$ (pp) & Finalist (now) & Semi (now) \\\\"
+            "$\\Delta$ (A$-$Frozen) & Finalist (now) & Semi (now) & QF (now) \\\\"
         )
         note = (
             f"Frozen = pre-kickoff lock ($N$ = 200{{,}}000, "

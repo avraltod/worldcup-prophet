@@ -63,9 +63,9 @@ def champ_table_unit(frozen, now, n_results, champion_b=None):
     return rev.champ_table(frozen, now, n_results, champion_b=champion_b)
 
 
-def divergence_unit(frozen, now, entries, group_state):
+def divergence_unit(frozen, now, entries, group_state, champion_b=None):
     played = [g for g in group_state if g["played"]]
-    return rev.divergence_section(frozen, now, entries, played)
+    return rev.divergence_section(frozen, now, entries, played, champion_b=champion_b)
 
 
 # ---- new units ----
@@ -200,39 +200,8 @@ def two_track_unit(two_track, learning, fig, info_snapshot=None):
                  "{figs/fig_two_track_live.pdf}\\par}\n\\end{figure}\n" if fig else "")
     n = len(learning["processed"])
 
-    provenance = ""
-    if info_snapshot:
-        ft = info_snapshot.get("fetched_at", "")[:16].replace("T", " ")
-        elo_rms = info_snapshot.get("elo_rms_delta", 0)
-        n_rates = info_snapshot.get("n_rate_changes", 0)
-        max_odds = info_snapshot.get("max_odds_shift_ph", 0)
-        best_elo = info_snapshot.get("biggest_elo_mover", {})
-        best_odds = info_snapshot.get("biggest_odds_mover", {})
-        n_inj = info_snapshot.get("n_new_injuries", 0)
-        n_lineup = info_snapshot.get("n_lineup_adj", 0)
-        n_drift = info_snapshot.get("n_teams_with_drift", 0)
-        elo_note = (f"{best_elo.get('team', '')} {best_elo.get('delta', 0):+.0f}"
-                    if best_elo else "---")
-        odds_note = (f"{best_odds.get('fixture', '')} "
-                     f"$\\Delta p_H$={best_odds.get('delta_ph', 0):+.2f}"
-                     if best_odds else "---")
-        provenance = (
-            f"\\medskip\n"
-            f"\\noindent{{\\small\\textbf{{Track~B update}} ({ft} UTC):\n"
-            f"\\begin{{itemize}}\n"
-            f"\\item Elo: {n} match(es) processed, RMS $\\Delta$={elo_rms}~pts, "
-            f"biggest mover: {elo_note}\n"
-            f"\\item Odds: {n_rates} fixture(s) updated, "
-            f"max $\\Delta p_H$={max_odds:+.2f}, biggest: {odds_note}\n"
-            f"\\item Injuries: {n_inj} new deduction(s); "
-            f"lineup adj: {n_lineup} team(s)\n"
-            f"\\item Drift: {n_drift} team(s) non-zero\n"
-            f"\\end{{itemize}}}}\n\\medskip\n"
-        )
-
     return (
-        provenance
-        + "\\subsection{The two tracks live: 2026 as it speaks}"
+        "\\subsection{The two tracks live: 2026 as it speaks}"
           "\\label{sec:twotracklive}\n"
           f"The pre-registered A-vs-B study of Appendix~D, running on the real "
           f"tournament: after each match the observed shot performance "
@@ -430,10 +399,10 @@ def survival_colcomp_unit(ctx):
 
     def pair(t, stage):
         f = frozen.get(t, {}).get(stage, 0.0)
-        n = now[t].get(stage, 0.0)
-        delta = abs(n - f)
-        now_str = f"\\textbf{{{_pct(n)}}}" if delta > 3.0 else _pct(n)
-        return f"{_pct(f)}/{now_str}"
+        a = now[t].get(stage, 0.0)
+        delta = abs(a - f)
+        a_str = f"\\textbf{{{_pct(a)}}}" if delta > 3.0 else _pct(a)
+        return f"{_pct(f)}/{a_str}"
 
     rows = [
         t + " & " + " & ".join(pair(t, s) for s in stages) + " \\\\"
@@ -441,10 +410,10 @@ def survival_colcomp_unit(ctx):
     ]
     return (
         "\\section*{Appendix B.live\\quad The same distribution, "
-        "frozen and conditioned side by side}\\label{app:survlive}\n"
-        "Each cell shows Frozen\\% / Now\\%; bold Now when $|\\Delta| > 3$ pp.\n\n"
+        "Frozen and Track~A side by side}\\label{app:survlive}\n"
+        "Each cell shows Frozen\\%{}~/{}Track~A\\%; bold Track~A when $|\\Delta| > 3$ pp.\n\n"
         "\\begin{footnotesize}\n\\begin{longtable}{lrrrrrr}\n"
-        "\\caption{Frozen vs.\\ conditioned stage probabilities, all 48 teams "
+        "\\caption{Frozen vs.\\ Track~A stage probabilities, all 48 teams "
         "(live edition M\\liveEditionNum{})}\\label{tab:live_survcomp}\\\\\n"
         "\\toprule\n" + headers + "\n\\midrule\n\\endhead\n"
         + "\n".join(rows) + "\n"

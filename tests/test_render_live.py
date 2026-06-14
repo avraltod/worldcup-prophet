@@ -319,7 +319,8 @@ def test_survival_colcomp_unit():
     assert "/" in tex  # frozen/now pair format
 
 
-def test_two_track_unit_renders_provenance_table():
+def test_two_track_unit_provenance_moved_to_data_revealed():
+    # Track B provenance block lives in data_revealed now, not two_track
     two_track = {"frozen": {"Spain": 0.142, "Argentina": 0.213},
                  "learning": {"Spain": 0.158, "Argentina": 0.201}}
     learning = {"drift": {"Mexico": -49.94}, "processed": [{"match": 1}],
@@ -328,19 +329,12 @@ def test_two_track_unit_renders_provenance_table():
         "fetched_at": "2026-06-13T12:47:00Z",
         "elo_rms_delta": 15.2,
         "n_rate_changes": 14,
-        "max_odds_shift_ph": 0.07,
-        "biggest_elo_mover": {"team": "Mexico", "delta": -27},
-        "biggest_odds_mover": {"fixture": "USA v Morocco", "delta_ph": 0.07},
-        "n_new_injuries": 1,
-        "n_lineup_adj": 1,
-        "n_teams_with_drift": 8,
     }
     out = rl.two_track_unit(two_track, learning, fig=False, info_snapshot=info)
-    assert "2026-06-13" in out          # fetched_at appears
-    assert "15.2" in out               # elo_rms_delta
-    assert "14" in out                 # n_rate_changes
-    assert "Mexico" in out             # biggest_elo_mover
-    assert "USA v Morocco" in out      # biggest_odds_mover
+    assert "2026-06-13" not in out      # date state NOT in two_track anymore
+    assert "15.2" not in out            # rms delta NOT in two_track anymore
+    assert "Track~B" in out             # section still renders with correct label
+    assert "Drift" in out               # drift table still present
 
 
 def test_two_track_unit_no_provenance_when_snapshot_absent():

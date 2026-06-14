@@ -330,7 +330,7 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     rl.write_unit(LIVE_DIR, "trajfig", rl.trajfig_unit(entries, live_fig))
     rl.write_unit(LIVE_DIR, "ledger", rl.ledger(entries))
     rl.write_unit(LIVE_DIR, "narrative", rl.narrative_unit(entries))
-    rl.write_unit(LIVE_DIR, "divergence", rl.divergence_unit(frozen, now_probs, entries, group_st))
+    rl.write_unit(LIVE_DIR, "divergence", rl.divergence_unit(frozen, now_probs, entries, group_st, champion_b=champion_b))
     # 4. derived units
     rl.write_unit(LIVE_DIR, "revision_report", rl.revision_report(ctx))
     rl.write_unit(LIVE_DIR, "tracker", rl.tracker(group_st, frozen, now_probs))
