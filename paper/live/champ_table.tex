@@ -4,22 +4,22 @@
   \caption{Simulated tournament probabilities, top eight teams (live edition)}\label{tab:champ}
   \begin{footnotesize}
   \begin{threeparttable}
-    {\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} lcccc}
+    {\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} lcccccc}
       \toprule
-      Team & Champion (lock) & Champion (now) & Finalist (now) & Semi-finalist (now) \\
+      Team & Lock (\%) & Track~A (\%) & Track~B (\%) & $\Delta$ (pp) & Finalist (now) & Semi (now) \\
       \midrule
-      Spain          & 26.9\% & 27.0\% & 39.3\% & 52.1\% \\
-      Argentina      & 18.1\% & 17.9\% & 29.9\% & 42.8\% \\
-      France         & 14.3\% & 14.4\% & 25.0\% & 43.4\% \\
-      Portugal       & 9.4\% & 9.7\% & 18.2\% & 29.3\% \\
-      England        & 7.0\% & 7.1\% & 14.6\% & 28.5\% \\
-      Brazil         & 3.5\% & 3.5\% & 8.5\% & 20.4\% \\
-      Netherlands    & 2.4\% & 2.3\% & 6.1\% & 15.8\% \\
-      Germany        & 2.2\% & 2.3\% & 6.4\% & 16.6\% \\
+      Spain          & 26.9\% & 27.0\% & 27.4\% & +0.4 & 39.3\% & 52.1\% \\
+      Argentina      & 18.1\% & 17.9\% & 17.6\% & -0.3 & 29.9\% & 42.8\% \\
+      France         & 14.3\% & 14.4\% & 14.3\% & -0.2 & 25.0\% & 43.4\% \\
+      Portugal       & 9.4\% & 9.7\% & 10.0\% & +0.3 & 18.2\% & 29.3\% \\
+      England        & 7.0\% & 7.1\% & 7.2\% & +0.2 & 14.6\% & 28.5\% \\
+      Brazil         & 3.5\% & 3.5\% & 3.0\% & -0.6 & 8.5\% & 20.4\% \\
+      Netherlands    & 2.4\% & 2.3\% & 2.4\% & +0.2 & 6.1\% & 15.8\% \\
+      Germany        & 2.2\% & 2.3\% & 2.0\% & -0.3 & 6.4\% & 16.6\% \\
       \bottomrule
     \end{tabular*}}
     \begin{tablenotes}\notesize
-      \item \textit{Notes}: ``now'' columns conditioned on the 6 results revealed to date ($N$ = 50{,}000, seed 2026); the lock column is the $N$ = 200{,}000 pre-kickoff baseline (\texttt{data/frozen\_stage\_probs.json}) and never changes.
+      \item \textit{Notes}: Track A = conditioned on the 6 results to date, June~10 ratings ($N$ = 50{,}000, seed 2026); Track B = live Elo + bookmaker odds + lineup adjustment. Lock = $N$ = 200{,}000 pre-kickoff baseline (\texttt{data/frozen\_stage\_probs.json}) and never changes.
     \end{tablenotes}
   \end{threeparttable}
   \end{footnotesize}
