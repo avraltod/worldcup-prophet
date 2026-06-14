@@ -26,13 +26,14 @@ def ledger_table(entries):
             f"& {_score(e['result'])} & {e['post']['points']} & {e['post']['brier']:.3f} "
             f"& {e['post']['info_bits']:.3f} & {fm} \\\\")
     _hdr = ("M & Fixture & Frozen & Track~A & Track~B & Result & Pts & Brier & Info & Mode \\\\\n")
-    head = ("\\begin{longtable}{rlcccccccl}\n"
+    head = ("\\begin{scriptsize}\n"
+            "\\begin{longtable}{rlcccccccl}\n"
             "\\caption{Match record (live edition)}\\label{tab:live_ledger}\\\\\n"
             "\\toprule\n" + _hdr + "\\midrule\n"
             "\\endfirsthead\n"
             "\\toprule\n" + _hdr + "\\midrule\n"
             "\\endhead\n")
-    foot = "\n\\bottomrule\n\\end{longtable}"
+    foot = "\n\\bottomrule\n\\end{longtable}\n\\end{scriptsize}"
     return head + "\n".join(rows) + foot
 
 

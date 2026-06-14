@@ -437,7 +437,7 @@ def revision_report(ctx):
                     deltas_ba.append(f"{t} {d:+.1f}")
         delta_ba = ("; ".join(deltas_ba) if deltas_ba
                     else "no contender diverged by 0.1 pp or more between tracks")
-        b_vs_a_line = f"\\\\\nTrack~B vs.\\ Track~A: {delta_ba}."
+        b_vs_a_line = f"\n\nTrack~B vs.\\ Track~A: {delta_ba}."
     imp_lines = "\n".join(
         f"{i['fixture']} & {'/'.join(_pct(p) for p in i['lock_HDA'])} & "
         f"{'/'.join(_pct(p) for p in i['learn_HDA'])} \\\\"
@@ -445,10 +445,10 @@ def revision_report(ctx):
     imp_block = ("" if not ctx["implications"] else
         "\\paragraph{Implications for upcoming fixtures.} Frozen odds are the "
         "pre-kickoff baseline (they move only through qualification scenarios); "
-        "Track~B odds incorporate live Elo and bookmaker signals.\n"
-        "\\begin{footnotesize}\\begin{tabular}{lcc}\\toprule\n"
+        "Track~B odds incorporate live Elo and bookmaker signals.\n\n"
+        "\\begin{footnotesize}\\begin{tabular}{p{0.40\\textwidth}cc}\\toprule\n"
         "Fixture & Frozen H/D/A (\\%) & Track~B H/D/A (\\%) \\\\\n\\midrule\n"
-        + imp_lines + "\n\\bottomrule\\end{tabular}\\end{footnotesize}\n")
+        + imp_lines + "\n\\bottomrule\\end{tabular}\\end{footnotesize}\n\n")
     return (
         f"\\subsection{{Revision report: edition M{m:03d}}}\\label{{sec:revreport}}\n"
         f"\\paragraph{{The data release.}} Match {latest['match']}, "
@@ -460,7 +460,7 @@ def revision_report(ctx):
             ctx["entries"], ctx["match_stats"],
             ctx.get("expectations", [])) + "\n\n"
         f"\\paragraph{{Forecast revision (vs.\\ edition M{ctx['vintages_rows'][-2]['edition']:03d}).}} "
-        f"Champion-probability movement (vs.\\ previous edition): {delta_line}.\\\\\n"
+        f"Champion-probability movement (vs.\\ previous edition): {delta_line}.\n\n"
         f"Track~A vs.\\ Frozen: {delta_af}.{b_vs_a_line}\n\n"
         + imp_block +
         "\\paragraph{Forecast vintages.} One column per issued edition; the "
@@ -833,7 +833,7 @@ def fixture_risk_unit(ctx):
         "\\begin{table}[!h]\\centering\n"
         "\\caption{Decisive upcoming fixtures --- bubble teams and outcome odds "
         "(live edition M\\liveEditionNum{})}\\label{tab:live_fixture_risk}\n"
-        "\\begin{footnotesize}\\begin{tabular}{lllll}\\toprule\n"
+        "\\begin{footnotesize}\\begin{tabular}{lp{0.28\\textwidth}p{0.22\\textwidth}cc}\\toprule\n"
         "Grp & Fixture & Bubble team(s) (Track~A Qual\\%) & "
         "Frozen H/D/A (\\%) & Track~B H/D/A (\\%) \\\\\n"
         "\\midrule\n"

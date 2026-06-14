@@ -70,7 +70,7 @@ def latex_table(rows, max_rows=20):
             f"% {len(rows) - len(shown)} intermediate editions omitted\n")
     _vin_colhdr = (f"\\makecell[l]{{Fixture \\\\\\\\ (play order)}} & {team_header}"
                   " & Cum.\\,pts & Mean Brier & Cum.\\,bits \\\\\n")
-    return (note + "\\begin{longtable}{" + colspec + "}\n"
+    return (note + "\\begin{scriptsize}\n\\begin{longtable}{" + colspec + "}\n"
             "\\caption{Forecast vintages --- champion probabilities by edition "
             "(live edition M\\liveEditionNum{})}\\label{tab:live_vintages}\\\\\n"
             "\\toprule\n" + _vin_colhdr + "\\midrule\n"
@@ -78,4 +78,4 @@ def latex_table(rows, max_rows=20):
             "\\toprule\n" + _vin_colhdr + "\\midrule\n"
             "\\endhead\n"
             + "\n".join(edition_rows)
-            + "\n\\bottomrule\n\\end{longtable}")
+            + "\n\\bottomrule\n\\end{longtable}\n\\end{scriptsize}")
