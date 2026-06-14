@@ -316,7 +316,11 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     rl.write_unit(LIVE_DIR, "divergence", rl.divergence_unit(frozen, now_probs, entries, group_st))
     rl.write_unit(LIVE_DIR, "revision_report", rl.revision_report(ctx))
     rl.write_unit(LIVE_DIR, "tracker", rl.tracker(group_st, frozen, now_probs))
-    rl.write_unit(LIVE_DIR, "two_track", rl.two_track_unit(two_track, state, fig=two_fig))
+    latest_snap = (state["history"][-1].get("info_snapshot")
+                   if state["history"] else None)
+    rl.write_unit(LIVE_DIR, "two_track",
+                  rl.two_track_unit(two_track, state, fig=two_fig,
+                                    info_snapshot=latest_snap))
     rl.write_unit(LIVE_DIR, "survival", rl.survival_unit(frozen, now_probs))
     for g in group_st:
         rl.write_unit(LIVE_DIR, f"group_{g['group']}",

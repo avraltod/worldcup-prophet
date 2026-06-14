@@ -175,9 +175,11 @@ def survival_unit(frozen, now):
         + "\n".join(rows) + "\n\\bottomrule\n\\end{longtable}\n\\end{footnotesize}")
 
 
-def two_track_unit(two_track, learning, fig):
+def two_track_unit(two_track, learning, fig, info_snapshot=None):
     """The live A-vs-B: frozen-track vs learning-track champion odds, the
-    largest accumulated drifts, and the per-match performance records."""
+    largest accumulated drifts, and the per-match performance records.
+    info_snapshot: dict from live_inputs.json deltas.summary + source_freshness,
+    or None if live_inputs.json was absent at prediction time."""
     if two_track is None:
         return ("\\textit{Two-track live results begin with the first match "
                 "whose box score is collected.}")
@@ -197,21 +199,56 @@ def two_track_unit(two_track, learning, fig):
                  "  {\\centering\\includegraphics[width=0.94\\textwidth]"
                  "{figs/fig_two_track_live.pdf}\\par}\n\\end{figure}\n" if fig else "")
     n = len(learning["processed"])
+
+    provenance = ""
+    if info_snapshot:
+        ft = info_snapshot.get("fetched_at", "")[:16].replace("T", " ")
+        elo_rms = info_snapshot.get("elo_rms_delta", 0)
+        n_rates = info_snapshot.get("n_rate_changes", 0)
+        max_odds = info_snapshot.get("max_odds_shift_ph", 0)
+        best_elo = info_snapshot.get("biggest_elo_mover", {})
+        best_odds = info_snapshot.get("biggest_odds_mover", {})
+        n_inj = info_snapshot.get("n_new_injuries", 0)
+        n_lineup = info_snapshot.get("n_lineup_adj", 0)
+        n_drift = info_snapshot.get("n_teams_with_drift", 0)
+        elo_note = (f"{best_elo.get('team', '')} {best_elo.get('delta', 0):+.0f}"
+                    if best_elo else "---")
+        odds_note = (f"{best_odds.get('fixture', '')} "
+                     f"$\\Delta p_H$={best_odds.get('delta_ph', 0):+.2f}"
+                     if best_odds else "---")
+        provenance = (
+            f"\\medskip\n"
+            f"\\noindent{{\\small\\textbf{{Track~B update}} ({ft} UTC):\n"
+            f"\\begin{{itemize}}[noitemsep,topsep=2pt]\n"
+            f"\\item Elo: {n} match(es) processed, RMS $\\Delta$={elo_rms}~pts, "
+            f"biggest mover: {elo_note}\n"
+            f"\\item Odds: {n_rates} fixture(s) updated, "
+            f"max $\\Delta p_H$={max_odds:+.2f}, biggest: {odds_note}\n"
+            f"\\item Injuries: {n_inj} new deduction(s); "
+            f"lineup adj: {n_lineup} team(s)\n"
+            f"\\item Drift: {n_drift} team(s) non-zero\n"
+            f"\\end{{itemize}}}}\n\\medskip\n"
+        )
+
     return (
-        "\\subsection{The two tracks live: 2026 as it speaks}"
-        "\\label{sec:twotracklive}\n"
-        f"The pre-registered A-vs-B study of Appendix~D, running on the real "
-        f"tournament: after each match the observed shot performance "
-        f"($\\lambda_{{\\mathrm{{obs}}}}$, Appendix~D.2) updates the learning "
-        f"track's ratings (k=50, locked), while the frozen track re-conditions "
-        f"on results alone. {n} match(es) processed so far.{pend}\n\n"
-        + fig_block +
-        "\\begin{footnotesize}\n"
-        "\\begin{tabular}{lrrr}\n\\toprule\n"
-        "Team & Frozen (\\%) & Learning (\\%) & $\\Delta$ (pp) \\\\\n\\midrule\n"
-        + rows + "\n\\bottomrule\n\\end{tabular}\\qquad\n"
-        "\\begin{tabular}{lr}\n\\toprule\nTeam & Drift (Elo) \\\\\n\\midrule\n"
-        + drift_rows + "\n\\bottomrule\n\\end{tabular}\n\\end{footnotesize}")
+        provenance
+        + "\\subsection{The two tracks live: 2026 as it speaks}"
+          "\\label{sec:twotracklive}\n"
+          f"The pre-registered A-vs-B study of Appendix~D, running on the real "
+          f"tournament: after each match the observed shot performance "
+          f"($\\lambda_{{\\mathrm{{obs}}}}$, Appendix~D.2) updates the learning "
+          f"track's ratings (k=50, locked), while the frozen track re-conditions "
+          f"on results alone. {n} match(es) processed so far.{pend}\n\n"
+        + fig_block
+        + "\\begin{footnotesize}\n"
+          "\\begin{tabular}{lrrr}\n\\toprule\n"
+          "Team & Frozen (\\%) & Learning (\\%) & $\\Delta$ (pp) \\\\\n\\midrule\n"
+        + rows
+        + "\n\\bottomrule\n\\end{tabular}\\qquad\n"
+          "\\begin{tabular}{lr}\n\\toprule\nTeam & Drift (Elo) \\\\\n\\midrule\n"
+        + drift_rows
+        + "\n\\bottomrule\n\\end{tabular}\n\\end{footnotesize}"
+    )
 
 
 def _stats_release(match, match_stats, learning):
