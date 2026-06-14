@@ -83,3 +83,28 @@ def test_trajfig_falls_back_to_demo():
     assert "fig_trajectory_live" in live
     assert "label{fig:trajectory}" in live                # label preserved
     assert "1 of 104" in live
+
+
+CHAMPION_B = {
+    "Spain":     0.271,
+    "Argentina": 0.191,
+    "France":    0.138,
+}
+
+def test_champ_table_with_champion_b_adds_track_b_columns():
+    tex = re_.champ_table(FROZEN, NOW, 2, champion_b=CHAMPION_B)
+    assert "Track A" in tex
+    assert "Track B" in tex
+    assert r"\Delta" in tex
+    assert "27.1\\%" in tex   # Spain Track B
+    assert "+0.2" in tex      # Spain delta: 27.1 - 26.9 = +0.2
+    assert "+1.2" in tex      # Argentina delta: 19.1 - 17.9 = +1.2
+    assert r"\label{tab:champ}" in tex
+    assert tex.count(r"\begin{table}") == tex.count(r"\end{table}") == 1
+
+def test_champ_table_without_champion_b_renders_as_before():
+    tex = re_.champ_table(FROZEN, NOW, 2)
+    assert "Track B" not in tex
+    assert "Champion (now)" in tex
+    assert "Champion (lock)" in tex
+    assert r"\label{tab:champ}" in tex

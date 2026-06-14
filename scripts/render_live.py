@@ -59,8 +59,8 @@ def trajfig_unit(entries, live_fig):
     return rev.trajfig(entries, live_fig)
 
 
-def champ_table_unit(frozen, now, n_results):
-    return rev.champ_table(frozen, now, n_results)
+def champ_table_unit(frozen, now, n_results, champion_b=None):
+    return rev.champ_table(frozen, now, n_results, champion_b=champion_b)
 
 
 def divergence_unit(frozen, now, entries, group_state):

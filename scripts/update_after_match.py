@@ -292,6 +292,15 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     s = _stats_lookup(trajectory)(latest["match"])
     if s is not None:
         match_stats[latest["match"]] = s
+
+    # Track B data from trajectory post record (written by live_update_v2)
+    _latest_post = next(
+        (r for r in reversed(trajectory)
+         if r["phase"] == "post" and r["match"] == match), None)
+    champion_b = (_latest_post.get("champion_b") or {}) if _latest_post else {}
+    latest_snap = (state["history"][-1].get("info_snapshot")
+                   if state["history"] else None) or {}
+
     ctx = {"match": match, "entries": entries, "match_stats": match_stats,
            "learning": state, "prev_now": prev_now, "now": now_probs,
            "vintages_rows": rows, "revision_narrative": narrative_text,
@@ -302,6 +311,7 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
            "mean_brier": stats["mean_brier"],
            "champ_now_top": stats["champ_now_top"],
            "two_track": two_track,
+           "info_snapshot": latest_snap,
            "champion_movers": sorted(
                [[t, round(prev_now.get(t, {}).get("champion", 0.0), 4),
                  round(now_probs[t]["champion"], 4)]
@@ -309,18 +319,18 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
                key=lambda x: -abs(x[2] - x[1])),
            }
     rl.write_unit(LIVE_DIR, "stats", ls.render_macros(stats))
-    rl.write_unit(LIVE_DIR, "champ_table", rl.champ_table_unit(frozen, now_probs, len(entries)))
+    rl.write_unit(LIVE_DIR, "champ_table",
+                  rl.champ_table_unit(frozen, now_probs, len(entries),
+                                      champion_b=champion_b))
     rl.write_unit(LIVE_DIR, "trajfig", rl.trajfig_unit(entries, live_fig))
     rl.write_unit(LIVE_DIR, "ledger", rl.ledger(entries))
     rl.write_unit(LIVE_DIR, "narrative", rl.narrative_unit(entries))
     rl.write_unit(LIVE_DIR, "divergence", rl.divergence_unit(frozen, now_probs, entries, group_st))
     rl.write_unit(LIVE_DIR, "revision_report", rl.revision_report(ctx))
     rl.write_unit(LIVE_DIR, "tracker", rl.tracker(group_st, frozen, now_probs))
-    latest_snap = (state["history"][-1].get("info_snapshot")
-                   if state["history"] else None)
     rl.write_unit(LIVE_DIR, "two_track",
                   rl.two_track_unit(two_track, state, fig=two_fig,
-                                    info_snapshot=latest_snap))
+                                    info_snapshot=latest_snap or None))
     rl.write_unit(LIVE_DIR, "survival", rl.survival_unit(frozen, now_probs))
     for g in group_st:
         rl.write_unit(LIVE_DIR, f"group_{g['group']}",

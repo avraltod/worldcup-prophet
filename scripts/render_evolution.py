@@ -106,35 +106,72 @@ def divergence_section(frozen, now, entries, group_state):
     return intro + "\n\n" + table + group_par
 
 
-def champ_table(frozen, now, n_results):
-    """The paper's headline probability table, re-stated conditionally:
-    top eight by current champion probability, locked baseline beside it."""
+def champ_table(frozen, now, n_results, champion_b=None):
+    """Headline probability table, top 8 by current champion probability.
+    When champion_b is a non-empty dict, adds Track A / Track B / Δ columns."""
     teams = sorted(now, key=lambda t: -now[t]["champion"])[:8]
+    has_b = bool(champion_b)
     rows = []
     for t in teams:
         f = frozen.get(t, {"champion": 0.0})
         c = now[t]
-        rows.append(f"      {t:<14} & {100*f['champion']:.1f}\\% & "
-                    f"{100*c['champion']:.1f}\\% & {100*c['final']:.1f}\\% & "
-                    f"{100*c['SF']:.1f}\\% \\\\")
+        if has_b:
+            b = champion_b.get(t, 0.0)
+            delta = 100 * (b - c["champion"])
+            rows.append(
+                f"      {t:<14} & {100*f['champion']:.1f}\\% & "
+                f"{100*c['champion']:.1f}\\% & {100*b:.1f}\\% & "
+                f"{delta:+.1f} & "
+                f"{100*c['final']:.1f}\\% & {100*c['SF']:.1f}\\% \\\\"
+            )
+        else:
+            rows.append(
+                f"      {t:<14} & {100*f['champion']:.1f}\\% & "
+                f"{100*c['champion']:.1f}\\% & {100*c['final']:.1f}\\% & "
+                f"{100*c['SF']:.1f}\\% \\\\"
+            )
+    if has_b:
+        col_spec = "lcccccc"
+        header = (
+            "      Team & Lock (\\%) & Track~A (\\%) & Track~B (\\%) & "
+            "$\\Delta$ (pp) & Finalist (now) & Semi (now) \\\\"
+        )
+        note = (
+            f"Track A = conditioned on the {n_results} results to date, "
+            f"June~10 ratings ($N$ = 50{{,}}000, seed 2026); "
+            f"Track B = live Elo + bookmaker odds + lineup adjustment. "
+            f"Lock = $N$ = 200{{,}}000 pre-kickoff baseline "
+            f"(\\texttt{{data/frozen\\_stage\\_probs.json}}) and never changes."
+        )
+    else:
+        col_spec = "lcccc"
+        header = (
+            "      Team & Champion (lock) & Champion (now) & "
+            "Finalist (now) & Semi-finalist (now) \\\\"
+        )
+        note = (
+            f"``now'' columns conditioned on the {n_results} results "
+            f"revealed to date ($N$ = 50{{,}}000, seed 2026); "
+            f"the lock column is the $N$ = 200{{,}}000 pre-kickoff baseline "
+            f"(\\texttt{{data/frozen\\_stage\\_probs.json}}) and never changes."
+        )
     return (
         "\\begin{table}[!t]\n  \\centering\n"
         "  \\caption{Simulated tournament probabilities, top eight teams "
         "(live edition)}\\label{tab:champ}\n"
         "  \\begin{footnotesize}\n  \\begin{threeparttable}\n"
-        "    {\\begin{tabular*}{\\textwidth}{@{\\extracolsep{\\fill}} lcccc}\n"
+        f"    {{\\begin{{tabular*}}{{\\textwidth}}"
+        f"{{@{{\\extracolsep{{\\fill}}}} {col_spec}}}\n"
         "      \\toprule\n"
-        "      Team & Champion (lock) & Champion (now) & Finalist (now) & Semi-finalist (now) \\\\\n"
+        f"{header}\n"
         "      \\midrule\n"
         + "\n".join(rows) + "\n"
         "      \\bottomrule\n    \\end{tabular*}}\n"
         "    \\begin{tablenotes}\\notesize\n"
-        f"      \\item \\textit{{Notes}}: ``now'' columns conditioned on the "
-        f"{n_results} results revealed to date ($N$ = 50{{,}}000, seed 2026); "
-        "the lock column is the $N$ = 200{,}000 pre-kickoff baseline "
-        "(\\texttt{data/frozen\\_stage\\_probs.json}) and never changes.\n"
+        f"      \\item \\textit{{Notes}}: {note}\n"
         "    \\end{tablenotes}\n  \\end{threeparttable}\n  \\end{footnotesize}\n"
-        "\\end{table}")
+        "\\end{table}"
+    )
 
 
 def trajfig(entries, live_fig=True):
