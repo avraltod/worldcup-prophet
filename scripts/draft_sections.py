@@ -94,7 +94,7 @@ def draft_intro_data_note(ctx, use_api):
 
 
 # ========================================================================
-# Simulation note (one sentence)
+# Simulation note
 # ========================================================================
 
 def templated_simulation_note(ctx):
@@ -117,7 +117,7 @@ def templated_simulation_note(ctx):
     para2 = (
         f"The full-information track (Track~B) supplements result-conditioning "
         f"with: live ClubElo ratings fetched {elo_ts} "
-        f"(RMS $\\Delta$ = {elo_rms}~pts vs.\\ the June~10 baseline); "
+        f"(RMS $\\Delta$ = {elo_rms:.1f}~pts vs.\\ the June~10 baseline); "
         f"bookmaker H2H odds de-vigged for {n_rates} unplayed fixture(s) "
         f"(max $|{{\\Delta}}p_H|$ = {max_odds:.2f}); "
         f"key-player Elo deductions where announced lineups are available "

@@ -127,7 +127,7 @@ def test_templated_simulation_note_v2_with_info_snapshot():
     assert "0.04" in text                # max_odds_shift_ph
     assert "2" in text                   # n_lineup_adj
     assert "8" in text                   # n_teams_with_drift
-    assert "100" in text                 # 104 - 4 remaining (Para 1 still present)
+    assert "100 matches" in text          # 104 - 4 remaining, Para 1 still present
 
 
 def test_templated_simulation_note_v1_fallback_no_key():
@@ -135,7 +135,7 @@ def test_templated_simulation_note_v1_fallback_no_key():
     # no info_snapshot key → v1 one-sentence output only
     text = ds.templated_simulation_note(ctx)
     assert "ClubElo" not in text
-    assert "100" in text                 # 104 - 4 remaining
+    assert "100 matches" in text
 
 
 def test_templated_simulation_note_v1_fallback_empty_dict():
@@ -143,4 +143,4 @@ def test_templated_simulation_note_v1_fallback_empty_dict():
     ctx["info_snapshot"] = {}
     text = ds.templated_simulation_note(ctx)
     assert "ClubElo" not in text
-    assert "100" in text
+    assert "100 matches" in text
