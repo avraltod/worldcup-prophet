@@ -91,9 +91,24 @@ def _entries_for_stats(index_path):
     return out
 
 
-def _latexmk():
-    subprocess.run(["latexmk", "-xelatex", "-bibtex", "-interaction=nonstopmode",
-                    "WC2026_paper.tex"], cwd=PAPER, check=True)
+def _latexmk(out_path=None):
+    """Compile live edition PDF.
+
+    Outputs to WC2026_paper_live.pdf (via -jobname) so that
+    paper/WC2026_paper.pdf — the locked pre-kickoff submission — is NEVER
+    overwritten.  If out_path is given, copies the built PDF there.
+    Returns the path of the built PDF.
+    """
+    import shutil as _sh
+    job = "WC2026_paper_live"
+    subprocess.run(
+        ["latexmk", "-xelatex", "-bibtex", "-interaction=nonstopmode",
+         f"-jobname={job}", "WC2026_paper.tex"],
+        cwd=PAPER, check=True)
+    built = PAPER / f"{job}.pdf"
+    if out_path:
+        _sh.copy(built, out_path)
+    return built
 
 
 def results_through(trajectory, match):

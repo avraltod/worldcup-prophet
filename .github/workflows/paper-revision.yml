@@ -50,7 +50,7 @@ jobs:
           REBUILD_MATCH: ${{ github.event.inputs.match }}
         run: |
           python3 - <<'PY'
-          import sys, os, json, shutil
+          import sys, os, json
           sys.path.insert(0, "scripts")
           import update_after_match as uam
           import match_book as mb
@@ -60,9 +60,9 @@ jobs:
           for m in pending:
               print("revising match", m)
               uam.revise(m, use_api=bool(os.environ.get("ANTHROPIC_API_KEY")))
-              uam._latexmk()
-              shutil.copy("paper/WC2026_paper.pdf",
-                          f"archive/paper_versions/WC2026_paper_M{m:03d}.pdf")
+              # _latexmk(out_path) compiles to WC2026_paper_live.pdf and copies
+              # directly to archive — paper/WC2026_paper.pdf is never touched.
+              uam._latexmk(out_path=f"archive/paper_versions/WC2026_paper_M{m:03d}.pdf")
           # After catch-up, restore living layer to the latest documented state
           # so paper/live/ reflects all known results, not just the last pending one.
           if pending:
@@ -70,15 +70,13 @@ jobs:
               if latest > max(pending):
                   print(f"restoring living layer to M{latest:03d} after catch-up")
                   uam.rerender(latest)
-                  uam._latexmk()
+                  uam._latexmk()  # rebuild live PDF; no archive copy needed here
           if not pending:  # manual dispatch with nothing new: re-render
               want = os.environ.get("REBUILD_MATCH") or ""
               target = int(want) if want.strip() else None
               uam.rerender(target)
-              uam._latexmk()
               m = target or max(mb.documented_matches(uam.INDEX))
-              shutil.copy("paper/WC2026_paper.pdf",
-                          f"archive/paper_versions/WC2026_paper_M{m:03d}.pdf")
+              uam._latexmk(out_path=f"archive/paper_versions/WC2026_paper_M{m:03d}.pdf")
               if target is not None:  # restore the latest state before the commit step
                   uam.rerender()
           PY
