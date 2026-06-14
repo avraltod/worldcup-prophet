@@ -164,6 +164,38 @@ def fetch_odds(api_key, unplayed_rows, opener=urllib.request.urlopen):
     return live_rates, details
 
 
+def compute_lineup_adj(team, side, lineup, key_players):
+    """Compute Elo deduction for team based on absent key players.
+
+    side: "home" or "away" — which side of the lineup dict to check.
+    key_players: {team: {player_name: positive_magnitude}} from key_player_elo_adj.json.
+    Returns negative int (deduction) or 0.
+    """
+    if team not in key_players:
+        return 0
+    if side not in lineup:
+        return 0
+    starters = set(lineup.get(side, []))
+    total_deduction = 0
+    for player, magnitude in key_players[team].items():
+        if player not in starters:
+            total_deduction -= magnitude
+    return total_deduction
+
+
+def compute_injury_deltas(live_inj, june10_adj):
+    """Return list of {team, june10, current, delta} where current != june10."""
+    deltas = []
+    all_teams = set(live_inj) | set(june10_adj)
+    for team in all_teams:
+        curr = live_inj.get(team, 0)
+        base = june10_adj.get(team, 0)
+        if curr != base:
+            deltas.append({"team": team, "june10": base, "current": curr,
+                           "delta": curr - base})
+    return deltas
+
+
 def main(argv=None):
     if argv is None:
         argv = sys.argv[1:]
@@ -208,6 +240,22 @@ def main(argv=None):
     else:
         print("fetch_live_inputs: ODDS_API_KEY not set, skipping odds fetch")
 
+    # --- Drift summary from learning_state_2026.json ---
+    drift_details = []
+    n_drift = 0
+    state_path = DATA / "learning_state_2026.json"
+    if state_path.exists():
+        st = json.loads(state_path.read_text())
+        drift = st.get("drift", {})
+        drift_details = [{"team": t, "drift": round(d, 2)}
+                         for t, d in sorted(drift.items(), key=lambda kv: -abs(kv[1]))]
+        n_drift = len(drift_details)
+
+    # --- Injury deltas ---
+    out_injury_adj = dict(JUNE10_ADJ)
+    inj_deltas = compute_injury_deltas(out_injury_adj, JUNE10_ADJ)
+    n_new_inj = len(inj_deltas)
+
     out = {
         "fetched_at": now,
         "mode": mode,
@@ -217,23 +265,23 @@ def main(argv=None):
         },
         "live_elo": live_elo,
         "live_rates": {str(r): v for r, v in live_rates_dict.items()},
-        "live_injury_adj": dict(JUNE10_ADJ),
+        "live_injury_adj": out_injury_adj,
         "lineup_adj": {},
         "deltas": {
             "elo": elo_deltas,
             "rates": rate_details,
-            "injury": [],
+            "injury": inj_deltas,
             "lineup": [],
-            "drift": [],
+            "drift": drift_details,
             "summary": {
                 "elo_rms_delta": elo_rms,
                 "n_rate_changes": len(rate_details),
                 "max_odds_shift_ph": round(max((abs(d["delta_ph"]) for d in rate_details), default=0.0), 3),
                 "biggest_elo_mover": elo_deltas[0] if elo_deltas else {},
                 "biggest_odds_mover": max(rate_details, key=lambda d: abs(d["delta_ph"]), default={}),
-                "n_new_injuries": 0,
+                "n_new_injuries": n_new_inj,
                 "n_lineup_adj": 0,
-                "n_teams_with_drift": 0,
+                "n_teams_with_drift": n_drift,
             },
         },
     }

@@ -139,3 +139,43 @@ def test_fetch_odds_skips_already_played_rows():
         api_key="TESTKEY", unplayed_rows=unplayed,
         opener=_odds_opener(ODDS_API_RESPONSE))
     assert 4 not in rates
+
+
+JUNE10_ADJ = fli.JUNE10_ADJ  # re-export for test clarity
+
+
+def test_compute_lineup_adj_deducts_absent_key_player(tmp_path):
+    key_players = {"France": {"Kylian Mbappe": 20, "Antoine Griezmann": 12}}
+    # Mbappe is absent from starting XI, Griezmann IS present
+    lineup = {"home": ["Antoine Griezmann", "Other Player"],
+              "away": ["Player A", "Player B"]}
+    adj = fli.compute_lineup_adj("France", "away_team", lineup, key_players)
+    assert adj == 0   # France is home; checking "away_team" side — France not there
+    adj_home = fli.compute_lineup_adj("France", "home", lineup, key_players)
+    assert adj_home == -20   # Mbappe absent (-20), Griezmann present (0)
+
+
+def test_compute_lineup_adj_returns_zero_when_all_present(tmp_path):
+    key_players = {"France": {"Kylian Mbappe": 20}}
+    lineup = {"home": ["Kylian Mbappe", "Other Player"], "away": []}
+    adj = fli.compute_lineup_adj("France", "home", lineup, key_players)
+    assert adj == 0
+
+
+def test_compute_lineup_adj_returns_zero_when_team_not_in_key_players():
+    adj = fli.compute_lineup_adj("Uzbekistan", "home", {"home": [], "away": []}, {})
+    assert adj == 0
+
+
+def test_compute_injury_deltas_detects_change():
+    live_inj = {"Netherlands": -35, "Brazil": -20}   # Netherlands worsened
+    june10 = {"Netherlands": -23, "Brazil": -20}
+    deltas = fli.compute_injury_deltas(live_inj, june10)
+    changed = [d for d in deltas if d["team"] == "Netherlands"]
+    assert len(changed) == 1
+    assert changed[0]["delta"] == -35 - (-23)
+
+
+def test_compute_injury_deltas_empty_when_no_change():
+    deltas = fli.compute_injury_deltas(dict(JUNE10_ADJ), JUNE10_ADJ)
+    assert deltas == []
