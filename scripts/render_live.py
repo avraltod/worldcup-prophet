@@ -426,14 +426,21 @@ def champdist_live_unit(ctx):
 
 
 def groupqual_live_unit(ctx):
-    """Figure block: live group qualification probability."""
+    """Two figure blocks: Track A and Track B qualification probabilities."""
     return (
         "\\begin{figure}[!t]\n"
-        "  \\caption{Qualification probability by team, conditioned on "
-        "\\liveDocumented{} results (live edition M\\liveEditionNum{})}"
-        "\\label{fig:live_groupqual}\n"
+        "  \\caption{Qualification probability by team --- Track~A "
+        "(conditioned on \\liveDocumented{} results, June~10 ratings frozen; "
+        "live edition M\\liveEditionNum{})}\\label{fig:live_groupqual}\n"
         "  {\\centering\\includegraphics[width=0.94\\textwidth]"
         "{figs/fig_live_groupqual.pdf}\\par}\n"
+        "\\end{figure}\n\n"
+        "\\begin{figure}[!t]\n"
+        "  \\caption{Qualification probability by team --- Track~B "
+        "(result-conditioning + live Elo + bookmaker odds; "
+        "live edition M\\liveEditionNum{})}\\label{fig:live_groupqual_b}\n"
+        "  {\\centering\\includegraphics[width=0.94\\textwidth]"
+        "{figs/fig_live_groupqual_b.pdf}\\par}\n"
         "\\end{figure}"
     )
 

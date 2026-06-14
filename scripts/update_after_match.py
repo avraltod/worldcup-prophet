@@ -274,16 +274,30 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
         groups = {g: sorted({cond.RATES[r][2] for r in cond.GROUPS[g]}
                             | {cond.RATES[r][3] for r in cond.GROUPS[g]})
                   for g in sorted(cond.GROUPS)}
+        # Track A groupqual figure
         mlf.group_qual_fig(frozen, now_probs, groups,
-                           PAPER / "figs" / "fig_group_qual_live.pdf")
+                           PAPER / "figs" / "fig_live_groupqual.pdf",
+                           label="Track A", color="#3b6ea5")
+        # Track B groupqual figure (uses same now_probs until Track B stage probs available)
         mlf.group_qual_fig(frozen, now_probs, groups,
-                           PAPER / "figs" / "fig_live_groupqual.pdf")
+                           PAPER / "figs" / "fig_live_groupqual_b.pdf",
+                           label="Track B", color="#3d8c40")
+        # Champdist with Frozen + Track A (+ Track B if available)
+        track_b_champ = champion_b if champion_b else None
         mlf.champdist_fig(frozen, now_probs,
-                          PAPER / "figs" / "fig_live_champdist.pdf")
+                          PAPER / "figs" / "fig_live_champdist.pdf",
+                          track_b=track_b_champ)
         if state["history"]:
             mlf.two_track_fig(state["history"],
                               PAPER / "figs" / "fig_two_track_live.pdf")
             two_fig = True
+        # Market figure (four bars: Frozen/Track A/Track B/Market)
+        market = next(
+            (r.get("market_champion") for r in reversed(trajectory)
+             if r.get("phase") == "post" and r.get("market_champion")), None)
+        if market:
+            mlf.market_fig(frozen, now_probs, track_b_champ, market,
+                           PAPER / "figs" / "fig_live_market.pdf")
     except Exception as ex:                      # noqa: BLE001
         print(f"live figures skipped ({ex})")
 
