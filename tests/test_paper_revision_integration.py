@@ -11,7 +11,7 @@ import fetch_stats_espn as fse
 
 EXPECTED_UNITS = ["stats", "champ_table", "trajfig", "ledger", "narrative",
                   "divergence", "revision_report", "tracker", "two_track",
-                  "survival"] + [f"group_{g}" for g in "ABCDEFGHIJKL"]
+                  "survival_colcomp"] + [f"group_{g}" for g in "ABCDEFGHIJKL"]
 
 
 def _setup(tmp_path, monkeypatch):
@@ -82,7 +82,7 @@ def test_revision_with_box_score_runs_the_two_track(tmp_path, monkeypatch):
     assert state["drift"]                          # the update actually moved ratings
 
     two = (paper / "live" / "two_track.tex").read_text()
-    assert "Frozen" in two and "Learning" in two and "Drift" in two
+    assert "Frozen" in two and "Track~B" in two and "Drift" in two
     rr = (paper / "live" / "revision_report.tex").read_text()
     assert "Shots" in rr                           # box-score table rendered
     assert "lambda" in rr                          # performance vs expectation line

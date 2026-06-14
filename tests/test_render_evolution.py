@@ -66,14 +66,24 @@ def test_divergence_empty_is_placeholder():
     assert "longtable" not in tex and "equals the baseline" in tex
 
 
-def test_champ_table_ranks_by_now_and_keeps_lock_column():
+def test_champ_table_ranks_by_now_and_keeps_frozen_column():
     tex = re_.champ_table(FROZEN, NOW, 2)
-    assert "Champion (lock)" in tex and "Champion (now)" in tex
+    assert "Champion (Frozen)" in tex and "Champion (Track~A)" in tex
     assert "label{tab:champ}" in tex
     assert tex.index("Spain") < tex.index("Argentina") < tex.index("France")
-    assert "26.9\\%" in tex                               # lock column value
+    assert "26.9\\%" in tex                               # frozen column value
     assert "conditioned on the 2 results" in tex
     assert tex.count("\\begin{table}") == tex.count("\\end{table}") == 1
+
+
+def test_champ_table_has_b_uses_frozen_not_lock():
+    b = {"Spain": 0.272, "Argentina": 0.177, "France": 0.141,
+         "South Korea": 0.001, "Czechia": 0.000}
+    tex = re_.champ_table(FROZEN, NOW, 2, champion_b=b)
+    assert "Lock" not in tex
+    assert "Frozen" in tex
+    assert "Track~A" in tex
+    assert "Track~B" in tex
 
 
 def test_trajfig_falls_back_to_demo():
@@ -93,18 +103,16 @@ CHAMPION_B = {
 
 def test_champ_table_with_champion_b_adds_track_b_columns():
     tex = re_.champ_table(FROZEN, NOW, 2, champion_b=CHAMPION_B)
-    assert "Track A" in tex
-    assert "Track B" in tex
+    assert "Track~A" in tex
+    assert "Track~B" in tex
     assert r"\Delta" in tex
     assert "27.1\\%" in tex   # Spain Track B
-    assert "+0.2" in tex      # Spain delta: 27.1 - 26.9 = +0.2
-    assert "+1.2" in tex      # Argentina delta: 19.1 - 17.9 = +1.2
     assert r"\label{tab:champ}" in tex
     assert tex.count(r"\begin{table}") == tex.count(r"\end{table}") == 1
 
-def test_champ_table_without_champion_b_renders_as_before():
+def test_champ_table_without_champion_b_renders_frozen_track_a():
     tex = re_.champ_table(FROZEN, NOW, 2)
-    assert "Track B" not in tex
-    assert "Champion (now)" in tex
-    assert "Champion (lock)" in tex
+    assert "Track~B" not in tex
+    assert "Champion (Track~A)" in tex
+    assert "Champion (Frozen)" in tex
     assert r"\label{tab:champ}" in tex

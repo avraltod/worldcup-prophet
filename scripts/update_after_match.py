@@ -187,7 +187,7 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     if latest_champ is None:
         raise SystemExit("no post record in trajectory — cannot compute stats")
     stats = ls.compute(entries, latest_champ)
-    stats["re_ev_delta"] = sum(
+    stats["real_vs_ev_delta"] = sum(
         re_ev_delta_for(next(x for x in expectations if x["match"] == en["match"]),
                         en["result"], en["post"]["points"]) for en in entries)
     stats["entries"] = entries
@@ -298,6 +298,8 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
         (r for r in reversed(trajectory)
          if r["phase"] == "post" and r["match"] == match), None)
     champion_b = (_latest_post.get("champion_b") or {}) if _latest_post else {}
+    if champion_b:
+        stats["champ_b_top"] = sorted(champion_b.items(), key=lambda kv: -kv[1])[:3]
     latest_snap = (state["history"][-1].get("info_snapshot")
                    if state["history"] else None) or None
 
@@ -318,35 +320,43 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
                 for t in now_probs if t in prev_now],
                key=lambda x: -abs(x[2] - x[1])),
            }
+    # 1. stats first — every other unit can reference these macros
     rl.write_unit(LIVE_DIR, "stats", ls.render_macros(stats))
+    # 2. champ table
     rl.write_unit(LIVE_DIR, "champ_table",
                   rl.champ_table_unit(frozen, now_probs, len(entries),
                                       champion_b=champion_b))
+    # 3. trajectory-based units
     rl.write_unit(LIVE_DIR, "trajfig", rl.trajfig_unit(entries, live_fig))
     rl.write_unit(LIVE_DIR, "ledger", rl.ledger(entries))
     rl.write_unit(LIVE_DIR, "narrative", rl.narrative_unit(entries))
     rl.write_unit(LIVE_DIR, "divergence", rl.divergence_unit(frozen, now_probs, entries, group_st))
+    # 4. derived units
     rl.write_unit(LIVE_DIR, "revision_report", rl.revision_report(ctx))
     rl.write_unit(LIVE_DIR, "tracker", rl.tracker(group_st, frozen, now_probs))
     rl.write_unit(LIVE_DIR, "two_track",
                   rl.two_track_unit(two_track, state, fig=two_fig,
                                     info_snapshot=latest_snap))
-    rl.write_unit(LIVE_DIR, "survival", rl.survival_unit(frozen, now_probs))
+    rl.write_unit(LIVE_DIR, "survival_colcomp", rl.survival_colcomp_unit(ctx))
+    # 5. per-group sections
     for g in group_st:
         rl.write_unit(LIVE_DIR, f"group_{g['group']}",
                       rl.group_box(g, res, expectations, frozen, now_probs))
-    rl.write_unit(LIVE_DIR, "abstract_live", rl.abstract_live_unit(ctx, use_api))
-    rl.write_unit(LIVE_DIR, "intro_data_note", rl.intro_data_note_unit(ctx, use_api))
+    # 6. data and methodology sections
     rl.write_unit(LIVE_DIR, "data_revealed", rl.data_revealed_unit(ctx, use_api))
     rl.write_unit(LIVE_DIR, "simulation_note", rl.simulation_note_unit(ctx, use_api))
     rl.write_unit(LIVE_DIR, "sec36_live", rl.sec36_live_unit(ctx, use_api))
     rl.write_unit(LIVE_DIR, "champdist_live", rl.champdist_live_unit(ctx))
+    # 7. analysis sections
     rl.write_unit(LIVE_DIR, "robustness_live", rl.robustness_live_unit(ctx, use_api))
     rl.write_unit(LIVE_DIR, "failure_analysis", rl.failure_analysis_unit(ctx, use_api))
     rl.write_unit(LIVE_DIR, "discussion_live", rl.discussion_live_unit(ctx, use_api))
+    # 8. group qual and bracket
     rl.write_unit(LIVE_DIR, "groupqual_live", rl.groupqual_live_unit(ctx))
     rl.write_unit(LIVE_DIR, "bracket_live", rl.bracket_live_unit(ctx))
-    rl.write_unit(LIVE_DIR, "survival_colcomp", rl.survival_colcomp_unit(ctx))
+    # 9. intro second-to-last, abstract last (both reference numbers from all other units)
+    rl.write_unit(LIVE_DIR, "intro_data_note", rl.intro_data_note_unit(ctx, use_api))
+    rl.write_unit(LIVE_DIR, "abstract_live", rl.abstract_live_unit(ctx, use_api))
     _assert_skeleton()
     return stats
 

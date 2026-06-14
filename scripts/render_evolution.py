@@ -83,7 +83,7 @@ def divergence_section(frozen, now, entries, group_state):
         "\\toprule\n"
         " & \\multicolumn{3}{c}{Champion (\\%)} & \\multicolumn{3}{c}{Advance (\\%)} \\\\\n"
         "\\cmidrule(lr){2-4}\\cmidrule(lr){5-7}\n"
-        "Team & frozen & now & $\\Delta$ & frozen & now & $\\Delta$ \\\\\n"
+        "Team & Frozen & Track~A & $\\Delta$ & Frozen & Track~A & $\\Delta$ \\\\\n"
         "\\midrule\n\\endhead\n"
         + "\n".join(rows)
         + "\n\\bottomrule\n\\end{longtable}")
@@ -140,26 +140,26 @@ def champ_table(frozen, now, n_results, champion_b=None):
     if has_b:
         col_spec = "lcccccc"
         header = (
-            "      Team & Lock (\\%) & Track~A (\\%) & Track~B (\\%) & "
+            "      Team & Frozen (\\%) & Track~A (\\%) & Track~B (\\%) & "
             "$\\Delta$ (pp) & Finalist (now) & Semi (now) \\\\"
         )
         note = (
-            f"Track A = conditioned on the {n_results} results to date, "
-            f"June~10 ratings ($N$ = 50{{,}}000, seed 2026); "
-            f"Track B = live Elo + bookmaker odds + lineup adjustment. "
-            f"Lock = $N$ = 200{{,}}000 pre-kickoff baseline "
-            f"(\\texttt{{data/frozen\\_stage\\_probs.json}}) and never changes."
+            f"Frozen = pre-kickoff lock ($N$ = 200{{,}}000, "
+            f"\\texttt{{data/frozen\\_stage\\_probs.json}}), never changes; "
+            f"Track~A = result-conditioned, June~10 ratings "
+            f"($N$ = 50{{,}}000, seed 2026); "
+            f"Track~B = result-conditioned + live Elo + bookmaker odds + lineup adj."
         )
     else:
         col_spec = "lcccc"
         header = (
-            "      Team & Champion (lock) & Champion (now) & "
-            "Finalist (now) & Semi-finalist (now) \\\\"
+            "      Team & Champion (Frozen) & Champion (Track~A) & "
+            "Finalist (Track~A) & Semi-finalist (Track~A) \\\\"
         )
         note = (
-            f"``now'' columns conditioned on the {n_results} results "
+            f"Track~A columns conditioned on the {n_results} results "
             f"revealed to date ($N$ = 50{{,}}000, seed 2026); "
-            f"the lock column is the $N$ = 200{{,}}000 pre-kickoff baseline "
+            f"Frozen = $N$ = 200{{,}}000 pre-kickoff baseline "
             f"(\\texttt{{data/frozen\\_stage\\_probs.json}}) and never changes."
         )
     return (

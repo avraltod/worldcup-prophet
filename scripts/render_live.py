@@ -143,7 +143,7 @@ def group_box(g_state, results, expectations, frozen, now):
              "\\begin{tabular}{lrrrrrrr} \\toprule "
              "Team & P & W & D & L & GF & GA & Pts \\\\ \\midrule "
              + stand + " \\bottomrule \\end{tabular}\\quad",
-             "\\begin{tabular}{lrr} \\toprule Team & Qual (lock) & Qual (now) \\\\ "
+             "\\begin{tabular}{lrr} \\toprule Team & Qual (Frozen) & Qual (Track~A) \\\\ "
              "\\midrule " + qual_rows + " \\bottomrule \\end{tabular}"]
     if remaining_rows:
         parts.append("\\\\[2pt] Remaining (lock H/D/A \\%): "
@@ -242,7 +242,7 @@ def two_track_unit(two_track, learning, fig, info_snapshot=None):
         + fig_block
         + "\\begin{footnotesize}\n"
           "\\begin{tabular}{lrrr}\n\\toprule\n"
-          "Team & Frozen (\\%) & Learning (\\%) & $\\Delta$ (pp) \\\\\n\\midrule\n"
+          "Team & Frozen (\\%) & Track~B (\\%) & $\\Delta$ (pp) \\\\\n\\midrule\n"
         + rows
         + "\n\\bottomrule\n\\end{tabular}\\qquad\n"
           "\\begin{tabular}{lr}\n\\toprule\nTeam & Drift (Elo) \\\\\n\\midrule\n"
@@ -305,11 +305,11 @@ def revision_report(ctx):
         f"{'/'.join(_pct(p) for p in i['learn_HDA'])} \\\\"
         for i in ctx["implications"])
     imp_block = ("" if not ctx["implications"] else
-        "\\paragraph{Implications for upcoming fixtures.} Lock odds are the "
-        "frozen track's (they move only through qualification scenarios); the "
-        "revised odds are the learning track's.\n"
+        "\\paragraph{Implications for upcoming fixtures.} Frozen odds are the "
+        "pre-kickoff baseline (they move only through qualification scenarios); "
+        "Track~B odds incorporate live Elo and bookmaker signals.\n"
         "\\begin{footnotesize}\\begin{tabular}{lcc}\\toprule\n"
-        "Fixture & Lock H/D/A (\\%) & Learning H/D/A (\\%) \\\\\n\\midrule\n"
+        "Fixture & Frozen H/D/A (\\%) & Track~B H/D/A (\\%) \\\\\n\\midrule\n"
         + imp_lines + "\n\\bottomrule\\end{tabular}\\end{footnotesize}\n")
     return (
         f"\\subsection{{Revision report: edition M{m:03d}}}\\label{{sec:revreport}}\n"

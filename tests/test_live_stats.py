@@ -28,7 +28,35 @@ def test_render_macros_are_consistent():
     assert r"\def\liveCumPoints{4}" in tex
     assert r"\def\liveMeanBrier{0.28}" in tex
     assert r"\def\liveDocumented{2}" in tex
-    assert r"\def\liveReEvDelta{+0}" in tex
+    assert r"\def\liveRealVsEVDelta{+0}" in tex
+    assert r"\def\liveReEvDelta{" not in tex       # old name must not appear
+
+
+def test_total_bits_and_bits_of_max_in_compute():
+    entries = [
+        {"match": 1, "result": [2, 0], "failure_mode": None,
+         "pre": {"pick": [2, 1]},
+         "post": {"points": 1, "brier": 0.17, "info_bits": 0.3}},
+        {"match": 2, "result": [1, 1], "failure_mode": None,
+         "pre": {"pick": [1, 1]},
+         "post": {"points": 3, "brier": 0.40, "info_bits": 0.2}},
+    ]
+    s = ls.compute(entries, {"Spain": 0.27})
+    assert abs(s["total_bits"] - 0.5) < 1e-9
+    assert abs(s["bits_of_max"] - (0.5 / 6.6 * 100)) < 0.01
+
+
+def test_render_macros_new_fields():
+    entries = [{"match": 1, "result": [2, 0], "failure_mode": None,
+                "pre": {"pick": [2, 1]},
+                "post": {"points": 1, "brier": 0.17, "info_bits": 0.08}}]
+    s = ls.compute(entries, {"Spain": 0.27, "Argentina": 0.18})
+    s["champ_b_top"] = [("Spain", 0.28), ("Argentina", 0.18), ("France", 0.14)]
+    tex = ls.render_macros(s)
+    assert r"\def\liveTotalBits{0.08}" in tex
+    assert r"\def\liveBitsOfMax{1.2}" in tex
+    assert r"\def\liveTrackBRevision{Spain 28.0\%" in tex
+    assert "Argentina 18.0\\%" in tex
 
 
 # ---------------- live-edition macros (version line, abstract, update log) ---
