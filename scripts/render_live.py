@@ -98,59 +98,87 @@ def tracker(group_state, frozen, now):
 
 
 def group_box(g_state, results, expectations, frozen, now):
-    """Appendix-A living box for one group: round-robin with pred->actual for
-    played matches, predictions for unplayed, standings, and qualification comparison."""
+    """Appendix-A living box for one group: unified round-robin matrix with
+    actual/prediction results + right-side standing + qual columns."""
     grp = g_state["group"]
-    exps = sorted((e for e in expectations if e.get("group") == grp),
-                  key=lambda e: e["match"])
+    teams = [r["team"] for r in g_state["rows"]]
+    exps = {(e["home"], e["away"]): e
+            for e in expectations if e.get("group") == grp}
+    res_by_match = results["group"]
+
     if not g_state["played"]:
-        qual = "; ".join(f"{r['team']} {_pct(frozen[r['team']]['advance_KO'])}"
-                         for r in g_state["rows"] if r["team"] in frozen)
-        return (f"\\paragraph{{Group {grp} — live.}} No results yet; the locked "
-                f"qualification odds stand ({qual}).")
-    played_rows, remaining_rows = [], []
-    for e in exps:
-        res = results["group"].get(str(e["match"]))
-        pick = e["pick"]
-        ph, pd, pa = e["probs_HDA"]
-        if res:
-            def _sgn(d): return 1 if d > 0 else (-1 if d < 0 else 0)
-            correct = _sgn(pick[0] - pick[1]) == _sgn(res[0] - res[1])
-            icon = r"\checkmark" if correct else r"\(\times\)"
-            played_rows.append(
-                f"M{e['match']} {e['home']} v {e['away']} & "
-                f"pred {pick[0]}--{pick[1]} & "
-                f"actual {res[0]}--{res[1]} & {icon} \\\\"
-            )
-        else:
-            remaining_rows.append(
-                f"M{e['match']} {e['home']} v {e['away']} & "
-                f"{_pct(ph)}/{_pct(pd)}/{_pct(pa)} \\\\"
-            )
-    stand = " ".join(
-        f"{r['team']} & {r['P']} & {r['W']} & {r['D']} & {r['L']} & "
-        f"{r['GF']} & {r['GA']} & {r['Pts']} \\\\" for r in g_state["rows"])
-    qual_rows = " ".join(
-        f"{r['team']} & {_pct(frozen[r['team']]['advance_KO'])} & "
-        f"{_pct(now[r['team']]['advance_KO'])} \\\\"
-        for r in g_state["rows"] if r["team"] in frozen and r["team"] in now)
-    parts = [f"\\paragraph{{Group {grp} — live ({g_state['played']} of "
-             f"{g_state['total']} played).}}",
-             "\\begin{footnotesize}",
-             "\\begin{tabular}{lllc} \\toprule "
-             "Match & Predicted & Actual & \\\\ \\midrule "
-             + " ".join(played_rows) + " \\bottomrule \\end{tabular}\\quad",
-             "\\begin{tabular}{lrrrrrrr} \\toprule "
-             "Team & P & W & D & L & GF & GA & Pts \\\\ \\midrule "
-             + stand + " \\bottomrule \\end{tabular}\\quad",
-             "\\begin{tabular}{lrr} \\toprule Team & Qual (Frozen) & Qual (Track~A) \\\\ "
-             "\\midrule " + qual_rows + " \\bottomrule \\end{tabular}"]
-    if remaining_rows:
-        parts.append("\\\\[2pt] Remaining (lock H/D/A \\%): "
-                     "\\begin{tabular}{ll} "
-                     + " ".join(remaining_rows) + " \\end{tabular}")
-    parts.append("\\end{footnotesize}")
-    return "\n".join(parts)
+        qual = "; ".join(f"{t} {_pct(frozen[t]['advance_KO'])}"
+                         for t in teams if t in frozen)
+        return (f"\\paragraph{{Group {grp} — live.}} No results yet; "
+                f"Frozen qualification odds: {qual}.")
+
+    def _sgn(d): return 1 if d > 0 else (-1 if d < 0 else 0)
+
+    # Build round-robin matrix: rows = teams, cols = opponent teams
+    # Extra right-side columns: Actual W/D/L/Pts/Qual% | Frozen Qual% | Track A Qual%
+    n = len(teams)
+    col_spec = "l" + "c" * n + "rrrr"
+    header_teams = " & ".join(f"\\tiny {t}" for t in teams)
+    header = f" & {header_teams} & \\makecell{{Actual\\\\W/D/L/Pts/Q\\%}} & Q\\%(F) & Q\\%(A) \\\\"
+
+    matrix_rows = []
+    for home in teams:
+        cells = []
+        for away in teams:
+            if home == away:
+                cells.append("---")
+                continue
+            e = exps.get((home, away)) or exps.get((away, home))
+            if e is None:
+                cells.append("?")
+                continue
+            match_key = str(e["match"])
+            res = res_by_match.get(match_key)
+            if res:
+                # played: actual score + correct/wrong indicator
+                if e["home"] == home:
+                    score = f"{res[0]}--{res[1]}"
+                    pick = e["pick"]
+                    correct = _sgn(pick[0] - pick[1]) == _sgn(res[0] - res[1])
+                else:
+                    score = f"{res[1]}--{res[0]}"
+                    pick = e["pick"]
+                    correct = _sgn(pick[0] - pick[1]) == _sgn(res[0] - res[1])
+                icon = r"$\checkmark$" if correct else r"$\times$"
+                cells.append(f"\\textbf{{{score}}}{icon}")
+            else:
+                # upcoming: Frozen H/D/A prediction
+                ph, pd, pa = e["probs_HDA"]
+                if e["home"] == home:
+                    cells.append(f"\\tiny {_pct(ph)}/{_pct(pd)}/{_pct(pa)}")
+                else:
+                    cells.append(f"\\tiny {_pct(pa)}/{_pct(pd)}/{_pct(ph)}")
+
+        # right-side standing columns
+        row_data = next((r for r in g_state["rows"] if r["team"] == home), {})
+        w, d, l = row_data.get("W", 0), row_data.get("D", 0), row_data.get("L", 0)
+        pts = row_data.get("Pts", 0)
+        qual_a = _pct(now[home]["advance_KO"]) if home in now else "--"
+        qual_f = _pct(frozen[home]["advance_KO"]) if home in frozen else "--"
+        actual_str = f"{w}/{d}/{l}/{pts}/{qual_a}\\%"
+        matrix_rows.append(
+            f"\\tiny {home} & " + " & ".join(cells)
+            + f" & \\tiny {actual_str} & \\tiny {qual_f}\\% & \\tiny {qual_a}\\% \\\\"
+        )
+
+    return (
+        f"\\paragraph{{Group {grp} — live ({g_state['played']} of "
+        f"{g_state['total']} played).}}\n"
+        "\\begin{footnotesize}\n"
+        f"\\begin{{tabular}}{{{col_spec}}}\n"
+        "\\toprule\n"
+        f"{header}\n"
+        "\\midrule\n"
+        + "\n".join(matrix_rows) + "\n"
+        "\\bottomrule\n"
+        "\\end{tabular}\n"
+        "\\end{footnotesize}"
+    )
 
 
 def survival_unit(frozen, now):
@@ -252,6 +280,45 @@ def _stats_release(match, match_stats, learning):
             + "\n\\end{table}")
 
 
+def _cumulative_stats_table(entries, match_stats, expectations):
+    """Table 7: one row per played match, grows with each edition.
+    Columns: Game | Shots H–A | On target H–A | Poss H–A | Frozen H/D/A."""
+    rows = []
+    exp_by_match = {e["match"]: e for e in expectations}
+    for e in sorted(entries, key=lambda x: x["match"]):
+        m = e["match"]
+        s = match_stats.get(m)
+        if s is None:
+            continue
+        sh = s["home"].get("total_shots", "--")
+        sa = s["away"].get("total_shots", "--")
+        oh = s["home"].get("sot", "--")
+        oa = s["away"].get("sot", "--")
+        ph = s["home"].get("possession")
+        pa = s["away"].get("possession")
+        poss = f"{ph:.0f}--{pa:.0f}" if ph is not None and pa is not None else "--"
+        exp = exp_by_match.get(m)
+        if exp:
+            hda = "/".join(_pct(p) for p in exp["probs_HDA"])
+        else:
+            hda = "--"
+        rows.append(
+            f"M{m} {e['fixture']} & {sh}--{sa} & {oh}--{oa} & {poss} & {hda} \\\\"
+        )
+    if not rows:
+        return r"\textit{Match statistics pending.}"
+    return (
+        "\\begin{table}[!h]\\centering\n"
+        "\\caption{Cumulative match statistics (live edition "
+        "M\\liveEditionNum{})}\\label{tab:live_match_stats}\n"
+        "\\begin{footnotesize}\\begin{tabular}{lcccc}\\toprule\n"
+        "Game & Shots (H--A) & On target (H--A) & Poss\\% (H--A) & Frozen H/D/A \\\\\n"
+        "\\midrule\n"
+        + "\n".join(rows) + "\n"
+        "\\bottomrule\\end{tabular}\\end{footnotesize}\n\\end{table}"
+    )
+
+
 def revision_report(ctx):
     """The central-bank release: data release, forecast revision vs the
     previous edition, implications, vintages. Driver contract: ctx
@@ -287,10 +354,11 @@ def revision_report(ctx):
         f"{latest['pre']['pick'][1]}, actual {latest['result'][0]}--"
         f"{latest['result'][1]}; {latest['post']['points']} of 3 points, Brier "
         f"{latest['post']['brier']:.3f}, {latest['post']['info_bits']:.3f} bits.\n\n"
-        + _stats_release(latest["match"], ctx["match_stats"], ctx["learning"]) + "\n\n"
+        + _cumulative_stats_table(
+            ctx["entries"], ctx["match_stats"],
+            ctx.get("expectations", [])) + "\n\n"
         f"\\paragraph{{Forecast revision (vs.\\ edition M{ctx['vintages_rows'][-2]['edition']:03d}).}} "
         f"Champion-probability movement: {delta_line}.\n\n"
-        + ctx["revision_narrative"] + "\n\n"
         + imp_block +
         "\\paragraph{Forecast vintages.} One column per issued edition; the "
         "locked M000 column never changes.\n\n"

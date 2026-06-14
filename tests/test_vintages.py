@@ -54,8 +54,10 @@ def test_latex_table_shows_m000_plus_tail():
         {"edition": i, "match": i, "fixture": "A v B", "result": [1, 0],
          "points": 1, "cum_points": i, "mean_brier": 0.2, "cum_bits": 0.01 * i,
          "champ_top5": [["Spain", 0.27], ["Argentina", 0.18], ["France", 0.14]]}
-        for i in range(1, 15)]
-    tex = vin.latex_table(rows, max_cols=9)
-    assert "M000" in tex and "M014" in tex
-    assert "M005" not in tex          # collapsed out
+        for i in range(1, 25)]
+    # pivoted table: rows are editions; max_rows limits how many rows shown
+    tex = vin.latex_table(rows, max_rows=9)
+    assert "M000" in tex and "M024" in tex    # first and last always present
+    assert "M005" not in tex                  # middle editions collapsed out
     assert "Spain" in tex and "longtable" in tex
+    assert "Cum." in tex                      # scoring columns present

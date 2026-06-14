@@ -84,6 +84,6 @@ def test_revision_with_box_score_runs_the_two_track(tmp_path, monkeypatch):
     two = (paper / "live" / "two_track.tex").read_text()
     assert "Frozen" in two and "Track~B" in two and "Drift" in two
     rr = (paper / "live" / "revision_report.tex").read_text()
-    assert "Shots" in rr                           # box-score table rendered
-    assert "lambda" in rr                          # performance vs expectation line
+    assert "Shots" in rr                           # cumulative match stats table rendered
+    assert r"\label{tab:live_match_stats}" in rr   # Table 7 label present
     assert "Implications" in rr                    # remaining-fixture odds present

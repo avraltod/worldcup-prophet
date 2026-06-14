@@ -288,10 +288,12 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
         print(f"live figures skipped ({ex})")
 
     # render every unit
+    _lookup = _stats_lookup(trajectory)
     match_stats = {}
-    s = _stats_lookup(trajectory)(latest["match"])
-    if s is not None:
-        match_stats[latest["match"]] = s
+    for _en in entries:
+        _s = _lookup(_en["match"])
+        if _s is not None:
+            match_stats[_en["match"]] = _s
 
     # Track B data from trajectory post record (written by live_update_v2)
     _latest_post = next(
@@ -307,7 +309,7 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
            "learning": state, "prev_now": prev_now, "now": now_probs,
            "vintages_rows": rows, "revision_narrative": narrative_text,
            "implications": _implications(latest, expectations, res, learn_ratings),
-           "frozen": frozen, "results": res,
+           "frozen": frozen, "results": res, "expectations": expectations,
            "n_results": stats["documented"],
            "cum_points": stats["cum_points"],
            "mean_brier": stats["mean_brier"],

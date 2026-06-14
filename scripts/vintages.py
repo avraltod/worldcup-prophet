@@ -45,36 +45,35 @@ def row_for_edition(match, entries, stats, champ_top5):
             "champ_top5": [[t, round(p, 4)] for t, p in champ_top5]}
 
 
-def latex_table(rows, max_cols=9):
-    """Vintages as a longtable: columns = M000 + the last (max_cols-1) editions;
-    team rows are the latest edition's top five champions."""
+def latex_table(rows, max_rows=20):
+    """Pivoted vintages longtable: rows = editions in play order,
+    cols = top-5 team champion % + Cum.pts / Mean Brier / Cum.bits."""
     if not rows:
         return r"\textit{No editions issued yet.}"
-    shown = [rows[0]] + rows[1:][-(max_cols - 1):] if len(rows) > max_cols else rows
+    shown = [rows[0]] + rows[1:][-(max_rows - 1):] if len(rows) > max_rows else rows
     teams = [t for t, _ in shown[-1]["champ_top5"]]
-    heads = " & ".join(f"M{r['edition']:03d}" for r in shown)
-    lines = []
-    for t in teams:
-        cells = []
-        for r in shown:
-            p = dict((a, b) for a, b in r["champ_top5"]).get(t)
-            cells.append(f"{100 * p:.1f}" if p is not None else "--")
-        lines.append(f"{t} & " + " & ".join(cells) + r" \\")
-    def _row(label, fmt, key):
-        cells = []
-        for r in shown:
-            v = r[key]
-            cells.append("--" if v is None else fmt.format(v))
-        return f"{label} & " + " & ".join(cells) + r" \\"
-    lines.append(r"\midrule")
-    lines.append(_row("Cum. points", "{:d}", "cum_points"))
-    lines.append(_row("Mean Brier", "{:.2f}", "mean_brier"))
-    lines.append(_row("Cum. bits", "{:.3f}", "cum_bits"))
-    colspec = "l" + "r" * len(shown)
+    team_header = " & ".join(teams)
+    edition_rows = []
+    for r in shown:
+        label = "M000 Lock" if r["fixture"] is None else f"M{r['edition']:03d} {r['fixture']}"
+        champ = dict(r["champ_top5"])
+        team_cells = " & ".join(
+            f"{100 * champ[t]:.1f}" if t in champ else "--" for t in teams)
+        cum_pts = "--" if r["cum_points"] is None else str(r["cum_points"])
+        mean_b = "--" if r["mean_brier"] is None else f"{r['mean_brier']:.2f}"
+        cum_b = f"{r['cum_bits']:.3f}"
+        edition_rows.append(
+            f"\\makecell[l]{{{label}}} & {team_cells} & {cum_pts} & {mean_b} & {cum_b} \\\\"
+        )
+    colspec = "l" + "r" * len(teams) + "rrr"
     note = ("" if len(shown) == len(rows) else
-            f"% {len(rows) - len(shown)} intermediate editions collapsed\n")
+            f"% {len(rows) - len(shown)} intermediate editions omitted\n")
     return (note + "\\begin{longtable}{" + colspec + "}\n"
-            "\\caption{Forecast vintages (all issued editions)}\\label{tab:live_vintages}\\\\\n"
+            "\\caption{Forecast vintages --- champion probabilities by edition "
+            "(live edition M\\liveEditionNum{})}\\label{tab:live_vintages}\\\\\n"
             "\\toprule\n"
-            "Edition & " + heads + " \\\\\n\\midrule\n\\endhead\n"
-            + "\n".join(lines) + "\n\\bottomrule\n\\end{longtable}")
+            f"\\makecell[l]{{Fixture \\\\\\\\ (play order)}} & {team_header}"
+            " & Cum.\\,pts & Mean Brier & Cum.\\,bits \\\\\n"
+            "\\midrule\n\\endhead\n"
+            + "\n".join(edition_rows)
+            + "\n\\bottomrule\n\\end{longtable}")

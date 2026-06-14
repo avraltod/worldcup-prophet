@@ -99,14 +99,14 @@ def test_group_box_played_and_unplayed():
              "pick": [1, 1], "probs_HDA": [0.35, 0.33, 0.32]}]
     gA = next(g for g in _gs12() if g["group"] == "A")
     tex = rl.group_box(gA, {"group": {"1": [2, 0]}}, exps, frozen, now)
-    assert "2--0" in tex                      # real result beside the pick
-    assert "South Korea v Czechia" in tex     # remaining fixture with lock probs
+    assert "2--0" in tex                      # real result in matrix cell
+    assert "35.0" in tex                      # remaining fixture H% in matrix cell
     gB = next(g for g in _gs12() if g["group"] == "B")
     tex_b = rl.group_box(gB, {"group": {}}, [], frozen, now)
     assert "No results yet" in tex_b
 
 
-def test_group_box_shows_pred_vs_actual_in_table():
+def test_group_box_shows_pred_vs_actual_in_matrix():
     frozen, now = _stages(), _stages(0.27)
     for t in ("Mexico", "South Korea", "Czechia", "South Africa"):
         frozen[t] = {"advance_KO": 0.9, "champion": 0.01, "R16": 0, "QF": 0, "SF": 0, "final": 0}
@@ -117,9 +117,10 @@ def test_group_box_shows_pred_vs_actual_in_table():
               "pick": [1, 1], "probs_HDA": [0.35, 0.33, 0.32]}]
     gA = next(g for g in _gs12() if g["group"] == "A")
     tex = rl.group_box(gA, {"group": {"1": [2, 0]}}, exps, frozen, now)
-    assert "pred 2--1" in tex and "actual 2--0" in tex   # played match
-    assert r"\checkmark" in tex   # pick 2-1 (home win) matches actual 2-0 (home win)
-    assert "South Korea v Czechia" in tex   # remaining
+    assert "2--0" in tex                         # played result in matrix cell
+    assert "checkmark" in tex                    # pick 2-1 (home win) vs actual 2-0 (home win) ✓
+    assert "Q" in tex and "90.0" in tex          # frozen qual% column present
+    assert "tabular" in tex                      # unified table structure
 
 
 def test_survival_unit_restates_all_teams():
@@ -169,10 +170,9 @@ def test_revision_report_unit():
                              "lock_HDA": [0.5, 0.3, 0.2], "learn_HDA": [0.55, 0.27, 0.18]}]}
     tex = rl.revision_report(ctx)
     assert "Revision report: edition M003" in tex
-    assert "Shots" in tex and "Canada" in tex
-    assert "The forecast moved because of the result." in tex
     assert "M000" in tex                       # vintages table embedded
     assert "Canada v Qatar" in tex             # implications
+    # revision_narrative dropped per spec §3.10 (duplicated forecast revision para)
 
 
 def test_validate_labels_passes_when_present():
@@ -229,9 +229,12 @@ def _ctx_for_report():
             "revision_narrative": "Test narrative.",
             "implications": []}
 
-def test_revision_report_snapshot_table_has_label():
-    tex = rl.revision_report(_ctx_for_report())
-    assert r"\label{tab:live_edition_snapshot}" in tex
+def test_revision_report_match_stats_table_has_label():
+    # Table 7: cumulative match stats — label changed per spec §3.10
+    ctx = _ctx_for_report()
+    ctx["expectations"] = [{"match": 3, "probs_HDA": [0.5, 0.25, 0.25]}]
+    tex = rl.revision_report(ctx)
+    assert r"\label{tab:live_match_stats}" in tex
 
 def test_revision_report_vintages_table_has_label():
     tex = rl.revision_report(_ctx_for_report())
