@@ -250,6 +250,34 @@ def test_revision_report_match_stats_table_has_label():
     tex = rl.revision_report(ctx)
     assert r"\label{tab:live_match_stats}" in tex
 
+
+def test_cumulative_stats_table_shows_track_b_column_when_probs_hda_b_present():
+    # Track B column appears when at least one entry has pre.probs_HDA_b stored
+    entries = [{"match": 3, "fixture": "Canada v BIH",
+                "pre": {"probs_HDA": [0.5, 0.25, 0.25],
+                        "probs_HDA_b": [0.55, 0.23, 0.22]}}]
+    match_stats = {3: {"home": {"team": "Canada", "total_shots": 11, "sot": 5,
+                                "possession": 58.0},
+                       "away": {"team": "BIH", "total_shots": 4, "sot": 2,
+                                "possession": 42.0}}}
+    tex = rl._cumulative_stats_table(entries, match_stats,
+                                     [{"match": 3, "probs_HDA": [0.5, 0.25, 0.25]}])
+    assert "Track~B" in tex
+    assert "55.0" in tex    # Track B home prob
+
+
+def test_cumulative_stats_table_no_track_b_column_when_missing():
+    entries = [{"match": 3, "fixture": "Canada v BIH",
+                "pre": {"probs_HDA": [0.5, 0.25, 0.25]}}]
+    match_stats = {3: {"home": {"team": "Canada", "total_shots": 11, "sot": 5,
+                                "possession": None},
+                       "away": {"team": "BIH", "total_shots": 4, "sot": 2,
+                                "possession": None}}}
+    tex = rl._cumulative_stats_table(entries, match_stats, [])
+    assert "Track~B" not in tex
+    assert r"\label{tab:live_match_stats}" in tex
+
+
 def test_revision_report_vintages_table_has_label():
     tex = rl.revision_report(_ctx_for_report())
     assert r"\label{tab:live_vintages}" in tex

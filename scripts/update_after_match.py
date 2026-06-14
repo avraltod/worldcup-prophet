@@ -76,6 +76,17 @@ def build_full_entry(match, trajectory, expectations, forecast_commit,
     e = mb.build_entry(match, trajectory, expectations, forecast_commit, documented_at)
     exp = next(x for x in expectations if x["match"] == match)
     e["failure_mode"] = detect_failure_mode(e, exp)
+    # Track B pre-match H/D/A: learn_ratings at this moment are pre-match
+    # (lst.sync runs later in _write_living_layer, after stats are collected)
+    try:
+        from learn import lambda_expected
+        _state = lst.load_state()
+        _lr = lst.ratings(_state)
+        if exp["home"] in _lr and exp["away"] in _lr:
+            _lh, _la = lambda_expected(_lr[exp["home"]], _lr[exp["away"]])
+            e["pre"]["probs_HDA_b"] = list(rl.outcome_probs(_lh, _la))
+    except Exception:
+        pass  # best-effort; column shows "--" if unavailable
     corrections = CORRECTIONS.read_text() if CORRECTIONS.exists() else ""
     text, source = di.draft(e, corrections, use_api)
     e["interpretation"], e["interpretation_source"] = text, source

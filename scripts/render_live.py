@@ -343,9 +343,12 @@ def _stats_release(match, match_stats, learning):
 
 def _cumulative_stats_table(entries, match_stats, expectations):
     """Table 7: one row per played match, grows with each edition.
-    Columns: Game | Shots H–A | On target H–A | Poss H–A | Frozen H/D/A."""
+    Columns: Game | Shots H–A | On target H–A | Poss H–A | Frozen H/D/A | Track B H/D/A.
+    Track B H/D/A is stored in entry['pre']['probs_HDA_b'] at documentation time
+    (pre-match learn_ratings); '--' for entries documented before this feature."""
     rows = []
     exp_by_match = {e["match"]: e for e in expectations}
+    has_b = any(e.get("pre", {}).get("probs_HDA_b") for e in entries)
     for e in sorted(entries, key=lambda x: x["match"]):
         m = e["match"]
         s = match_stats.get(m)
@@ -359,22 +362,33 @@ def _cumulative_stats_table(entries, match_stats, expectations):
         pa = s["away"].get("possession")
         poss = f"{ph:.0f}--{pa:.0f}" if ph is not None and pa is not None else "--"
         exp = exp_by_match.get(m)
-        if exp:
-            hda = "/".join(_pct(p) for p in exp["probs_HDA"])
+        hda = "/".join(_pct(p) for p in exp["probs_HDA"]) if exp else "--"
+        hda_b_raw = e.get("pre", {}).get("probs_HDA_b")
+        hda_b = "/".join(_pct(p) for p in hda_b_raw) if hda_b_raw else "--"
+        if has_b:
+            rows.append(
+                f"M{m} {e['fixture']} & {sh}--{sa} & {oh}--{oa} & {poss} & {hda} & {hda_b} \\\\"
+            )
         else:
-            hda = "--"
-        rows.append(
-            f"M{m} {e['fixture']} & {sh}--{sa} & {oh}--{oa} & {poss} & {hda} \\\\"
-        )
+            rows.append(
+                f"M{m} {e['fixture']} & {sh}--{sa} & {oh}--{oa} & {poss} & {hda} \\\\"
+            )
     if not rows:
         return r"\textit{Match statistics pending.}"
+    if has_b:
+        col_spec = "lccccc"
+        header = ("Game & Shots (H--A) & On target (H--A) & Poss\\% (H--A) & "
+                  "Frozen H/D/A & Track~B H/D/A \\\\\n")
+    else:
+        col_spec = "lcccc"
+        header = "Game & Shots (H--A) & On target (H--A) & Poss\\% (H--A) & Frozen H/D/A \\\\\n"
     return (
         "\\begin{table}[!h]\\centering\n"
         "\\caption{Cumulative match statistics (live edition "
         "M\\liveEditionNum{})}\\label{tab:live_match_stats}\n"
-        "\\begin{footnotesize}\\begin{tabular}{lcccc}\\toprule\n"
-        "Game & Shots (H--A) & On target (H--A) & Poss\\% (H--A) & Frozen H/D/A \\\\\n"
-        "\\midrule\n"
+        f"\\begin{{footnotesize}}\\begin{{tabular}}{{{col_spec}}}\\toprule\n"
+        + header
+        + "\\midrule\n"
         + "\n".join(rows) + "\n"
         "\\bottomrule\\end{tabular}\\end{footnotesize}\n\\end{table}"
     )
