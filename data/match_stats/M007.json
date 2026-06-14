@@ -1,0 +1,20 @@
+{
+ "match": 7,
+ "event_id": "760419",
+ "stats": {
+  "home": {
+   "team": "Brazil",
+   "sot": 5.0,
+   "other_shots": 8.0,
+   "total_shots": 13.0,
+   "possession": 51.2
+  },
+  "away": {
+   "team": "Morocco",
+   "sot": 3.0,
+   "other_shots": 11.0,
+   "total_shots": 14.0,
+   "possession": 48.8
+  }
+ }
+}

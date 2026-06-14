@@ -219,7 +219,7 @@ def two_track_unit(two_track, learning, fig, info_snapshot=None):
         provenance = (
             f"\\medskip\n"
             f"\\noindent{{\\small\\textbf{{Track~B update}} ({ft} UTC):\n"
-            f"\\begin{{itemize}}[noitemsep,topsep=2pt]\n"
+            f"\\begin{{itemize}}\n"
             f"\\item Elo: {n} match(es) processed, RMS $\\Delta$={elo_rms}~pts, "
             f"biggest mover: {elo_note}\n"
             f"\\item Odds: {n_rates} fixture(s) updated, "

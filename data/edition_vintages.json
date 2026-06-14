@@ -172,6 +172,41 @@
   ]
  },
  {
+  "edition": 7,
+  "match": 7,
+  "fixture": "Brazil v Morocco",
+  "result": [
+   1,
+   1
+  ],
+  "points": 0,
+  "cum_points": 2,
+  "mean_brier": 0.61,
+  "cum_bits": 0.0067,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2723
+   ],
+   [
+    "Argentina",
+    0.1813
+   ],
+   [
+    "France",
+    0.1425
+   ],
+   [
+    "Portugal",
+    0.0942
+   ],
+   [
+    "England",
+    0.0679
+   ]
+  ]
+ },
+ {
   "edition": 8,
   "match": 8,
   "fixture": "Qatar v Switzerland",
@@ -181,28 +216,28 @@
   ],
   "points": 0,
   "cum_points": 2,
-  "mean_brier": 0.661,
-  "cum_bits": 0.0081,
+  "mean_brier": 0.7116,
+  "cum_bits": 0.0094,
   "champ_top5": [
    [
     "Spain",
-    0.2729
+    0.2704
    ],
    [
     "Argentina",
-    0.1807
+    0.1793
    ],
    [
     "France",
-    0.1425
+    0.1443
    ],
    [
     "Portugal",
-    0.0955
+    0.0965
    ],
    [
     "England",
-    0.0671
+    0.0706
    ]
   ]
  }
