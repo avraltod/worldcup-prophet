@@ -105,8 +105,10 @@ def _latexmk(out_path=None):
         ["latexmk", "-xelatex", "-bibtex", "-interaction=nonstopmode",
          "-f", "-e", "$max_repeat=8",
          f"-jobname={job}", "WC2026_paper.tex"],
-        cwd=PAPER, check=True)
+        cwd=PAPER)
     built = PAPER / f"{job}.pdf"
+    if not built.exists():
+        raise RuntimeError(f"latexmk did not produce {built}")
     if out_path:
         _sh.copy(built, out_path)
     return built
