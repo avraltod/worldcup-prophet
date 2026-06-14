@@ -310,5 +310,40 @@
     0.0684
    ]
   ]
+ },
+ {
+  "edition": 10,
+  "match": 10,
+  "fixture": "Germany v Curaçao",
+  "result": [
+   7,
+   1
+  ],
+  "points": 1,
+  "cum_points": 5,
+  "mean_brier": 0.6055,
+  "cum_bits": 0.016,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2692
+   ],
+   [
+    "Argentina",
+    0.1826
+   ],
+   [
+    "France",
+    0.144
+   ],
+   [
+    "Portugal",
+    0.0957
+   ],
+   [
+    "England",
+    0.0698
+   ]
+  ]
  }
 ]
