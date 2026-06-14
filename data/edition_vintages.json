@@ -345,5 +345,40 @@
     0.0698
    ]
   ]
+ },
+ {
+  "edition": 11,
+  "match": 11,
+  "fixture": "Netherlands v Japan",
+  "result": [
+   2,
+   2
+  ],
+  "points": 0,
+  "cum_points": 5,
+  "mean_brier": 0.6293,
+  "cum_bits": 0.0177,
+  "champ_top5": [
+   [
+    "Spain",
+    0.269
+   ],
+   [
+    "Argentina",
+    0.1806
+   ],
+   [
+    "France",
+    0.1426
+   ],
+   [
+    "Portugal",
+    0.0973
+   ],
+   [
+    "England",
+    0.0701
+   ]
+  ]
  }
 ]
