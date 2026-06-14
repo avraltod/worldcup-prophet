@@ -21,11 +21,12 @@ def ledger_table(entries):
             f"{e['match']} & {e['fixture']} & {e['pre']['pick'][0]}--{e['pre']['pick'][1]} "
             f"& {_score(e['result'])} & {e['post']['points']} & {e['post']['brier']:.3f} "
             f"& {e['post']['info_bits']:.3f} & {fm} \\\\")
+    _hdr = "M & Fixture & Pick & Result & Pts & Brier & Info & Mode \\\\\n"
     head = ("\\begin{longtable}{rlcccccl}\n"
             "\\caption{Match record (live edition)}\\label{tab:live_ledger}\\\\\n"
-            "\\toprule\n"
-            "M & Fixture & Pick & Result & Pts & Brier & Info & Mode \\\\\n"
-            "\\midrule\n"
+            "\\toprule\n" + _hdr + "\\midrule\n"
+            "\\endfirsthead\n"
+            "\\toprule\n" + _hdr + "\\midrule\n"
             "\\endhead\n")
     foot = "\n\\bottomrule\n\\end{longtable}"
     return head + "\n".join(rows) + foot
@@ -104,15 +105,18 @@ def divergence_section(frozen, now, entries, group_state, champion_b=None):
         champ_rule = "\\cmidrule(lr){2-4}"
         adv_rule = "\\cmidrule(lr){5-7}"
         col_header = "Team & Frozen & Track~A & $\\Delta$ & Frozen & Track~A & $\\Delta$ \\\\\n"
+    _div_subhdr = (f" & {champ_span} & \\multicolumn{{3}}{{c}}{{Advance (\\%)}} \\\\\n"
+                  f"{champ_rule}{adv_rule}\n" + col_header + "\\midrule\n")
     table = (
         f"\\begin{{longtable}}{{{col_spec}}}\n"
         "\\caption{Champion and advance probability divergence from the locked baseline "
         "(live edition)}\\label{tab:live_divergence}\\\\\n"
         "\\toprule\n"
-        f" & {champ_span} & \\multicolumn{{3}}{{c}}{{Advance (\\%)}} \\\\\n"
-        f"{champ_rule}{adv_rule}\n"
-        + col_header
-        + "\\midrule\n\\endhead\n"
+        + _div_subhdr
+        + "\\endfirsthead\n"
+        "\\toprule\n"
+        + _div_subhdr
+        + "\\endhead\n"
         + "\n".join(rows)
         + "\n\\bottomrule\n\\end{longtable}")
 

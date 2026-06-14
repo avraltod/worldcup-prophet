@@ -199,7 +199,10 @@ def survival_unit(frozen, now):
         "\\begin{footnotesize}\n\\begin{longtable}{lrrrrrr}\n"
         "\\caption{Stage-reached probabilities conditioned on results so far "
         "(live edition)}\\label{tab:live_survival}\\\\\n"
-        "\\toprule\nTeam & KO & R16 & QF & SF & Final & Champion \\\\\n\\midrule\n\\endhead\n"
+        "\\toprule\nTeam & KO & R16 & QF & SF & Final & Champion \\\\\n\\midrule\n"
+        "\\endfirsthead\n"
+        "\\toprule\nTeam & KO & R16 & QF & SF & Final & Champion \\\\\n\\midrule\n"
+        "\\endhead\n"
         + "\n".join(rows) + "\n\\bottomrule\n\\end{longtable}\n\\end{footnotesize}")
 
 
@@ -502,7 +505,10 @@ def survival_colcomp_unit(ctx):
         "\\begin{footnotesize}\n\\begin{longtable}{lrrrrrr}\n"
         "\\caption{Frozen vs.\\ Track~A stage probabilities, all 48 teams "
         "(live edition M\\liveEditionNum{})}\\label{tab:live_survcomp}\\\\\n"
-        "\\toprule\n" + headers + "\n\\midrule\n\\endhead\n"
+        "\\toprule\n" + headers + "\n\\midrule\n"
+        "\\endfirsthead\n"
+        "\\toprule\n" + headers + "\n\\midrule\n"
+        "\\endhead\n"
         + "\n".join(rows) + "\n"
         "\\bottomrule\n\\end{longtable}\n\\end{footnotesize}"
     )

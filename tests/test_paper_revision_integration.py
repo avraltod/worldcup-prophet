@@ -103,7 +103,8 @@ def test_rerender_through_all_documented_matches(tmp_path, monkeypatch):
     shutil.copytree(ROOT / "paper" / "match_book", paper / "match_book",
                     dirs_exist_ok=True)
 
-    latest_match = max(posts, key=lambda r: r["match"])["match"]
+    import match_book as mb
+    latest_match = max(mb.documented_matches(uam.INDEX))
     stats = uam.rerender(match=latest_match)
 
     n = stats["documented"]
