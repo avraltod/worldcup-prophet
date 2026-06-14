@@ -100,11 +100,31 @@ def draft_intro_data_note(ctx, use_api):
 def templated_simulation_note(ctx):
     n = ctx["n_results"]
     remaining = 104 - n
-    return (
+    para1 = (
         f"Of the 104 group-stage fixtures, {n} results are now fixed; "
         f"the simulator conditions on these outcomes and draws over the "
         f"remaining {remaining} matches."
     )
+    snap = ctx.get("info_snapshot") or {}
+    if not snap:
+        return para1
+    elo_ts = (snap.get("elo_updated_at") or "")[:10]   # YYYY-MM-DD
+    elo_rms = snap.get("elo_rms_delta", 0)
+    n_rates = snap.get("n_rate_changes", 0)
+    max_odds = snap.get("max_odds_shift_ph", 0)
+    n_lineup = snap.get("n_lineup_adj", 0)
+    n_drift = snap.get("n_teams_with_drift", 0)
+    para2 = (
+        f"The full-information track (Track~B) supplements result-conditioning "
+        f"with: live ClubElo ratings fetched {elo_ts} "
+        f"(RMS $\\Delta$ = {elo_rms}~pts vs.\\ the June~10 baseline); "
+        f"bookmaker H2H odds de-vigged for {n_rates} unplayed fixture(s) "
+        f"(max $|{{\\Delta}}p_H|$ = {max_odds:.2f}); "
+        f"key-player Elo deductions where announced lineups are available "
+        f"({n_lineup} team(s) adjusted); "
+        f"and learning-track Elo drift on {n_drift} team(s)."
+    )
+    return para1 + "\n\n" + para2
 
 
 def draft_simulation_note(ctx, use_api):

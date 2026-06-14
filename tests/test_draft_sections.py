@@ -106,3 +106,41 @@ def test_draft_abstract_live_falls_back_to_template_without_key(monkeypatch):
     text, source = ds.draft_abstract_live(_ctx(), use_api=True)
     assert source == "template"
     assert "Spain" in text
+
+
+def test_templated_simulation_note_v2_with_info_snapshot():
+    ctx = _ctx()
+    ctx["info_snapshot"] = {
+        "elo_updated_at": "2026-06-13T19:00:00Z",
+        "elo_rms_delta": 12.3,
+        "n_rate_changes": 5,
+        "max_odds_shift_ph": 0.04,
+        "n_lineup_adj": 2,
+        "n_teams_with_drift": 8,
+    }
+    text = ds.templated_simulation_note(ctx)
+    assert "Track" in text and "B" in text
+    assert "ClubElo" in text
+    assert "2026-06-13" in text          # date portion of elo_updated_at
+    assert "12.3" in text                # elo_rms_delta
+    assert "5" in text                   # n_rate_changes
+    assert "0.04" in text                # max_odds_shift_ph
+    assert "2" in text                   # n_lineup_adj
+    assert "8" in text                   # n_teams_with_drift
+    assert "100" in text                 # 104 - 4 remaining (Para 1 still present)
+
+
+def test_templated_simulation_note_v1_fallback_no_key():
+    ctx = _ctx()
+    # no info_snapshot key → v1 one-sentence output only
+    text = ds.templated_simulation_note(ctx)
+    assert "ClubElo" not in text
+    assert "100" in text                 # 104 - 4 remaining
+
+
+def test_templated_simulation_note_v1_fallback_empty_dict():
+    ctx = _ctx()
+    ctx["info_snapshot"] = {}
+    text = ds.templated_simulation_note(ctx)
+    assert "ClubElo" not in text
+    assert "100" in text
