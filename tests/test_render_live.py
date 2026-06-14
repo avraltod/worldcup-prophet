@@ -350,11 +350,23 @@ def test_groupqual_live_unit():
     tex = rl.groupqual_live_unit(_full_ctx())
     assert r"\label{fig:live_groupqual}" in tex
 
-def test_bracket_live_unit_group_stage_is_placeholder():
+def test_bracket_live_unit_group_stage_shows_slot_risk_table():
     ctx = _full_ctx()
     ctx["results"] = {"group": {}, "ko": {}}
     tex = rl.bracket_live_unit(ctx)
-    assert "No knockout results" in tex
+    assert r"\label{tab:live_slot_risk}" in tex
+    assert "R32 slot risk" in tex
+    assert "KO Pick" in tex
+    assert "Frozen" in tex
+
+
+def test_bracket_live_unit_group_stage_with_track_b():
+    ctx = _full_ctx()
+    ctx["results"] = {"group": {}, "ko": {}}
+    ctx["now_b"] = {"Spain": {"advance_KO": 0.99, "champion": 0.25}}
+    tex = rl.bracket_live_unit(ctx)
+    assert "Track~B" in tex
+    assert r"\checkmark" in tex or r"\triangle" in tex or r"\times" in tex
 
 def test_survival_colcomp_unit():
     ctx = _full_ctx()

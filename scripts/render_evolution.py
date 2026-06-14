@@ -17,12 +17,16 @@ def ledger_table(entries):
     rows = []
     for e in entries:
         fm = (e["failure_mode"] or "--").replace("_", r"\_")
+        played = e.get("result") is not None
+        pick_a = "--" if played else f"{e['pre']['pick'][0]}--{e['pre']['pick'][1]}"
+        pick_b = "--" if played else pick_a  # Track B scoreline shown when KO upcoming
         rows.append(
             f"{e['match']} & {e['fixture']} & {e['pre']['pick'][0]}--{e['pre']['pick'][1]} "
+            f"& {pick_a} & {pick_b} "
             f"& {_score(e['result'])} & {e['post']['points']} & {e['post']['brier']:.3f} "
             f"& {e['post']['info_bits']:.3f} & {fm} \\\\")
-    _hdr = "M & Fixture & Pick & Result & Pts & Brier & Info & Mode \\\\\n"
-    head = ("\\begin{longtable}{rlcccccl}\n"
+    _hdr = ("M & Fixture & Frozen & Track~A & Track~B & Result & Pts & Brier & Info & Mode \\\\\n")
+    head = ("\\begin{longtable}{rlcccccccl}\n"
             "\\caption{Match record (live edition)}\\label{tab:live_ledger}\\\\\n"
             "\\toprule\n" + _hdr + "\\midrule\n"
             "\\endfirsthead\n"

@@ -548,21 +548,90 @@ def groupqual_live_unit(ctx):
     )
 
 
+_R32_PAIRS = [
+    # (home, away, match_number) — pre-registered bracket (LEFT then RIGHT half)
+    ("Germany",       "Paraguay",              73),
+    ("France",        "Sweden",                74),
+    ("South Korea",   "Canada",                75),
+    ("Netherlands",   "Morocco",               76),
+    ("Colombia",      "Croatia",               77),
+    ("Spain",         "Austria",               78),
+    ("United States", "Bosnia and Herzegovina", 79),
+    ("Belgium",       "Czechia",               80),
+    ("Brazil",        "Japan",                 81),
+    ("Ecuador",       "Norway",                82),
+    ("Mexico",        "Ivory Coast",           83),
+    ("England",       "Algeria",               84),
+    ("Argentina",     "Uruguay",               85),
+    ("Turkey",        "Egypt",                 86),
+    ("Switzerland",   "Iran",                  87),
+    ("Portugal",      "Senegal",               88),
+]
+
+
+def _slot_status(frozen_pct, track_b_pct):
+    drop = frozen_pct - track_b_pct
+    if drop < 5:
+        return "\\checkmark"
+    if drop <= 20:
+        return "$\\triangle$"
+    return "$\\times$"
+
+
 def bracket_live_unit(ctx):
-    """Knockout bracket: placeholder during group stage, live figure once KO begins."""
+    """Knockout bracket: slot risk table during group stage, live figure once KO begins."""
     ko_results = ctx.get("results", {}).get("ko", {})
-    if not ko_results:
+    if ko_results:
         return (
-            "\\textit{No knockout results yet; the frozen bracket "
-            "(Figure~\\ref{fig:bracket}) remains the current best estimate.}"
+            "\\begin{figure}[!t]\n"
+            "  \\caption{The submitted bracket updated through M\\liveEditionNum{}; "
+            "shaded cells are confirmed results}\\label{fig:live_bracket}\n"
+            "  {\\centering\\includegraphics[width=0.94\\textwidth]"
+            "{figs/fig_live_bracket.pdf}\\par}\n"
+            "\\end{figure}"
         )
+    frozen = ctx.get("frozen", {})
+    now = ctx.get("now", {})
+    now_b = ctx.get("now_b", {})
+    has_b = bool(now_b)
+
+    rows = []
+    for home, away, mn in _R32_PAIRS:
+        for team in (home, away):
+            fr = frozen.get(team, {}).get("advance_KO", 0.0)
+            ta = now.get(team, frozen.get(team, {})).get("advance_KO", fr)
+            tb = now_b.get(team, {}).get("advance_KO", float("nan")) if has_b else float("nan")
+            fr_p, ta_p = round(100 * fr, 1), round(100 * ta, 1)
+            tb_str = f"{100 * tb:.1f}" if tb == tb else "--"
+            status = _slot_status(fr_p, 100 * tb if tb == tb else fr_p) if has_b else ""
+            b_col = f" & {tb_str} & {status}" if has_b else ""
+            rows.append(
+                f"{team} advance & M{mn} & {fr_p} & {ta_p}{b_col} \\\\"
+            )
+
+    if has_b:
+        col_spec = "llrrrl"
+        hdr = "KO Pick & Slot & Frozen~\\% & Track~A~\\% & Track~B~\\% & Status \\\\"
+        note = (
+            "Status: \\checkmark{} = Track~B within 5 pp of Frozen; "
+            "$\\triangle$ = 5--20 pp drop; $\\times$ = pick reversed ($>$20 pp)."
+        )
+    else:
+        col_spec = "llrr"
+        hdr = "KO Pick & Slot & Frozen~\\% & Track~A~\\% \\\\"
+        note = ""
+
+    body = "\n".join(rows)
+    note_line = f"\n\\smallskip\\begin{{footnotesize}}{note}\\end{{footnotesize}}" if note else ""
     return (
-        "\\begin{figure}[!t]\n"
-        "  \\caption{The submitted bracket updated through M\\liveEditionNum{}; "
-        "shaded cells are confirmed results}\\label{fig:live_bracket}\n"
-        "  {\\centering\\includegraphics[width=0.94\\textwidth]"
-        "{figs/fig_live_bracket.pdf}\\par}\n"
-        "\\end{figure}"
+        "\\begin{table}[!t]\n  \\centering\n"
+        "  \\caption{R32 slot risk: probability each pre-registered pick "
+        "advances from the group stage (live edition M\\liveEditionNum{})"
+        "}\\label{tab:live_slot_risk}\n"
+        f"  {{\\begin{{footnotesize}}\\begin{{tabular}}{{{col_spec}}}\n"
+        f"  \\toprule\n  {hdr}\n  \\midrule\n  {body}\n"
+        "  \\bottomrule\\end{tabular}\\end{footnotesize}}"
+        + note_line + "\n\\end{table}"
     )
 
 

@@ -35,9 +35,24 @@ def build(trajectory, through_match=None, out=None):
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(11, 9),
                                    gridspec_kw={"height_ratios": [2.0, 1.0]})
     for team, col in TEAM_COLORS.items():
-        ys = [100 * base.get(team, 0.0)] + \
-             [100 * r["champion"].get(team, 0.0) for r in posts]
-        ax1.plot(xs, ys, color=col, lw=2.2, label=team, marker="o", ms=4)
+        y0 = 100 * base.get(team, 0.0)
+        # Frozen dot at x=0 (gray, never moves)
+        ax1.plot([0], [y0], color="0.5", marker="o", ms=6, zorder=5,
+                 label="Frozen" if team == "Spain" else None)
+        # Track A (result-conditioned)
+        ys_a = [y0] + [100 * r["champion"].get(team, 0.0) for r in posts]
+        ax1.plot(xs, ys_a, color=col, lw=2.2, label=team, marker="o", ms=4)
+        # Track B (result + Elo, green dashed), when available
+        ys_b = [100 * r.get("champion_b", {}).get(team, float("nan")) for r in posts]
+        if any(v == v for v in ys_b):  # at least one non-nan
+            ax1.plot([r["match"] for r in posts], ys_b,
+                     color=col, lw=1.6, ls="--", alpha=0.7)
+        # Market (Polymarket de-vigged, orange dotted), when available
+        ys_m = [100 * r.get("market_champion", {}).get(team, float("nan")) for r in posts]
+        if any(v == v for v in ys_m):
+            ax1.plot([r["match"] for r in posts], ys_m,
+                     color="#E87020", lw=1.4, ls=":", alpha=0.8,
+                     label="Market" if team == "Spain" else None)
     ax1.axvspan(0, min(GROUP_END, xmax), color="0.93", zorder=0)
     ax1.set_xlabel("Matches played")
     ax1.set_ylabel("P(champion), %")
