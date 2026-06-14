@@ -299,7 +299,7 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
          if r["phase"] == "post" and r["match"] == match), None)
     champion_b = (_latest_post.get("champion_b") or {}) if _latest_post else {}
     latest_snap = (state["history"][-1].get("info_snapshot")
-                   if state["history"] else None) or {}
+                   if state["history"] else None) or None
 
     ctx = {"match": match, "entries": entries, "match_stats": match_stats,
            "learning": state, "prev_now": prev_now, "now": now_probs,
@@ -311,7 +311,7 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
            "mean_brier": stats["mean_brier"],
            "champ_now_top": stats["champ_now_top"],
            "two_track": two_track,
-           "info_snapshot": latest_snap,
+           "info_snapshot": latest_snap or {},
            "champion_movers": sorted(
                [[t, round(prev_now.get(t, {}).get("champion", 0.0), 4),
                  round(now_probs[t]["champion"], 4)]
@@ -330,7 +330,7 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     rl.write_unit(LIVE_DIR, "tracker", rl.tracker(group_st, frozen, now_probs))
     rl.write_unit(LIVE_DIR, "two_track",
                   rl.two_track_unit(two_track, state, fig=two_fig,
-                                    info_snapshot=latest_snap or None))
+                                    info_snapshot=latest_snap))
     rl.write_unit(LIVE_DIR, "survival", rl.survival_unit(frozen, now_probs))
     for g in group_st:
         rl.write_unit(LIVE_DIR, f"group_{g['group']}",

@@ -116,14 +116,21 @@ def champ_table(frozen, now, n_results, champion_b=None):
         f = frozen.get(t, {"champion": 0.0})
         c = now[t]
         if has_b:
-            b = champion_b.get(t, 0.0)
-            delta = 100 * (b - c["champion"])
-            rows.append(
-                f"      {t:<14} & {100*f['champion']:.1f}\\% & "
-                f"{100*c['champion']:.1f}\\% & {100*b:.1f}\\% & "
-                f"{delta:+.1f} & "
-                f"{100*c['final']:.1f}\\% & {100*c['SF']:.1f}\\% \\\\"
-            )
+            b = champion_b.get(t)
+            if b is None:
+                rows.append(
+                    f"      {t:<14} & {100*f['champion']:.1f}\\% & "
+                    f"{100*c['champion']:.1f}\\% & --- & --- & "
+                    f"{100*c['final']:.1f}\\% & {100*c['SF']:.1f}\\% \\\\"
+                )
+            else:
+                delta = 100 * (b - c["champion"])
+                rows.append(
+                    f"      {t:<14} & {100*f['champion']:.1f}\\% & "
+                    f"{100*c['champion']:.1f}\\% & {100*b:.1f}\\% & "
+                    f"{delta:+.1f} & "
+                    f"{100*c['final']:.1f}\\% & {100*c['SF']:.1f}\\% \\\\"
+                )
         else:
             rows.append(
                 f"      {t:<14} & {100*f['champion']:.1f}\\% & "
