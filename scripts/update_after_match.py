@@ -103,6 +103,7 @@ def _latexmk(out_path=None):
     job = "WC2026_paper_live"
     subprocess.run(
         ["latexmk", "-xelatex", "-bibtex", "-interaction=nonstopmode",
+         "-f", "-e", "$max_repeat=8",
          f"-jobname={job}", "WC2026_paper.tex"],
         cwd=PAPER, check=True)
     built = PAPER / f"{job}.pdf"
