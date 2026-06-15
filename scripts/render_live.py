@@ -45,6 +45,35 @@ def _pct(x):
     return f"{100 * x:.1f}"
 
 
+# Team -> flag markup, matching the locked group matrices in the skeleton:
+# most teams use \worldflag (ISO-2), three use the preamble's custom TikZ flags.
+_FLAG_ISO = {
+    "Algeria": "DZ", "Argentina": "AR", "Australia": "AU", "Austria": "AT",
+    "Belgium": "BE", "Bosnia and Herzegovina": "BA", "Brazil": "BR",
+    "Canada": "CA", "Cape Verde": "CV", "Colombia": "CO", "Congo DR": "CD",
+    "Croatia": "HR", "Czechia": "CZ", "Ecuador": "EC", "Egypt": "EG",
+    "France": "FR", "Germany": "DE", "Ghana": "GH", "Haiti": "HT", "Iran": "IR",
+    "Iraq": "IQ", "Ivory Coast": "CI", "Japan": "JP", "Jordan": "JO",
+    "Mexico": "MX", "Morocco": "MA", "Netherlands": "NL", "New Zealand": "NZ",
+    "Norway": "NO", "Panama": "PA", "Paraguay": "PY", "Portugal": "PT",
+    "Qatar": "QA", "Saudi Arabia": "SA", "Senegal": "SN", "South Africa": "ZA",
+    "South Korea": "KR", "Spain": "ES", "Sweden": "SE", "Switzerland": "CH",
+    "Tunisia": "TN", "Turkey": "TR", "United States": "US", "Uruguay": "UY",
+    "Uzbekistan": "UZ",
+}
+_FLAG_CUSTOM = {"England": "\\flagENG", "Scotland": "\\flagSCO", "Curaçao": "\\flagCUW"}
+
+
+def _flag(team):
+    """Mini flag for a team, sized to match the locked group matrices (4mm×2.7mm)."""
+    if team in _FLAG_CUSTOM:
+        return f"\\resizebox{{4mm}}{{2.7mm}}{{{_FLAG_CUSTOM[team]}[10mm]}}"
+    iso = _FLAG_ISO.get(team)
+    if iso:
+        return f"\\resizebox{{4mm}}{{2.7mm}}{{\\worldflag[width=10mm]{{{iso}}}}}"
+    return ""
+
+
 # ---- ported units (reuse render_evolution's pure builders) ----
 
 def ledger(entries, upcoming=None):
@@ -117,12 +146,14 @@ def _record_from(team, group_exps, res_by_match, resolver):
 
 
 def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=None):
-    """Appendix-A unified group box (spec 3.15). ONE round-robin matrix: played
-    cells show the bold actual score + check/cross; upcoming cells show the
-    three-track predicted scoreline (F / A / B). Four right-side panels give the
-    Actual record (W/D/L/Pts/Qual\\%) and the projected final W/D/L/Pts under
-    Frozen, Track A, and Track B. A remaining-fixtures H/D/A block sits below.
-    track_b: {match_num: {'pick': [h, a], 'hda': [h, d, a]}} for upcoming games."""
+    """Appendix-A unified group table (spec 3.15) — ONE table per group, in the
+    locked-matrix style: flag column headers (no rotated names), flag+name row
+    labels, and a round-robin body whose played cells carry the bold actual score
+    + check/cross and whose upcoming cells carry the predicted scoreline under
+    Frozen/Track~A (one line, since both ride the June-10 ratings) and Track~B.
+    Right panels give the Actual record (W/D/L/Pts/Qual\\%) and the projected
+    final W/D/L/Pts under Frozen/Track~A and under Track~B. A remaining-fixtures
+    H/D/A block sits below. track_b: {match: {'pick':[h,a],'hda':[h,d,a]}}."""
     grp = g_state["group"]
     teams = [r["team"] for r in g_state["rows"]]
     group_exps = [e for e in expectations if e.get("group") == grp]
@@ -130,11 +161,8 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
     res_by_match = results["group"]
     track_b = track_b or {}
 
-    if not g_state["played"]:
-        qual = "; ".join(f"{t} {_pct(frozen[t]['advance_KO'])}"
-                         for t in teams if t in frozen)
-        return (f"\\paragraph{{Group {grp} — live.}} No results yet; "
-                f"Frozen qualification odds: {qual}.")
+    if not group_exps:
+        return f"\\paragraph{{Group {grp} — live.}} Fixtures pending."
 
     def _sgn(x): return 1 if x > 0 else (-1 if x < 0 else 0)
 
@@ -144,19 +172,18 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
     def _track_b_pick(e):
         return tuple(track_b.get(e["match"], {}).get("pick", e["pick"]))
 
-    # ---- round-robin matrix -------------------------------------------------
+    # ---- one round-robin table, locked-matrix style -------------------------
     n = len(teams)
-    col_spec = "l" + "c" * n + "cccc"
-    header_teams = " & ".join(f"\\rotatebox{{90}}{{\\tiny {t}}}" for t in teams)
+    col_spec = "cl" + "c" * n + "ccc"
+    flag_hdr = " & ".join(_flag(t) for t in teams)
     panel_hdr = (
-        "\\makecell{\\tiny Actual \\\\ \\tiny W/D/L/P/Q\\%} & "
-        "\\makecell{\\tiny Frozen \\\\ \\tiny W/D/L/P} & "
-        "\\makecell{\\tiny Track~A \\\\ \\tiny W/D/L/P} & "
-        "\\makecell{\\tiny Track~B \\\\ \\tiny W/D/L/P}")
-    header = f" & {header_teams} & {panel_hdr} \\\\"
+        "\\makecell{Actual \\\\ \\tiny W/D/L/P/Q\\%} & "
+        "\\makecell{Frozen=A \\\\ \\tiny W/D/L/P} & "
+        "\\makecell{Track~B \\\\ \\tiny W/D/L/P}")
+    header = f" & Team & {flag_hdr} & {panel_hdr} \\\\"
 
-    matrix_rows = []
-    for home in teams:
+    body_rows = []
+    for rank, home in enumerate(teams, 1):
         cells = []
         for away in teams:
             if home == away:
@@ -174,29 +201,29 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
                 correct = _sgn(pick[0] - pick[1]) == _sgn(res[0] - res[1])
                 icon = r"$\checkmark$" if correct else r"$\times$"
                 cells.append(f"\\textbf{{{score}}}{icon}")
-            else:                        # upcoming: three-track predicted scoreline
+            else:                        # upcoming: Frozen/Track~A on one line, Track~B below
                 fa, tb = _frozen_pick(e), _track_b_pick(e)
                 if e["home"] == home:
                     f_s, b_s = f"{fa[0]}--{fa[1]}", f"{tb[0]}--{tb[1]}"
                 else:
                     f_s, b_s = f"{fa[1]}--{fa[0]}", f"{tb[1]}--{tb[0]}"
                 cells.append(
-                    f"\\makecell{{\\tiny F:{f_s} \\\\ \\tiny A:{f_s} "
-                    f"\\\\ \\tiny B:{b_s}}}")
+                    f"\\makecell{{\\tiny F/A:{f_s} \\\\ \\tiny B:{b_s}}}")
 
-        # right-side panels: Actual (real record + Track A qual%), then projected
-        # final W/D/L/Pts under Frozen / Track A (= Frozen) / Track B
+        # right panels: Actual (real record + Track A qual%), then projected final
+        # W/D/L/Pts under Frozen/Track~A (one column; identical) and under Track~B
         row = next((r for r in g_state["rows"] if r["team"] == home), {})
         aw, ad, al = row.get("W", 0), row.get("D", 0), row.get("L", 0)
         apts = row.get("Pts", 0)
         qual_a = _pct(now[home]["advance_KO"]) if home in now else "--"
-        actual = f"{aw}/{ad}/{al}/{apts}/{qual_a}\\%"
+        actual = (f"{aw}/{ad}/{al}/{apts}/{qual_a}\\%"
+                  if g_state["played"] else "--")
         fw, fd, fl, fp = _record_from(home, group_exps, res_by_match, _frozen_pick)
         bw, bd, bl, bp = _record_from(home, group_exps, res_by_match, _track_b_pick)
-        matrix_rows.append(
-            f"\\tiny {home} & " + " & ".join(cells)
+        body_rows.append(
+            f"{rank} & {_flag(home)}~{_abbrev_team(home)} & " + " & ".join(cells)
             + f" & \\tiny {actual} & \\tiny {fw}/{fd}/{fl}/{fp}"
-            f" & \\tiny {fw}/{fd}/{fl}/{fp} & \\tiny {bw}/{bd}/{bl}/{bp} \\\\"
+            f" & \\tiny {bw}/{bd}/{bl}/{bp} \\\\"
         )
 
     # ---- remaining-fixtures H/D/A block (below the matrix) -------------------
@@ -220,18 +247,32 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
             "\\bottomrule\\end{tabular}\n\\end{footnotesize}"
         )
 
+    state = (f"{g_state['played']} of {g_state['total']} played"
+             if g_state["played"] else "fixtures pending")
+    note = ("Round-robin body: row team's score against the column team. Played "
+            "cells show the actual score in bold with $\\checkmark$/$\\times$ "
+            "for the submitted result pick; upcoming cells show the predicted "
+            "scoreline under Frozen/Track~A (F/A) and Track~B (B). Right panels: "
+            "current actual W/D/L/Pts and Track~A qualification \\%, then the "
+            "projected final W/D/L/Pts. Frozen and Track~A share the June~10 "
+            "ratings, so their predicted scorelines and records coincide and are "
+            "shown once; Track~B uses the live (learning-track) ratings.")
+
     return (
-        f"\\paragraph{{Group {grp} — live ({g_state['played']} of "
-        f"{g_state['total']} played).}}\n"
-        "{\\setlength{\\tabcolsep}{2pt}\\begin{footnotesize}\n"
+        f"\\paragraph{{Group {grp} — live ({state}).}}\\leavevmode\\par\n"
+        "\\noindent\\begin{threeparttable}\n"
+        "\\resizebox{\\textwidth}{!}{%\n"
+        "{\\setlength{\\tabcolsep}{3pt}\n"
         f"\\begin{{tabular}}{{{col_spec}}}\n"
         "\\toprule\n"
         f"{header}\n"
         "\\midrule\n"
-        + "\n".join(matrix_rows) + "\n"
+        + "\n".join(body_rows) + "\n"
         "\\bottomrule\n"
-        "\\end{tabular}\n"
-        "\\end{footnotesize}}\n"
+        "\\end{tabular}}}\n"
+        "\\begin{tablenotes}\\notesize\n"
+        f"\\item \\textit{{Notes}}: {note}\n"
+        "\\end{tablenotes}\n\\end{threeparttable}\n"
         + fixtures_block
     )
 
