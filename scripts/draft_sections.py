@@ -227,11 +227,12 @@ def templated_sec36_live(ctx):
     biggest = max(movers, key=lambda x: abs(x[2] - x[1]), default=None)
     two = ctx.get("two_track")
     track_ab_gap = ""
+    champion_b = ctx.get("champion_b") or {}
     if two:
         top_team = max(two["frozen"], key=lambda t: two["frozen"][t])
         a_prob = ctx.get("now", {}).get(top_team, {}).get("champion",
                                                           two["frozen"][top_team])
-        b_prob = two["learning"].get(top_team, a_prob)
+        b_prob = champion_b.get(top_team, two["learning"].get(top_team, a_prob))
         gap = abs(b_prob - a_prob)
         track_ab_gap = (
             f" Track~A and Track~B remain close for {top_team}: "

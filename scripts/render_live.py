@@ -120,12 +120,12 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, implicati
     imp_by_fixture = {i["fixture"]: i for i in (implications or [])}
 
     # Build round-robin matrix: rows = teams, cols = opponent teams
-    # Right-side columns: Actual W/D/L/Pts/Qual% | Frozen Qual% | Track A Qual% | Track B Qual%
+    # Right-side columns: W/D/L/P | Q%(A) | Q%(F) | Q%(B)
     n = len(teams)
     col_spec = "l" + "c" * n + "rrrr"
-    header_teams = " & ".join(f"\\tiny {t}" for t in teams)
-    header = (f" & {header_teams} & \\makecell{{Actual\\\\W/D/L/Pts/Q\\%}} & "
-              f"Q\\%(F) & Q\\%(A) & Q\\%(B) \\\\")
+    header_teams = " & ".join(f"\\rotatebox{{90}}{{\\tiny {t}}}" for t in teams)
+    header = (f" & {header_teams} & \\tiny W/D/L/P & \\tiny Q\\%(A) & "
+              f"\\tiny Q\\%(F) & \\tiny Q\\%(B) \\\\")
 
     matrix_rows = []
     for home in teams:
@@ -161,12 +161,12 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, implicati
                     bh, bd, ba = imp["learn_HDA"]
                     if e["home"] == home:
                         cells.append(
-                            f"\\tiny F:{_pct(ph)}/{_pct(pd)}/{_pct(pa)}"
-                            f"\\\\B:{_pct(bh)}/{_pct(bd)}/{_pct(ba)}")
+                            f"\\makecell{{\\tiny F:{_pct(ph)}/{_pct(pd)}/{_pct(pa)}"
+                            f" \\\\ \\tiny B:{_pct(bh)}/{_pct(bd)}/{_pct(ba)}}}")
                     else:
                         cells.append(
-                            f"\\tiny F:{_pct(pa)}/{_pct(pd)}/{_pct(ph)}"
-                            f"\\\\B:{_pct(ba)}/{_pct(bd)}/{_pct(bh)}")
+                            f"\\makecell{{\\tiny F:{_pct(pa)}/{_pct(pd)}/{_pct(ph)}"
+                            f" \\\\ \\tiny B:{_pct(ba)}/{_pct(bd)}/{_pct(bh)}}}")
                 else:
                     if e["home"] == home:
                         cells.append(f"\\tiny {_pct(ph)}/{_pct(pd)}/{_pct(pa)}")
@@ -180,11 +180,11 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, implicati
         qual_a = _pct(now[home]["advance_KO"]) if home in now else "--"
         qual_f = _pct(frozen[home]["advance_KO"]) if home in frozen else "--"
         qual_b = _pct(now_b[home]["advance_KO"]) if now_b and home in now_b else "--"
-        actual_str = f"{w}/{d}/{l}/{pts}/{qual_a}\\%"
+        record_str = f"{w}/{d}/{l}/{pts}"
         matrix_rows.append(
             f"\\tiny {home} & " + " & ".join(cells)
-            + f" & \\tiny {actual_str} & \\tiny {qual_f}\\% "
-            f"& \\tiny {qual_a}\\% & \\tiny {qual_b}\\% \\\\"
+            + f" & \\tiny {record_str} & \\tiny {qual_a}\\%"
+            f" & \\tiny {qual_f}\\% & \\tiny {qual_b}\\% \\\\"
         )
 
     # Remaining fixtures block: upcoming matches in this group
@@ -214,7 +214,7 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, implicati
     return (
         f"\\paragraph{{Group {grp} — live ({g_state['played']} of "
         f"{g_state['total']} played).}}\n"
-        "\\begin{footnotesize}\n"
+        "{\\setlength{\\tabcolsep}{2pt}\\begin{footnotesize}\n"
         f"\\begin{{tabular}}{{{col_spec}}}\n"
         "\\toprule\n"
         f"{header}\n"
@@ -222,7 +222,7 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, implicati
         + "\n".join(matrix_rows) + "\n"
         "\\bottomrule\n"
         "\\end{tabular}\n"
-        "\\end{footnotesize}"
+        "\\end{footnotesize}}\n"
         + fixtures_block
     )
 
