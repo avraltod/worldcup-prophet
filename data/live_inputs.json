@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-06-15T01:27:22Z",
+ "fetched_at": "2026-06-15T02:43:03Z",
  "mode": "pre",
  "source_freshness": {
   "elo_updated_at": "2026-06-10T00:00:00Z",
@@ -370,6 +370,14 @@
     "drift": -75.0
    },
    {
+    "team": "Ivory Coast",
+    "drift": 75.0
+   },
+   {
+    "team": "Ecuador",
+    "drift": -75.0
+   },
+   {
     "team": "Germany",
     "drift": 65.28
    },
@@ -455,7 +463,7 @@
    "biggest_odds_mover": {},
    "n_new_injuries": 0,
    "n_lineup_adj": 0,
-   "n_teams_with_drift": 20
+   "n_teams_with_drift": 22
   }
  }
 }
