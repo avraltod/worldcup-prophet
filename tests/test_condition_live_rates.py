@@ -55,3 +55,22 @@ def test_observed_result_takes_priority_over_live_rates():
     # The two calls must be identical: the observed result takes priority and the
     # live_rates branch for this row is never executed (same seed => same outcomes)
     assert p_no_live == p_with_live
+
+
+def test_finish_positions_present_and_sum_to_advance():
+    """first + second + third_adv == advance_KO for every team (mutually
+    exclusive routes into the knockout round)."""
+    p = cond.conditional_probs({"group": {}, "ko": {}}, N=3000, seed=2026)
+    for t, d in p.items():
+        assert "first" in d and "second" in d and "third_adv" in d
+        s = d["first"] + d["second"] + d["third_adv"]
+        # rounding to 4 dp on each of four quantities: tolerate <= 2e-4
+        assert abs(s - d["advance_KO"]) <= 2e-4, (t, s, d["advance_KO"])
+
+
+def test_finish_positions_match_locked_frozen_baseline():
+    """The frozen (no-results) finishing-position split reproduces the locked
+    Table 13 modal order: Spain wins Group H most often."""
+    p = cond.conditional_probs({"group": {}, "ko": {}}, N=5000, seed=2026)
+    assert p["Spain"]["first"] > p["Spain"]["second"] > p["Spain"]["third_adv"]
+    assert p["Spain"]["first"] > 0.6     # locked Table 13: Spain 1st ~75%

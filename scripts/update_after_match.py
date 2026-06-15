@@ -35,6 +35,7 @@ CORRECTIONS = PAPER / "match_book" / "corrections.md"
 REVISIONS = PAPER / "REVISIONS.md"
 PAPER_TEX = PAPER / "WC2026_paper.tex"
 FROZEN_PATH = DATA / "frozen_stage_probs.json"
+GROUP_QUAL_PATH = DATA / "group_qual.json"   # frozen 1st/2nd/3rd*/qual (locked Table 13)
 COND_N = 50000   # sims for the per-snapshot conditional forecast
 LIVE_DIR = PAPER / "live"
 SKELETON_SHA = DATA / "skeleton_sha256.txt"
@@ -359,7 +360,8 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
            "learning": state, "prev_now": prev_now, "now": now_probs,
            "vintages_rows": rows, "revision_narrative": narrative_text,
            "implications": _implications(latest, expectations, res, learn_ratings),
-           "frozen": frozen, "results": res, "expectations": expectations,
+           "frozen": frozen, "frozen_finish": _load(GROUP_QUAL_PATH, {}),
+           "results": res, "expectations": expectations,
            "n_results": stats["documented"],
            "cum_points": stats["cum_points"],
            "mean_brier": stats["mean_brier"],
@@ -418,6 +420,7 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     rl.write_unit(LIVE_DIR, "groupqual_live", rl.groupqual_live_unit(ctx))
     rl.write_unit(LIVE_DIR, "groupqual_table", rl.groupqual_table_unit(ctx))
     rl.write_unit(LIVE_DIR, "fixture_risk", rl.fixture_risk_unit(ctx))
+    rl.write_unit(LIVE_DIR, "risk_tracker", rl.risk_tracker_unit(ctx))
     rl.write_unit(LIVE_DIR, "bracket_live", rl.bracket_live_unit(ctx))
     # 9. intro second-to-last, abstract last (both reference numbers from all other units)
     rl.write_unit(LIVE_DIR, "intro_data_note", rl.intro_data_note_unit(ctx, use_api))

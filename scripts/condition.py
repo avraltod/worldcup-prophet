@@ -198,9 +198,15 @@ def conditional_probs(results, N=50000, seed=2026, ratings=None, live_rates=None
             continue
         slots = dict(pos)
         inko = set(pos.values())
+        # finishing-position counters (committed only on a valid bracket fill, so
+        # they divide by the same effective N as the stage counters below)
+        for grp in "ABCDEFGHIJKL":
+            reach[pos[f"{grp}1"]]["first"] += 1
+            reach[pos[f"{grp}2"]]["second"] += 1
         for m_, g_ in am.items():
             slots[f"T{m_}"] = thirds[g_][0]
             inko.add(thirds[g_][0])
+            reach[thirds[g_][0]]["third_adv"] += 1
         for t in inko:
             reach[t][1] += 1
         W = {}
@@ -226,6 +232,11 @@ def conditional_probs(results, N=50000, seed=2026, ratings=None, live_rates=None
         # probability of reaching stage s is c[s]/N directly -- summing s..6
         # would double-count deeper runs.
         out[t] = {STAGES[s]: round(c[s] / N, 4) for s in range(1, 7)}
+        # finishing-position probabilities (Table 10): mutually exclusive routes
+        # into the knockout round; first + second + third_adv == advance_KO.
+        out[t]["first"] = round(c["first"] / N, 4)
+        out[t]["second"] = round(c["second"] / N, 4)
+        out[t]["third_adv"] = round(c["third_adv"] / N, 4)
     return out
 
 

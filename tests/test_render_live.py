@@ -420,3 +420,127 @@ def test_market_snap_unit_with_market():
     assert "27.5" in out    # Track B Spain
     assert "30.0" in out    # Market Spain
     assert "Track~B" in out and "Market" in out
+
+
+# ---- Table 10: three-panel finishing-position table ----
+
+def _group_state_AB():
+    return [
+        {"group": "A", "played": 2, "total": 6,
+         "rows": [{"team": "Mexico", "Pts": 3}, {"team": "South Korea", "Pts": 3},
+                  {"team": "Czechia", "Pts": 0}, {"team": "South Africa", "Pts": 0}]},
+        {"group": "B", "played": 2, "total": 6,
+         "rows": [{"team": "Switzerland", "Pts": 1}, {"team": "Canada", "Pts": 1},
+                  {"team": "Bosnia and Herzegovina", "Pts": 1}, {"team": "Qatar", "Pts": 1}]},
+    ]
+
+
+def _finish(first, second, third, qual):
+    return {"first": first, "second": second, "third_adv": third,
+            "advance_KO": qual, "champion": 0.1}
+
+
+def test_groupqual_table_three_panel_14_cols():
+    ctx = {
+        "frozen_finish": {
+            "A": {"Mexico": {"p1": 0.55, "p2": 0.26, "p3adv": 0.11, "qual": 0.91},
+                  "South Korea": {"p1": 0.18, "p2": 0.28, "p3adv": 0.21, "qual": 0.66},
+                  "Czechia": {"p1": 0.19, "p2": 0.29, "p3adv": 0.20, "qual": 0.68},
+                  "South Africa": {"p1": 0.08, "p2": 0.18, "p3adv": 0.19, "qual": 0.45}}},
+        "now": {"Mexico": _finish(0.68, 0.23, 0.08, 0.99),
+                "South Korea": _finish(0.26, 0.47, 0.19, 0.92)},
+        "now_b": {"Mexico": _finish(0.52, 0.34, 0.13, 0.99)},
+        "group_state": _group_state_AB(),
+    }
+    out = rl.groupqual_table_unit(ctx)
+    # three panel headers
+    assert out.count(r"\multicolumn{4}{c}") == 3
+    assert r"\multicolumn{4}{c}{Frozen}" in out
+    assert r"\multicolumn{4}{c}{Track~A}" in out
+    assert r"\multicolumn{4}{c}{Track~B}" in out
+    # 14-column tabular: ll + 12 numeric
+    assert r"\begin{tabular}{llrrrrrrrrrrrr}" in out
+    assert r"\cmidrule(lr){3-6}\cmidrule(lr){7-10}\cmidrule(lr){11-14}" in out
+    # Frozen panel matches locked Table 13 (Mexico 55/26/11/91)
+    assert "Mexico & 55 & 26 & 11 & \\textbf{91}" in out
+    # Track A populated (Mexico 68/23/8/99); Track B (52/34/13/99)
+    assert "68 & 23 & 8 & \\textbf{99}" in out
+    assert "52 & 34 & 13 & \\textbf{99}" in out
+    # team lacking Track B shows dashes in its B panel
+    assert "--" in out
+    assert r"\label{tab:live_groupqual_three}" in out
+
+
+def test_groupqual_table_abbreviates_long_names():
+    ctx = {
+        "frozen_finish": {"B": {"Bosnia and Herzegovina":
+                                {"p1": 0.1, "p2": 0.24, "p3adv": 0.28, "qual": 0.62}}},
+        "now": {}, "now_b": {},
+        "group_state": [{"group": "B", "played": 0, "total": 6,
+                         "rows": [{"team": "Bosnia and Herzegovina", "Pts": 0}]}],
+    }
+    out = rl.groupqual_table_unit(ctx)
+    assert "Bosnia and He." in out           # matches locked Table 13 style
+    assert "Bosnia and Herzegovina &" not in out
+
+
+def test_groupqual_table_no_group_state():
+    out = rl.groupqual_table_unit({"frozen_finish": {}, "group_state": []})
+    assert "not yet available" in out
+
+
+# ---- Table 11: pre-registered risk tracker ----
+
+def _frozen_finish_full():
+    # minimal: submitted top-2 per group A and D
+    return {
+        "A": {"Mexico": {"p1": 0.55, "p2": 0.26}, "Czechia": {"p1": 0.19, "p2": 0.29},
+              "South Korea": {"p1": 0.18, "p2": 0.28}, "South Africa": {"p1": 0.08, "p2": 0.18}},
+        "D": {"United States": {"p1": 0.37, "p2": 0.29}, "Turkey": {"p1": 0.35, "p2": 0.29},
+              "Paraguay": {"p1": 0.18, "p2": 0.25}, "Australia": {"p1": 0.10, "p2": 0.17}},
+    }
+
+
+def test_risk_tracker_all_twelve_groups_and_labels():
+    ctx = {"frozen_finish": _frozen_finish_full(), "now": {},
+           "group_state": [{"group": g, "played": 0, "total": 6,
+                            "rows": [{"team": "X", "Pts": 0}]} for g in "ABCDEFGHIJKL"]}
+    out = rl.risk_tracker_unit(ctx)
+    assert r"\label{tab:live_risk_tracker}" in out
+    # every group letter heads a row
+    for g in "ABCDEFGHIJKL":
+        assert f"  {g} & " in out
+    # pre-registered risk text carried verbatim
+    assert "Czechia (68\\% qual.) takes second ahead of South Korea" in out
+
+
+def test_risk_tracker_reversed_when_complete_and_displaced():
+    # Group A complete; actual top-2 = Czechia, Mexico (South Korea/frozen-2 dropped)
+    ff = _frozen_finish_full()
+    # frozen top-2 for A: Mexico (p1 max), then Czechia (p2 max) -> {Mexico, Czechia}
+    ctx = {"frozen_finish": ff, "now": {},
+           "group_state": [{"group": "A", "played": 6, "total": 6,
+                            "rows": [{"team": "Mexico", "Pts": 12},
+                                     {"team": "South Korea", "Pts": 9},
+                                     {"team": "Czechia", "Pts": 4},
+                                     {"team": "South Africa", "Pts": 1}]}]}
+    out = rl.risk_tracker_unit(ctx)
+    # current top-2 = {Mexico, South Korea}; frozen = {Mexico, Czechia} -> reversed
+    assert r"$\times$ Reversed" in out
+
+
+def test_risk_tracker_resolved_when_complete_and_held():
+    ff = _frozen_finish_full()
+    ctx = {"frozen_finish": ff, "now": {},
+           "group_state": [{"group": "A", "played": 6, "total": 6,
+                            "rows": [{"team": "Mexico", "Pts": 12},
+                                     {"team": "Czechia", "Pts": 9},
+                                     {"team": "South Korea", "Pts": 4},
+                                     {"team": "South Africa", "Pts": 1}]}]}
+    out = rl.risk_tracker_unit(ctx)
+    assert r"\checkmark\ Resolved" in out
+
+
+def test_risk_tracker_no_frozen_finish():
+    out = rl.risk_tracker_unit({"frozen_finish": {}, "now": {}, "group_state": []})
+    assert "unavailable" in out

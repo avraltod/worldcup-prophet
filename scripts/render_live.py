@@ -738,65 +738,89 @@ def market_snap_unit(ctx):
     return table + "\n\n" + status + fig_block
 
 
+def _abbrev_team(t, n=14):
+    """Match the locked Table 13 abbreviation style (e.g. 'Bosnia and He.')."""
+    return t if len(t) <= n else t[:n - 1].rstrip() + "."
+
+
+def _finish_cells(d):
+    """Three finishing-position cells + Qual as integer percents from a stage
+    dict carrying first/second/third_adv/advance_KO, or four '--' when absent."""
+    if not d:
+        return ["--", "--", "--", "--"]
+    return [f"{100 * d.get('first', 0):.0f}",
+            f"{100 * d.get('second', 0):.0f}",
+            f"{100 * d.get('third_adv', 0):.0f}",
+            f"\\textbf{{{100 * d.get('advance_KO', 0):.0f}}}"]
+
+
 def groupqual_table_unit(ctx):
-    """Table 10: Three-panel (Frozen / Track A / Track B) qualification probability,
-    all teams grouped by group. Requires ctx['group_state']."""
-    frozen = ctx.get("frozen", {})
+    """Table 10: three-panel finishing-position table (Frozen / Track A / Track B),
+    14 columns: Grp, Team, then 1st/2nd/3rd*/Qual for each track. Frozen panel is
+    the locked Table 13 (ctx['frozen_finish'], 100k sims); Track A/B carry the
+    finishing-position keys added by condition.conditional_probs."""
+    frozen_finish = ctx.get("frozen_finish", {})   # {grp: {team: {p1,p2,p3adv,qual}}}
     now = ctx.get("now", {})
     now_b = ctx.get("now_b", {})
-    has_b = bool(now_b)
     group_state = ctx.get("group_state", [])
 
     if not group_state:
         return (r"\textit{Group-state not yet available; qualification table "
                 r"will appear once matches are recorded.}")
 
-    if has_b:
-        col_spec = "llrrr"
-        header = ("Grp & Team & Frozen (\\%) & Track~A (\\%) & Track~B (\\%) \\\\\n"
-                  "\\midrule\n")
-    else:
-        col_spec = "llrr"
-        header = "Grp & Team & Frozen (\\%) & Track~A (\\%) \\\\\n\\midrule\n"
+    def _frozen_cells(grp, t):
+        d = frozen_finish.get(grp, {}).get(t)
+        if not d:
+            return ["--", "--", "--", "--"]
+        return [f"{100 * d.get('p1', 0):.0f}", f"{100 * d.get('p2', 0):.0f}",
+                f"{100 * d.get('p3adv', 0):.0f}",
+                f"\\textbf{{{100 * d.get('qual', 0):.0f}}}"]
 
     rows = []
     for g in group_state:
         grp = g["group"]
         teams = sorted(
             [r["team"] for r in g["rows"]],
-            key=lambda t: -now.get(t, frozen.get(t, {})).get("advance_KO", 0))
+            key=lambda t: -now.get(t, {}).get("advance_KO",
+                          frozen_finish.get(grp, {}).get(t, {}).get("qual", 0)))
         for i, t in enumerate(teams):
             grp_col = grp if i == 0 else ""
-            f_pct = _pct(frozen.get(t, {}).get("advance_KO", 0))
-            a_pct = _pct(now.get(t, {}).get("advance_KO", 0))
-            if has_b:
-                b_pct = _pct(now_b[t].get("advance_KO", 0)) if t in now_b else "---"
-                rows.append(f"{grp_col} & {t} & {f_pct} & {a_pct} & {b_pct} \\\\")
-            else:
-                rows.append(f"{grp_col} & {t} & {f_pct} & {a_pct} \\\\")
-        rows.append("\\midrule")
-    if rows and rows[-1] == "\\midrule":
+            cells = (_frozen_cells(grp, t)
+                     + _finish_cells(now.get(t))
+                     + _finish_cells(now_b.get(t)))
+            rows.append(f"{grp_col} & {_abbrev_team(t)} & " + " & ".join(cells) + " \\\\")
+        rows.append("\\addlinespace")
+    if rows and rows[-1] == "\\addlinespace":
         rows.pop()
 
-    note = ("Qual~\\% = probability of advancing to the knockout round. "
-            "Frozen = pre-kickoff lock ($N$=200{,}000, never changes); "
-            "Track~A = result-conditioned, June~10 ratings ($N$=50{,}000); "
-            + ("Track~B = result-conditioning + live Elo + bookmaker odds ($N$=50{,}000)."
-               if has_b else
-               "Track~B column populated once box-score data is processed."))
+    note = ("1st / 2nd / 3rd$^{*}$ / Qual = probability of winning the group, "
+            "finishing second, advancing as a best third-placed team, and "
+            "qualifying in total. Frozen = pre-kickoff lock ($N$=100{,}000, "
+            "never changes); Track~A = result-conditioned, June~10 ratings "
+            "($N$=50{,}000); Track~B = result-conditioning + live Elo + "
+            "bookmaker odds ($N$=50{,}000). Dashes mark a track not yet "
+            "populated for that edition.")
+
+    panel_hdr = ("\\multicolumn{4}{c}{Frozen} & \\multicolumn{4}{c}{Track~A} & "
+                 "\\multicolumn{4}{c}{Track~B} \\\\\n"
+                 "\\cmidrule(lr){3-6}\\cmidrule(lr){7-10}\\cmidrule(lr){11-14}\n")
+    sub_hdr = ("Grp & Team & " + " & ".join(
+        ["1st & 2nd & 3rd$^{*}$ & Qual"] * 3) + " \\\\\n\\midrule\n")
 
     return (
         "\\begin{table}[!t]\\centering\n"
-        "\\caption{Qualification probability --- Frozen / Track~A / Track~B, "
-        "all teams (live edition M\\liveEditionNum{})}\\label{tab:live_groupqual_three}\n"
-        "\\begin{footnotesize}\\begin{threeparttable}\n"
-        f"\\begin{{tabular}}{{{col_spec}}}\\toprule\n"
-        + header
+        "\\caption{Group finishing-position probabilities --- Frozen / Track~A "
+        "/ Track~B, all teams (live edition M\\liveEditionNum{})}"
+        "\\label{tab:live_groupqual_three}\n"
+        "{\\setlength{\\tabcolsep}{3pt}\\scriptsize\\begin{threeparttable}\n"
+        "\\begin{tabular}{llrrrrrrrrrrrr}\\toprule\n"
+        " & & " + panel_hdr
+        + sub_hdr
         + "\n".join(rows) + "\n"
         "\\bottomrule\\end{tabular}\n"
         "\\begin{tablenotes}\\notesize\n"
         f"\\item \\textit{{Notes}}: {note}\n"
-        "\\end{tablenotes}\\end{threeparttable}\\end{footnotesize}\n\\end{table}"
+        "\\end{tablenotes}\\end{threeparttable}}\n\\end{table}"
     )
 
 
@@ -848,4 +872,107 @@ def fixture_risk_unit(ctx):
         "\\midrule\n"
         + "\n".join(rows) + "\n"
         "\\bottomrule\\end{tabular}\\end{footnotesize}\\end{table}"
+    )
+
+
+# Pre-registered decisive fixture + primary forecast risk per group, copied
+# verbatim from the locked Table~\ref{tab:watchrisk}. These never change; the
+# live tracker (Table 11) scores their status against the results so far.
+_PREREG_RISK = {
+    "A": ("South Korea v Czechia, MD1", "Czechia (68\\% qual.) takes second ahead of South Korea"),
+    "B": ("Switzerland v Canada, MD3", "Host Canada (88\\%) wins the group outright"),
+    "C": ("Scotland v Morocco, MD2", "Scotland (69\\%) overtakes Morocco for second"),
+    "D": ("Turkey v United States, MD3", "Turkey tops the group and reroutes the bracket"),
+    "E": ("Ecuador v Germany, MD3", "Ecuador (88\\%, Elo 1935) wins the group, not second"),
+    "F": ("Netherlands v Japan, MD1", "Japan (76\\%) wins the group ahead of the Netherlands"),
+    "G": ("Egypt v Iran, MD3", "Iran (63\\%) edges Egypt for second"),
+    "H": ("Cape Verde v Saudi Arabia (3rd-place race)", "Neither third-placer qualifies; Uruguay slips to second"),
+    "I": ("Norway v Senegal, MD2", "Senegal (82\\%) beats Norway and takes second"),
+    "J": ("Algeria v Austria, MD3", "Algeria (57\\%) overtakes Austria for second"),
+    "K": ("Colombia v Portugal, MD3", "The Elo tie holds and Colombia (94\\%) tops the group"),
+    "L": ("England v Croatia, MD1", "Croatia (96\\%) wins the group instead of England"),
+}
+
+
+def _frozen_top2(grp, frozen_finish):
+    """The submitted group winner and runner-up: argmax p1, then argmax p2."""
+    teams = frozen_finish.get(grp, {})
+    if not teams:
+        return []
+    first = max(teams, key=lambda t: teams[t].get("p1", 0))
+    rest = [t for t in teams if t != first]
+    if not rest:
+        return [first]
+    second = max(rest, key=lambda t: teams[t].get("p2", 0))
+    return [first, second]
+
+
+def _current_top2(g, now):
+    """Current top two: actual standings when the group is complete, else the
+    Track~A advance-probability ranking."""
+    if g["played"] >= g["total"]:
+        return [r["team"] for r in g["rows"][:2]]
+    teams = [r["team"] for r in g["rows"]]
+    return sorted(teams, key=lambda t: -now.get(t, {}).get("advance_KO", 0))[:2]
+
+
+def risk_tracker_unit(ctx):
+    """Table 11: live status of each group's pre-registered forecast risk.
+    Status is scored programmatically from the submitted top two (Frozen) vs the
+    current top two (actual standings if the group is complete, else Track~A)."""
+    frozen_finish = ctx.get("frozen_finish", {})
+    now = ctx.get("now", {})
+    group_state = {g["group"]: g for g in ctx.get("group_state", [])}
+
+    if not frozen_finish:
+        return (r"\textit{Risk tracker unavailable; frozen finishing-position "
+                r"baseline not loaded for this edition.}")
+
+    rows = []
+    for grp in "ABCDEFGHIJKL":
+        fixture, risk = _PREREG_RISK[grp]
+        g = group_state.get(grp)
+        sub = _frozen_top2(grp, frozen_finish)
+        if g is None or not sub:
+            status, emerging = "$\\triangle$ Pending", "--"
+        else:
+            cur = _current_top2(g, now)
+            held = set(cur) == set(sub)
+            complete = g["played"] >= g["total"]
+            if complete and held:
+                status = "\\checkmark\\ Resolved"
+            elif complete and not held:
+                status = "$\\times$ Reversed"
+            elif held:
+                status = "$\\triangle$ Pending"
+            else:
+                status = "$\\triangle$ At risk"
+            if not held:
+                gained = [t for t in cur if t not in sub]
+                dropped = [t for t in sub if t not in cur]
+                if gained and dropped:
+                    emerging = (f"Track~A now has {_abbrev_team(gained[0])} in the "
+                                f"top two over {_abbrev_team(dropped[0])}")
+                else:
+                    emerging = "Track~A order differs from the submitted top two"
+            else:
+                emerging = "--"
+        rows.append(f"  {grp} & {fixture} & {risk} & {status} & {emerging} \\\\")
+
+    return (
+        "\\begin{table}[!h]\\centering\n"
+        "\\caption{Pre-registered group risks: live status against the results "
+        "so far (live edition M\\liveEditionNum{})}\\label{tab:live_risk_tracker}\n"
+        "\\begin{footnotesize}\\begin{tabular*}{\\textwidth}{@{\\extracolsep{\\fill}}"
+        "lp{3.1cm}p{4.6cm}p{1.7cm}p{3.0cm}}\\toprule\n"
+        "Grp & Decisive fixture & Pre-registered risk & Status & Emerging issue \\\\\n"
+        "\\midrule\n"
+        + "\n".join(rows) + "\n"
+        "\\bottomrule\\end{tabular*}\\end{footnotesize}\n"
+        "\\begin{footnotesize}\\textit{Notes}: Status compares the submitted top "
+        "two (Frozen modal 1st/2nd) with the current top two --- actual standings "
+        "once a group is complete, otherwise the Track~A advance ranking. "
+        "\\checkmark\\ Resolved = held at completion; $\\times$ Reversed = a "
+        "submitted qualifier displaced; $\\triangle$ = group still open.\\end{footnotesize}"
+        "\n\\end{table}"
     )

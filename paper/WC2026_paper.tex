@@ -284,6 +284,8 @@ frozen column never changes, so successive versions are directly comparable).}
 
 \input{live/fixture_risk}
 
+\input{live/risk_tracker}
+
 \subsection{Model against market: a benchmarked trajectory}\label{sec:market}
 
 The forecast does not revise in a vacuum, because a liquid prediction market revises its own champion odds on the same results, and the market is the natural benchmark for whether the model's revisions are sound. Alongside each conditional update I record the market's champion distribution from Polymarket, normalized to remove the small overround, so the live study produces two probability-revision trajectories rather than one. The comparison is informative precisely because the model and the market are built from different information. The group-stage probabilities of this model are recovered from match odds, so on the group stage the two should agree, but the model's knockout tier is Elo while the market aggregates the views of traders, so any disagreement in the champion odds comes from how the two treat the knockout stage.
