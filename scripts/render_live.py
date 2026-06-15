@@ -227,31 +227,6 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, implicati
     )
 
 
-def survival_unit(frozen, now):
-    """Appendix-B 'now' restatement of the stage-by-stage outcome table.
-    frozen is intentionally unused: the locked table sits directly above in
-    the paper, so only the conditioned values are printed here."""
-    teams = sorted(now, key=lambda t: (-now[t]["champion"], -now[t]["advance_KO"]))
-    rows = [f"{t} & {_pct(now[t]['advance_KO'])} & {_pct(now[t]['R16'])} & "
-            f"{_pct(now[t]['QF'])} & {_pct(now[t]['SF'])} & "
-            f"{_pct(now[t]['final'])} & {_pct(now[t]['champion'])} \\\\"
-            for t in teams]
-    return (
-        "\\subsection*{B.live \\quad The same distribution, conditioned on the "
-        "results so far}\n"
-        "The table restates the stage-reached probabilities of the locked table "
-        "above, conditioned on every result revealed to date; the locked table "
-        "never changes, so the pair is directly comparable.\n\n"
-        "\\begin{footnotesize}\n\\begin{longtable}{lrrrrrr}\n"
-        "\\caption{Stage-reached probabilities conditioned on results so far "
-        "(live edition)}\\label{tab:live_survival}\\\\\n"
-        "\\toprule\nTeam & KO & R16 & QF & SF & Final & Champion \\\\\n\\midrule\n"
-        "\\endfirsthead\n"
-        "\\toprule\nTeam & KO & R16 & QF & SF & Final & Champion \\\\\n\\midrule\n"
-        "\\endhead\n"
-        + "\n".join(rows) + "\n\\bottomrule\n\\end{longtable}\n\\end{footnotesize}")
-
-
 def two_track_unit(two_track, learning, fig, info_snapshot=None, track_a=None,
                    champion_b=None, frozen_stages=None):
     """The live A-vs-B: Frozen / Track A / Track B champion odds and Elo drift.
@@ -593,10 +568,14 @@ def bracket_live_unit(ctx):
     if ko_results:
         return (
             "\\begin{figure}[!t]\n"
-            "  \\caption{The submitted bracket updated through M\\liveEditionNum{}; "
-            "shaded cells are confirmed results}\\label{fig:live_bracket}\n"
-            "  {\\centering\\includegraphics[width=0.94\\textwidth]"
-            "{figs/fig_live_bracket.pdf}\\par}\n"
+            "  \\caption{The submitted bracket through M\\liveEditionNum{}, valued "
+            "by champion probability under Track~A (top) and Track~B (bottom); "
+            "greyed boxes are teams eliminated by confirmed results}"
+            "\\label{fig:live_bracket}\n"
+            "  {\\centering\\includegraphics[width=0.92\\textwidth]"
+            "{figs/fig_live_bracket_a.pdf}\\par\\smallskip\n"
+            "  \\includegraphics[width=0.92\\textwidth]"
+            "{figs/fig_live_bracket_b.pdf}\\par}\n"
             "\\end{figure}"
         )
     frozen = ctx.get("frozen", {})

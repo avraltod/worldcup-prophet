@@ -191,6 +191,23 @@ def _stats_lookup(trajectory):
     return lookup
 
 
+def _bracket_eliminated(ko_results):
+    """Teams the live bracket figure should grey out: submitted R32 participants
+    whose match is decided and who did not win it. ko_results maps official KO
+    match numbers (as str or int) to the winning team. Empty during the group
+    stage; deeper-round shading follows the same rule as those rounds resolve."""
+    if not ko_results:
+        return set()
+    from render_live import _R32_PAIRS
+    decided = {str(m): w for m, w in ko_results.items()}
+    elim = set()
+    for home, away, mn in _R32_PAIRS:
+        w = decided.get(str(mn))
+        if w is not None:
+            elim.update(t for t in (home, away) if t != w)
+    return elim
+
+
 def _implications(latest_entry, expectations, results, learn_ratings):
     """Remaining fixtures of the just-played group: lock odds + learning odds."""
     from learn import lambda_expected
@@ -315,12 +332,13 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
         groups = {g: sorted({cond.RATES[r][2] for r in cond.GROUPS[g]}
                             | {cond.RATES[r][3] for r in cond.GROUPS[g]})
                   for g in sorted(cond.GROUPS)}
+        now_b_probs = (two_track or {}).get("learn_probs", {})
         # Track A groupqual figure
         mlf.group_qual_fig(frozen, now_probs, groups,
                            PAPER / "figs" / "fig_live_groupqual.pdf",
                            label="Track A", color="#3b6ea5")
-        # Track B groupqual figure (uses same now_probs until Track B stage probs available)
-        mlf.group_qual_fig(frozen, now_probs, groups,
+        # Track B groupqual figure (true Track B stage probs when available)
+        mlf.group_qual_fig(frozen, now_b_probs or now_probs, groups,
                            PAPER / "figs" / "fig_live_groupqual_b.pdf",
                            label="Track B", color="#3d8c40")
         # Champdist with Frozen + Track A (+ Track B if available)
@@ -339,6 +357,15 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
         if market:
             mlf.market_fig(frozen, now_probs, track_b_champ, market,
                            PAPER / "figs" / "fig_live_market.pdf")
+        # Knockout brackets (Track A / Track B): generated every edition so they
+        # are ready; bracket_live_unit only displays them once KO results exist.
+        ko_done = res.get("ko", {})
+        elim = _bracket_eliminated(ko_done)
+        mlf.bracket_fig(now_probs, PAPER / "figs" / "fig_live_bracket_a.pdf",
+                        "Track A", eliminated=elim)
+        mlf.bracket_fig(now_b_probs or now_probs,
+                        PAPER / "figs" / "fig_live_bracket_b.pdf",
+                        "Track B", eliminated=elim)
     except Exception as ex:                      # noqa: BLE001
         print(f"live figures skipped ({ex})")
 

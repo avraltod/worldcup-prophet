@@ -88,3 +88,96 @@ def two_track_fig(history, out):
     ax.set_xlabel("after match"); ax.set_ylabel("P(champion)")
     ax.legend(fontsize=7, ncol=2)
     fig.tight_layout(); fig.savefig(out); plt.close(fig)
+
+
+def bracket_fig(probs, out, title, eliminated=None):
+    """Two-sided knockout bracket on the submitted-entry structure (spec 3.20).
+    Each box carries a team and its champion probability under `probs`
+    ({team: {champion, ...}}); the submitted winners' path is shaded blue and the
+    champion gold, and teams in `eliminated` (confirmed knockout losers) are
+    greyed. Called once per edition with Track A and again with Track B inputs."""
+    from matplotlib.patches import FancyBboxPatch
+    import make_bracket_tikz as bt
+
+    elim = set(eliminated or [])
+
+    def cp(t):
+        return probs.get(t, {}).get("champion", 0.0)
+
+    def parents(ys):
+        return [(ys[2 * i] + ys[2 * i + 1]) / 2 for i in range(len(ys) // 2)]
+
+    rows = [15 - i for i in range(16)]
+    w32 = parents(rows); r16 = parents(w32); qf = parents(r16); sf = parents(qf)
+    BW, BH = 1.7, 0.62
+    xL = [0, 2, 4, 6, 8]            # left half: R32, R32-winners, R16, QF, SF
+    xR = [20, 18, 16, 14, 12]       # right half mirrors toward the centre
+    xC = 10                         # champion column
+
+    fig, ax = plt.subplots(figsize=(13, 7.2))
+    ax.set_xlim(-0.5, 21.5); ax.set_ylim(-1.4, 17.2); ax.axis("off")
+
+    def draw(t, x, y, side, win=False, champ=False):
+        left = x if side == "L" else x - BW
+        if champ:
+            fc, ec, tc = "#f4d03f", "#b8860b", "black"
+        elif t in elim:
+            fc, ec, tc = "#ececec", "#c4c4c4", "#9a9a9a"
+        elif win:
+            fc, ec, tc = "#dce7f6", "#5b8fd0", "black"
+        else:
+            fc, ec, tc = "#f7f7f7", "#cfcfcf", "#444444"
+        ax.add_patch(FancyBboxPatch((left, y - BH / 2), BW, BH,
+                     boxstyle="round,pad=0.01", fc=fc, ec=ec, lw=0.8, zorder=2))
+        ax.text(left + 0.08, y, bt.TEAM[t][0], va="center", ha="left",
+                fontsize=7.5, color=tc,
+                fontweight="bold" if champ else "normal", zorder=3)
+        ax.text(left + BW - 0.08, y, f"{100 * cp(t):.0f}", va="center",
+                ha="right", fontsize=6.5, color="#666666", zorder=3)
+
+    def line(x1, y1, x2, y2):
+        ax.plot([x1, x2], [y1, y2], color="#c2c2c2", lw=0.7, zorder=1)
+
+    def connect(y1, y2, xce, xpe):
+        mid = (xce + xpe) / 2
+        line(xce, y1, mid, y1); line(xce, y2, mid, y2)
+        line(mid, y1, mid, y2); line(mid, (y1 + y2) / 2, xpe, (y1 + y2) / 2)
+
+    def render_side(R32, R16, QF, SF, xs, s):
+        sgn = 1 if s == "L" else -1
+        inner = lambda x: x + sgn * BW          # edge facing the centre
+        for j, (h, a, w) in enumerate(R32):
+            draw(h, xs[0], rows[2 * j], s, win=(h == w))
+            draw(a, xs[0], rows[2 * j + 1], s, win=(a == w))
+            connect(rows[2 * j], rows[2 * j + 1], inner(xs[0]), xs[1])
+        for j, (_, _, w) in enumerate(R32):
+            draw(w, xs[1], w32[j], s)
+        for k in range(4):
+            draw(R16[k], xs[2], r16[k], s)
+            connect(w32[2 * k], w32[2 * k + 1], inner(xs[1]), xs[2])
+        for k in range(2):
+            draw(QF[k], xs[3], qf[k], s)
+            connect(r16[2 * k], r16[2 * k + 1], inner(xs[2]), xs[3])
+        draw(SF, xs[4], sf[0], s)
+        connect(qf[0], qf[1], inner(xs[3]), xs[4])
+        return inner(xs[4]), sf[0]
+
+    lx, ly = render_side(bt.LEFT_R32, bt.LEFT_R16, bt.LEFT_QF, bt.LEFT_SF, xL, "L")
+    rx, ry = render_side(bt.RIGHT_R32, bt.RIGHT_R16, bt.RIGHT_QF, bt.RIGHT_SF, xR, "R")
+
+    # champion box at centre, fed by both semi-finalists
+    cy = max(ly, ry) + 1.4
+    draw(bt.CHAMPION, xC, cy, "L", champ=True)   # drawn with left edge = xC
+    line(lx, ly, xC, ly); line(xC, ly, xC, cy - BH / 2)
+    line(rx, ry, xC + BW, ry); line(xC + BW, ry, xC + BW, cy - BH / 2)
+    ax.text(xC + BW / 2, cy + 0.7, "★ " + bt.TEAM[bt.CHAMPION][0],
+            ha="center", fontsize=9, fontweight="bold", color="#b8860b")
+
+    for lab, x in [("R32", xL[0]), ("R16", xL[2]), ("QF", xL[3]), ("SF", xL[4]),
+                   ("SF", xR[4]), ("QF", xR[3]), ("R16", xR[2]), ("R32", xR[0])]:
+        ax.text(x + (BW / 2 if x < xC else -BW / 2), 16.6, lab, ha="center",
+                fontsize=8, color="#888888", fontweight="bold")
+    ax.set_title(f"{title}: submitted bracket, box value = P(champion) %",
+                 fontsize=10)
+    fig.tight_layout(); fig.savefig(out); plt.close(fig)
+    return out

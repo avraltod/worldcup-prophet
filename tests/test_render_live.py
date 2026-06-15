@@ -123,12 +123,6 @@ def test_group_box_shows_pred_vs_actual_in_matrix():
     assert "tabular" in tex                      # unified table structure
 
 
-def test_survival_unit_restates_all_teams():
-    frozen, now = _stages(), _stages(0.30)
-    tex = rl.survival_unit(frozen, now)
-    assert "Spain" in tex and "30.0" in tex and "longtable" in tex
-
-
 def _learning():
     return {"drift": {"Mexico": 6.2, "South Africa": -6.2},
             "pending": [],
@@ -201,12 +195,6 @@ def test_validate_labels_raises_when_missing():
 
 def test_validate_labels_empty_requirements_always_passes():
     rl.validate_labels("test", "any content", [])
-
-
-def test_survival_unit_has_label():
-    frozen, now = _stages(), _stages(0.30)
-    tex = rl.survival_unit(frozen, now)
-    assert r"\label{tab:live_survival}" in tex
 
 
 def test_ledger_has_label():
