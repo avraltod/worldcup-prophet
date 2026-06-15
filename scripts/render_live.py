@@ -224,21 +224,14 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
                 correct = _sgn(pick[0] - pick[1]) == _sgn(res[0] - res[1])
                 icon = r"$\checkmark$" if correct else r"$\times$"
                 cells.append(f"\\textbf{{{score}}}{icon}")
-            else:                        # upcoming: per-track scoreline + H/D/A,
-                fa, tb = _frozen_pick(e), _track_b_pick(e)   # folding in the old fixtures block
-                fhda = e["probs_HDA"]                        # Frozen = Track A (market-based)
-                bhda = track_b.get(e["match"], {}).get("hda")
+            else:                        # upcoming: Frozen=Track~A scoreline; Track~B if it differs
+                fa, tb = _frozen_pick(e), _track_b_pick(e)
                 if e["home"] == home:
                     f_s, b_s = f"{fa[0]}--{fa[1]}", f"{tb[0]}--{tb[1]}"
-                    f_h, b_h = fhda, bhda
                 else:
                     f_s, b_s = f"{fa[1]}--{fa[0]}", f"{tb[1]}--{tb[0]}"
-                    f_h = [fhda[2], fhda[1], fhda[0]]
-                    b_h = [bhda[2], bhda[1], bhda[0]] if bhda else None
-                fh = "/".join(str(round(100 * x)) for x in f_h)
-                bh = "/".join(str(round(100 * x)) for x in b_h) if b_h else "--"
-                cells.append(
-                    f"\\makecell{{F/A {f_s}\\,{fh} \\\\ B {b_s}\\,{bh}}}")
+                cells.append(f"F/A/B:{f_s}" if f_s == b_s
+                             else f"F/A:{f_s}\\, B:{b_s}")
 
         # right panels — each W/D/L/Pts/Qual%: Actual (real record + current
         # qual), then projected final record under Frozen / Track A / Track B.
@@ -265,14 +258,14 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
     note = ("Teams are 3-letter codes. Round-robin body: row team's score against "
             "the column team. Played cells show the actual score in bold with "
             "$\\checkmark$/$\\times$ for the submitted result pick; upcoming cells "
-            "give, per track, the predicted scoreline and the H/D/A outcome "
-            "probabilities (\\%) --- line F/A is Frozen=Track~A, line B is Track~B. "
-            "Right panels report W/D/L/Pts and qualification \\%: Actual is the real "
-            "record so far; Frozen, Track~A, and Track~B give the projected final "
-            "record (each remaining game resolved at that track's predicted "
-            "scoreline) and that track's qual. Frozen and Track~A share the June~10 "
-            "ratings, so their scoreline, H/D/A, and projected record coincide; the "
-            "two diverge only in the conditioned qualification \\%.")
+            "give the predicted scoreline as F/A (Frozen=Track~A) and B (Track~B), "
+            "collapsed to F/A/B when all agree. Right panels report W/D/L/Pts and "
+            "qualification \\%: Actual is the real record so far; Frozen, Track~A, "
+            "and Track~B give the projected final record (each remaining game "
+            "resolved at that track's predicted scoreline) and that track's qual. "
+            "Frozen and Track~A share the June~10 ratings, so their scoreline and "
+            "projected record coincide; the two diverge only in the conditioned "
+            "qualification \\%.")
 
     return (
         f"\\paragraph{{Group {grp} — live ({state}).}}\\leavevmode\\par\n"

@@ -100,7 +100,8 @@ def test_group_box_played_and_unplayed():
     gA = next(g for g in _gs12() if g["group"] == "A")
     tex = rl.group_box(gA, {"group": {"1": [2, 0]}}, exps, frozen, now)
     assert "2--0" in tex                      # real result in matrix cell
-    assert "35/33/32" in tex                  # Frozen H/D/A folded into the upcoming cell
+    assert "F/A/B:1--1" in tex                # upcoming scoreline (no track_b: all agree)
+    assert "H/D/A" not in tex                 # H/D/A no longer in the group box
     gB = next(g for g in _gs12() if g["group"] == "B")
     tex_b = rl.group_box(gB, {"group": {}}, [], frozen, now)
     assert "Fixtures pending" in tex_b      # no expectations supplied
@@ -127,10 +128,10 @@ def test_group_box_panels_and_track_scorelines():
     # full-width table + 3-letter team codes
     assert "tabular*" in tex and "\\textwidth" in tex
     assert "MEX" in tex and "KOR" in tex       # ISO3 codes, not full names
-    # upcoming cell now carries scoreline + H/D/A per track (old block folded in)
-    assert "F/A 1--1\\,35/33/32" in tex        # Frozen=Track A: 1-1, H/D/A 35/33/32
-    assert "B 2--0\\,55/25/20" in tex          # Track B: 2-0, H/D/A 55/25/20
-    # the separate remaining-fixtures table is gone
+    # upcoming cell: scoreline only, Frozen=Track A merged, Track B if it differs
+    assert "F/A:1--1\\, B:2--0" in tex         # match 2: F/A 1-1, Track B 2-0
+    # no H/D/A and no separate fixtures table in the group box
+    assert "H/D/A" not in tex
     assert "Fixture &" not in tex
 
 
