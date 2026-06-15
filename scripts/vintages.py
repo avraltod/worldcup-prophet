@@ -46,8 +46,10 @@ def row_for_edition(match, entries, stats, champ_top5):
 
 
 def latex_table(rows, max_rows=20):
-    """Pivoted vintages longtable: rows = editions in play order,
-    cols = top-5 team champion % + Cum.pts / Mean Brier / Cum.bits."""
+    """Pivoted vintages table: rows = editions in play order, cols = top-5 team
+    champion % + Cum.pts / Mean Brier / Cum.bits. A plain table (not longtable):
+    capped at max_rows it always fits one page, and unlike a longtable it does not
+    drop its continuation rows when it lands next to a float."""
     if not rows:
         return r"\textit{No editions issued yet.}"
     shown = [rows[0]] + rows[1:][-(max_rows - 1):] if len(rows) > max_rows else rows
@@ -70,12 +72,10 @@ def latex_table(rows, max_rows=20):
             f"% {len(rows) - len(shown)} intermediate editions omitted\n")
     _vin_colhdr = (f"\\makecell{{Fixture \\\\ (play order)}} & {team_header}"
                   " & Cum.\\,pts & Mean Brier & Cum.\\,bits \\\\\n")
-    return (note + "\\begin{scriptsize}\n\\begin{longtable}{" + colspec + "}\n"
+    return (note + "\\begin{table}[!ht]\\centering\\begin{scriptsize}\n"
             "\\caption{Forecast vintages --- champion probabilities by edition "
-            "(live edition M\\liveEditionNum{})}\\label{tab:live_vintages}\\\\\n"
+            "(live edition M\\liveEditionNum{})}\\label{tab:live_vintages}\n"
+            "\\begin{tabular}{" + colspec + "}\n"
             "\\toprule\n" + _vin_colhdr + "\\midrule\n"
-            "\\endfirsthead\n"
-            "\\toprule\n" + _vin_colhdr + "\\midrule\n"
-            "\\endhead\n"
             + "\n".join(edition_rows)
-            + "\n\\bottomrule\n\\end{longtable}\n\\end{scriptsize}")
+            + "\n\\bottomrule\n\\end{tabular}\n\\end{scriptsize}\\end{table}")

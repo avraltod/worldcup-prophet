@@ -59,5 +59,6 @@ def test_latex_table_shows_m000_plus_tail():
     tex = vin.latex_table(rows, max_rows=9)
     assert "M000" in tex and "M024" in tex    # first and last always present
     assert "M005" not in tex                  # middle editions collapsed out
-    assert "Spain" in tex and "longtable" in tex
+    assert "Spain" in tex and "tabular" in tex
+    assert "longtable" not in tex             # plain table (no float-drop bug)
     assert "Cum." in tex                      # scoring columns present

@@ -270,7 +270,7 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
     return (
         f"\\paragraph{{Group {grp} — live ({state}).}}\\leavevmode\\par\n"
         "\\noindent\\begin{threeparttable}\n"
-        "{\\setlength{\\tabcolsep}{2pt}\\tiny\n"
+        "{\\setlength{\\tabcolsep}{3pt}\\scriptsize\n"
         f"\\begin{{tabular*}}{{\\textwidth}}{{@{{\\extracolsep{{\\fill}}}}{col_spec}@{{}}}}\n"
         "\\toprule\n"
         f"{header}\n"
