@@ -9,3 +9,4 @@ date,match,home,away,pred,actual,pts,ev,p_outcome_real,p_score_real,brier,code
 2026-06-14,6,Australia,Turkey,1-2,2-0,0,0.8739,0.207,0.0337,0.9762,L?
 2026-06-14,10,Germany,Curaçao,3-0,7-1,1,1.3197,0.9235,0.0043,0.0097,S
 2026-06-14,11,Netherlands,Japan,2-1,2-2,0,0.7885,0.2577,0.0506,0.8438,P?
+2026-06-15,9,Ivory Coast,Ecuador,1-2,1-0,0,0.7476,0.2699,0.115,0.8071,P?
