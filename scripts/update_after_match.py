@@ -208,6 +208,27 @@ def _bracket_eliminated(ko_results):
     return elim
 
 
+def _track_b_fixture_map(expectations, results, learn_ratings):
+    """For every unplayed group fixture, Track~B's predicted scoreline and H/D/A
+    probabilities from the live (learning-track) ratings: {match: {'pick':[h,a],
+    'hda':[h,d,a]}}. Empty when the learning track has no ratings yet."""
+    out = {}
+    if not learn_ratings:
+        return out
+    from learn import lambda_expected
+    played = set(results.get("group", {}).keys())
+    for e in expectations:
+        if str(e["match"]) in played:
+            continue
+        h, a = e["home"], e["away"]
+        if h not in learn_ratings or a not in learn_ratings:
+            continue
+        lh, la = lambda_expected(learn_ratings[h], learn_ratings[a])
+        out[e["match"]] = {"pick": [round(lh), round(la)],
+                           "hda": list(rl.outcome_probs(lh, la))}
+    return out
+
+
 def _upcoming_picks(expectations, results, learn_ratings, limit=8):
     """Next-matchday unplayed group fixtures with each track's predicted scoreline.
     Frozen and Track~A reuse the submitted pick (both ride the June-10 ratings, so
@@ -455,11 +476,12 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     rl.write_unit(LIVE_DIR, "market_snap", rl.market_snap_unit(ctx))
     rl.write_unit(LIVE_DIR, "survival_colcomp", rl.survival_colcomp_unit(ctx))
     # 5. per-group sections
+    track_b_map = _track_b_fixture_map(expectations, res, learn_ratings)
     for g in group_st:
         rl.write_unit(LIVE_DIR, f"group_{g['group']}",
                       rl.group_box(g, res, expectations, frozen, now_probs,
                                    now_b=ctx.get("now_b", {}),
-                                   implications=ctx["implications"]))
+                                   track_b=track_b_map))
     # 6. data and methodology sections
     rl.write_unit(LIVE_DIR, "data_revealed", rl.data_revealed_unit(ctx, use_api))
     rl.write_unit(LIVE_DIR, "simulation_note", rl.simulation_note_unit(ctx, use_api))

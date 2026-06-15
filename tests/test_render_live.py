@@ -100,10 +100,32 @@ def test_group_box_played_and_unplayed():
     gA = next(g for g in _gs12() if g["group"] == "A")
     tex = rl.group_box(gA, {"group": {"1": [2, 0]}}, exps, frozen, now)
     assert "2--0" in tex                      # real result in matrix cell
-    assert "35.0" in tex                      # remaining fixture H% in matrix cell
+    assert "35.0" in tex                      # remaining fixture H% in H/D/A block below
     gB = next(g for g in _gs12() if g["group"] == "B")
     tex_b = rl.group_box(gB, {"group": {}}, [], frozen, now)
     assert "No results yet" in tex_b
+
+
+def test_group_box_four_panels_and_three_track_scorelines():
+    frozen, now = _stages(), _stages(0.27)
+    for t in ("Mexico", "South Korea", "Czechia", "South Africa"):
+        frozen[t] = {"advance_KO": 0.9, "champion": 0.01, "R16": 0, "QF": 0, "SF": 0, "final": 0}
+        now[t] = {"advance_KO": 0.95, "champion": 0.01, "R16": 0, "QF": 0, "SF": 0, "final": 0}
+    exps = [{"match": 1, "group": "A", "home": "Mexico", "away": "South Africa",
+             "pick": [2, 1], "probs_HDA": [0.67, 0.21, 0.12]},
+            {"match": 2, "group": "A", "home": "South Korea", "away": "Czechia",
+             "pick": [1, 1], "probs_HDA": [0.35, 0.33, 0.32]}]
+    # Track B predicts a different scoreline for the unplayed match 2
+    track_b = {2: {"pick": [2, 0], "hda": [0.55, 0.25, 0.20]}}
+    gA = next(g for g in _gs12() if g["group"] == "A")
+    tex = rl.group_box(gA, {"group": {"1": [2, 0]}}, exps, frozen, now, track_b=track_b)
+    # four-panel headers
+    assert "Actual" in tex and "Frozen" in tex and "Track~A" in tex and "Track~B" in tex
+    assert "W/D/L/P" in tex
+    # upcoming cell carries three-track predicted scorelines
+    assert "F:1--1" in tex and "A:1--1" in tex and "B:2--0" in tex
+    # remaining-fixtures block shows Frozen and Track B H/D/A
+    assert "55.0" in tex                       # Track B H% for match 2 in block
 
 
 def test_group_box_shows_pred_vs_actual_in_matrix():
@@ -119,7 +141,7 @@ def test_group_box_shows_pred_vs_actual_in_matrix():
     tex = rl.group_box(gA, {"group": {"1": [2, 0]}}, exps, frozen, now)
     assert "2--0" in tex                         # played result in matrix cell
     assert "checkmark" in tex                    # pick 2-1 (home win) vs actual 2-0 (home win) ✓
-    assert "Q" in tex and "90.0" in tex          # frozen qual% column present
+    assert "Q\\%" in tex and "95.0" in tex       # Actual panel folds Track A qual% (now)
     assert "tabular" in tex                      # unified table structure
 
 

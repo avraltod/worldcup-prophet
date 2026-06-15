@@ -97,16 +97,38 @@ def tracker(group_state, frozen, now):
         "    \\bottomrule\n  \\end{tabular*}}\n  \\end{footnotesize}\n\\end{table}")
 
 
-def group_box(g_state, results, expectations, frozen, now, now_b=None, implications=None):
-    """Appendix-A living box for one group: unified round-robin matrix with
-    actual/prediction results + right-side standing + qual columns.
-    now_b: Track B full stage probs {team: {advance_KO,...}}.
-    implications: list of {fixture, lock_HDA, learn_HDA} for upcoming fixtures."""
+def _record_from(team, group_exps, res_by_match, resolver):
+    """Tally (W, D, L, Pts) for `team` across its group fixtures, taking played
+    matches from `res_by_match` and unplayed ones from resolver(e) -> (hg, ag)."""
+    w = d = l = pts = 0
+    for e in group_exps:
+        if team not in (e["home"], e["away"]):
+            continue
+        res = res_by_match.get(str(e["match"]))
+        hg, ag = (tuple(res) if res else resolver(e))
+        tf, ta = (hg, ag) if e["home"] == team else (ag, hg)
+        if tf > ta:
+            w += 1; pts += 3
+        elif tf == ta:
+            d += 1; pts += 1
+        else:
+            l += 1
+    return w, d, l, pts
+
+
+def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=None):
+    """Appendix-A unified group box (spec 3.15). ONE round-robin matrix: played
+    cells show the bold actual score + check/cross; upcoming cells show the
+    three-track predicted scoreline (F / A / B). Four right-side panels give the
+    Actual record (W/D/L/Pts/Qual\\%) and the projected final W/D/L/Pts under
+    Frozen, Track A, and Track B. A remaining-fixtures H/D/A block sits below.
+    track_b: {match_num: {'pick': [h, a], 'hda': [h, d, a]}} for upcoming games."""
     grp = g_state["group"]
     teams = [r["team"] for r in g_state["rows"]]
-    exps = {(e["home"], e["away"]): e
-            for e in expectations if e.get("group") == grp}
+    group_exps = [e for e in expectations if e.get("group") == grp]
+    exps = {(e["home"], e["away"]): e for e in group_exps}
     res_by_match = results["group"]
+    track_b = track_b or {}
 
     if not g_state["played"]:
         qual = "; ".join(f"{t} {_pct(frozen[t]['advance_KO'])}"
@@ -114,18 +136,24 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, implicati
         return (f"\\paragraph{{Group {grp} — live.}} No results yet; "
                 f"Frozen qualification odds: {qual}.")
 
-    def _sgn(d): return 1 if d > 0 else (-1 if d < 0 else 0)
+    def _sgn(x): return 1 if x > 0 else (-1 if x < 0 else 0)
 
-    # Index implications by fixture name for Track B H/D/A lookup
-    imp_by_fixture = {i["fixture"]: i for i in (implications or [])}
+    def _frozen_pick(e):                # Frozen and Track A share the submitted pick
+        return tuple(e["pick"])
 
-    # Build round-robin matrix: rows = teams, cols = opponent teams
-    # Right-side columns: W/D/L/P | Q%(A) | Q%(F) | Q%(B)
+    def _track_b_pick(e):
+        return tuple(track_b.get(e["match"], {}).get("pick", e["pick"]))
+
+    # ---- round-robin matrix -------------------------------------------------
     n = len(teams)
-    col_spec = "l" + "c" * n + "rrrr"
+    col_spec = "l" + "c" * n + "cccc"
     header_teams = " & ".join(f"\\rotatebox{{90}}{{\\tiny {t}}}" for t in teams)
-    header = (f" & {header_teams} & \\tiny W/D/L/P & \\tiny Q\\%(A) & "
-              f"\\tiny Q\\%(F) & \\tiny Q\\%(B) \\\\")
+    panel_hdr = (
+        "\\makecell{\\tiny Actual \\\\ \\tiny W/D/L/P/Q\\%} & "
+        "\\makecell{\\tiny Frozen \\\\ \\tiny W/D/L/P} & "
+        "\\makecell{\\tiny Track~A \\\\ \\tiny W/D/L/P} & "
+        "\\makecell{\\tiny Track~B \\\\ \\tiny W/D/L/P}")
+    header = f" & {header_teams} & {panel_hdr} \\\\"
 
     matrix_rows = []
     for home in teams:
@@ -138,77 +166,58 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, implicati
             if e is None:
                 cells.append("?")
                 continue
-            match_key = str(e["match"])
-            res = res_by_match.get(match_key)
-            if res:
-                # played: actual score + correct/wrong indicator
-                if e["home"] == home:
-                    score = f"{res[0]}--{res[1]}"
-                    pick = e["pick"]
-                    correct = _sgn(pick[0] - pick[1]) == _sgn(res[0] - res[1])
-                else:
-                    score = f"{res[1]}--{res[0]}"
-                    pick = e["pick"]
-                    correct = _sgn(pick[0] - pick[1]) == _sgn(res[0] - res[1])
+            res = res_by_match.get(str(e["match"]))
+            if res:                      # played: bold actual score + correct mark
+                score = (f"{res[0]}--{res[1]}" if e["home"] == home
+                         else f"{res[1]}--{res[0]}")
+                pick = e["pick"]
+                correct = _sgn(pick[0] - pick[1]) == _sgn(res[0] - res[1])
                 icon = r"$\checkmark$" if correct else r"$\times$"
                 cells.append(f"\\textbf{{{score}}}{icon}")
-            else:
-                # upcoming: Frozen H/D/A; add Track B line if implications available
-                ph, pd, pa = e["probs_HDA"]
-                fixture_name = f"{e['home']} v {e['away']}"
-                imp = imp_by_fixture.get(fixture_name)
-                if imp:
-                    bh, bd, ba = imp["learn_HDA"]
-                    if e["home"] == home:
-                        cells.append(
-                            f"\\makecell{{\\tiny F:{_pct(ph)}/{_pct(pd)}/{_pct(pa)}"
-                            f" \\\\ \\tiny B:{_pct(bh)}/{_pct(bd)}/{_pct(ba)}}}")
-                    else:
-                        cells.append(
-                            f"\\makecell{{\\tiny F:{_pct(pa)}/{_pct(pd)}/{_pct(ph)}"
-                            f" \\\\ \\tiny B:{_pct(ba)}/{_pct(bd)}/{_pct(bh)}}}")
+            else:                        # upcoming: three-track predicted scoreline
+                fa, tb = _frozen_pick(e), _track_b_pick(e)
+                if e["home"] == home:
+                    f_s, b_s = f"{fa[0]}--{fa[1]}", f"{tb[0]}--{tb[1]}"
                 else:
-                    if e["home"] == home:
-                        cells.append(f"\\tiny {_pct(ph)}/{_pct(pd)}/{_pct(pa)}")
-                    else:
-                        cells.append(f"\\tiny {_pct(pa)}/{_pct(pd)}/{_pct(ph)}")
+                    f_s, b_s = f"{fa[1]}--{fa[0]}", f"{tb[1]}--{tb[0]}"
+                cells.append(
+                    f"\\makecell{{\\tiny F:{f_s} \\\\ \\tiny A:{f_s} "
+                    f"\\\\ \\tiny B:{b_s}}}")
 
-        # right-side standing columns
-        row_data = next((r for r in g_state["rows"] if r["team"] == home), {})
-        w, d, l = row_data.get("W", 0), row_data.get("D", 0), row_data.get("L", 0)
-        pts = row_data.get("Pts", 0)
+        # right-side panels: Actual (real record + Track A qual%), then projected
+        # final W/D/L/Pts under Frozen / Track A (= Frozen) / Track B
+        row = next((r for r in g_state["rows"] if r["team"] == home), {})
+        aw, ad, al = row.get("W", 0), row.get("D", 0), row.get("L", 0)
+        apts = row.get("Pts", 0)
         qual_a = _pct(now[home]["advance_KO"]) if home in now else "--"
-        qual_f = _pct(frozen[home]["advance_KO"]) if home in frozen else "--"
-        qual_b = _pct(now_b[home]["advance_KO"]) if now_b and home in now_b else "--"
-        record_str = f"{w}/{d}/{l}/{pts}"
+        actual = f"{aw}/{ad}/{al}/{apts}/{qual_a}\\%"
+        fw, fd, fl, fp = _record_from(home, group_exps, res_by_match, _frozen_pick)
+        bw, bd, bl, bp = _record_from(home, group_exps, res_by_match, _track_b_pick)
         matrix_rows.append(
             f"\\tiny {home} & " + " & ".join(cells)
-            + f" & \\tiny {record_str} & \\tiny {qual_a}\\%"
-            f" & \\tiny {qual_f}\\% & \\tiny {qual_b}\\% \\\\"
+            + f" & \\tiny {actual} & \\tiny {fw}/{fd}/{fl}/{fp}"
+            f" & \\tiny {fw}/{fd}/{fl}/{fp} & \\tiny {bw}/{bd}/{bl}/{bp} \\\\"
         )
 
-    # Remaining fixtures block: upcoming matches in this group
+    # ---- remaining-fixtures H/D/A block (below the matrix) -------------------
     remaining_lines = []
-    for e in expectations:
-        if e.get("group") != grp or str(e["match"]) in res_by_match:
+    for e in group_exps:
+        if str(e["match"]) in res_by_match:
             continue
         fixture_name = f"{e['home']} v {e['away']}"
         lock_str = "/".join(_pct(p) for p in e["probs_HDA"])
-        imp = imp_by_fixture.get(fixture_name)
-        learn_str = "/".join(_pct(p) for p in imp["learn_HDA"]) if imp else "--"
-        remaining_lines.append(f"{fixture_name} & {lock_str} & {learn_str} \\\\")
+        hda = track_b.get(e["match"], {}).get("hda")
+        b_str = "/".join(_pct(p) for p in hda) if hda else "--"
+        remaining_lines.append(f"{fixture_name} & {lock_str} & {b_str} \\\\")
 
     fixtures_block = ""
     if remaining_lines:
         fixtures_block = (
-            "\n\\smallskip\n"
-            "\\begin{footnotesize}\n"
+            "\n\\smallskip\n\\begin{footnotesize}\n"
             "\\begin{tabular}{lcc}\\toprule\n"
-            "Fixture & Frozen H/D/A (\\%) & Track~B H/D/A (\\%) \\\\\n"
-            "\\midrule\n"
+            "Fixture & Frozen H/D/A (\\%) & Track~B H/D/A (\\%) \\\\\n\\midrule\n"
             + "\n".join(remaining_lines) + "\n"
-            "\\bottomrule\\end{tabular}\n"
-            "\\end{footnotesize}"
+            "\\bottomrule\\end{tabular}\n\\end{footnotesize}"
         )
 
     return (
