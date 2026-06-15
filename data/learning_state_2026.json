@@ -76,7 +76,9 @@
   "Netherlands": 36.335125448028705,
   "Japan": -36.335125448028705,
   "Sweden": 56.39187574671452,
-  "Tunisia": -56.39187574671452
+  "Tunisia": -56.39187574671452,
+  "Spain": -7.329749103942586,
+  "Cape Verde": 7.329749103942586
  },
  "processed": [
   {
@@ -293,6 +295,24 @@
    "drift_after": {
     "Sweden": 56.39,
     "Tunisia": -56.39
+   }
+  },
+  {
+   "match": 14,
+   "home": "Spain",
+   "away": "Cape Verde",
+   "lam_obs": {
+    "home": 2.279,
+    "away": 0.326,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 2.2,
+    "away": 0.1
+   },
+   "drift_after": {
+    "Spain": -7.33,
+    "Cape Verde": 7.33
    }
   }
  ],
@@ -537,6 +557,47 @@
     "n_new_injuries": 0,
     "n_lineup_adj": 0,
     "n_teams_with_drift": 22
+   }
+  },
+  {
+   "match": 14,
+   "frozen_top": {
+    "Spain": 0.2675,
+    "Argentina": 0.1812,
+    "France": 0.1461,
+    "Portugal": 0.0959,
+    "England": 0.0721,
+    "Brazil": 0.0368,
+    "Netherlands": 0.0243,
+    "Germany": 0.0238
+   },
+   "learning_top": {
+    "Spain": 0.2518,
+    "Argentina": 0.18,
+    "France": 0.1374,
+    "Portugal": 0.0988,
+    "England": 0.0745,
+    "Brazil": 0.033,
+    "Netherlands": 0.0393,
+    "Germany": 0.0532
+   },
+   "info_snapshot": {
+    "fetched_at": "2026-06-15T19:07:59Z",
+    "elo_updated_at": "2026-06-10T00:00:00Z",
+    "odds_fetched_at": null,
+    "elo_rms_delta": 0.0,
+    "n_rate_changes": 0,
+    "max_odds_shift_ph": 0.0,
+    "biggest_elo_mover": {
+     "team": "Mexico",
+     "june10": 1868,
+     "current": 1868,
+     "delta": 0
+    },
+    "biggest_odds_mover": {},
+    "n_new_injuries": 0,
+    "n_lineup_adj": 0,
+    "n_teams_with_drift": 24
    }
   }
  ]

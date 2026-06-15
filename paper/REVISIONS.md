@@ -48,3 +48,5 @@ headline numbers are backfilled into the vintages table.
 **Rev M009 (Ivory Coast v Ecuador 1-0).** Cumulative 4 pts, mean Brier 0.69; failure-mode none. Full living layer re-rendered (edition M009); skeleton unchanged.
 
 **Rev M012 (Sweden v Tunisia 5-1).** Cumulative 6 pts, mean Brier 0.62; failure-mode none. Full living layer re-rendered (edition M012); skeleton unchanged.
+
+**Rev M014 (Spain v Cape Verde 0-0).** Cumulative 6 pts, mean Brier 0.70; failure-mode systematic_rating_error. Full living layer re-rendered (edition M014); skeleton unchanged.

@@ -450,5 +450,40 @@
     0.0712
    ]
   ]
+ },
+ {
+  "edition": 14,
+  "match": 14,
+  "fixture": "Spain v Cape Verde",
+  "result": [
+   0,
+   0
+  ],
+  "points": 0,
+  "cum_points": 6,
+  "mean_brier": 0.6952,
+  "cum_bits": 0.024,
+  "champ_top5": [
+   [
+    "Spain",
+    0.253
+   ],
+   [
+    "Argentina",
+    0.1817
+   ],
+   [
+    "France",
+    0.1488
+   ],
+   [
+    "Portugal",
+    0.0968
+   ],
+   [
+    "England",
+    0.0711
+   ]
+  ]
  }
 ]
