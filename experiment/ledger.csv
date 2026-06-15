@@ -16,3 +16,4 @@ date,match,home,away,pred,actual,pts,ev,p_outcome_real,p_score_real,brier,code
 2026-06-15,9,Ivory Coast,Ecuador,1-2,1-0,0,0.7476,0.27,0.115,0.8071,P?
 2026-06-15,12,Sweden,Tunisia,2-1,5-1,1,0.824,0.485,0.0035,0.3992,S
 2026-06-15,14,Spain,Cape Verde,3-0,0-0,0,1.183,0.1024,0.0334,1.5378,L?
+2026-06-15,16,Belgium,Egypt,2-1,1-1,0,0.9332,0.229,0.1089,0.9721,L?

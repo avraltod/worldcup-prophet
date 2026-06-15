@@ -485,5 +485,40 @@
     0.0711
    ]
   ]
+ },
+ {
+  "edition": 16,
+  "match": 16,
+  "fixture": "Belgium v Egypt",
+  "result": [
+   1,
+   1
+  ],
+  "points": 0,
+  "cum_points": 6,
+  "mean_brier": 0.715,
+  "cum_bits": 0.0253,
+  "champ_top5": [
+   [
+    "Spain",
+    0.252
+   ],
+   [
+    "Argentina",
+    0.179
+   ],
+   [
+    "France",
+    0.1488
+   ],
+   [
+    "Portugal",
+    0.0973
+   ],
+   [
+    "England",
+    0.0736
+   ]
+  ]
  }
 ]
