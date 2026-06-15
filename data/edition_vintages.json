@@ -415,5 +415,40 @@
     0.0709
    ]
   ]
+ },
+ {
+  "edition": 12,
+  "match": 12,
+  "fixture": "Sweden v Tunisia",
+  "result": [
+   5,
+   1
+  ],
+  "points": 1,
+  "cum_points": 6,
+  "mean_brier": 0.625,
+  "cum_bits": 0.0213,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2661
+   ],
+   [
+    "Argentina",
+    0.1823
+   ],
+   [
+    "France",
+    0.1473
+   ],
+   [
+    "Portugal",
+    0.0948
+   ],
+   [
+    "England",
+    0.0712
+   ]
+  ]
  }
 ]
