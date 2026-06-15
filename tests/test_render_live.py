@@ -124,12 +124,13 @@ def test_group_box_panels_and_track_scorelines():
     assert "Track~A" in tex and "Track~B" in tex
     assert "worldflag" in tex                  # flag column headers, not country names
     assert "W/D/L/P/Q\\%" in tex               # every panel carries qual%
-    # upcoming cell is one line with three explicit tracks F, A, B
-    assert "F:1--1\\,A:1--1\\,B:2--0" in tex   # match 2: F/A 1-1, Track B 2-0
-    assert "\\\\ A:" not in tex                # not stacked across rows
-    # remaining-fixtures block has a separate column for each track
-    assert "Frozen H/D/A" in tex and "Track~A H/D/A" in tex
-    assert "Track~B H/D/A" in tex
+    # full-width table + 3-letter team codes
+    assert "tabular*" in tex and "\\textwidth" in tex
+    assert "MEX" in tex and "KOR" in tex       # ISO3 codes, not full names
+    # upcoming cell merges Frozen/Track A; Track B after a slash when it differs
+    assert "F/A:1--1\\, B:2--0" in tex         # match 2: F/A 1-1, Track B 2-0
+    # remaining-fixtures block: 2 distinct columns (Frozen/Track A, Track B)
+    assert "Frozen / Track~A H/D/A" in tex
     assert "55.0" in tex                       # Track B H% for match 2 in block
 
 

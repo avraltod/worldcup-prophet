@@ -63,6 +63,28 @@ _FLAG_ISO = {
 }
 _FLAG_CUSTOM = {"England": "\\flagENG", "Scotland": "\\flagSCO", "Curaçao": "\\flagCUW"}
 
+# Three-letter FIFA codes — compact, fixed-width team labels so every group
+# table is the same width regardless of how long the team names are.
+_CODE3 = {
+    "Mexico": "MEX", "South Korea": "KOR", "Czechia": "CZE", "South Africa": "RSA",
+    "Switzerland": "SUI", "Canada": "CAN", "Bosnia and Herzegovina": "BIH",
+    "Qatar": "QAT", "Brazil": "BRA", "Morocco": "MAR", "Scotland": "SCO",
+    "Haiti": "HAI", "United States": "USA", "Turkey": "TUR", "Paraguay": "PAR",
+    "Australia": "AUS", "Germany": "GER", "Ecuador": "ECU", "Ivory Coast": "CIV",
+    "Curaçao": "CUW", "Netherlands": "NED", "Japan": "JPN", "Sweden": "SWE",
+    "Tunisia": "TUN", "Belgium": "BEL", "Egypt": "EGY", "Iran": "IRN",
+    "New Zealand": "NZL", "Spain": "ESP", "Uruguay": "URU", "Cape Verde": "CPV",
+    "Saudi Arabia": "KSA", "France": "FRA", "Norway": "NOR", "Senegal": "SEN",
+    "Iraq": "IRQ", "Argentina": "ARG", "Austria": "AUT", "Algeria": "ALG",
+    "Jordan": "JOR", "Portugal": "POR", "Colombia": "COL", "Uzbekistan": "UZB",
+    "Congo DR": "COD", "England": "ENG", "Croatia": "CRO", "Panama": "PAN",
+    "Ghana": "GHA",
+}
+
+
+def _code3(team):
+    return _CODE3.get(team, team[:3].upper())
+
 
 def _flag(team):
     """Mini flag for a team, sized to match the locked group matrices (4mm×2.7mm)."""
@@ -202,13 +224,14 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
                 correct = _sgn(pick[0] - pick[1]) == _sgn(res[0] - res[1])
                 icon = r"$\checkmark$" if correct else r"$\times$"
                 cells.append(f"\\textbf{{{score}}}{icon}")
-            else:                        # upcoming: one-line, three explicit tracks
+            else:                        # upcoming: Frozen=Track~A merged, Track~B if it differs
                 fa, tb = _frozen_pick(e), _track_b_pick(e)
                 if e["home"] == home:
                     f_s, b_s = f"{fa[0]}--{fa[1]}", f"{tb[0]}--{tb[1]}"
                 else:
                     f_s, b_s = f"{fa[1]}--{fa[0]}", f"{tb[1]}--{tb[0]}"
-                cells.append(f"F:{f_s}\\,A:{f_s}\\,B:{b_s}")
+                cells.append(f"F/A/B:{f_s}" if f_s == b_s
+                             else f"F/A:{f_s}\\, B:{b_s}")
 
         # right panels — each W/D/L/Pts/Qual%: Actual (real record + current
         # qual), then projected final record under Frozen / Track A / Track B.
@@ -225,7 +248,7 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
         fw, fd, fl, fp = _record_from(home, group_exps, res_by_match, _frozen_pick)
         bw, bd, bl, bp = _record_from(home, group_exps, res_by_match, _track_b_pick)
         body_rows.append(
-            f"{rank} & {_flag(home)}~{_abbrev_team(home)} & " + " & ".join(cells)
+            f"{rank} & {_flag(home)}~{_code3(home)} & " + " & ".join(cells)
             + f" & {actual} & {fw}/{fd}/{fl}/{fp}/{q_frozen}\\%"
             f" & {fw}/{fd}/{fl}/{fp}/{q_a}\\% & {bw}/{bd}/{bl}/{bp}/{q_b}\\% \\\\"
         )
@@ -239,43 +262,44 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
         lock_str = "/".join(_pct(p) for p in e["probs_HDA"])   # Frozen == Track A
         hda = track_b.get(e["match"], {}).get("hda")
         b_str = "/".join(_pct(p) for p in hda) if hda else "--"
-        remaining_lines.append(
-            f"{fixture_name} & {lock_str} & {lock_str} & {b_str} \\\\")
+        remaining_lines.append(f"{fixture_name} & {lock_str} & {b_str} \\\\")
 
     fixtures_block = ""
     if remaining_lines:
         fixtures_block = (
             "\n\\smallskip\n\\begin{footnotesize}\n"
-            "\\begin{tabular}{lccc}\\toprule\n"
-            "Fixture & Frozen H/D/A (\\%) & Track~A H/D/A (\\%) & "
-            "Track~B H/D/A (\\%) \\\\\n\\midrule\n"
+            "\\begin{tabular}{lcc}\\toprule\n"
+            "Fixture & Frozen / Track~A H/D/A (\\%) & Track~B H/D/A (\\%) "
+            "\\\\\n\\midrule\n"
             + "\n".join(remaining_lines) + "\n"
             "\\bottomrule\\end{tabular}\n\\end{footnotesize}"
         )
 
     state = (f"{g_state['played']} of {g_state['total']} played"
              if g_state["played"] else "fixtures pending")
-    note = ("Round-robin body: row team's score against the column team. Played "
-            "cells show the actual score in bold with $\\checkmark$/$\\times$ for "
-            "the submitted result pick; upcoming cells give the predicted scoreline "
-            "under Frozen (F), Track~A (A), and Track~B (B). Right panels report "
-            "W/D/L/Pts and qualification \\%: Actual is the real record with the "
-            "current (Track~A) qual; Frozen, Track~A, and Track~B give the "
-            "projected final record and that track's qual. Frozen and Track~A share "
-            "the June~10 ratings, so their per-match scoreline and H/D/A coincide; "
-            "they differ only in the conditioned qualification \\%.")
+    note = ("Teams are 3-letter codes. Round-robin body: row team's score against "
+            "the column team. Played cells show the actual score in bold with "
+            "$\\checkmark$/$\\times$ for the submitted result pick; upcoming cells "
+            "give the predicted scoreline as F/A (Frozen=Track~A) and B (Track~B), "
+            "collapsed to F/A/B when all agree. Right panels report W/D/L/Pts and "
+            "qualification \\%: Actual is the real record with the current "
+            "(Track~A) qual; Frozen, Track~A, and Track~B give the projected final "
+            "record and that track's qual. A single match's scoreline and H/D/A "
+            "coincide under Frozen and Track~A (shared June~10 ratings); the two "
+            "diverge only in the conditioned qualification \\%, which is why "
+            "Track~A earns its own column there.")
 
     return (
         f"\\paragraph{{Group {grp} — live ({state}).}}\\leavevmode\\par\n"
         "\\noindent\\begin{threeparttable}\n"
-        "{\\setlength{\\tabcolsep}{2pt}\\tiny\n"
-        f"\\begin{{tabular}}{{{col_spec}}}\n"
+        "{\\setlength{\\tabcolsep}{2pt}\\scriptsize\n"
+        f"\\begin{{tabular*}}{{\\textwidth}}{{@{{\\extracolsep{{\\fill}}}}{col_spec}@{{}}}}\n"
         "\\toprule\n"
         f"{header}\n"
         "\\midrule\n"
         + "\n".join(body_rows) + "\n"
         "\\bottomrule\n"
-        "\\end{tabular}}\n"
+        "\\end{tabular*}}\n"
         "\\begin{tablenotes}\\notesize\n"
         f"\\item \\textit{{Notes}}: {note}\n"
         "\\end{tablenotes}\n\\end{threeparttable}\n"
