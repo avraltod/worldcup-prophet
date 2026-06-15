@@ -178,9 +178,9 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
     flag_hdr = " & ".join(_flag(t) for t in teams)
     panel_hdr = (
         "\\makecell{Actual \\\\ W/D/L/P/Q\\%} & "
-        "\\makecell{Frozen \\\\ W/D/L/P} & "
-        "\\makecell{Track~A \\\\ W/D/L/P} & "
-        "\\makecell{Track~B \\\\ W/D/L/P}")
+        "\\makecell{Frozen \\\\ W/D/L/P/Q\\%} & "
+        "\\makecell{Track~A \\\\ W/D/L/P/Q\\%} & "
+        "\\makecell{Track~B \\\\ W/D/L/P/Q\\%}")
     header = f" & Team & {flag_hdr} & {panel_hdr} \\\\"
 
     body_rows = []
@@ -202,29 +202,32 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
                 correct = _sgn(pick[0] - pick[1]) == _sgn(res[0] - res[1])
                 icon = r"$\checkmark$" if correct else r"$\times$"
                 cells.append(f"\\textbf{{{score}}}{icon}")
-            else:                        # upcoming: three-track predicted scoreline
-                fa, tb = _frozen_pick(e), _track_b_pick(e)
+            else:                        # upcoming: one-line predicted scoreline,
+                fa, tb = _frozen_pick(e), _track_b_pick(e)   # Track B after a slash if it differs
                 if e["home"] == home:
                     f_s, b_s = f"{fa[0]}--{fa[1]}", f"{tb[0]}--{tb[1]}"
                 else:
                     f_s, b_s = f"{fa[1]}--{fa[0]}", f"{tb[1]}--{tb[0]}"
-                cells.append(
-                    f"\\makecell{{F:{f_s} \\\\ A:{f_s} \\\\ B:{b_s}}}")
+                cells.append(f_s if f_s == b_s else f"{f_s}\\,/\\,{b_s}")
 
-        # right panels: Actual (real record + Track A qual%), then projected final
-        # W/D/L/Pts under Frozen / Track A (= Frozen) / Track B
+        # right panels — each W/D/L/Pts/Qual%: Actual (real record + current
+        # qual), then projected final record under Frozen / Track A / Track B.
+        # Records coincide for Frozen and Track A (shared June-10 ratings); the
+        # qualification probabilities differ because Track A is result-conditioned.
         row = next((r for r in g_state["rows"] if r["team"] == home), {})
         aw, ad, al = row.get("W", 0), row.get("D", 0), row.get("L", 0)
         apts = row.get("Pts", 0)
-        qual_a = _pct(now[home]["advance_KO"]) if home in now else "--"
-        actual = (f"{aw}/{ad}/{al}/{apts}/{qual_a}\\%"
+        q_frozen = _pct(frozen[home]["advance_KO"]) if home in frozen else "--"
+        q_a = _pct(now[home]["advance_KO"]) if home in now else "--"
+        q_b = _pct(now_b[home]["advance_KO"]) if (now_b and home in now_b) else "--"
+        actual = (f"{aw}/{ad}/{al}/{apts}/{q_a}\\%"
                   if g_state["played"] else "--")
         fw, fd, fl, fp = _record_from(home, group_exps, res_by_match, _frozen_pick)
         bw, bd, bl, bp = _record_from(home, group_exps, res_by_match, _track_b_pick)
         body_rows.append(
             f"{rank} & {_flag(home)}~{_abbrev_team(home)} & " + " & ".join(cells)
-            + f" & {actual} & {fw}/{fd}/{fl}/{fp}"
-            f" & {fw}/{fd}/{fl}/{fp} & {bw}/{bd}/{bl}/{bp} \\\\"
+            + f" & {actual} & {fw}/{fd}/{fl}/{fp}/{q_frozen}\\%"
+            f" & {fw}/{fd}/{fl}/{fp}/{q_a}\\% & {bw}/{bd}/{bl}/{bp}/{q_b}\\% \\\\"
         )
 
     # ---- remaining-fixtures H/D/A block (below the matrix) -------------------
@@ -253,11 +256,12 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
     note = ("Round-robin body: row team's score against the column team. Played "
             "cells show the actual score in bold with $\\checkmark$/$\\times$ "
             "for the submitted result pick; upcoming cells show the predicted "
-            "scoreline under Frozen (F), Track~A (A), and Track~B (B). Right "
-            "panels: current actual W/D/L/Pts and Track~A qualification \\%, then "
-            "the projected final W/D/L/Pts under each track. Track~A reuses the "
-            "June~10 ratings, so its predicted scorelines and projected record "
-            "match Frozen by construction; Track~B uses the live ratings.")
+            "scoreline (Frozen/Track~A, with Track~B after a slash where it "
+            "differs). Right panels report W/D/L/Pts and qualification \\%: Actual "
+            "is the real record with the current (Track~A) qual; Frozen, Track~A, "
+            "and Track~B give the projected final record and that track's qual. "
+            "Frozen and Track~A share the June~10 ratings, so their records match "
+            "and they differ only in qual (Track~A is result-conditioned).")
 
     return (
         f"\\paragraph{{Group {grp} — live ({state}).}}\\leavevmode\\par\n"

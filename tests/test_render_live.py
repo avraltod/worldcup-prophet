@@ -123,9 +123,10 @@ def test_group_box_panels_and_track_scorelines():
     assert "Actual" in tex and "Frozen" in tex
     assert "Track~A" in tex and "Track~B" in tex
     assert "worldflag" in tex                  # flag column headers, not country names
-    assert "W/D/L/P" in tex
-    # upcoming cell: three-track predicted scorelines (F / A / B)
-    assert "F:1--1" in tex and "A:1--1" in tex and "B:2--0" in tex
+    assert "W/D/L/P/Q\\%" in tex               # every panel carries qual%
+    # upcoming cell is one line: Frozen/Track A scoreline, Track B after a slash
+    assert "1--1\\,/\\,2--0" in tex            # match 2: F/A 1-1, Track B 2-0
+    assert "\\makecell{F:" not in tex          # no three-row stacked cells
     # remaining-fixtures block shows Frozen and Track B H/D/A
     assert "55.0" in tex                       # Track B H% for match 2 in block
 
