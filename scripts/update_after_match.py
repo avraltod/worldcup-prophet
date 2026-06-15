@@ -428,6 +428,9 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     _market = next(
         (r.get("market_champion") for r in reversed(trajectory)
          if r.get("phase") == "post" and r.get("market_champion")), None)
+    # Track B predicted scoreline + H/D/A for every unplayed group fixture; used
+    # by the per-group boxes and the decisive-upcoming-fixtures table.
+    track_b_map = _track_b_fixture_map(expectations, res, learn_ratings)
     ctx = {"match": match, "entries": entries, "match_stats": match_stats,
            "learning": state, "prev_now": prev_now, "now": now_probs,
            "vintages_rows": rows, "revision_narrative": narrative_text,
@@ -445,6 +448,7 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
            "champion_b": champion_b,
            "market": _market,
            "group_state": group_st,
+           "track_b_map": track_b_map,
            "champion_movers": sorted(
                [[t, round(prev_now.get(t, {}).get("champion", 0.0), 4),
                  round(now_probs[t]["champion"], 4)]
@@ -476,7 +480,6 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     rl.write_unit(LIVE_DIR, "market_snap", rl.market_snap_unit(ctx))
     rl.write_unit(LIVE_DIR, "survival_colcomp", rl.survival_colcomp_unit(ctx))
     # 5. per-group sections
-    track_b_map = _track_b_fixture_map(expectations, res, learn_ratings)
     for g in group_st:
         rl.write_unit(LIVE_DIR, f"group_{g['group']}",
                       rl.group_box(g, res, expectations, frozen, now_probs,

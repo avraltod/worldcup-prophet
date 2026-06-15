@@ -866,11 +866,10 @@ def fixture_risk_unit(ctx):
     now = ctx.get("now", {})
     expectations = ctx.get("expectations", [])
     results = ctx.get("results", {})
-    implications = ctx.get("implications", [])
+    track_b_map = ctx.get("track_b_map", {})   # {match: {'pick','hda'}} all upcoming fixtures
     group_state = ctx.get("group_state", [])
 
     played = set(results.get("group", {}).keys())
-    imp_by_fixture = {i["fixture"]: i for i in implications}
 
     rows = []
     for g in group_state:
@@ -888,8 +887,8 @@ def fixture_risk_unit(ctx):
             fixture = f"{home} v {away}"
             bubble_str = "; ".join(f"{t} {_pct(adv)}\\%" for t, adv in bubble)
             lock_str = "/".join(_pct(p) for p in e["probs_HDA"])
-            imp = imp_by_fixture.get(fixture)
-            b_hda = "/".join(_pct(p) for p in imp["learn_HDA"]) if imp else "--"
+            hda = track_b_map.get(e["match"], {}).get("hda")
+            b_hda = "/".join(_pct(p) for p in hda) if hda else "--"
             rows.append(
                 f"  {grp} & {fixture} & {bubble_str} & {lock_str} & {b_hda} \\\\"
             )
