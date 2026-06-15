@@ -119,12 +119,13 @@ def test_group_box_panels_and_track_scorelines():
     track_b = {2: {"pick": [2, 0], "hda": [0.55, 0.25, 0.20]}}
     gA = next(g for g in _gs12() if g["group"] == "A")
     tex = rl.group_box(gA, {"group": {"1": [2, 0]}}, exps, frozen, now, track_b=track_b)
-    # panel headers: Actual, merged Frozen=A, Track B; flag-style header (worldflag)
-    assert "Actual" in tex and "Frozen=A" in tex and "Track~B" in tex
+    # four panel headers: Actual, Frozen, Track A, Track B; flag-style header
+    assert "Actual" in tex and "Frozen" in tex
+    assert "Track~A" in tex and "Track~B" in tex
     assert "worldflag" in tex                  # flag column headers, not country names
     assert "W/D/L/P" in tex
-    # upcoming cell merges Frozen/Track A on one line, Track B below
-    assert "F/A:1--1" in tex and "B:2--0" in tex
+    # upcoming cell: three-track predicted scorelines (F / A / B)
+    assert "F:1--1" in tex and "A:1--1" in tex and "B:2--0" in tex
     # remaining-fixtures block shows Frozen and Track B H/D/A
     assert "55.0" in tex                       # Track B H% for match 2 in block
 

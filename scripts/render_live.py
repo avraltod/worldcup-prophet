@@ -174,12 +174,13 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
 
     # ---- one round-robin table, locked-matrix style -------------------------
     n = len(teams)
-    col_spec = "cl" + "c" * n + "ccc"
+    col_spec = "cl" + "c" * n + "cccc"
     flag_hdr = " & ".join(_flag(t) for t in teams)
     panel_hdr = (
-        "\\makecell{Actual \\\\ \\tiny W/D/L/P/Q\\%} & "
-        "\\makecell{Frozen=A \\\\ \\tiny W/D/L/P} & "
-        "\\makecell{Track~B \\\\ \\tiny W/D/L/P}")
+        "\\makecell{Actual \\\\ W/D/L/P/Q\\%} & "
+        "\\makecell{Frozen \\\\ W/D/L/P} & "
+        "\\makecell{Track~A \\\\ W/D/L/P} & "
+        "\\makecell{Track~B \\\\ W/D/L/P}")
     header = f" & Team & {flag_hdr} & {panel_hdr} \\\\"
 
     body_rows = []
@@ -201,17 +202,17 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
                 correct = _sgn(pick[0] - pick[1]) == _sgn(res[0] - res[1])
                 icon = r"$\checkmark$" if correct else r"$\times$"
                 cells.append(f"\\textbf{{{score}}}{icon}")
-            else:                        # upcoming: Frozen/Track~A on one line, Track~B below
+            else:                        # upcoming: three-track predicted scoreline
                 fa, tb = _frozen_pick(e), _track_b_pick(e)
                 if e["home"] == home:
                     f_s, b_s = f"{fa[0]}--{fa[1]}", f"{tb[0]}--{tb[1]}"
                 else:
                     f_s, b_s = f"{fa[1]}--{fa[0]}", f"{tb[1]}--{tb[0]}"
                 cells.append(
-                    f"\\makecell{{\\tiny F/A:{f_s} \\\\ \\tiny B:{b_s}}}")
+                    f"\\makecell{{F:{f_s} \\\\ A:{f_s} \\\\ B:{b_s}}}")
 
         # right panels: Actual (real record + Track A qual%), then projected final
-        # W/D/L/Pts under Frozen/Track~A (one column; identical) and under Track~B
+        # W/D/L/Pts under Frozen / Track A (= Frozen) / Track B
         row = next((r for r in g_state["rows"] if r["team"] == home), {})
         aw, ad, al = row.get("W", 0), row.get("D", 0), row.get("L", 0)
         apts = row.get("Pts", 0)
@@ -222,8 +223,8 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
         bw, bd, bl, bp = _record_from(home, group_exps, res_by_match, _track_b_pick)
         body_rows.append(
             f"{rank} & {_flag(home)}~{_abbrev_team(home)} & " + " & ".join(cells)
-            + f" & \\tiny {actual} & \\tiny {fw}/{fd}/{fl}/{fp}"
-            f" & \\tiny {bw}/{bd}/{bl}/{bp} \\\\"
+            + f" & {actual} & {fw}/{fd}/{fl}/{fp}"
+            f" & {fw}/{fd}/{fl}/{fp} & {bw}/{bd}/{bl}/{bp} \\\\"
         )
 
     # ---- remaining-fixtures H/D/A block (below the matrix) -------------------
@@ -252,24 +253,23 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
     note = ("Round-robin body: row team's score against the column team. Played "
             "cells show the actual score in bold with $\\checkmark$/$\\times$ "
             "for the submitted result pick; upcoming cells show the predicted "
-            "scoreline under Frozen/Track~A (F/A) and Track~B (B). Right panels: "
-            "current actual W/D/L/Pts and Track~A qualification \\%, then the "
-            "projected final W/D/L/Pts. Frozen and Track~A share the June~10 "
-            "ratings, so their predicted scorelines and records coincide and are "
-            "shown once; Track~B uses the live (learning-track) ratings.")
+            "scoreline under Frozen (F), Track~A (A), and Track~B (B). Right "
+            "panels: current actual W/D/L/Pts and Track~A qualification \\%, then "
+            "the projected final W/D/L/Pts under each track. Track~A reuses the "
+            "June~10 ratings, so its predicted scorelines and projected record "
+            "match Frozen by construction; Track~B uses the live ratings.")
 
     return (
         f"\\paragraph{{Group {grp} — live ({state}).}}\\leavevmode\\par\n"
         "\\noindent\\begin{threeparttable}\n"
-        "\\resizebox{\\textwidth}{!}{%\n"
-        "{\\setlength{\\tabcolsep}{3pt}\n"
+        "{\\setlength{\\tabcolsep}{2.5pt}\\scriptsize\n"
         f"\\begin{{tabular}}{{{col_spec}}}\n"
         "\\toprule\n"
         f"{header}\n"
         "\\midrule\n"
         + "\n".join(body_rows) + "\n"
         "\\bottomrule\n"
-        "\\end{tabular}}}\n"
+        "\\end{tabular}}\n"
         "\\begin{tablenotes}\\notesize\n"
         f"\\item \\textit{{Notes}}: {note}\n"
         "\\end{tablenotes}\n\\end{threeparttable}\n"
