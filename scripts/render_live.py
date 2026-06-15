@@ -199,7 +199,7 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
     col_spec = "cl" + "c" * n + "cccc"
     flag_hdr = " & ".join(_flag(t) for t in teams)
     panel_hdr = (
-        "\\makecell{Actual \\\\ W/D/L/P/Q\\%} & "
+        "\\makecell{Actual \\\\ W/D/L/P} & "
         "\\makecell{Frozen \\\\ W/D/L/P/Q\\%} & "
         "\\makecell{Track~A \\\\ W/D/L/P/Q\\%} & "
         "\\makecell{Track~B \\\\ W/D/L/P/Q\\%}")
@@ -224,14 +224,21 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
                 correct = _sgn(pick[0] - pick[1]) == _sgn(res[0] - res[1])
                 icon = r"$\checkmark$" if correct else r"$\times$"
                 cells.append(f"\\textbf{{{score}}}{icon}")
-            else:                        # upcoming: Frozen=Track~A merged, Track~B if it differs
-                fa, tb = _frozen_pick(e), _track_b_pick(e)
+            else:                        # upcoming: per-track scoreline + H/D/A,
+                fa, tb = _frozen_pick(e), _track_b_pick(e)   # folding in the old fixtures block
+                fhda = e["probs_HDA"]                        # Frozen = Track A (market-based)
+                bhda = track_b.get(e["match"], {}).get("hda")
                 if e["home"] == home:
                     f_s, b_s = f"{fa[0]}--{fa[1]}", f"{tb[0]}--{tb[1]}"
+                    f_h, b_h = fhda, bhda
                 else:
                     f_s, b_s = f"{fa[1]}--{fa[0]}", f"{tb[1]}--{tb[0]}"
-                cells.append(f"F/A/B:{f_s}" if f_s == b_s
-                             else f"F/A:{f_s}\\, B:{b_s}")
+                    f_h = [fhda[2], fhda[1], fhda[0]]
+                    b_h = [bhda[2], bhda[1], bhda[0]] if bhda else None
+                fh = "/".join(str(round(100 * x)) for x in f_h)
+                bh = "/".join(str(round(100 * x)) for x in b_h) if b_h else "--"
+                cells.append(
+                    f"\\makecell{{F/A {f_s}\\,{fh} \\\\ B {b_s}\\,{bh}}}")
 
         # right panels — each W/D/L/Pts/Qual%: Actual (real record + current
         # qual), then projected final record under Frozen / Track A / Track B.
@@ -243,8 +250,7 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
         q_frozen = _pct(frozen[home]["advance_KO"]) if home in frozen else "--"
         q_a = _pct(now[home]["advance_KO"]) if home in now else "--"
         q_b = _pct(now_b[home]["advance_KO"]) if (now_b and home in now_b) else "--"
-        actual = (f"{aw}/{ad}/{al}/{apts}/{q_a}\\%"
-                  if g_state["played"] else "--")
+        actual = f"{aw}/{ad}/{al}/{apts}" if g_state["played"] else "--"
         fw, fd, fl, fp = _record_from(home, group_exps, res_by_match, _frozen_pick)
         bw, bd, bl, bp = _record_from(home, group_exps, res_by_match, _track_b_pick)
         body_rows.append(
@@ -254,45 +260,24 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
         )
 
     # ---- remaining-fixtures H/D/A block (below the matrix) -------------------
-    remaining_lines = []
-    for e in group_exps:
-        if str(e["match"]) in res_by_match:
-            continue
-        fixture_name = f"{e['home']} v {e['away']}"
-        lock_str = "/".join(_pct(p) for p in e["probs_HDA"])   # Frozen == Track A
-        hda = track_b.get(e["match"], {}).get("hda")
-        b_str = "/".join(_pct(p) for p in hda) if hda else "--"
-        remaining_lines.append(f"{fixture_name} & {lock_str} & {b_str} \\\\")
-
-    fixtures_block = ""
-    if remaining_lines:
-        fixtures_block = (
-            "\n\\smallskip\n\\begin{footnotesize}\n"
-            "\\begin{tabular}{lcc}\\toprule\n"
-            "Fixture & Frozen / Track~A H/D/A (\\%) & Track~B H/D/A (\\%) "
-            "\\\\\n\\midrule\n"
-            + "\n".join(remaining_lines) + "\n"
-            "\\bottomrule\\end{tabular}\n\\end{footnotesize}"
-        )
-
     state = (f"{g_state['played']} of {g_state['total']} played"
              if g_state["played"] else "fixtures pending")
     note = ("Teams are 3-letter codes. Round-robin body: row team's score against "
             "the column team. Played cells show the actual score in bold with "
             "$\\checkmark$/$\\times$ for the submitted result pick; upcoming cells "
-            "give the predicted scoreline as F/A (Frozen=Track~A) and B (Track~B), "
-            "collapsed to F/A/B when all agree. Right panels report W/D/L/Pts and "
-            "qualification \\%: Actual is the real record with the current "
-            "(Track~A) qual; Frozen, Track~A, and Track~B give the projected final "
-            "record and that track's qual. A single match's scoreline and H/D/A "
-            "coincide under Frozen and Track~A (shared June~10 ratings); the two "
-            "diverge only in the conditioned qualification \\%, which is why "
-            "Track~A earns its own column there.")
+            "give, per track, the predicted scoreline and the H/D/A outcome "
+            "probabilities (\\%) --- line F/A is Frozen=Track~A, line B is Track~B. "
+            "Right panels report W/D/L/Pts and qualification \\%: Actual is the real "
+            "record so far; Frozen, Track~A, and Track~B give the projected final "
+            "record (each remaining game resolved at that track's predicted "
+            "scoreline) and that track's qual. Frozen and Track~A share the June~10 "
+            "ratings, so their scoreline, H/D/A, and projected record coincide; the "
+            "two diverge only in the conditioned qualification \\%.")
 
     return (
         f"\\paragraph{{Group {grp} — live ({state}).}}\\leavevmode\\par\n"
         "\\noindent\\begin{threeparttable}\n"
-        "{\\setlength{\\tabcolsep}{2pt}\\scriptsize\n"
+        "{\\setlength{\\tabcolsep}{2pt}\\tiny\n"
         f"\\begin{{tabular*}}{{\\textwidth}}{{@{{\\extracolsep{{\\fill}}}}{col_spec}@{{}}}}\n"
         "\\toprule\n"
         f"{header}\n"
@@ -303,7 +288,6 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
         "\\begin{tablenotes}\\notesize\n"
         f"\\item \\textit{{Notes}}: {note}\n"
         "\\end{tablenotes}\n\\end{threeparttable}\n"
-        + fixtures_block
     )
 
 

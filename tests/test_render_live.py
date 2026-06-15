@@ -100,7 +100,7 @@ def test_group_box_played_and_unplayed():
     gA = next(g for g in _gs12() if g["group"] == "A")
     tex = rl.group_box(gA, {"group": {"1": [2, 0]}}, exps, frozen, now)
     assert "2--0" in tex                      # real result in matrix cell
-    assert "35.0" in tex                      # remaining fixture H% in H/D/A block below
+    assert "35/33/32" in tex                  # Frozen H/D/A folded into the upcoming cell
     gB = next(g for g in _gs12() if g["group"] == "B")
     tex_b = rl.group_box(gB, {"group": {}}, [], frozen, now)
     assert "Fixtures pending" in tex_b      # no expectations supplied
@@ -119,19 +119,19 @@ def test_group_box_panels_and_track_scorelines():
     track_b = {2: {"pick": [2, 0], "hda": [0.55, 0.25, 0.20]}}
     gA = next(g for g in _gs12() if g["group"] == "A")
     tex = rl.group_box(gA, {"group": {"1": [2, 0]}}, exps, frozen, now, track_b=track_b)
-    # four panel headers: Actual, Frozen, Track A, Track B; flag-style header
-    assert "Actual" in tex and "Frozen" in tex
+    # four panel headers: Actual (no Q%), Frozen/Track A/Track B (with Q%)
+    assert "\\makecell{Actual \\\\ W/D/L/P}" in tex     # Actual drops Q%
+    assert "\\makecell{Frozen \\\\ W/D/L/P/Q\\%}" in tex
     assert "Track~A" in tex and "Track~B" in tex
     assert "worldflag" in tex                  # flag column headers, not country names
-    assert "W/D/L/P/Q\\%" in tex               # every panel carries qual%
     # full-width table + 3-letter team codes
     assert "tabular*" in tex and "\\textwidth" in tex
     assert "MEX" in tex and "KOR" in tex       # ISO3 codes, not full names
-    # upcoming cell merges Frozen/Track A; Track B after a slash when it differs
-    assert "F/A:1--1\\, B:2--0" in tex         # match 2: F/A 1-1, Track B 2-0
-    # remaining-fixtures block: 2 distinct columns (Frozen/Track A, Track B)
-    assert "Frozen / Track~A H/D/A" in tex
-    assert "55.0" in tex                       # Track B H% for match 2 in block
+    # upcoming cell now carries scoreline + H/D/A per track (old block folded in)
+    assert "F/A 1--1\\,35/33/32" in tex        # Frozen=Track A: 1-1, H/D/A 35/33/32
+    assert "B 2--0\\,55/25/20" in tex          # Track B: 2-0, H/D/A 55/25/20
+    # the separate remaining-fixtures table is gone
+    assert "Fixture &" not in tex
 
 
 def test_group_box_shows_pred_vs_actual_in_matrix():
