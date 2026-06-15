@@ -619,27 +619,10 @@ def _slot_status(frozen_pct, track_b_pct):
     return "$\\times$"
 
 
-def bracket_live_unit(ctx):
-    """Knockout bracket: slot risk table during group stage, live figure once KO begins."""
-    ko_results = ctx.get("results", {}).get("ko", {})
-    if ko_results:
-        return (
-            "\\begin{figure}[!t]\n"
-            "  \\caption{The submitted bracket through M\\liveEditionNum{}, valued "
-            "by champion probability under Track~A (top) and Track~B (bottom); "
-            "greyed boxes are teams eliminated by confirmed results}"
-            "\\label{fig:live_bracket}\n"
-            "  {\\centering\\includegraphics[width=0.92\\textwidth]"
-            "{figs/fig_live_bracket_a.pdf}\\par\\smallskip\n"
-            "  \\includegraphics[width=0.92\\textwidth]"
-            "{figs/fig_live_bracket_b.pdf}\\par}\n"
-            "\\end{figure}"
-        )
-    frozen = ctx.get("frozen", {})
-    now = ctx.get("now", {})
-    now_b = ctx.get("now_b", {})
+def _slot_risk_table(frozen, now, now_b):
+    """R32 slot-risk table: does each pre-registered pick still advance, under
+    Frozen / Track A / Track B?  Group-stage companion to the bracket figures."""
     has_b = bool(now_b)
-
     rows = []
     for home, away, mn in _R32_PAIRS:
         for team in (home, away):
@@ -650,34 +633,66 @@ def bracket_live_unit(ctx):
             tb_str = f"{100 * tb:.1f}" if tb == tb else "--"
             status = _slot_status(fr_p, 100 * tb if tb == tb else fr_p) if has_b else ""
             b_col = f" & {tb_str} & {status}" if has_b else ""
-            rows.append(
-                f"{team} advance & M{mn} & {fr_p} & {ta_p}{b_col} \\\\"
-            )
-
+            rows.append(f"{team} advance & M{mn} & {fr_p} & {ta_p}{b_col} \\\\")
     if has_b:
         col_spec = "llrrrl"
         hdr = "KO Pick & Slot & Frozen~\\% & Track~A~\\% & Track~B~\\% & Status \\\\"
-        note = (
-            "Status: \\checkmark{} = Track~B within 5 pp of Frozen; "
-            "$\\triangle$ = 5--20 pp drop; $\\times$ = pick reversed ($>$20 pp)."
-        )
+        note = ("Status: \\checkmark{} = Track~B within 5 pp of Frozen; "
+                "$\\triangle$ = 5--20 pp drop; $\\times$ = pick reversed ($>$20 pp).")
     else:
-        col_spec = "llrr"
-        hdr = "KO Pick & Slot & Frozen~\\% & Track~A~\\% \\\\"
-        note = ""
-
-    body = "\n".join(rows)
-    note_line = f"\n\\smallskip\\begin{{footnotesize}}{note}\\end{{footnotesize}}" if note else ""
+        col_spec, hdr, note = "llrr", "KO Pick & Slot & Frozen~\\% & Track~A~\\% \\\\", ""
+    note_line = (f"\n\\smallskip\\begin{{footnotesize}}{note}\\end{{footnotesize}}"
+                 if note else "")
     return (
         "\\begin{table}[!t]\n  \\centering\n"
         "  \\caption{R32 slot risk: probability each pre-registered pick "
         "advances from the group stage (live edition M\\liveEditionNum{})"
         "}\\label{tab:live_slot_risk}\n"
         f"  {{\\begin{{footnotesize}}\\begin{{tabular}}{{{col_spec}}}\n"
-        f"  \\toprule\n  {hdr}\n  \\midrule\n  {body}\n"
+        f"  \\toprule\n  {hdr}\n  \\midrule\n  " + "\n  ".join(rows) + "\n"
         "  \\bottomrule\\end{tabular}\\end{footnotesize}}"
-        + note_line + "\n\\end{table}"
-    )
+        + note_line + "\n\\end{table}")
+
+
+def bracket_live_unit(ctx):
+    """The knockout bracket, three ways (spec 3.20): the submitted Frozen bracket
+    is the locked TikZ Figure~\\ref{fig:bracket}; the live Track A and Track B
+    brackets re-value that same bracket by champion probability and grey out
+    teams eliminated by confirmed results. During the group stage a slot-risk
+    table also tracks whether each R32 pick is still advancing."""
+    ko_results = ctx.get("results", {}).get("ko", {})
+    frozen, now = ctx.get("frozen", {}), ctx.get("now", {})
+    now_b = ctx.get("now_b", {})
+
+    discussion = (
+        "\\paragraph{The bracket, three ways.} The submitted knockout entry is "
+        "the Frozen bracket of Figure~\\ref{fig:bracket}, which never changes. "
+        "The two live brackets below re-value that same submitted bracket by each "
+        "team's champion probability under Track~A (result-conditioning on the "
+        "June~10 ratings) and Track~B (live Elo and bookmaker odds), and once the "
+        "knockout rounds begin they shade out teams eliminated by confirmed "
+        "results. Read together with the locked bracket, they show how far the "
+        "live forecast has drifted from the path the entry committed to; the "
+        "slot-risk table below tracks the same question one pick at a time while "
+        "the group stage is still running.\n\n")
+
+    slot_table = ("" if ko_results
+                  else _slot_risk_table(frozen, now, now_b) + "\n\n")
+
+    figs = (
+        "\\begin{figure}[!t]\n"
+        "  \\caption{The submitted bracket re-valued by champion probability "
+        "under Track~A (top) and Track~B (bottom) at live edition "
+        "M\\liveEditionNum{}; the gold box is each track's most likely champion "
+        "and greyed boxes are teams eliminated by confirmed results. The locked "
+        "submitted bracket is Figure~\\ref{fig:bracket}.}\\label{fig:live_bracket}\n"
+        "  {\\centering\\includegraphics[width=0.92\\textwidth]"
+        "{figs/fig_live_bracket_a.pdf}\\par\\smallskip\n"
+        "  \\includegraphics[width=0.92\\textwidth]"
+        "{figs/fig_live_bracket_b.pdf}\\par}\n"
+        "\\end{figure}")
+
+    return discussion + slot_table + figs
 
 
 def survival_colcomp_unit(ctx):

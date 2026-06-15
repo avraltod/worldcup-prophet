@@ -375,6 +375,10 @@ def test_bracket_live_unit_group_stage_shows_slot_risk_table():
     assert "R32 slot risk" in tex
     assert "KO Pick" in tex
     assert "Frozen" in tex
+    # the three-bracket discussion + live Track A/B bracket figures are now always shown
+    assert "bracket, three ways" in tex
+    assert "fig_live_bracket_a.pdf" in tex and "fig_live_bracket_b.pdf" in tex
+    assert r"Figure~\ref{fig:bracket}" in tex   # references the locked Frozen bracket
 
 
 def test_bracket_live_unit_group_stage_with_track_b():
