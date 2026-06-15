@@ -202,14 +202,13 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
                 correct = _sgn(pick[0] - pick[1]) == _sgn(res[0] - res[1])
                 icon = r"$\checkmark$" if correct else r"$\times$"
                 cells.append(f"\\textbf{{{score}}}{icon}")
-            else:                        # upcoming: one-line labelled predicted scoreline
-                fa, tb = _frozen_pick(e), _track_b_pick(e)   # Frozen=Track A pick; Track B may differ
+            else:                        # upcoming: one-line, three explicit tracks
+                fa, tb = _frozen_pick(e), _track_b_pick(e)
                 if e["home"] == home:
                     f_s, b_s = f"{fa[0]}--{fa[1]}", f"{tb[0]}--{tb[1]}"
                 else:
                     f_s, b_s = f"{fa[1]}--{fa[0]}", f"{tb[1]}--{tb[0]}"
-                cells.append(f"F/A/B:{f_s}" if f_s == b_s
-                             else f"F/A:{f_s}\\, B:{b_s}")
+                cells.append(f"F:{f_s}\\,A:{f_s}\\,B:{b_s}")
 
         # right panels — each W/D/L/Pts/Qual%: Actual (real record + current
         # qual), then projected final record under Frozen / Track A / Track B.
@@ -237,17 +236,19 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
         if str(e["match"]) in res_by_match:
             continue
         fixture_name = f"{e['home']} v {e['away']}"
-        lock_str = "/".join(_pct(p) for p in e["probs_HDA"])
+        lock_str = "/".join(_pct(p) for p in e["probs_HDA"])   # Frozen == Track A
         hda = track_b.get(e["match"], {}).get("hda")
         b_str = "/".join(_pct(p) for p in hda) if hda else "--"
-        remaining_lines.append(f"{fixture_name} & {lock_str} & {b_str} \\\\")
+        remaining_lines.append(
+            f"{fixture_name} & {lock_str} & {lock_str} & {b_str} \\\\")
 
     fixtures_block = ""
     if remaining_lines:
         fixtures_block = (
             "\n\\smallskip\n\\begin{footnotesize}\n"
-            "\\begin{tabular}{lcc}\\toprule\n"
-            "Fixture & Frozen / Track~A H/D/A (\\%) & Track~B H/D/A (\\%) \\\\\n\\midrule\n"
+            "\\begin{tabular}{lccc}\\toprule\n"
+            "Fixture & Frozen H/D/A (\\%) & Track~A H/D/A (\\%) & "
+            "Track~B H/D/A (\\%) \\\\\n\\midrule\n"
             + "\n".join(remaining_lines) + "\n"
             "\\bottomrule\\end{tabular}\n\\end{footnotesize}"
         )
@@ -257,19 +258,17 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
     note = ("Round-robin body: row team's score against the column team. Played "
             "cells show the actual score in bold with $\\checkmark$/$\\times$ for "
             "the submitted result pick; upcoming cells give the predicted scoreline "
-            "as F/A:Frozen=Track~A and B:Track~B (collapsed to F/A/B when all "
-            "agree). Right panels report W/D/L/Pts and qualification \\%: Actual is "
-            "the real record with the current (Track~A) qual; Frozen, Track~A, and "
-            "Track~B give the projected final record and that track's qual. A "
-            "single upcoming match has the same scoreline and H/D/A under Frozen "
-            "and Track~A (shared June~10 ratings); the two diverge only in the "
-            "conditioned qualification \\%, so Track~A is folded with Frozen in the "
-            "body and the H/D/A block, and shown on its own only in the qual panel.")
+            "under Frozen (F), Track~A (A), and Track~B (B). Right panels report "
+            "W/D/L/Pts and qualification \\%: Actual is the real record with the "
+            "current (Track~A) qual; Frozen, Track~A, and Track~B give the "
+            "projected final record and that track's qual. Frozen and Track~A share "
+            "the June~10 ratings, so their per-match scoreline and H/D/A coincide; "
+            "they differ only in the conditioned qualification \\%.")
 
     return (
         f"\\paragraph{{Group {grp} — live ({state}).}}\\leavevmode\\par\n"
         "\\noindent\\begin{threeparttable}\n"
-        "{\\setlength{\\tabcolsep}{2.5pt}\\tiny\n"
+        "{\\setlength{\\tabcolsep}{2pt}\\tiny\n"
         f"\\begin{{tabular}}{{{col_spec}}}\n"
         "\\toprule\n"
         f"{header}\n"
