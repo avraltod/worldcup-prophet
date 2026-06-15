@@ -63,8 +63,19 @@ def champdist_fig(frozen, track_a, out, track_b=None):
         ax.bar([i + offsets[2] for i in x],
                [track_b.get(t, 0) for t in teams],
                width=width, color="#3d8c40", alpha=0.85, label="Track B")
+    # value label (champion %) atop each bar
+    for i, t in enumerate(teams):
+        vals = [(offsets[0], frozen.get(t, {}).get("champion", 0)),
+                (offsets[1], track_a[t]["champion"])]
+        if has_b:
+            vals.append((offsets[2], track_b.get(t, 0)))
+        for off, v in vals:
+            ax.text(i + off, v + 0.004, f"{100 * v:.0f}", ha="center",
+                    va="bottom", fontsize=5, rotation=90, color="#333333")
     ax.set_xticks(list(x)); ax.set_xticklabels(teams, rotation=35, ha="right", fontsize=8)
     ax.set_ylabel("P(champion)")
+    ax.set_ylim(0, max(track_a[teams[0]]["champion"],
+                       frozen.get(teams[0], {}).get("champion", 0)) * 1.18)
     ax.legend(fontsize=9)
     fig.tight_layout(); fig.savefig(out); plt.close(fig)
 
