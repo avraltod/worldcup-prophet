@@ -5,13 +5,15 @@ import make_live_figures as mlf
 
 
 def _stages(c):
-    return {t: {"advance_KO": 0.5 + i * 0.01, "champion": c}
+    return {t: {"advance_KO": 0.5 + i * 0.01, "champion": c,
+                "first": 0.3, "second": 0.15, "third_adv": 0.05 + i * 0.01}
             for i, t in enumerate(["Spain", "Argentina", "France", "Mexico"])}
 
 
 def test_group_qual_fig(tmp_path):
+    # stacked Win/2nd/3rd/Out grid for one track; now[team] has the decomposition
     out = tmp_path / "q.pdf"
-    mlf.group_qual_fig(_stages(0.2), _stages(0.25),
+    mlf.group_qual_fig(_stages(0.25),
                        {"A": ["Spain", "Argentina"], "B": ["France", "Mexico"]}, out)
     assert out.exists() and out.stat().st_size > 0
 

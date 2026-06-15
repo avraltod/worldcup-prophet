@@ -378,14 +378,12 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
                             | {cond.RATES[r][3] for r in cond.GROUPS[g]})
                   for g in sorted(cond.GROUPS)}
         now_b_probs = (two_track or {}).get("learn_probs", {})
-        # Track A groupqual figure
-        mlf.group_qual_fig(frozen, now_probs, groups,
-                           PAPER / "figs" / "fig_live_groupqual.pdf",
-                           label="Track A", color="#3b6ea5")
-        # Track B groupqual figure (true Track B stage probs when available)
-        mlf.group_qual_fig(frozen, now_b_probs or now_probs, groups,
-                           PAPER / "figs" / "fig_live_groupqual_b.pdf",
-                           label="Track B", color="#3d8c40")
+        # Track A / Track B qualification grids — same stacked Win/2nd/3rd/Out
+        # format as the locked Figure 19, so the three versions are comparable.
+        mlf.group_qual_fig(now_probs, groups,
+                           PAPER / "figs" / "fig_live_groupqual.pdf")
+        mlf.group_qual_fig(now_b_probs or now_probs, groups,
+                           PAPER / "figs" / "fig_live_groupqual_b.pdf")
         # Champdist with Frozen + Track A (+ Track B if available)
         track_b_champ = champion_b if champion_b else None
         mlf.champdist_fig(frozen, now_probs,

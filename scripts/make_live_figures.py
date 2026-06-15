@@ -7,23 +7,41 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 
-def group_qual_fig(frozen, now, groups, out, label="Track A", color="#3b6ea5"):
-    """Horizontal bars: advance probability for `now` track, Frozen as marker.
-    groups = {group letter: [team, ...]} ordering top-to-bottom.
-    label/color: track label and bar color (use 'Track B' + green for second call)."""
-    teams = [t for g in sorted(groups) for t in groups[g]]
-    teams = [t for t in teams if t in now]
-    y = range(len(teams))
-    fig, ax = plt.subplots(figsize=(8, max(4, 0.28 * len(teams))))
-    ax.barh(list(y), [now[t]["advance_KO"] for t in teams],
-            color=color, alpha=0.85, label=label)
-    ax.plot([frozen[t]["advance_KO"] for t in teams if t in frozen],
-            [i for i, t in enumerate(teams) if t in frozen],
-            "D", color="#888888", markersize=4, linestyle="none", label="Frozen")
-    ax.set_yticks(list(y)); ax.set_yticklabels(teams, fontsize=7)
-    ax.invert_yaxis(); ax.set_xlabel("P(advance to knockout)")
-    ax.legend(loc="lower right", fontsize=8)
-    fig.tight_layout(); fig.savefig(out); plt.close(fig)
+def group_qual_fig(now, groups, out):
+    """4x3 grid of stacked qualification bars (Win group / 2nd / 3rd-advance /
+    Out) for one track, matching the locked Figure 19 so the Frozen, Track A, and
+    Track B versions are directly comparable. now[team] carries the finishing-
+    position decomposition first/second/third_adv/advance_KO (from
+    condition.conditional_probs); groups = {group letter: [team, ...]}."""
+    WIN, SECOND, THIRD, OUT = "#0072B2", "#56B4E9", "#E69F00", "#D9D9D9"
+    fig, axes = plt.subplots(4, 3, figsize=(8.2, 9.4))
+    for ax, grp in zip(axes.flat, sorted(groups)):
+        teams = sorted([t for t in groups[grp] if t in now],
+                       key=lambda t: -now[t].get("advance_KO", 0))
+        names = [t[:11] for t in teams]
+        p1 = [now[t].get("first", 0) * 100 for t in teams]
+        p2 = [now[t].get("second", 0) * 100 for t in teams]
+        p3 = [now[t].get("third_adv", 0) * 100 for t in teams]
+        qual = [now[t].get("advance_KO", 0) * 100 for t in teams]
+        pout = [100 - q for q in qual]
+        left3 = [a + b for a, b in zip(p1, p2)]
+        left4 = [a + b for a, b in zip(left3, p3)]
+        y = list(range(len(names)))[::-1]
+        ax.barh(y, p1, color=WIN, label="Win group")
+        ax.barh(y, p2, left=p1, color=SECOND, label="2nd")
+        ax.barh(y, p3, left=left3, color=THIRD, label="3rd (advance)")
+        ax.barh(y, pout, left=left4, color=OUT, label="Out")
+        ax.set_yticks(y); ax.set_yticklabels(names, fontsize=7)
+        ax.set_xlim(0, 100)
+        ax.set_title(f"Group {grp}", fontsize=9, fontweight="bold", loc="left")
+        ax.tick_params(axis="x", labelsize=6)
+        for yi, q in zip(y, qual):
+            ax.text(101, yi, f"{q:.0f}", va="center", fontsize=6, color="#555")
+    handles, labels = axes.flat[0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc="lower center", ncol=4, fontsize=8,
+               frameon=False, bbox_to_anchor=(0.5, -0.01))
+    fig.tight_layout(rect=[0, 0.02, 1, 1])
+    fig.savefig(out, bbox_inches="tight"); plt.close(fig)
 
 
 def champdist_fig(frozen, track_a, out, track_b=None):
