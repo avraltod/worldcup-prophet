@@ -252,29 +252,37 @@ def survival_unit(frozen, now):
         + "\n".join(rows) + "\n\\bottomrule\n\\end{longtable}\n\\end{footnotesize}")
 
 
-def two_track_unit(two_track, learning, fig, info_snapshot=None, track_a=None):
+def two_track_unit(two_track, learning, fig, info_snapshot=None, track_a=None,
+                   champion_b=None, frozen_stages=None):
     """The live A-vs-B: Frozen / Track A / Track B champion odds and Elo drift.
     track_a: dict of {team: {champion: prob, ...}} (Track A / now_probs).
+    champion_b: dict of {team: prob} from champion_b post record (preferred Track B source).
+    frozen_stages: dict of {team: {champion: prob, ...}} from frozen_stage_probs (preferred Frozen source).
     info_snapshot: no longer used here (provenance moved to data_revealed)."""
     if two_track is None:
         return ("\\textit{Two-track live results begin with the first match "
                 "whose box score is collected.}")
-    teams = sorted(two_track["frozen"], key=lambda t: -two_track["frozen"][t])[:8]
+    # Use frozen_stages (200k-sim baseline) when available; fall back to two_track['frozen']
+    frozen_src = {t: d["champion"] for t, d in frozen_stages.items()} if frozen_stages else two_track["frozen"]
+    teams = sorted(frozen_src, key=lambda t: -frozen_src.get(t, 0.0))[:8]
     if track_a is not None:
+        # Track B: prefer champion_b (consistent with Table 3); fall back to two_track['learning']
+        b_src = champion_b if champion_b else two_track["learning"]
         rows = "\n".join(
-            f"{t} & {_pct(two_track['frozen'][t])} & "
+            f"{t} & {_pct(frozen_src.get(t, 0.0))} & "
             f"{_pct(track_a.get(t, {}).get('champion', 0.0))} & "
-            f"{_pct(two_track['learning'].get(t, 0.0))} & "
-            f"{100*(track_a.get(t, {}).get('champion', 0.0) - two_track['frozen'][t]):+.1f} \\\\"
+            f"{_pct(b_src.get(t, 0.0))} & "
+            f"{100*(track_a.get(t, {}).get('champion', 0.0) - frozen_src.get(t, 0.0)):+.1f} \\\\"
             for t in teams)
         header = ("Team & Frozen (\\%) & Track~A (\\%) & Track~B (\\%) & "
                   "$\\Delta$ (A$-$Frozen, pp) \\\\\n\\midrule\n")
         col_spec = "lrrrr"
     else:
+        b_src = champion_b if champion_b else two_track["learning"]
         rows = "\n".join(
-            f"{t} & {_pct(two_track['frozen'][t])} & "
-            f"{_pct(two_track['learning'].get(t, 0.0))} & "
-            f"{100*(two_track['learning'].get(t, 0.0) - two_track['frozen'][t]):+.1f} \\\\"
+            f"{t} & {_pct(frozen_src.get(t, 0.0))} & "
+            f"{_pct(b_src.get(t, 0.0))} & "
+            f"{100*(b_src.get(t, 0.0) - frozen_src.get(t, 0.0)):+.1f} \\\\"
             for t in teams)
         header = "Team & Frozen (\\%) & Track~B (\\%) & $\\Delta$ (pp) \\\\\n\\midrule\n"
         col_spec = "lrrr"

@@ -394,7 +394,9 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     rl.write_unit(LIVE_DIR, "two_track",
                   rl.two_track_unit(two_track, state, fig=two_fig,
                                     info_snapshot=latest_snap,
-                                    track_a=now_probs))
+                                    track_a=now_probs,
+                                    champion_b=champion_b or None,
+                                    frozen_stages=frozen))
     rl.write_unit(LIVE_DIR, "market_snap", rl.market_snap_unit(ctx))
     rl.write_unit(LIVE_DIR, "survival_colcomp", rl.survival_colcomp_unit(ctx))
     # 5. per-group sections
