@@ -41,14 +41,22 @@ def templated_abstract_live(ctx):
     word = "result" if n == 1 else "results"
     total_bits = sum(e["post"].get("info_bits", 0.0) for e in ctx["entries"])
     pct_max = 100 * total_bits / _TOTAL_TOURNAMENT_BITS
-    parts = []
+    # Movers: contenders whose Track A champion prob shifted >= 0.05 pp from the
+    # frozen lock. In the group stage champions barely move, so fall back to a
+    # "holds steady" framing rather than the no-op "from X% to X%".
+    movers = []
     for team, prob in top[:3]:
         frz = frozen.get(team, {}).get("champion")
-        if frz is not None:
-            parts.append(f"{team} from {_pct(frz)}\\% to {_pct(prob)}\\%")
-        else:
-            parts.append(f"{team} at {_pct(prob)}\\%")
-    inner = ", ".join(parts[:-1]) + f", and {parts[-1]}"
+        if frz is not None and abs(100 * (prob - frz)) >= 0.05:
+            movers.append(f"{team} from {_pct(frz)}\\% to {_pct(prob)}\\%")
+    if movers:
+        joined = (", ".join(movers[:-1]) + f", and {movers[-1]}"
+                  if len(movers) > 1 else movers[0])
+        track_a = f"Track~A moves {joined}"
+    else:
+        held = [f"{t} at {_pct(p)}\\%" for t, p in top[:3]]
+        track_a = ("Track~A holds the lock steady, with "
+                   + ", ".join(held[:-1]) + f", and {held[-1]}")
     b_top = ctx.get("champ_b_top", [])
     b_text = ""
     if b_top:
@@ -56,7 +64,7 @@ def templated_abstract_live(ctx):
         b_inner = " and ".join(b_parts)
         b_text = (f" Track~B (live Elo + bookmaker odds) leads with {b_inner}.")
     return (
-        f" Conditioned on {n} {word}, Track~A moves {inner}. "
+        f"Conditioned on {n} {word}, {track_a}. "
         f"The {n} {word} have revealed {total_bits:.3f} bits "
         f"({pct_max:.1f}\\% of the {_TOTAL_TOURNAMENT_BITS:.1f}-bit tournament maximum)."
         + b_text
