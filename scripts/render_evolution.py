@@ -11,20 +11,31 @@ def _score(result):
     return f"{result[0]}--{result[1]}"
 
 
-def ledger_table(entries):
-    if not entries:
+def ledger_table(entries, upcoming=None):
+    """Match record. Played rows show the Frozen submitted pick and dashes for
+    the (result-known) track-pick columns; `upcoming` rows — next-matchday
+    fixtures, each {match, fixture, frozen_pick, track_a_pick, track_b_pick} —
+    show the three tracks' predicted scorelines and dashes for the result columns."""
+    if not entries and not upcoming:
         return r"\textit{No matches documented yet.}"
     rows = []
     for e in entries:
         fm = (e["failure_mode"] or "--").replace("_", r"\_")
-        played = e.get("result") is not None
-        pick_a = "--" if played else f"{e['pre']['pick'][0]}--{e['pre']['pick'][1]}"
-        pick_b = "--" if played else pick_a  # Track B scoreline shown when KO upcoming
         rows.append(
             f"{e['match']} & {e['fixture']} & {e['pre']['pick'][0]}--{e['pre']['pick'][1]} "
-            f"& {pick_a} & {pick_b} "
+            f"& -- & -- "
             f"& {_score(e['result'])} & {e['post']['points']} & {e['post']['brier']:.3f} "
             f"& {e['post']['info_bits']:.3f} & {fm} \\\\")
+    if upcoming:
+        def _sc(p):
+            return f"{p[0]}--{p[1]}"
+        rows.append("\\midrule\n\\multicolumn{10}{l}{\\itshape Upcoming fixtures "
+                    "--- predicted scoreline by track} \\\\")
+        for u in upcoming:
+            rows.append(
+                f"{u['match']} & {u['fixture']} & {_sc(u['frozen_pick'])} "
+                f"& {_sc(u['track_a_pick'])} & {_sc(u['track_b_pick'])} "
+                f"& -- & -- & -- & -- & -- \\\\")
     _hdr = ("M & Fixture & Frozen & Track~A & Track~B & Result & Pts & Brier & Info & Mode \\\\\n")
     head = ("\\begin{scriptsize}\n"
             "\\begin{longtable}{rlcccccccl}\n"

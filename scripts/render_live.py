@@ -47,8 +47,8 @@ def _pct(x):
 
 # ---- ported units (reuse render_evolution's pure builders) ----
 
-def ledger(entries):
-    return rev.ledger_table(entries)
+def ledger(entries, upcoming=None):
+    return rev.ledger_table(entries, upcoming=upcoming)
 
 
 def narrative_unit(entries):

@@ -208,6 +208,30 @@ def _bracket_eliminated(ko_results):
     return elim
 
 
+def _upcoming_picks(expectations, results, learn_ratings, limit=8):
+    """Next-matchday unplayed group fixtures with each track's predicted scoreline.
+    Frozen and Track~A reuse the submitted pick (both ride the June-10 ratings, so
+    they are identical by construction); Track~B rounds the live-rating expected
+    goals, so it can diverge once the learning track has moved a rating."""
+    played = set(results.get("group", {}).keys())
+    out = []
+    for e in sorted(expectations, key=lambda x: x["match"]):
+        if str(e["match"]) in played:
+            continue
+        fa = list(e["pick"])
+        if learn_ratings and e["home"] in learn_ratings and e["away"] in learn_ratings:
+            from learn import lambda_expected
+            lh, la = lambda_expected(learn_ratings[e["home"]], learn_ratings[e["away"]])
+            fb = [round(lh), round(la)]
+        else:
+            fb = list(fa)
+        out.append({"match": e["match"], "fixture": f"{e['home']} v {e['away']}",
+                    "frozen_pick": fa, "track_a_pick": list(fa), "track_b_pick": fb})
+        if len(out) >= limit:
+            break
+    return out
+
+
 def _implications(latest_entry, expectations, results, learn_ratings):
     """Remaining fixtures of the just-played group: lock odds + learning odds."""
     from learn import lambda_expected
@@ -414,7 +438,9 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
                                       champion_b=champion_b))
     # 3. trajectory-based units
     rl.write_unit(LIVE_DIR, "trajfig", rl.trajfig_unit(entries, live_fig))
-    rl.write_unit(LIVE_DIR, "ledger", rl.ledger(entries))
+    rl.write_unit(LIVE_DIR, "ledger",
+                  rl.ledger(entries,
+                            upcoming=_upcoming_picks(expectations, res, learn_ratings)))
     rl.write_unit(LIVE_DIR, "narrative", rl.narrative_unit(entries))
     rl.write_unit(LIVE_DIR, "divergence", rl.divergence_unit(frozen, now_probs, entries, group_st, champion_b=champion_b, now_b=ctx.get("now_b", {})))
     # 4. derived units

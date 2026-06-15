@@ -29,6 +29,30 @@ def test_ledger_table_empty_is_a_placeholder_not_broken_latex():
     assert "No matches documented yet" in tex
 
 
+def test_ledger_table_upcoming_rows_show_three_track_picks():
+    upcoming = [
+        {"match": 12, "fixture": "Japan v Tunisia",
+         "frozen_pick": [2, 0], "track_a_pick": [2, 0], "track_b_pick": [2, 1]},
+        {"match": 13, "fixture": "Sweden v Tunisia",
+         "frozen_pick": [1, 1], "track_a_pick": [1, 1], "track_b_pick": [1, 0]},
+    ]
+    tex = re_.ledger_table(ENTRIES, upcoming=upcoming)
+    assert "Upcoming fixtures" in tex
+    assert "Japan v Tunisia" in tex
+    # Track B diverges from Frozen/Track A on the upcoming rows
+    assert "2--0 & 2--0 & 2--1" in tex
+    assert "1--1 & 1--1 & 1--0" in tex
+    # played entry still present with dashed track-pick columns
+    assert "Mexico v South Africa" in tex
+
+
+def test_ledger_table_upcoming_only_renders_without_played_entries():
+    upcoming = [{"match": 1, "fixture": "A v B",
+                 "frozen_pick": [1, 0], "track_a_pick": [1, 0], "track_b_pick": [2, 0]}]
+    tex = re_.ledger_table([], upcoming=upcoming)
+    assert "longtable" in tex and "A v B" in tex
+
+
 # ---------------- live-edition additions (divergence, champ table, trajfig) --
 
 FROZEN = {
