@@ -108,12 +108,78 @@ def two_track_fig(history, out):
     fig.tight_layout(); fig.savefig(out); plt.close(fig)
 
 
+# Flag palette + schematic shapes, ported from make_bracket_tikz.draw_flag so the
+# live brackets carry the same hand-drawn flags as the locked TikZ Figure 22.
+_FLAGHEX = {"fr": "#CE1126", "fb": "#0033A0", "fy": "#FCD116", "fg": "#009639",
+            "fk": "#000000", "fw": "#FFFFFF", "fw2": "#F2F2F2", "fo": "#F77F00",
+            "fs": "#75AADB"}
+
+
+def _draw_flag(ax, spec, x1, y1, x2, y2):
+    """Draw the schematic flag `spec` (kind + palette colours) in rect (x1,y1)-(x2,y2)."""
+    from matplotlib.patches import Rectangle, Circle, Polygon
+    C = _FLAGHEX
+    cx, cy, w, h = (x1 + x2) / 2, (y1 + y2) / 2, x2 - x1, y2 - y1
+
+    def R(a, b, c, d, col):
+        ax.add_patch(Rectangle((a, b), c - a, d - b, fc=C.get(col, col),
+                               ec="none", zorder=4))
+    k = spec[0]
+    if k == "solid":
+        R(x1, y1, x2, y2, spec[1])
+    elif k == "v":
+        cols = spec[1]; n = len(cols); ww = w / n
+        for i, c in enumerate(cols):
+            R(x1 + i * ww, y1, x1 + (i + 1) * ww, y2, c)
+    elif k == "h":
+        cols = spec[1]; n = len(cols); hh = h / n
+        for i, c in enumerate(cols):
+            R(x1, y2 - (i + 1) * hh, x2, y2 - i * hh, c)
+    elif k == "hw":
+        c = spec[1]; q = h / 4
+        R(x1, y2 - q, x2, y2, c[0]); R(x1, y1 + q, x2, y2 - q, c[1]); R(x1, y1, x2, y1 + q, c[2])
+    elif k == "vw":
+        c = spec[1]; xm = x1 + w * 0.4
+        R(x1, y1, xm, y2, c[0]); R(xm, y1, x2, y2, c[1])
+    elif k == "plus":
+        field, cr = spec[1], spec[2]; t = h * 0.30
+        R(x1, y1, x2, y2, field)
+        R(cx - t / 2, y1, cx + t / 2, y2, cr); R(x1, cy - t / 2, x2, cy + t / 2, cr)
+    elif k == "nordic":
+        field, cr = spec[1], spec[2]; t = h * 0.24; vx = x1 + w * 0.34
+        R(x1, y1, x2, y2, field)
+        R(vx - t / 2, y1, vx + t / 2, y2, cr); R(x1, cy - t / 2, x2, cy + t / 2, cr)
+    elif k == "circle":
+        R(x1, y1, x2, y2, spec[1])
+        ax.add_patch(Circle((cx, cy), h * 0.32, fc=C.get(spec[2], spec[2]), ec="none", zorder=4))
+    elif k == "diamond":
+        f, d, c = spec[1], spec[2], spec[3]; R(x1, y1, x2, y2, f)
+        ax.add_patch(Polygon([(cx, y2), (x2, cy), (cx, y1), (x1, cy)],
+                             fc=C.get(d, d), ec="none", zorder=4))
+        ax.add_patch(Circle((cx, cy), h * 0.18, fc=C.get(c, c), ec="none", zorder=5))
+    elif k == "triangle":
+        R(x1, y1, x2, y2, spec[1])
+        ax.add_patch(Polygon([(x1, y2), (x1, y1), (x2, y1)],
+                             fc=C.get(spec[2], spec[2]), ec="none", zorder=4))
+    elif k == "canton":
+        stripe, base, canton = spec[1], spec[2], spec[3]; R(x1, y1, x2, y2, base)
+        n = 5; hh = h / n
+        for i in range(0, n, 2):
+            R(x1, y1 + i * hh, x2, y1 + (i + 1) * hh, stripe)
+        R(x1, y2 - h * 0.5, x1 + w * 0.42, y2, canton)
+    elif k == "crescent":
+        field, cr = spec[1], spec[2]; R(x1, y1, x2, y2, field)
+        ax.add_patch(Circle((cx - w * 0.04, cy), h * 0.30, fc=C.get(cr, cr), ec="none", zorder=4))
+        ax.add_patch(Circle((cx + w * 0.06, cy), h * 0.26, fc=C.get(field, field), ec="none", zorder=5))
+    ax.add_patch(Rectangle((x1, y1), w, h, fc="none", ec="#888888", lw=0.3, zorder=6))
+
+
 def bracket_fig(probs, out, title, eliminated=None):
     """Two-sided knockout bracket on the submitted-entry structure (spec 3.20).
-    Each box carries a team and its champion probability under `probs`
-    ({team: {champion, ...}}); the submitted winners' path is shaded blue and the
-    champion gold, and teams in `eliminated` (confirmed knockout losers) are
-    greyed. Called once per edition with Track A and again with Track B inputs."""
+    Each box carries a flag (matching Figure 22), the team's 3-letter code and its
+    champion probability under `probs` ({team: {champion, ...}}); the submitted
+    winners' path is shaded blue and the champion gold, and teams in `eliminated`
+    (confirmed knockout losers) are greyed. Called with Track A and Track B."""
     from matplotlib.patches import FancyBboxPatch
     import make_bracket_tikz as bt
 
@@ -147,7 +213,9 @@ def bracket_fig(probs, out, title, eliminated=None):
             fc, ec, tc = "#f7f7f7", "#cfcfcf", "#444444"
         ax.add_patch(FancyBboxPatch((left, y - BH / 2), BW, BH,
                      boxstyle="round,pad=0.01", fc=fc, ec=ec, lw=0.8, zorder=2))
-        ax.text(left + 0.08, y, bt.TEAM[t][0], va="center", ha="left",
+        # schematic flag at the left of the box
+        _draw_flag(ax, bt.TEAM[t][1], left + 0.07, y - 0.10, left + 0.40, y + 0.10)
+        ax.text(left + 0.48, y, bt.TEAM[t][0], va="center", ha="left",
                 fontsize=7.5, color=tc,
                 fontweight="bold" if champ else "normal", zorder=3)
         ax.text(left + BW - 0.08, y, f"{100 * cp(t):.0f}", va="center",
@@ -183,12 +251,12 @@ def bracket_fig(probs, out, title, eliminated=None):
     lx, ly = render_side(bt.LEFT_R32, bt.LEFT_R16, bt.LEFT_QF, bt.LEFT_SF, xL, "L")
     rx, ry = render_side(bt.RIGHT_R32, bt.RIGHT_R16, bt.RIGHT_QF, bt.RIGHT_SF, xR, "R")
 
-    # champion box at centre, fed by both semi-finalists
-    cy = max(ly, ry) + 1.4
-    draw(bt.CHAMPION, xC, cy, "L", champ=True)   # drawn with left edge = xC
-    line(lx, ly, xC, ly); line(xC, ly, xC, cy - BH / 2)
-    line(rx, ry, xC + BW, ry); line(xC + BW, ry, xC + BW, cy - BH / 2)
-    ax.text(xC + BW / 2, cy + 0.7, "★ " + bt.TEAM[bt.CHAMPION][0],
+    # champion box, horizontally centred on xC and lifted above the two SFs
+    cy = max(ly, ry) + 1.6
+    draw(bt.CHAMPION, xC - BW / 2, cy, "L", champ=True)   # centred: left edge = xC - BW/2
+    line(lx, ly, xC, ly); line(rx, ry, xC, ry)           # SFs in to the centre line
+    line(xC, min(ly, ry), xC, cy - BH / 2)               # up to the champion box
+    ax.text(xC, cy + 0.7, "★ " + bt.TEAM[bt.CHAMPION][0],
             ha="center", fontsize=9, fontweight="bold", color="#b8860b")
 
     for lab, x in [("R32", xL[0]), ("R16", xL[2]), ("QF", xL[3]), ("SF", xL[4]),
