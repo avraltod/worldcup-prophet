@@ -366,6 +366,10 @@ def test_champdist_live_unit():
 def test_groupqual_live_unit():
     tex = rl.groupqual_live_unit(_full_ctx())
     assert r"\label{fig:live_groupqual}" in tex
+    assert r"\label{fig:live_groupqual_b}" in tex
+    # discussion paragraph referencing the locked Frozen figure
+    assert "Qualification, three ways" in tex
+    assert r"Figure~\ref{fig:groupqual}" in tex
 
 def test_bracket_live_unit_group_stage_shows_slot_risk_table():
     ctx = _full_ctx()

@@ -570,8 +570,33 @@ def champdist_live_unit(ctx):
 
 
 def groupqual_live_unit(ctx):
-    """Two figure blocks: Track A and Track B qualification probabilities."""
-    return (
+    """Discussion + two figure blocks (Track A / Track B qualification), the
+    live companions to the locked Frozen Figure~\\ref{fig:groupqual}."""
+    frozen = ctx.get("frozen", {})
+    now = ctx.get("now", {})
+    n = ctx.get("n_results", 0)
+    movers = sorted(
+        ((t, frozen[t]["advance_KO"], now[t]["advance_KO"]) for t in now
+         if t in frozen and "advance_KO" in now[t] and "advance_KO" in frozen[t]),
+        key=lambda x: -abs(x[2] - x[1]))
+    swing = ""
+    if movers and abs(movers[0][2] - movers[0][1]) >= 0.005:
+        t, f, a = movers[0]
+        verb = "up" if a >= f else "down"
+        swing = (f" The largest swing so far is {t}, {verb} from "
+                 f"{_pct(f)}\\% under Frozen to {_pct(a)}\\% under Track~A.")
+    discussion = (
+        "\\paragraph{Qualification, three ways.} Figure~\\ref{fig:groupqual} is "
+        "the pre-kickoff (Frozen) qualification decomposition --- win the group, "
+        "finish second, or advance as a best third --- locked and unchanged. The "
+        f"two figures below recompute it after {n} result"
+        f"{'' if n == 1 else 's'}: Track~A conditions on the played outcomes with "
+        "the June~10 ratings held fixed, and Track~B additionally folds in live "
+        "Elo and bookmaker odds. Conditioning sharpens every group that has "
+        "kicked off --- a win lifts a team's qualification mass and a defeat cuts "
+        "it --- while groups still to play stay at the Frozen baseline." + swing
+        + "\n\n")
+    return discussion + (
         "\\begin{figure}[!t]\n"
         "  \\caption{Qualification probability by team --- Track~A "
         "(conditioned on \\liveDocumented{} results, June~10 ratings frozen; "
