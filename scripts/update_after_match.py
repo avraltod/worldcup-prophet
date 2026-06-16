@@ -77,15 +77,15 @@ def build_full_entry(match, trajectory, expectations, forecast_commit,
     e = mb.build_entry(match, trajectory, expectations, forecast_commit, documented_at)
     exp = next(x for x in expectations if x["match"] == match)
     e["failure_mode"] = detect_failure_mode(e, exp)
-    # Track B pre-match H/D/A: learn_ratings at this moment are pre-match
-    # (lst.sync runs later in _write_living_layer, after stats are collected)
+    # Track B pre-match H/D/A: the live state at this moment is pre-match
+    # (lst.sync runs later in _write_living_layer, after stats are collected).
+    # Use the same full live inputs as the Track B champion (bookmaker odds where
+    # present, else live Elo), not drift alone.
     try:
-        from learn import lambda_expected
-        _state = lst.load_state()
-        _lr = lst.ratings(_state)
-        if exp["home"] in _lr and exp["away"] in _lr:
-            _lh, _la = lambda_expected(_lr[exp["home"]], _lr[exp["away"]])
-            e["pre"]["probs_HDA_b"] = list(rl.outcome_probs(_lh, _la))
+        _eff, _rates = _eff_elo_and_rates(lst.load_state())
+        _lam = _track_b_lambda(match, exp["home"], exp["away"], _eff, _rates)
+        if _lam is not None:
+            e["pre"]["probs_HDA_b"] = list(rl.outcome_probs(_lam[0], _lam[1]))
     except Exception:
         pass  # best-effort; column shows "--" if unavailable
     corrections = CORRECTIONS.read_text() if CORRECTIONS.exists() else ""
@@ -208,44 +208,72 @@ def _bracket_eliminated(ko_results):
     return elim
 
 
-def _track_b_fixture_map(expectations, results, learn_ratings):
+def _eff_elo_and_rates(state):
+    """Track~B inputs, identical to those the Track~B champion uses
+    (live_update_v2._champion_dist_b): the effective Elo (live ClubElo + injury +
+    lineup + host + drift, via build_eff_elo) and the bookmaker live_rates keyed
+    by group row. Returns (None, {}) when there is no live information, mirroring
+    the champion's gate so the scoreline track and the champion track agree on
+    whether Track~B exists at all."""
+    live = lst.load_live_inputs()
+    if not (live.get("live_elo") or live.get("live_rates")):
+        return None, {}
+    eff_elo = lst.build_eff_elo(state, live)
+    live_rates = {int(k): v for k, v in live.get("live_rates", {}).items()}
+    return eff_elo, live_rates
+
+
+def _track_b_lambda(match, home, away, eff_elo, live_rates):
+    """Track~B expected goals (lh, la) for one fixture, using exactly the same
+    per-fixture rule as the champion simulation in condition.conditional_probs:
+    the bookmaker live_rates for the fixture's row when present, otherwise
+    lambda_expected on the effective Elo. None when Track~B has no information
+    for this fixture."""
+    from condition import MATCH_ROW
+    row = MATCH_ROW.get(match)
+    if live_rates and row in live_rates:
+        return live_rates[row][0], live_rates[row][1]
+    if eff_elo and home in eff_elo and away in eff_elo:
+        from learn import lambda_expected
+        return lambda_expected(eff_elo[home], eff_elo[away])
+    return None
+
+
+def _track_b_fixture_map(expectations, results, eff_elo, live_rates):
     """For every unplayed group fixture, Track~B's predicted scoreline and H/D/A
-    probabilities from the live (learning-track) ratings: {match: {'pick':[h,a],
-    'hda':[h,d,a]}}. Empty when the learning track has no ratings yet."""
+    from the full live information set (bookmaker odds where present, else live
+    Elo) — the same inputs as the Track~B champion: {match: {'pick':[h,a],
+    'hda':[h,d,a]}}. Empty when Track~B has no live information."""
     out = {}
-    if not learn_ratings:
+    if eff_elo is None and not live_rates:
         return out
-    from learn import lambda_expected
     played = set(results.get("group", {}).keys())
     for e in expectations:
         if str(e["match"]) in played:
             continue
-        h, a = e["home"], e["away"]
-        if h not in learn_ratings or a not in learn_ratings:
+        lam = _track_b_lambda(e["match"], e["home"], e["away"], eff_elo, live_rates)
+        if lam is None:
             continue
-        lh, la = lambda_expected(learn_ratings[h], learn_ratings[a])
+        lh, la = lam
         out[e["match"]] = {"pick": [round(lh), round(la)],
                            "hda": list(rl.outcome_probs(lh, la))}
     return out
 
 
-def _upcoming_picks(expectations, results, learn_ratings, limit=8):
+def _upcoming_picks(expectations, results, eff_elo, live_rates, limit=8):
     """Next-matchday unplayed group fixtures with each track's predicted scoreline.
     Frozen and Track~A reuse the submitted pick (both ride the June-10 ratings, so
-    they are identical by construction); Track~B rounds the live-rating expected
-    goals, so it can diverge once the learning track has moved a rating."""
+    they are identical by construction); Track~B rounds the live expected goals
+    (bookmaker odds where present, else live Elo) — the same information set as the
+    Track~B champion — so it diverges once any live signal moves a fixture."""
     played = set(results.get("group", {}).keys())
     out = []
     for e in sorted(expectations, key=lambda x: x["match"]):
         if str(e["match"]) in played:
             continue
         fa = list(e["pick"])
-        if learn_ratings and e["home"] in learn_ratings and e["away"] in learn_ratings:
-            from learn import lambda_expected
-            lh, la = lambda_expected(learn_ratings[e["home"]], learn_ratings[e["away"]])
-            fb = [round(lh), round(la)]
-        else:
-            fb = list(fa)
+        lam = _track_b_lambda(e["match"], e["home"], e["away"], eff_elo, live_rates)
+        fb = [round(lam[0]), round(lam[1])] if lam is not None else list(fa)
         out.append({"match": e["match"], "fixture": f"{e['home']} v {e['away']}",
                     "frozen_pick": fa, "track_a_pick": list(fa), "track_b_pick": fb})
         if len(out) >= limit:
@@ -253,21 +281,24 @@ def _upcoming_picks(expectations, results, learn_ratings, limit=8):
     return out
 
 
-def _implications(latest_entry, expectations, results, learn_ratings):
-    """Remaining fixtures of the just-played group: lock odds + learning odds."""
-    from learn import lambda_expected
+def _implications(latest_entry, expectations, results, eff_elo, live_rates):
+    """Remaining fixtures of the just-played group: lock (Frozen) odds + Track~B
+    odds. Track~B uses the full live information set (bookmaker odds where present,
+    else live Elo), matching the Track~B champion."""
     grp = next((e.get("group") for e in expectations
                 if e["match"] == latest_entry["match"]), None)
     out = []
-    if grp is None or learn_ratings is None:
+    if grp is None or eff_elo is None:
         return out
     for e in expectations:
         if e.get("group") != grp or str(e["match"]) in results["group"]:
             continue
-        lh, la = lambda_expected(learn_ratings[e["home"]], learn_ratings[e["away"]])
+        lam = _track_b_lambda(e["match"], e["home"], e["away"], eff_elo, live_rates)
+        if lam is None:
+            continue
         out.append({"match": e["match"], "fixture": f"{e['home']} v {e['away']}",
                     "lock_HDA": e["probs_HDA"],
-                    "learn_HDA": list(rl.outcome_probs(lh, la))})
+                    "learn_HDA": list(rl.outcome_probs(lam[0], lam[1]))})
     return out
 
 
@@ -433,12 +464,15 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
         (r.get("market_champion") for r in reversed(trajectory)
          if r.get("phase") == "post" and r.get("market_champion")), None)
     # Track B predicted scoreline + H/D/A for every unplayed group fixture; used
-    # by the per-group boxes and the decisive-upcoming-fixtures table.
-    track_b_map = _track_b_fixture_map(expectations, res, learn_ratings)
+    # by the per-group boxes and the decisive-upcoming-fixtures table. Uses the
+    # same live inputs (eff Elo + bookmaker rates) as the Track B champion, so the
+    # scoreline track and the champion track are one consistent Track B.
+    eff_elo_b, live_rates_b = _eff_elo_and_rates(state)
+    track_b_map = _track_b_fixture_map(expectations, res, eff_elo_b, live_rates_b)
     ctx = {"match": match, "entries": entries, "match_stats": match_stats,
            "learning": state, "prev_now": prev_now, "now": now_probs,
            "vintages_rows": rows, "revision_narrative": narrative_text,
-           "implications": _implications(latest, expectations, res, learn_ratings),
+           "implications": _implications(latest, expectations, res, eff_elo_b, live_rates_b),
            "frozen": frozen, "frozen_finish": _load(GROUP_QUAL_PATH, {}),
            "results": res, "expectations": expectations,
            "n_results": stats["documented"],
@@ -469,7 +503,8 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     rl.write_unit(LIVE_DIR, "trajfig", rl.trajfig_unit(entries, live_fig))
     rl.write_unit(LIVE_DIR, "ledger",
                   rl.ledger(entries,
-                            upcoming=_upcoming_picks(expectations, res, learn_ratings)))
+                            upcoming=_upcoming_picks(expectations, res,
+                                                     eff_elo_b, live_rates_b)))
     rl.write_unit(LIVE_DIR, "narrative", rl.narrative_unit(entries))
     rl.write_unit(LIVE_DIR, "divergence", rl.divergence_unit(frozen, now_probs, entries, group_st, champion_b=champion_b, now_b=ctx.get("now_b", {})))
     # 4. derived units
