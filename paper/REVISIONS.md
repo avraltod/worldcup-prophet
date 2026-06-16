@@ -52,3 +52,5 @@ headline numbers are backfilled into the vintages table.
 **Rev M014 (Spain v Cape Verde 0-0).** Cumulative 6 pts, mean Brier 0.70; failure-mode systematic_rating_error. Full living layer re-rendered (edition M014); skeleton unchanged.
 
 **Rev M016 (Belgium v Egypt 1-1).** Cumulative 6 pts, mean Brier 0.71; failure-mode systematic_rating_error. Full living layer re-rendered (edition M016); skeleton unchanged.
+
+**Rev M013 (Saudi Arabia v Uruguay 1-1).** Cumulative 6 pts, mean Brier 0.65; failure-mode systematic_rating_error. Full living layer re-rendered (edition M013); skeleton unchanged.

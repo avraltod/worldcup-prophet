@@ -452,6 +452,41 @@
   ]
  },
  {
+  "edition": 13,
+  "match": 13,
+  "fixture": "Saudi Arabia v Uruguay",
+  "result": [
+   1,
+   1
+  ],
+  "points": 0,
+  "cum_points": 6,
+  "mean_brier": 0.6532,
+  "cum_bits": 0.0243,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2732
+   ],
+   [
+    "Argentina",
+    0.1871
+   ],
+   [
+    "France",
+    0.1445
+   ],
+   [
+    "Portugal",
+    0.093
+   ],
+   [
+    "England",
+    0.0676
+   ]
+  ]
+ },
+ {
   "edition": 14,
   "match": 14,
   "fixture": "Spain v Cape Verde",
@@ -496,28 +531,28 @@
   ],
   "points": 0,
   "cum_points": 6,
-  "mean_brier": 0.715,
-  "cum_bits": 0.0253,
+  "mean_brier": 0.7334,
+  "cum_bits": 0.0283,
   "champ_top5": [
    [
     "Spain",
-    0.252
+    0.2596
    ],
    [
     "Argentina",
-    0.179
+    0.1863
    ],
    [
     "France",
-    0.1488
+    0.1504
    ],
    [
     "Portugal",
-    0.0973
+    0.0949
    ],
    [
     "England",
-    0.0736
+    0.0696
    ]
   ]
  }

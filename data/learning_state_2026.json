@@ -80,7 +80,9 @@
   "Belgium": -47.5,
   "Egypt": 47.5,
   "Spain": -7.329749103942586,
-  "Cape Verde": 7.329749103942586
+  "Cape Verde": 7.329749103942586,
+  "Saudi Arabia": -33.94862604540032,
+  "Uruguay": 33.94862604540032
  },
  "processed": [
   {
@@ -333,6 +335,24 @@
    "drift_after": {
     "Belgium": -47.5,
     "Egypt": 47.5
+   }
+  },
+  {
+   "match": 13,
+   "home": "Saudi Arabia",
+   "away": "Uruguay",
+   "lam_obs": {
+    "home": 0.977,
+    "away": 3.256,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 0.2,
+    "away": 1.8
+   },
+   "drift_after": {
+    "Saudi Arabia": -33.95,
+    "Uruguay": 33.95
    }
   }
  ],
