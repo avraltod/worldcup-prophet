@@ -46,7 +46,7 @@ Poisson goal model, and optimizes picks under the pool's 3/2/1 scoring rule.
 | `stata/` | Stata replication scripts and backing data |
 | `tests/` | Test suite |
 | `experiment/ledger.csv` | Match-by-match scoring ledger |
-| `archive/` | Issued paper editions M000, M001, … (`archive/paper_versions/`) + progress reports |
+| `archive/` | Issued paper editions, named `WC2026_paper_Gggg_Mmmm.pdf` (ggg = update order, mmm = match number; `archive/paper_versions/`) + progress reports |
 
 ## Results tracking
 

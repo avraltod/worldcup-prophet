@@ -9,10 +9,12 @@ N=200k), and revealed group standings are conditioned through that match
 (N=50k, seed 2026).
 
 Editions are built by the `paper-revision` CI workflow and archived here, one
-per match, named `WC2026_paper_Mnnn.pdf` where **nnn is the schedule match
-number** (the fixed fixture slot). The working source is
+per match, named `WC2026_paper_Gggg_Mmmm.pdf`, where **ggg is the update order**
+(the grading sequence — the order the model saw the results) and **mmm is the
+schedule match number** (the fixed fixture slot). Naming this way makes the
+files sort by the order the model actually updated. The working source is
 `../../paper/WC2026_paper.tex`; the repo's `paper/WC2026_paper.pdf` remains the
-locked pre-kickoff build (identical to M000).
+locked pre-kickoff build (identical to G000/M000).
 
 ## Update order matters
 

@@ -56,13 +56,19 @@ jobs:
           import match_book as mb
           traj = json.load(open("data/trajectory_v2.json"))
           os.makedirs("archive/paper_versions", exist_ok=True)
+          def archive_path(m):
+              # G### = update/grading order (position in records_index_v2 post,
+              # appended as each result is confirmed); M### = schedule match number.
+              post = json.load(open("data/records_index_v2.json")).get("post", [])
+              g = 0 if m == 0 else (post.index(m) + 1 if m in post else len(post))
+              return f"archive/paper_versions/WC2026_paper_G{g:03d}_M{m:03d}.pdf"
           pending = uam.pending_matches(traj, uam.INDEX)
           for m in pending:
               print("revising match", m)
               uam.revise(m, use_api=bool(os.environ.get("ANTHROPIC_API_KEY")))
               # _latexmk(out_path) compiles to WC2026_paper_live.pdf and copies
               # directly to archive — paper/WC2026_paper.pdf is never touched.
-              uam._latexmk(out_path=f"archive/paper_versions/WC2026_paper_M{m:03d}.pdf")
+              uam._latexmk(out_path=archive_path(m))
           # After catch-up, restore living layer to the latest documented state
           # so paper/live/ reflects all known results, not just the last pending one.
           if pending:
@@ -76,7 +82,7 @@ jobs:
               target = int(want) if want.strip() else None
               uam.rerender(target)
               m = target or max(mb.documented_matches(uam.INDEX))
-              uam._latexmk(out_path=f"archive/paper_versions/WC2026_paper_M{m:03d}.pdf")
+              uam._latexmk(out_path=archive_path(m))
               if target is not None:  # restore the latest state before the commit step
                   uam.rerender()
           PY
