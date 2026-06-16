@@ -1,0 +1,20 @@
+{
+ "match": 12,
+ "event_id": "760424",
+ "stats": {
+  "home": {
+   "team": "Sweden",
+   "sot": 7.0,
+   "other_shots": 6.0,
+   "total_shots": 13.0,
+   "possession": 49.1
+  },
+  "away": {
+   "team": "Tunisia",
+   "sot": 2.0,
+   "other_shots": 4.0,
+   "total_shots": 6.0,
+   "possession": 50.9
+  }
+ }
+}

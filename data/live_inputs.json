@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-06-14T23:49:37Z",
+ "fetched_at": "2026-06-16T10:26:05Z",
  "mode": "pre",
  "source_freshness": {
   "elo_updated_at": "2026-06-10T00:00:00Z",
@@ -370,6 +370,22 @@
     "drift": -75.0
    },
    {
+    "team": "Ivory Coast",
+    "drift": 75.0
+   },
+   {
+    "team": "Ecuador",
+    "drift": -75.0
+   },
+   {
+    "team": "Iran",
+    "drift": -75.0
+   },
+   {
+    "team": "New Zealand",
+    "drift": 75.0
+   },
+   {
     "team": "Germany",
     "drift": 65.28
    },
@@ -386,12 +402,28 @@
     "drift": -65.0
    },
    {
+    "team": "Sweden",
+    "drift": 56.39
+   },
+   {
+    "team": "Tunisia",
+    "drift": -56.39
+   },
+   {
     "team": "Mexico",
     "drift": -49.94
    },
    {
     "team": "South Africa",
     "drift": 49.94
+   },
+   {
+    "team": "Belgium",
+    "drift": -47.5
+   },
+   {
+    "team": "Egypt",
+    "drift": 47.5
    },
    {
     "team": "Canada",
@@ -408,6 +440,14 @@
    {
     "team": "Japan",
     "drift": -36.34
+   },
+   {
+    "team": "Saudi Arabia",
+    "drift": -33.95
+   },
+   {
+    "team": "Uruguay",
+    "drift": 33.95
    },
    {
     "team": "Qatar",
@@ -440,6 +480,14 @@
    {
     "team": "Morocco",
     "drift": 9.94
+   },
+   {
+    "team": "Spain",
+    "drift": -7.33
+   },
+   {
+    "team": "Cape Verde",
+    "drift": 7.33
    }
   ],
   "summary": {
@@ -455,7 +503,7 @@
    "biggest_odds_mover": {},
    "n_new_injuries": 0,
    "n_lineup_adj": 0,
-   "n_teams_with_drift": 20
+   "n_teams_with_drift": 32
   }
  }
 }

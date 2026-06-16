@@ -44,3 +44,15 @@ headline numbers are backfilled into the vintages table.
 **Rev M010 (Germany v Curaçao 7-1).** Cumulative 5 pts, mean Brier 0.61; failure-mode none. Full living layer re-rendered (edition M010); skeleton unchanged.
 
 **Rev M011 (Netherlands v Japan 2-2).** Cumulative 5 pts, mean Brier 0.63; failure-mode none. Full living layer re-rendered (edition M011); skeleton unchanged.
+
+**Rev M009 (Ivory Coast v Ecuador 1-0).** Cumulative 4 pts, mean Brier 0.69; failure-mode none. Full living layer re-rendered (edition M009); skeleton unchanged.
+
+**Rev M012 (Sweden v Tunisia 5-1).** Cumulative 6 pts, mean Brier 0.62; failure-mode none. Full living layer re-rendered (edition M012); skeleton unchanged.
+
+**Rev M014 (Spain v Cape Verde 0-0).** Cumulative 6 pts, mean Brier 0.70; failure-mode systematic_rating_error. Full living layer re-rendered (edition M014); skeleton unchanged.
+
+**Rev M016 (Belgium v Egypt 1-1).** Cumulative 6 pts, mean Brier 0.71; failure-mode systematic_rating_error. Full living layer re-rendered (edition M016); skeleton unchanged.
+
+**Rev M013 (Saudi Arabia v Uruguay 1-1).** Cumulative 6 pts, mean Brier 0.65; failure-mode systematic_rating_error. Full living layer re-rendered (edition M013); skeleton unchanged.
+
+**Rev M015 (Iran v New Zealand 2-2).** Cumulative 6 pts, mean Brier 0.73; failure-mode none. Full living layer re-rendered (edition M015); skeleton unchanged.

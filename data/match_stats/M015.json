@@ -1,0 +1,20 @@
+{
+ "match": 15,
+ "event_id": "760427",
+ "stats": {
+  "home": {
+   "team": "Iran",
+   "sot": 4.0,
+   "other_shots": 13.0,
+   "total_shots": 17.0,
+   "possession": 48.4
+  },
+  "away": {
+   "team": "New Zealand",
+   "sot": 8.0,
+   "other_shots": 6.0,
+   "total_shots": 14.0,
+   "possession": 51.6
+  }
+ }
+}

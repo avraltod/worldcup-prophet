@@ -312,6 +312,41 @@
   ]
  },
  {
+  "edition": 9,
+  "match": 9,
+  "fixture": "Ivory Coast v Ecuador",
+  "result": [
+   1,
+   0
+  ],
+  "points": 0,
+  "cum_points": 4,
+  "mean_brier": 0.6941,
+  "cum_bits": 0.0168,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2655
+   ],
+   [
+    "Argentina",
+    0.1826
+   ],
+   [
+    "France",
+    0.15
+   ],
+   [
+    "Portugal",
+    0.095
+   ],
+   [
+    "England",
+    0.0703
+   ]
+  ]
+ },
+ {
   "edition": 10,
   "match": 10,
   "fixture": "Germany v Curaçao",
@@ -356,28 +391,203 @@
   ],
   "points": 0,
   "cum_points": 5,
-  "mean_brier": 0.6293,
-  "cum_bits": 0.0177,
+  "mean_brier": 0.6455,
+  "cum_bits": 0.0199,
   "champ_top5": [
    [
     "Spain",
-    0.269
+    0.2669
    ],
    [
     "Argentina",
-    0.1806
+    0.1795
    ],
    [
     "France",
-    0.1426
+    0.1487
    ],
    [
     "Portugal",
-    0.0973
+    0.0952
    ],
    [
     "England",
-    0.0701
+    0.0709
+   ]
+  ]
+ },
+ {
+  "edition": 12,
+  "match": 12,
+  "fixture": "Sweden v Tunisia",
+  "result": [
+   5,
+   1
+  ],
+  "points": 1,
+  "cum_points": 6,
+  "mean_brier": 0.625,
+  "cum_bits": 0.0213,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2661
+   ],
+   [
+    "Argentina",
+    0.1823
+   ],
+   [
+    "France",
+    0.1473
+   ],
+   [
+    "Portugal",
+    0.0948
+   ],
+   [
+    "England",
+    0.0712
+   ]
+  ]
+ },
+ {
+  "edition": 13,
+  "match": 13,
+  "fixture": "Saudi Arabia v Uruguay",
+  "result": [
+   1,
+   1
+  ],
+  "points": 0,
+  "cum_points": 6,
+  "mean_brier": 0.6532,
+  "cum_bits": 0.0243,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2732
+   ],
+   [
+    "Argentina",
+    0.1871
+   ],
+   [
+    "France",
+    0.1445
+   ],
+   [
+    "Portugal",
+    0.093
+   ],
+   [
+    "England",
+    0.0676
+   ]
+  ]
+ },
+ {
+  "edition": 14,
+  "match": 14,
+  "fixture": "Spain v Cape Verde",
+  "result": [
+   0,
+   0
+  ],
+  "points": 0,
+  "cum_points": 6,
+  "mean_brier": 0.6952,
+  "cum_bits": 0.024,
+  "champ_top5": [
+   [
+    "Spain",
+    0.253
+   ],
+   [
+    "Argentina",
+    0.1817
+   ],
+   [
+    "France",
+    0.1488
+   ],
+   [
+    "Portugal",
+    0.0968
+   ],
+   [
+    "England",
+    0.0711
+   ]
+  ]
+ },
+ {
+  "edition": 15,
+  "match": 15,
+  "fixture": "Iran v New Zealand",
+  "result": [
+   2,
+   2
+  ],
+  "points": 0,
+  "cum_points": 6,
+  "mean_brier": 0.7251,
+  "cum_bits": 0.0288,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2587
+   ],
+   [
+    "Argentina",
+    0.1867
+   ],
+   [
+    "France",
+    0.1504
+   ],
+   [
+    "Portugal",
+    0.0948
+   ],
+   [
+    "England",
+    0.0698
+   ]
+  ]
+ },
+ {
+  "edition": 16,
+  "match": 16,
+  "fixture": "Belgium v Egypt",
+  "result": [
+   1,
+   1
+  ],
+  "points": 0,
+  "cum_points": 6,
+  "mean_brier": 0.7405,
+  "cum_bits": 0.0301,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2599
+   ],
+   [
+    "Argentina",
+    0.187
+   ],
+   [
+    "France",
+    0.1459
+   ],
+   [
+    "Portugal",
+    0.0934
+   ],
+   [
+    "England",
+    0.071
    ]
   ]
  }

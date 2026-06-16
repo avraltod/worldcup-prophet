@@ -1,0 +1,20 @@
+{
+ "match": 14,
+ "event_id": "760428",
+ "stats": {
+  "home": {
+   "team": "Spain",
+   "sot": 7.0,
+   "other_shots": 20.0,
+   "total_shots": 27.0,
+   "possession": 74.2
+  },
+  "away": {
+   "team": "Cape Verde",
+   "sot": 1.0,
+   "other_shots": 5.0,
+   "total_shots": 6.0,
+   "possession": 25.8
+  }
+ }
+}

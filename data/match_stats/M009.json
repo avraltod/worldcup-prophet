@@ -1,0 +1,20 @@
+{
+ "match": 9,
+ "event_id": "760423",
+ "stats": {
+  "home": {
+   "team": "Ivory Coast",
+   "sot": 4.0,
+   "other_shots": 11.0,
+   "total_shots": 15.0,
+   "possession": 48.3
+  },
+  "away": {
+   "team": "Ecuador",
+   "sot": 1.0,
+   "other_shots": 11.0,
+   "total_shots": 12.0,
+   "possession": 51.7
+  }
+ }
+}
