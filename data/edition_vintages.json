@@ -590,5 +590,40 @@
     0.071
    ]
   ]
+ },
+ {
+  "edition": 17,
+  "match": 17,
+  "fixture": "France v Senegal",
+  "result": [
+   3,
+   1
+  ],
+  "points": 1,
+  "cum_points": 7,
+  "mean_brier": 0.712,
+  "cum_bits": 0.0324,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2524
+   ],
+   [
+    "Argentina",
+    0.1862
+   ],
+   [
+    "France",
+    0.1567
+   ],
+   [
+    "Portugal",
+    0.0957
+   ],
+   [
+    "England",
+    0.0733
+   ]
+  ]
  }
 ]
