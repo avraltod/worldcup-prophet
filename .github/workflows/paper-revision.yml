@@ -57,10 +57,11 @@ jobs:
           traj = json.load(open("data/trajectory_v2.json"))
           os.makedirs("archive/paper_versions", exist_ok=True)
           def archive_path(m):
-              # G### = update/grading order (position in records_index_v2 post,
-              # appended as each result is confirmed); M### = schedule match number.
-              post = json.load(open("data/records_index_v2.json")).get("post", [])
-              g = 0 if m == 0 else (post.index(m) + 1 if m in post else len(post))
+              # G### = issue/update order, M### = schedule match number. G is the
+              # count of documented editions at issue time (call AFTER revise(m)
+              # marks m documented). records_index_v2 ordering is unreliable, so we
+              # use the match-book index, which is the true order editions issued.
+              g = 0 if m == 0 else len(mb.documented_matches(uam.INDEX))
               return f"archive/paper_versions/WC2026_paper_G{g:03d}_M{m:03d}.pdf"
           pending = uam.pending_matches(traj, uam.INDEX)
           for m in pending:
