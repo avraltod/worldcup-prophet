@@ -34,7 +34,7 @@ ax.set_ylabel("P(champion), %")
 ax.set_ylim(0, 31)
 plt.xticks(rotation=38, ha="right")
 fig.tight_layout()
-fig.savefig(FIGS / "fig1_champion_dist.pdf")
+fig.savefig(FIGS / "fig_champion_dist.pdf")
 plt.close(fig)
 
 # ---- Fig 2: head-to-head vs slot emergence (the revised picks) --------------
@@ -57,7 +57,7 @@ ax.set_ylabel("Probability, %")
 ax.set_ylim(0, 88)
 ax.legend(fontsize=7.5, loc="upper right", frameon=False, borderaxespad=0.1)
 fig.tight_layout()
-fig.savefig(FIGS / "fig2_slot_vs_h2h.pdf")
+fig.savefig(FIGS / "fig_slot_vs_h2h.pdf")
 plt.close(fig)
 
 # ---- Fig 3: scoreline distribution for the predicted final ------------------
@@ -76,12 +76,12 @@ ax.set_xlabel("Argentina goals")
 ax.set_ylabel("Spain goals")
 ax.set_xticks(range(G + 1))
 ax.set_yticks(range(G + 1))
-# highlight the realistic pick 2-1 (Spain 2, Argentina 1)
-ax.add_patch(plt.Rectangle((1 - 0.5, 2 - 0.5), 1, 1, fill=False, edgecolor=ORANGE, lw=2.2))
+# highlight the most likely scoreline 1-0 (Spain 1, Argentina 0)
+ax.add_patch(plt.Rectangle((0 - 0.5, 1 - 0.5), 1, 1, fill=False, edgecolor=ORANGE, lw=2.2))
 cb = fig.colorbar(im, ax=ax, shrink=0.85)
 cb.set_label("P(scoreline), %")
 fig.tight_layout()
-fig.savefig(FIGS / "fig3_final_scorelines.pdf")
+fig.savefig(FIGS / "fig_final_scorelines.pdf")
 plt.close(fig)
 
 print(f"figures written to {FIGS}; final fit lh={lh}, la={la}, "
