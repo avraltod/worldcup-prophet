@@ -79,6 +79,8 @@
   "Tunisia": -56.39187574671452,
   "Belgium": -47.5,
   "Egypt": 47.5,
+  "Iran": -75.0,
+  "New Zealand": 75.0,
   "Spain": -7.329749103942586,
   "Cape Verde": 7.329749103942586,
   "Saudi Arabia": -33.94862604540032,
@@ -353,6 +355,24 @@
    "drift_after": {
     "Saudi Arabia": -33.95,
     "Uruguay": 33.95
+   }
+  },
+  {
+   "match": 15,
+   "home": "Iran",
+   "away": "New Zealand",
+   "lam_obs": {
+    "home": 1.302,
+    "away": 2.605,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 1.75,
+    "away": 0.7
+   },
+   "drift_after": {
+    "Iran": -75.0,
+    "New Zealand": 75.0
    }
   }
  ],

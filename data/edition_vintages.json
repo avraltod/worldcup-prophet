@@ -522,6 +522,41 @@
   ]
  },
  {
+  "edition": 15,
+  "match": 15,
+  "fixture": "Iran v New Zealand",
+  "result": [
+   2,
+   2
+  ],
+  "points": 0,
+  "cum_points": 6,
+  "mean_brier": 0.7251,
+  "cum_bits": 0.0288,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2587
+   ],
+   [
+    "Argentina",
+    0.1867
+   ],
+   [
+    "France",
+    0.1504
+   ],
+   [
+    "Portugal",
+    0.0948
+   ],
+   [
+    "England",
+    0.0698
+   ]
+  ]
+ },
+ {
   "edition": 16,
   "match": 16,
   "fixture": "Belgium v Egypt",
@@ -531,28 +566,28 @@
   ],
   "points": 0,
   "cum_points": 6,
-  "mean_brier": 0.7334,
-  "cum_bits": 0.0283,
+  "mean_brier": 0.7405,
+  "cum_bits": 0.0301,
   "champ_top5": [
    [
     "Spain",
-    0.2596
+    0.2599
    ],
    [
     "Argentina",
-    0.1863
+    0.187
    ],
    [
     "France",
-    0.1504
+    0.1459
    ],
    [
     "Portugal",
-    0.0949
+    0.0934
    ],
    [
     "England",
-    0.0696
+    0.071
    ]
   ]
  }
