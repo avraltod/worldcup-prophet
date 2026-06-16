@@ -294,7 +294,13 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
         raise SystemExit("frozen_stage_probs.json missing — cannot render")
     res = results_through(trajectory, match)
     now_probs = cond.conditional_probs(res, N=COND_N, seed=2026)
-    prev_res = results_through(trajectory, latest["match"] - 1)
+    # prev_now conditions on this edition's matches EXCEPT the one just released
+    # (results_through stops at match-1), so the movement now_probs - prev_now is
+    # exactly the marginal effect of this match's result. This is well-defined
+    # regardless of issue order; the revision report frames it as such rather
+    # than naming a "previous edition" (editions issue out of match order, and no
+    # single prior edition reliably corresponds to this conditioning set).
+    prev_res = results_through(trajectory, match - 1)
     prev_now = (cond.conditional_probs(prev_res, N=COND_N, seed=2026)
                 if prev_res["group"] or prev_res["ko"] else frozen)
     group_st = group_state(res)

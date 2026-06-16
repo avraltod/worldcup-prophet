@@ -435,10 +435,10 @@ def _cumulative_stats_table(entries, match_stats, expectations):
 
 
 def revision_report(ctx):
-    """The central-bank release: data release, forecast revision vs the
-    previous edition, implications, vintages. Driver contract: ctx
-    vintages_rows already contains THIS edition's row (so [-2] is the
-    previous edition) and ctx['match'] equals the latest entry's match."""
+    """The central-bank release: data release, forecast revision (the marginal
+    effect of this match's result), implications, vintages. Driver contract:
+    ctx['prev_now'] is the forecast conditioned on this edition's matches except
+    the one just released, and ctx['match'] equals the latest entry's match."""
     import vintages as vin
     m = ctx["match"]
     latest = max(ctx["entries"], key=lambda e: e["match"])
@@ -500,8 +500,9 @@ def revision_report(ctx):
         + _cumulative_stats_table(
             ctx["entries"], ctx["match_stats"],
             ctx.get("expectations", [])) + "\n\n"
-        f"\\paragraph{{Forecast revision (vs.\\ edition M{ctx['vintages_rows'][-2]['edition']:03d}).}} "
-        f"Champion-probability movement (vs.\\ previous edition): {delta_line}.\n\n"
+        f"\\paragraph{{Forecast revision: marginal effect of this result.}} "
+        f"Champion-probability movement attributable to match {latest['match']}'s "
+        f"result (this edition vs.\\ the same forecast without it): {delta_line}.\n\n"
         f"Track~A vs.\\ Frozen: {delta_af}.{b_vs_a_line}\n\n"
         + imp_block +
         "\\paragraph{Forecast vintages.} One column per issued edition; the "
