@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-06-17T04:15:40Z",
+ "fetched_at": "2026-06-17T06:11:31Z",
  "mode": "pre",
  "source_freshness": {
   "elo_updated_at": "2026-06-10T00:00:00Z",
@@ -504,6 +504,14 @@
    {
     "team": "Cape Verde",
     "drift": 7.33
+   },
+   {
+    "team": "Argentina",
+    "drift": -3.61
+   },
+   {
+    "team": "Algeria",
+    "drift": 3.61
    }
   ],
   "summary": {
@@ -519,7 +527,7 @@
    "biggest_odds_mover": {},
    "n_new_injuries": 0,
    "n_lineup_adj": 0,
-   "n_teams_with_drift": 36
+   "n_teams_with_drift": 38
   }
  }
 }
