@@ -660,5 +660,40 @@
     0.0702
    ]
   ]
+ },
+ {
+  "edition": 19,
+  "match": 19,
+  "fixture": "Argentina v Algeria",
+  "result": [
+   3,
+   0
+  ],
+  "points": 1,
+  "cum_points": 9,
+  "mean_brier": 0.6521,
+  "cum_bits": 0.0355,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2591
+   ],
+   [
+    "Argentina",
+    0.1902
+   ],
+   [
+    "France",
+    0.1549
+   ],
+   [
+    "Portugal",
+    0.0932
+   ],
+   [
+    "England",
+    0.0705
+   ]
+  ]
  }
 ]
