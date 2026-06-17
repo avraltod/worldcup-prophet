@@ -45,9 +45,13 @@ conditions only on the results available at that point, never on later matches.
 | G014 | M013 | Saudi Arabia v Uruguay | 1–1 | 0 | 0.992 |
 | G015 | M015 | Iran v New Zealand | 2–2 | 0 | 0.847 |
 | G016 | M016 | Belgium v Egypt | 1–1 | 0 | 0.972 |
+| G017 | M017 | France v Senegal | 3–1 | 1 | 0.256 |
+| G018 | M018 | Iraq v Norway | 1–4 | 1 | 0.075 |
+| G019 | M019 | Argentina v Algeria | 3–0 | 1 | 0.212 |
+| G020 | M020 | Austria v Jordan | 3–1 | 1 | 0.157 |
 
-The latest edition is **G016 (M016, Belgium 1–1 Egypt)**. "Pts" is the
-scorecard award for that single match (running total: 6 points through G016);
+The latest edition is **G020 (M020, Austria 3–1 Jordan)**. "Pts" is the
+scorecard award for that single match (running total: 10 points through G020);
 "Brier" is the Brier score for that match alone (from the live ledger). Each
 edition's *cumulative* mean Brier and points are reported on its own title page
 and scorecard; because conditioning sets are not strictly nested in issue order
