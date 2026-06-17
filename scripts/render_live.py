@@ -716,12 +716,12 @@ def survival_colcomp_unit(ctx):
     def triple(t, stage):
         f = frozen.get(t, {}).get(stage, 0.0)
         a = now[t].get(stage, 0.0)
-        delta = abs(a - f)
-        a_str = f"\\textbf{{{_pct(a)}}}" if delta > 3.0 else _pct(a)
+        delta = abs(a - f)            # zero-padded (07.0) so the F/A/B cells align
+        a_str = f"\\textbf{{{_ppct(a)}}}" if delta > 3.0 else _ppct(a)
         if has_b and t in now_b:
             b = now_b[t].get(stage, 0.0)
-            return f"{_pct(f)}/{a_str}/{_pct(b)}"
-        return f"{_pct(f)}/{a_str}"
+            return f"{_ppct(f)}/{a_str}/{_ppct(b)}"
+        return f"{_ppct(f)}/{a_str}"
 
     rows = [
         t + " & " + " & ".join(triple(t, s) for s in stages) + " \\\\"

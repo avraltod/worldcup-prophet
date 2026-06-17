@@ -47,42 +47,48 @@ def build(trajectory, through_match=None, out=None, issue_order=None):
 
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(11, 9),
                                    gridspec_kw={"height_ratios": [2.0, 1.0]})
+    # Colour = team; the four series share that colour and are told apart by
+    # marker + line style (Frozen circle/dotted, Track A square/solid, Track B
+    # diamond/dashed, Market triangle/dash-dot).
+    STYLES = {
+        "Frozen":  dict(ls=":",  marker="o", lw=1.3),
+        "Track A": dict(ls="-",  marker="s", lw=2.0),
+        "Track B": dict(ls="--", marker="D", lw=1.6),
+        "Market":  dict(ls="-.", marker="^", lw=1.4),
+    }
     for team, col in TEAM_COLORS.items():
         y0 = 100 * base.get(team, 0.0)
-        # Frozen dot at x=0 (gray, never moves)
-        ax1.plot([0], [y0], color="0.5", marker="o", ms=6, zorder=5)
+        # Frozen: flat baseline (never moves)
+        ax1.plot([0, n], [y0, y0], color=col, alpha=0.5, ms=4, markevery=[0],
+                 **STYLES["Frozen"])
         # Track A (result-conditioned)
         ys_a = [y0] + [100 * r["champion"].get(team, 0.0) for r in posts]
-        ax1.plot(xs, ys_a, color=col, lw=2.2, marker="o", ms=4)
-        # Track B (result + Elo, dashed), when available
+        ax1.plot(xs, ys_a, color=col, ms=4, markevery=3, **STYLES["Track A"])
+        # Track B (result + Elo), when available
         ys_b = [100 * r.get("champion_b", {}).get(team, float("nan")) for r in posts]
         if any(v == v for v in ys_b):  # at least one non-nan
-            ax1.plot(xb, ys_b, color=col, lw=1.6, ls="--", alpha=0.7)
-        # Market (Polymarket de-vigged, orange dotted), when available
+            ax1.plot(xb, ys_b, color=col, alpha=0.85, ms=4, markevery=3,
+                     **STYLES["Track B"])
+        # Market (Polymarket de-vigged), now in the team colour, when available
         ys_m = [100 * r.get("market_champion", {}).get(team, float("nan")) for r in posts]
         if any(v == v for v in ys_m):
-            ax1.plot(xb, ys_m, color="#E87020", lw=1.4, ls=":", alpha=0.8)
+            ax1.plot(xb, ys_m, color=col, alpha=0.85, ms=4, markevery=3,
+                     **STYLES["Market"])
     ax1.axvspan(0, min(GROUP_END, xmax), color="0.93", zorder=0)
     ax1.set_xlabel("Matches played (in issue order)")
     ax1.set_ylabel("P(champion), %")
     ax1.set_xlim(0, xmax)
     ax1.set_ylim(0, max(35, 5 + max(100 * base.get(t, 0) for t in TEAM_COLORS)))
-    # Two legends: team colours, and a separate line-style key so every series
-    # (Track A / Track B / Market / Frozen) is explained.
-    team_handles = [Line2D([0], [0], color=c, lw=2.2, label=t)
+    # Two legends: team colours, and a marker/line-style key for the four series.
+    team_handles = [Line2D([0], [0], color=c, lw=2.4, label=t)
                     for t, c in TEAM_COLORS.items()]
-    style_handles = [
-        Line2D([0], [0], color="0.35", lw=2.2, ls="-", marker="o", ms=4,
-               label="Track A (results)"),
-        Line2D([0], [0], color="0.35", lw=1.6, ls="--", label="Track B (+Elo/odds)"),
-        Line2D([0], [0], color="#E87020", lw=1.4, ls=":", label="Market"),
-        Line2D([0], [0], color="0.5", lw=0, marker="o", ms=6, label="Frozen (baseline)"),
-    ]
+    style_handles = [Line2D([0], [0], color="0.3", ms=5, label=lbl,
+                            **STYLES[lbl]) for lbl in STYLES]
     leg_teams = ax1.legend(handles=team_handles, ncol=3, frameon=False,
-                           loc="upper right", fontsize=9)
+                           loc="upper right", fontsize=8.5, title="Team (colour)")
     ax1.add_artist(leg_teams)
     ax1.legend(handles=style_handles, ncol=1, frameon=False,
-               loc="upper left", fontsize=9)
+               loc="upper left", fontsize=8.5, title="Series (marker/line)")
     for s in ("top", "right"):
         ax1.spines[s].set_visible(False)
 
