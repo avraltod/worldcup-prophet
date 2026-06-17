@@ -4,22 +4,22 @@
   \caption{Simulated tournament probabilities, top eight teams (live edition)}\label{tab:champ}
   \begin{footnotesize}
   \begin{threeparttable}
-    {\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} lccccccc}
+    {\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} lcccccccc}
       \toprule
-      Team & Frozen (\%) & Track~A (\%) & Track~B (\%) & $\Delta$ (A$-$Frozen) & Finalist (now) & Semi (now) & QF (now) \\
+      Team & Frozen (\%) & Track~A (\%) & Track~B (\%) & Market (\%) & $\Delta$ (B$-$F) & Finalist (now) & Semi (now) & QF (now) \\
       \midrule
-      Spain          & 26.9\% & 25.4\% & 23.8\% & -1.5 & 37.1\% & 49.8\% & 60.3\% \\
-      Argentina      & 18.1\% & 19.4\% & 17.6\% & +1.4 & 32.4\% & 46.3\% & 64.4\% \\
-      France         & 14.3\% & 15.2\% & 19.0\% & +0.9 & 26.1\% & 45.9\% & 62.0\% \\
-      Portugal       & 9.4\% & 9.3\% & 9.3\% & -0.1 & 17.8\% & 28.8\% & 52.2\% \\
-      England        & 7.0\% & 7.1\% & 6.8\% & +0.1 & 14.7\% & 29.5\% & 46.9\% \\
-      Brazil         & 3.5\% & 3.6\% & 2.7\% & +0.1 & 8.6\% & 20.4\% & 38.5\% \\
-      Netherlands    & 2.4\% & 2.2\% & 3.6\% & -0.1 & 5.9\% & 15.0\% & 32.3\% \\
-      Germany        & 2.2\% & 2.2\% & 4.5\% & -0.1 & 6.4\% & 16.6\% & 30.3\% \\
+      Spain          & 26.9\% & 25.4\% & 23.8\% & 13.0\% & -3.1 & 37.1\% & 49.8\% & 60.3\% \\
+      Argentina      & 18.1\% & 19.4\% & 17.6\% & 11.1\% & -0.5 & 32.4\% & 46.3\% & 64.4\% \\
+      France         & 14.3\% & 15.2\% & 19.0\% & 18.1\% & +4.7 & 26.1\% & 45.9\% & 62.0\% \\
+      Portugal       & 9.4\% & 9.3\% & 9.3\% & 9.9\% & -0.1 & 17.8\% & 28.8\% & 52.2\% \\
+      England        & 7.0\% & 7.1\% & 6.8\% & 10.2\% & -0.2 & 14.7\% & 29.5\% & 46.9\% \\
+      Brazil         & 3.5\% & 3.6\% & 2.7\% & 6.5\% & -0.8 & 8.6\% & 20.4\% & 38.5\% \\
+      Netherlands    & 2.4\% & 2.2\% & 3.6\% & 4.4\% & +1.2 & 5.9\% & 15.0\% & 32.3\% \\
+      Germany        & 2.2\% & 2.2\% & 4.5\% & 5.5\% & +2.3 & 6.4\% & 16.6\% & 30.3\% \\
       \bottomrule
     \end{tabular*}}
     \begin{tablenotes}\notesize
-      \item \textit{Notes}: Frozen = pre-kickoff lock ($N$ = 200{,}000, \texttt{data/frozen\_stage\_probs.json}), never changes; Track~A = result-conditioned, June~10 ratings ($N$ = 50{,}000, seed 2026); Track~B = result-conditioned + live Elo + bookmaker odds + lineup adj.
+      \item \textit{Notes}: Frozen = pre-kickoff lock ($N$ = 200{,}000, \texttt{data/frozen\_stage\_probs.json}), never changes; Track~A = result-conditioned, June~10 ratings ($N$ = 50{,}000, seed 2026); Track~B = result-conditioned + live Elo + bookmaker odds + lineup adj.; Market = live Polymarket champion distribution, normalized to remove the overround. $\Delta$ (B$-$F) = Track~B champion probability minus Frozen.
     \end{tablenotes}
   \end{threeparttable}
   \end{footnotesize}

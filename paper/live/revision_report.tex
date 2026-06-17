@@ -3,31 +3,45 @@
 \paragraph{The data release.} Match 20, Austria v Jordan: predicted 2--1, actual 3--1; 1 of 3 points, Brier 0.157, 0.002 bits.
 
 \begin{table}[!h]\centering
-\caption{Cumulative match statistics (live edition M\liveEditionNum{})}\label{tab:live_match_stats}
-\begin{footnotesize}\begin{tabular}{lccccc}\toprule
+\caption{Cumulative match statistics and upcoming-fixture implications (live edition M\liveEditionNum{})}\label{tab:live_match_stats}
+\begin{footnotesize}
+\textit{Panel A. Cumulative match statistics (played matches, in issue order).}\\[3pt]
+\begin{tabular}{lccccc}\toprule
 Game & Shots (H--A) & On target (H--A) & Poss\% (H--A) & Frozen H/D/A & Track~B H/D/A \\
 \midrule
-M1 Mexico v South Africa & 16.0--3.0 & 4.0--2.0 & 60--40 & 67.2/20.9/11.9 & -- \\
-M2 South Korea v Czechia & 15.0--7.0 & 6.0--4.0 & 62--38 & 36.1/30.4/33.5 & -- \\
-M3 Canada v Bosnia and Herzegovina & 13.0--8.0 & 4.0--3.0 & 61--39 & 52.6/25.0/22.4 & -- \\
-M4 United States v Paraguay & 16.0--9.0 & 6.0--1.0 & 65--35 & 47.2/27.8/25.0 & -- \\
-M5 Haiti v Scotland & 15.0--9.0 & 2.0--2.0 & 54--46 & 15.1/20.7/64.2 & -- \\
-M6 Australia v Turkey & 9.0--30.0 & 4.0--8.0 & 28--72 & 20.7/26.8/52.5 & -- \\
-M7 Brazil v Morocco & 13.0--14.0 & 5.0--3.0 & 51--49 & 58.7/23.3/18.0 & -- \\
-M8 Qatar v Switzerland & 7.0--26.0 & 4.0--7.0 & 32--68 & 10.0/17.3/72.6 & -- \\
-M9 Ivory Coast v Ecuador & 15.0--12.0 & 4.0--1.0 & 48--52 & 27.0/30.4/42.6 & 8.2/20.3/71.5 \\
-M10 Germany v Curaçao & 26.0--8.0 & 12.0--2.0 & 65--35 & 92.3/6.1/1.0 & -- \\
-M11 Netherlands v Japan & 10.0--10.0 & 6.0--3.0 & 60--40 & 46.4/25.8/27.8 & 42.0/28.5/29.6 \\
-M12 Sweden v Tunisia & 13.0--6.0 & 7.0--2.0 & 49--51 & 48.5/27.9/23.6 & 48.7/26.6/24.7 \\
-M13 Saudi Arabia v Uruguay & 7.0--27.0 & 3.0--10.0 & 33--67 & 15.6/23.1/61.3 & 3.5/18.9/77.6 \\
-M14 Spain v Cape Verde & 27.0--6.0 & 7.0--1.0 & 74--26 & 85.5/10.2/4.0 & 86.5/12.4/1.2 \\
-M15 Iran v New Zealand & 17.0--14.0 & 4.0--8.0 & 48--52 & 51.2/26.8/22.0 & 62.6/22.9/14.5 \\
-M16 Belgium v Egypt & 15.0--14.0 & 3.0--3.0 & 54--46 & 58.6/22.9/18.5 & 60.1/23.7/16.2 \\
-M17 France v Senegal & 11.0--6.0 & 8.0--2.0 & 54--46 & 59.0/24.8/16.2 & 66.4/21.9/11.8 \\
-M18 Iraq v Norway & 11.0--12.0 & 1.0--5.0 & 39--61 & 7.7/14.1/78.0 & 4.5/19.4/76.1 \\
-M19 Argentina v Algeria & 10.0--7.0 & 6.0--1.0 & 48--52 & 62.9/23.9/13.2 & 80.5/17.8/1.7 \\
-M20 Austria v Jordan & 11.0--11.0 & 4.0--4.0 & 63--37 & 67.9/20.0/12.1 & 57.6/24.4/18.0 \\
-\bottomrule\end{tabular}\end{footnotesize}
+G01 M01 Mexico v South Africa & 16--03 & 04--02 & 60--40 & 67.2/20.9/11.9 & -- \\
+G02 M02 South Korea v Czechia & 15--07 & 06--04 & 62--38 & 36.1/30.4/33.5 & -- \\
+G03 M03 Canada v Bosnia and Herzegovina & 13--08 & 04--03 & 61--39 & 52.6/25.0/22.4 & -- \\
+G04 M04 United States v Paraguay & 16--09 & 06--01 & 65--35 & 47.2/27.8/25.0 & -- \\
+G05 M07 Brazil v Morocco & 13--14 & 05--03 & 51--49 & 58.7/23.3/18.0 & -- \\
+G06 M08 Qatar v Switzerland & 07--26 & 04--07 & 32--68 & 10.0/17.3/72.6 & -- \\
+G07 M05 Haiti v Scotland & 15--09 & 02--02 & 54--46 & 15.1/20.7/64.2 & -- \\
+G08 M06 Australia v Turkey & 09--30 & 04--08 & 28--72 & 20.7/26.8/52.5 & -- \\
+G09 M10 Germany v Curaçao & 26--08 & 12--02 & 65--35 & 92.3/06.1/01.0 & -- \\
+G10 M11 Netherlands v Japan & 10--10 & 06--03 & 60--40 & 46.4/25.8/27.8 & 42.0/28.5/29.6 \\
+G11 M09 Ivory Coast v Ecuador & 15--12 & 04--01 & 48--52 & 27.0/30.4/42.6 & 08.2/20.3/71.5 \\
+G12 M12 Sweden v Tunisia & 13--06 & 07--02 & 49--51 & 48.5/27.9/23.6 & 48.7/26.6/24.7 \\
+G13 M14 Spain v Cape Verde & 27--06 & 07--01 & 74--26 & 85.5/10.2/04.0 & 86.5/12.4/01.2 \\
+G14 M13 Saudi Arabia v Uruguay & 07--27 & 03--10 & 33--67 & 15.6/23.1/61.3 & 03.5/18.9/77.6 \\
+G15 M15 Iran v New Zealand & 17--14 & 04--08 & 48--52 & 51.2/26.8/22.0 & 62.6/22.9/14.5 \\
+G16 M16 Belgium v Egypt & 15--14 & 03--03 & 54--46 & 58.6/22.9/18.5 & 60.1/23.7/16.2 \\
+G17 M17 France v Senegal & 11--06 & 08--02 & 54--46 & 59.0/24.8/16.2 & 66.4/21.9/11.8 \\
+G18 M18 Iraq v Norway & 11--12 & 01--05 & 39--61 & 07.7/14.1/78.0 & 04.5/19.4/76.1 \\
+G19 M19 Argentina v Algeria & 10--07 & 06--01 & 48--52 & 62.9/23.9/13.2 & 80.5/17.8/01.7 \\
+G20 M20 Austria v Jordan & 11--11 & 04--04 & 63--37 & 67.9/20.0/12.1 & 57.6/24.4/18.0 \\
+\bottomrule\end{tabular}
+
+\medskip
+\textit{Panel B. Implications for upcoming fixtures.} Frozen odds are the pre-kickoff baseline (they move only through qualification scenarios); Track~B odds incorporate live Elo and bookmaker signals.\\[3pt]
+\begin{tabular}{p{0.40\textwidth}p{0.22\textwidth}p{0.22\textwidth}}\toprule
+Fixture & Frozen H/D/A (\%) & Track~B H/D/A (\%) \\
+\midrule
+Jordan v Algeria & 31.9/28.6/39.4 & 32.9/29.1/38.0 \\
+Argentina v Austria & 79.7/13.4/06.8 & 77.1/18.6/04.3 \\
+Algeria v Austria & 28.6/28.0/43.4 & 29.6/28.5/42.0 \\
+Jordan v Argentina & 04.0/10.2/85.5 & 01.6/17.0/81.4 \\
+\bottomrule\end{tabular}
+\end{footnotesize}
 \end{table}
 
 \paragraph{Forecast revision: marginal effect of this result.} Champion-probability movement attributable to match 20's result (this edition vs.\ the same forecast without it): Spain -0.5; Argentina +0.4; France -0.3; England +0.1; Brazil +0.1; Netherlands +0.2; Germany -0.2.
@@ -36,46 +50,35 @@ Track~A vs.\ Frozen: Spain -1.5; Argentina +1.4; France +0.9; Portugal -0.1; Eng
 
 Track~B vs.\ Track~A: Spain -1.6; Argentina -1.8; France +3.8; England -0.3; Brazil -0.9; Netherlands +1.4; Germany +2.3.
 
-\paragraph{Implications for upcoming fixtures.} Frozen odds are the pre-kickoff baseline (they move only through qualification scenarios); Track~B odds incorporate live Elo and bookmaker signals.
-
-\begin{center}\begin{footnotesize}\begin{tabular}{p{0.40\textwidth}p{0.22\textwidth}p{0.22\textwidth}}\toprule
-Fixture & Frozen H/D/A (\%) & Track~B H/D/A (\%) \\
-\midrule
-Jordan v Algeria & 31.9/28.6/39.4 & 32.9/29.1/38.0 \\
-Argentina v Austria & 79.7/13.4/6.8 & 77.1/18.6/4.3 \\
-Algeria v Austria & 28.6/28.0/43.4 & 29.6/28.5/42.0 \\
-Jordan v Argentina & 4.0/10.2/85.5 & 1.6/17.0/81.4 \\
-\bottomrule\end{tabular}\end{footnotesize}\end{center}
-
-\paragraph{Forecast vintages.} One column per issued edition; the locked M000 column never changes.
+\paragraph{Forecast vintages.} Track~B champion probabilities, one row per issued edition, in issue order; the locked M000 (Frozen baseline) row never changes.
 
 % 1 intermediate editions omitted
 \begin{table}[!ht]\centering\begin{scriptsize}
-\caption{Forecast vintages --- champion probabilities by edition (live edition M\liveEditionNum{})}\label{tab:live_vintages}
+\caption{Forecast vintages --- Track~B champion probabilities by edition (live edition M\liveEditionNum{}); M000 is the Frozen baseline}\label{tab:live_vintages}
 \begin{tabular}{lrrrrrrrr}
 \toprule
-\makecell{Fixture \\ (play order)} & Spain & Argentina & France & Portugal & England & Cum.\,pts & Mean Brier & Cum.\,bits \\
+\makecell{Fixture \\ (play order)} & Spain & France & Argentina & Portugal & England & Cum.\,pts & Mean Brier & Cum.\,bits \\
 \midrule
-M000 Lock & 26.9 & 18.1 & 14.3 & 9.4 & 7.0 & 0 & -- & 0.000 \\
-M002 South Korea v Czechia & 26.9 & 17.9 & 14.3 & 9.3 & 7.1 & 1 & 0.39 & 0.002 \\
-M003 Canada v Bosnia and Herzegovina & 26.9 & 17.8 & 14.5 & 9.3 & 6.9 & 1 & 0.56 & 0.003 \\
-M004 United States v Paraguay & 27.0 & 18.0 & 14.2 & 9.4 & 7.0 & 2 & 0.52 & 0.005 \\
-M005 Haiti v Scotland & 27.3 & 18.1 & 14.2 & 9.4 & 6.8 & 4 & 0.46 & 0.006 \\
-M006 Australia v Turkey & 27.2 & 18.1 & 14.4 & 9.6 & 7.0 & 4 & 0.54 & 0.011 \\
-M007 Brazil v Morocco & 27.2 & 18.1 & 14.2 & 9.4 & 6.8 & 2 & 0.61 & 0.007 \\
-M008 Qatar v Switzerland & 27.2 & 18.0 & 14.3 & 9.7 & 6.8 & 4 & 0.68 & 0.015 \\
-M009 Ivory Coast v Ecuador & 26.6 & 18.3 & 15.0 & 9.5 & 7.0 & 4 & 0.69 & 0.017 \\
-M010 Germany v Curaçao & 26.9 & 18.3 & 14.4 & 9.6 & 7.0 & 5 & 0.61 & 0.016 \\
-M011 Netherlands v Japan & 26.7 & 17.9 & 14.9 & 9.5 & 7.1 & 5 & 0.65 & 0.020 \\
-M012 Sweden v Tunisia & 26.6 & 18.2 & 14.7 & 9.5 & 7.1 & 6 & 0.62 & 0.021 \\
-M013 Saudi Arabia v Uruguay & 27.3 & 18.7 & 14.4 & 9.3 & 6.8 & 6 & 0.65 & 0.024 \\
-M014 Spain v Cape Verde & 25.3 & 18.2 & 14.9 & 9.7 & 7.1 & 6 & 0.70 & 0.024 \\
-M015 Iran v New Zealand & 25.9 & 18.7 & 15.0 & 9.5 & 7.0 & 6 & 0.73 & 0.029 \\
-M016 Belgium v Egypt & 26.0 & 18.7 & 14.6 & 9.3 & 7.1 & 6 & 0.74 & 0.030 \\
-M017 France v Senegal & 25.2 & 18.6 & 15.7 & 9.6 & 7.3 & 7 & 0.71 & 0.032 \\
-M018 Iraq v Norway & 25.4 & 18.7 & 15.4 & 9.6 & 7.0 & 8 & 0.68 & 0.034 \\
-M019 Argentina v Algeria & 25.9 & 19.0 & 15.5 & 9.3 & 7.0 & 9 & 0.65 & 0.035 \\
-M020 Austria v Jordan & 25.4 & 19.4 & 15.2 & 9.3 & 7.1 & 10 & 0.63 & 0.037 \\
+M000 Lock & 26.9 & 14.3 & 18.1 & 9.4 & 7.0 & 0 & -- & 0.000 \\
+G02 M02 South Korea v Czechia & 27.7 & 14.0 & 17.9 & 9.6 & 7.1 & 1 & 0.39 & 0.002 \\
+G03 M03 Canada v Bosnia and Herzegovina & 27.6 & 14.2 & 17.6 & 9.8 & 7.0 & 1 & 0.56 & 0.003 \\
+G04 M04 United States v Paraguay & 27.6 & 14.1 & 17.8 & 10.1 & 7.1 & 2 & 0.52 & 0.005 \\
+G05 M07 Brazil v Morocco & 28.2 & 13.9 & 17.9 & 9.5 & 7.0 & 2 & 0.61 & 0.007 \\
+G06 M08 Qatar v Switzerland & 27.4 & 14.3 & 17.6 & 10.0 & 7.2 & 2 & 0.71 & 0.009 \\
+G07 M05 Haiti v Scotland & 27.8 & 14.1 & 17.7 & 9.6 & 7.0 & 4 & 0.46 & 0.006 \\
+G08 M06 Australia v Turkey & 27.9 & 13.9 & 17.8 & 10.0 & 7.0 & 4 & 0.54 & 0.011 \\
+G09 M10 Germany v Curaçao & 27.8 & 14.0 & 18.1 & 9.8 & 7.1 & 5 & 0.61 & 0.016 \\
+G10 M11 Netherlands v Japan & 27.1 & 13.1 & 17.5 & 9.8 & 6.9 & 5 & 0.63 & 0.018 \\
+G11 M09 Ivory Coast v Ecuador & 26.4 & 13.6 & 17.3 & 9.6 & 7.1 & 4 & 0.69 & 0.017 \\
+G12 M12 Sweden v Tunisia & 27.1 & 13.6 & 17.5 & 9.6 & 7.3 & 6 & 0.62 & 0.021 \\
+G13 M14 Spain v Cape Verde & 26.5 & 13.6 & 17.5 & 9.6 & 7.1 & 6 & 0.70 & 0.024 \\
+G14 M13 Saudi Arabia v Uruguay & 25.7 & 13.9 & 18.9 & 9.6 & 7.0 & 6 & 0.65 & 0.024 \\
+G15 M15 Iran v New Zealand & 25.5 & 13.7 & 18.5 & 9.5 & 6.9 & 6 & 0.73 & 0.029 \\
+G16 M16 Belgium v Egypt & 24.8 & 14.0 & 17.5 & 9.8 & 7.3 & 6 & 0.74 & 0.030 \\
+G17 M17 France v Senegal & 25.2 & 14.1 & 18.3 & 9.8 & 7.1 & 7 & 0.71 & 0.032 \\
+G18 M18 Iraq v Norway & 23.9 & 19.1 & 17.6 & 9.3 & 6.6 & 8 & 0.68 & 0.034 \\
+G19 M19 Argentina v Algeria & 24.3 & 19.0 & 17.8 & 9.2 & 6.7 & 9 & 0.65 & 0.035 \\
+G20 M20 Austria v Jordan & 23.8 & 19.0 & 17.6 & 9.3 & 6.8 & 10 & 0.63 & 0.037 \\
 \bottomrule
 \end{tabular}
 \end{scriptsize}\end{table}
