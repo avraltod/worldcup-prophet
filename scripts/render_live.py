@@ -984,10 +984,28 @@ def risk_tracker_unit(ctx):
         return (r"\textit{Risk tracker unavailable; frozen finishing-position "
                 r"baseline not loaded for this edition.}")
 
+    played_group = ctx.get("results", {}).get("group", {})
+    expectations = ctx.get("expectations", [])
+
+    def _decisive_result(raw_fixture, grp):
+        """Result of a pre-registered decisive fixture if it has been played,
+        oriented to the fixture's stated home/away order; else None."""
+        core = raw_fixture.split(",")[0]
+        if " v " not in core:
+            return None
+        h, a = (t.strip() for t in core.split(" v ", 1))
+        for e in expectations:
+            if e.get("group") == grp and {e.get("home"), e.get("away")} == {h, a}:
+                res = played_group.get(str(e.get("match")))
+                if not res:
+                    return None
+                return res if e.get("home") == h else [res[1], res[0]]
+        return None
+
     rows = []
     for grp in "ABCDEFGHIJKL":
-        fixture, risk = _PREREG_RISK[grp]
-        fixture = ic.fixture_tag(fixture)   # flags + ISO3 (keeps the ", MDx" suffix)
+        raw_fixture, risk = _PREREG_RISK[grp]
+        fixture = ic.fixture_tag(raw_fixture)   # ISO3 (keeps the ", MDx" suffix)
         g = group_state.get(grp)
         sub = _frozen_top2(grp, frozen_finish)
         if g is None or not sub:
@@ -996,10 +1014,16 @@ def risk_tracker_unit(ctx):
             cur = _current_top2(g, now)
             held = set(cur) == set(sub)
             complete = g["played"] >= g["total"]
+            dres = _decisive_result(raw_fixture, grp)
             if complete and held:
                 status = "\\checkmark\\ Resolved"
             elif complete and not held:
                 status = "$\\times$ Reversed"
+            elif dres is not None:
+                # decisive fixture played but group not yet complete: show the
+                # score with a provisional verdict from the current top two
+                status = (f"Played {dres[0]}--{dres[1]}, "
+                          f"{'holding' if held else 'reversing'}")
             elif held:
                 status = "$\\triangle$ Pending"
             else:
@@ -1021,7 +1045,7 @@ def risk_tracker_unit(ctx):
         "\\caption{Pre-registered group risks: live status against the results "
         "so far (live edition M\\liveEditionNum{})}\\label{tab:live_risk_tracker}\n"
         "\\begin{footnotesize}\\begin{tabular*}{\\textwidth}{@{\\extracolsep{\\fill}}"
-        "lp{3.1cm}p{4.6cm}p{1.7cm}p{3.0cm}}\\toprule\n"
+        "lp{2.9cm}p{3.9cm}p{2.5cm}p{2.7cm}}\\toprule\n"
         "Grp & Decisive fixture & Pre-registered risk & Status & Emerging issue \\\\\n"
         "\\midrule\n"
         + "\n".join(rows) + "\n"
@@ -1030,6 +1054,8 @@ def risk_tracker_unit(ctx):
         "two (Frozen modal 1st/2nd) with the current top two --- actual standings "
         "once a group is complete, otherwise the Track~A advance ranking. "
         "\\checkmark\\ Resolved = held at completion; $\\times$ Reversed = a "
-        "submitted qualifier displaced; $\\triangle$ = group still open.\\end{footnotesize}"
+        "submitted qualifier displaced; \\emph{Played h--a} = the decisive fixture "
+        "is in, with a provisional verdict from the current top two; "
+        "$\\triangle$ = group still open.\\end{footnotesize}"
         "\n\\end{table}"
     )
