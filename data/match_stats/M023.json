@@ -1,0 +1,20 @@
+{
+ "match": 23,
+ "event_id": "760435",
+ "stats": {
+  "home": {
+   "team": "Portugal",
+   "sot": 1.0,
+   "other_shots": 6.0,
+   "total_shots": 7.0,
+   "possession": 75.4
+  },
+  "away": {
+   "team": "Congo DR",
+   "sot": 2.0,
+   "other_shots": 6.0,
+   "total_shots": 8.0,
+   "possession": 24.6
+  }
+ }
+}

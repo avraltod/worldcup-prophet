@@ -64,3 +64,5 @@ headline numbers are backfilled into the vintages table.
 **Rev M019 (Argentina v Algeria 3-0).** Cumulative 9 pts, mean Brier 0.65; failure-mode none. Full living layer re-rendered (edition M019); skeleton unchanged.
 
 **Rev M020 (Austria v Jordan 3-1).** Cumulative 10 pts, mean Brier 0.63; failure-mode none. Full living layer re-rendered (edition M020); skeleton unchanged.
+
+**Rev M023 (Portugal v Congo DR 1-1).** Cumulative 10 pts, mean Brier 0.65; failure-mode systematic_rating_error. Full living layer re-rendered (edition M023); skeleton unchanged.

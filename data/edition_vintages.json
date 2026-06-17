@@ -730,5 +730,40 @@
     0.0684
    ]
   ]
+ },
+ {
+  "edition": 23,
+  "match": 23,
+  "fixture": "Portugal v Congo DR",
+  "result": [
+   1,
+   1
+  ],
+  "points": 0,
+  "cum_points": 10,
+  "mean_brier": 0.6546,
+  "cum_bits": 0.0387,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2469
+   ],
+   [
+    "France",
+    0.1938
+   ],
+   [
+    "Argentina",
+    0.1811
+   ],
+   [
+    "Portugal",
+    0.0822
+   ],
+   [
+    "England",
+    0.0696
+   ]
+  ]
  }
 ]
