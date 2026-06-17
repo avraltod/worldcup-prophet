@@ -501,7 +501,7 @@
     "Ecuador": 0.0233
    },
    "info_snapshot": {
-    "fetched_at": "2026-06-17T14:44:05Z",
+    "fetched_at": "2026-06-17T23:00:10Z",
     "elo_updated_at": "2026-06-10T00:00:00Z",
     "odds_fetched_at": null,
     "elo_rms_delta": 0.0,
@@ -516,7 +516,7 @@
     "biggest_odds_mover": {},
     "n_new_injuries": 0,
     "n_lineup_adj": 0,
-    "n_teams_with_drift": 40
+    "n_teams_with_drift": 42
    }
   },
   {
@@ -542,7 +542,7 @@
     "Ecuador": 0.0238
    },
    "info_snapshot": {
-    "fetched_at": "2026-06-17T14:44:05Z",
+    "fetched_at": "2026-06-17T23:00:10Z",
     "elo_updated_at": "2026-06-10T00:00:00Z",
     "odds_fetched_at": null,
     "elo_rms_delta": 0.0,
@@ -557,7 +557,7 @@
     "biggest_odds_mover": {},
     "n_new_injuries": 0,
     "n_lineup_adj": 0,
-    "n_teams_with_drift": 40
+    "n_teams_with_drift": 42
    }
   },
   {
@@ -583,7 +583,7 @@
     "Netherlands": 0.0236
    },
    "info_snapshot": {
-    "fetched_at": "2026-06-17T14:44:05Z",
+    "fetched_at": "2026-06-17T23:00:10Z",
     "elo_updated_at": "2026-06-10T00:00:00Z",
     "odds_fetched_at": null,
     "elo_rms_delta": 0.0,
@@ -598,7 +598,7 @@
     "biggest_odds_mover": {},
     "n_new_injuries": 0,
     "n_lineup_adj": 0,
-    "n_teams_with_drift": 40
+    "n_teams_with_drift": 42
    }
   },
   {
@@ -624,7 +624,7 @@
     "Ecuador": 0.0221
    },
    "info_snapshot": {
-    "fetched_at": "2026-06-17T14:44:05Z",
+    "fetched_at": "2026-06-17T23:00:10Z",
     "elo_updated_at": "2026-06-10T00:00:00Z",
     "odds_fetched_at": null,
     "elo_rms_delta": 0.0,
@@ -639,7 +639,7 @@
     "biggest_odds_mover": {},
     "n_new_injuries": 0,
     "n_lineup_adj": 0,
-    "n_teams_with_drift": 40
+    "n_teams_with_drift": 42
    }
   },
   {
@@ -665,7 +665,7 @@
     "Ecuador": 0.0249
    },
    "info_snapshot": {
-    "fetched_at": "2026-06-17T14:44:05Z",
+    "fetched_at": "2026-06-17T23:00:10Z",
     "elo_updated_at": "2026-06-10T00:00:00Z",
     "odds_fetched_at": null,
     "elo_rms_delta": 0.0,
@@ -680,7 +680,7 @@
     "biggest_odds_mover": {},
     "n_new_injuries": 0,
     "n_lineup_adj": 0,
-    "n_teams_with_drift": 40
+    "n_teams_with_drift": 42
    }
   },
   {
@@ -706,7 +706,7 @@
     "Ecuador": 0.0227
    },
    "info_snapshot": {
-    "fetched_at": "2026-06-17T14:44:05Z",
+    "fetched_at": "2026-06-17T23:00:10Z",
     "elo_updated_at": "2026-06-10T00:00:00Z",
     "odds_fetched_at": null,
     "elo_rms_delta": 0.0,
@@ -721,7 +721,7 @@
     "biggest_odds_mover": {},
     "n_new_injuries": 0,
     "n_lineup_adj": 0,
-    "n_teams_with_drift": 40
+    "n_teams_with_drift": 42
    }
   },
   {
@@ -747,7 +747,7 @@
     "Ecuador": 0.0225
    },
    "info_snapshot": {
-    "fetched_at": "2026-06-17T14:44:05Z",
+    "fetched_at": "2026-06-17T23:00:10Z",
     "elo_updated_at": "2026-06-10T00:00:00Z",
     "odds_fetched_at": null,
     "elo_rms_delta": 0.0,
@@ -762,7 +762,7 @@
     "biggest_odds_mover": {},
     "n_new_injuries": 0,
     "n_lineup_adj": 0,
-    "n_teams_with_drift": 40
+    "n_teams_with_drift": 42
    }
   },
   {
@@ -788,7 +788,7 @@
     "Netherlands": 0.0379
    },
    "info_snapshot": {
-    "fetched_at": "2026-06-17T14:44:05Z",
+    "fetched_at": "2026-06-17T23:00:10Z",
     "elo_updated_at": "2026-06-10T00:00:00Z",
     "odds_fetched_at": null,
     "elo_rms_delta": 0.0,
@@ -803,7 +803,7 @@
     "biggest_odds_mover": {},
     "n_new_injuries": 0,
     "n_lineup_adj": 0,
-    "n_teams_with_drift": 40
+    "n_teams_with_drift": 42
    }
   },
   {
@@ -829,7 +829,7 @@
     "Germany": 0.0504
    },
    "info_snapshot": {
-    "fetched_at": "2026-06-17T14:44:05Z",
+    "fetched_at": "2026-06-17T23:00:10Z",
     "elo_updated_at": "2026-06-10T00:00:00Z",
     "odds_fetched_at": null,
     "elo_rms_delta": 0.0,
@@ -844,7 +844,7 @@
     "biggest_odds_mover": {},
     "n_new_injuries": 0,
     "n_lineup_adj": 0,
-    "n_teams_with_drift": 40
+    "n_teams_with_drift": 42
    }
   },
   {
@@ -870,7 +870,7 @@
     "Germany": 0.0534
    },
    "info_snapshot": {
-    "fetched_at": "2026-06-17T14:44:05Z",
+    "fetched_at": "2026-06-17T23:00:10Z",
     "elo_updated_at": "2026-06-10T00:00:00Z",
     "odds_fetched_at": null,
     "elo_rms_delta": 0.0,
@@ -885,7 +885,7 @@
     "biggest_odds_mover": {},
     "n_new_injuries": 0,
     "n_lineup_adj": 0,
-    "n_teams_with_drift": 40
+    "n_teams_with_drift": 42
    }
   },
   {
@@ -911,7 +911,7 @@
     "Netherlands": 0.0408
    },
    "info_snapshot": {
-    "fetched_at": "2026-06-17T14:44:05Z",
+    "fetched_at": "2026-06-17T23:00:10Z",
     "elo_updated_at": "2026-06-10T00:00:00Z",
     "odds_fetched_at": null,
     "elo_rms_delta": 0.0,
@@ -926,7 +926,7 @@
     "biggest_odds_mover": {},
     "n_new_injuries": 0,
     "n_lineup_adj": 0,
-    "n_teams_with_drift": 40
+    "n_teams_with_drift": 42
    }
   },
   {
@@ -952,7 +952,7 @@
     "Germany": 0.0521
    },
    "info_snapshot": {
-    "fetched_at": "2026-06-17T14:44:05Z",
+    "fetched_at": "2026-06-17T23:00:10Z",
     "elo_updated_at": "2026-06-10T00:00:00Z",
     "odds_fetched_at": null,
     "elo_rms_delta": 0.0,
@@ -967,7 +967,7 @@
     "biggest_odds_mover": {},
     "n_new_injuries": 0,
     "n_lineup_adj": 0,
-    "n_teams_with_drift": 40
+    "n_teams_with_drift": 42
    }
   },
   {
@@ -993,7 +993,7 @@
     "Germany": 0.0445
    },
    "info_snapshot": {
-    "fetched_at": "2026-06-17T14:44:05Z",
+    "fetched_at": "2026-06-17T23:00:10Z",
     "elo_updated_at": "2026-06-10T00:00:00Z",
     "odds_fetched_at": null,
     "elo_rms_delta": 0.0,
@@ -1008,7 +1008,7 @@
     "biggest_odds_mover": {},
     "n_new_injuries": 0,
     "n_lineup_adj": 0,
-    "n_teams_with_drift": 40
+    "n_teams_with_drift": 42
    }
   },
   {
@@ -1034,7 +1034,7 @@
     "Ecuador": 0.0065
    },
    "info_snapshot": {
-    "fetched_at": "2026-06-17T14:44:05Z",
+    "fetched_at": "2026-06-17T23:00:10Z",
     "elo_updated_at": "2026-06-10T00:00:00Z",
     "odds_fetched_at": null,
     "elo_rms_delta": 0.0,
@@ -1049,7 +1049,7 @@
     "biggest_odds_mover": {},
     "n_new_injuries": 0,
     "n_lineup_adj": 0,
-    "n_teams_with_drift": 40
+    "n_teams_with_drift": 42
    }
   },
   {
@@ -1075,7 +1075,7 @@
     "Germany": 0.0484
    },
    "info_snapshot": {
-    "fetched_at": "2026-06-17T14:44:05Z",
+    "fetched_at": "2026-06-17T23:00:10Z",
     "elo_updated_at": "2026-06-10T00:00:00Z",
     "odds_fetched_at": null,
     "elo_rms_delta": 0.0,
@@ -1090,7 +1090,7 @@
     "biggest_odds_mover": {},
     "n_new_injuries": 0,
     "n_lineup_adj": 0,
-    "n_teams_with_drift": 40
+    "n_teams_with_drift": 42
    }
   },
   {
@@ -1116,7 +1116,7 @@
     "Germany": 0.0442
    },
    "info_snapshot": {
-    "fetched_at": "2026-06-17T14:44:05Z",
+    "fetched_at": "2026-06-17T23:00:10Z",
     "elo_updated_at": "2026-06-10T00:00:00Z",
     "odds_fetched_at": null,
     "elo_rms_delta": 0.0,
@@ -1131,7 +1131,7 @@
     "biggest_odds_mover": {},
     "n_new_injuries": 0,
     "n_lineup_adj": 0,
-    "n_teams_with_drift": 40
+    "n_teams_with_drift": 42
    }
   },
   {
@@ -1157,7 +1157,7 @@
     "Germany": 0.0478
    },
    "info_snapshot": {
-    "fetched_at": "2026-06-17T20:31:51Z",
+    "fetched_at": "2026-06-17T23:00:10Z",
     "elo_updated_at": "2026-06-10T00:00:00Z",
     "odds_fetched_at": null,
     "elo_rms_delta": 0.0,
@@ -1172,7 +1172,7 @@
     "biggest_odds_mover": {},
     "n_new_injuries": 0,
     "n_lineup_adj": 0,
-    "n_teams_with_drift": 40
+    "n_teams_with_drift": 42
    }
   }
  ]
