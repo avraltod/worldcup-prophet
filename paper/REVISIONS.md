@@ -58,3 +58,5 @@ headline numbers are backfilled into the vintages table.
 **Rev M015 (Iran v New Zealand 2-2).** Cumulative 6 pts, mean Brier 0.73; failure-mode none. Full living layer re-rendered (edition M015); skeleton unchanged.
 
 **Rev M017 (France v Senegal 3-1).** Cumulative 7 pts, mean Brier 0.71; failure-mode none. Full living layer re-rendered (edition M017); skeleton unchanged.
+
+**Rev M018 (Iraq v Norway 1-4).** Cumulative 8 pts, mean Brier 0.68; failure-mode none. Full living layer re-rendered (edition M018); skeleton unchanged.

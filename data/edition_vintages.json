@@ -625,5 +625,40 @@
     0.0733
    ]
   ]
+ },
+ {
+  "edition": 18,
+  "match": 18,
+  "fixture": "Iraq v Norway",
+  "result": [
+   1,
+   4
+  ],
+  "points": 1,
+  "cum_points": 8,
+  "mean_brier": 0.6766,
+  "cum_bits": 0.034,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2543
+   ],
+   [
+    "Argentina",
+    0.1866
+   ],
+   [
+    "France",
+    0.1542
+   ],
+   [
+    "Portugal",
+    0.0963
+   ],
+   [
+    "England",
+    0.0702
+   ]
+  ]
  }
 ]

@@ -1,0 +1,20 @@
+{
+ "match": 18,
+ "event_id": "760430",
+ "stats": {
+  "home": {
+   "team": "Iraq",
+   "sot": 1.0,
+   "other_shots": 10.0,
+   "total_shots": 11.0,
+   "possession": 38.7
+  },
+  "away": {
+   "team": "Norway",
+   "sot": 5.0,
+   "other_shots": 7.0,
+   "total_shots": 12.0,
+   "possession": 61.3
+  }
+ }
+}
