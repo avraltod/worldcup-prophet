@@ -94,7 +94,9 @@
   "Austria": -42.49999999999999,
   "Jordan": 42.49999999999999,
   "Portugal": -75.0,
-  "Congo DR": 75.0
+  "Congo DR": 75.0,
+  "England": 67.67025089605741,
+  "Croatia": -67.67025089605741
  },
  "processed": [
   {
@@ -473,6 +475,24 @@
    "drift_after": {
     "Portugal": -75.0,
     "Congo DR": 75.0
+   }
+  },
+  {
+   "match": 22,
+   "home": "England",
+   "away": "Croatia",
+   "lam_obs": {
+    "home": 3.581,
+    "away": 1.628,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 1.5,
+    "away": 0.9
+   },
+   "drift_after": {
+    "England": 67.67,
+    "Croatia": -67.67
    }
   }
  ],

@@ -732,6 +732,41 @@
   ]
  },
  {
+  "edition": 22,
+  "match": 22,
+  "fixture": "England v Croatia",
+  "result": [
+   4,
+   2
+  ],
+  "points": 1,
+  "cum_points": 11,
+  "mean_brier": 0.612,
+  "cum_bits": 0.0401,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2619
+   ],
+   [
+    "France",
+    0.1972
+   ],
+   [
+    "Argentina",
+    0.1924
+   ],
+   [
+    "England",
+    0.0792
+   ],
+   [
+    "Germany",
+    0.0485
+   ]
+  ]
+ },
+ {
   "edition": 23,
   "match": 23,
   "fixture": "Portugal v Congo DR",

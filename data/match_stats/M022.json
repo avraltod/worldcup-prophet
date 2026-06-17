@@ -1,0 +1,20 @@
+{
+ "match": 22,
+ "event_id": "760437",
+ "stats": {
+  "home": {
+   "team": "England",
+   "sot": 11.0,
+   "other_shots": 11.0,
+   "total_shots": 22.0,
+   "possession": 51.7
+  },
+  "away": {
+   "team": "Croatia",
+   "sot": 5.0,
+   "other_shots": 5.0,
+   "total_shots": 10.0,
+   "possession": 48.3
+  }
+ }
+}
