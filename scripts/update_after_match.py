@@ -451,10 +451,8 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
                            PAPER / "figs" / "fig_live_groupqual_b.pdf")
         # Track B champion probs feed the consolidated market figure below.
         track_b_champ = champion_b if champion_b else None
-        if state["history"]:
-            mlf.two_track_fig(state["history"],
-                              PAPER / "figs" / "fig_two_track_live.pdf")
-            two_fig = True
+        # (the standalone two-track path figure was redundant with the
+        # trajectory figure, Figure~\ref{fig:trajectory}, and is no longer drawn)
         # Consolidated champion figure (four bars: Frozen/Track A/Track B/Market).
         # Generated every edition so figs/fig_live_market.pdf always exists and
         # the baseline references to it resolve, even before any market data.

@@ -599,7 +599,7 @@ Post-tournament, the forecast will be evaluated against realized results match b
 
 Predicted finishing order per group, with the decisive evidence. Advancers are the top two plus the eight best third-placed teams; the model's third-place qualifiers are Senegal and Ivory Coast (goal difference 0) and Paraguay, Sweden, Bosnia and Herzegovina, Algeria, Iran, and Czechia (all $-1$); Scotland, Cape Verde, Uzbekistan ($-2$) and Ghana ($-3$) miss the cut.
 
-Figure~\ref{fig:groupqual} shows each team's qualification probability from 100{,}000 simulations, decomposed into winning the group, finishing second, and advancing as a best third-placed team. Table~\ref{tab:qual} reports the same probabilities numerically. The competitiveness of the twelve groups varies widely. Group A is the tightest, because Czechia and South Korea finish within two percentage points of each other for the second qualification place, while Groups K and L are the most decided, because two strong teams in each take roughly 95 percent of the qualification mass between them and leave the other two with little.
+Figure~\ref{fig:groupqual} shows each team's qualification probability from 100{,}000 simulations, decomposed into winning the group, finishing second, and advancing as a best third-placed team. Table~\ref{tab:live_groupqual_three} reports the same probabilities numerically, with the Frozen baseline beside the two live tracks. The competitiveness of the twelve groups varies widely. Group A is the tightest, because Czechia and South Korea finish within two percentage points of each other for the second qualification place, while Groups K and L are the most decided, because two strong teams in each take roughly 95 percent of the qualification mass between them and leave the other two with little.
 
 \begin{figure}[p]
   \caption{Qualification probability by team}\label{fig:groupqual}
@@ -615,123 +615,6 @@ Figure~\ref{fig:groupqual} shows each team's qualification probability from 100{
 \input{live/groupqual_live}
 
 \input{live/groupqual_table}
-
-\begin{table}[!t]
-  \centering
-  \caption{Qualification probabilities by team}\label{tab:qual}
-  \begin{threeparttable}
-    {\footnotesize
-\begin{minipage}{0.49\textwidth}\centering
-\begin{tabular}{llcccc}
-\toprule
-Grp & Team & 1st & 2nd & 3rd$^{*}$ & Qual \\
-\midrule
-A & Mexico & 55 & 26 & 11 & \textbf{91} \\
- & Czechia & 19 & 29 & 20 & \textbf{68} \\
- & South Korea & 18 & 28 & 21 & \textbf{66} \\
- & South Africa & 8 & 18 & 19 & \textbf{45} \\
-\addlinespace
-B & Switzerland & 54 & 29 & 10 & \textbf{94} \\
- & Canada & 33 & 38 & 17 & \textbf{88} \\
- & Bosnia and He. & 10 & 24 & 28 & \textbf{62} \\
- & Qatar & 2 & 8 & 13 & \textbf{24} \\
-\addlinespace
-C & Brazil & 68 & 23 & 7 & \textbf{98} \\
- & Morocco & 22 & 46 & 20 & \textbf{89} \\
- & Scotland & 10 & 27 & 33 & \textbf{69} \\
- & Haiti & 0 & 4 & 8 & \textbf{12} \\
-\addlinespace
-D & United States & 37 & 29 & 16 & \textbf{82} \\
- & Turkey & 35 & 29 & 17 & \textbf{81} \\
- & Paraguay & 18 & 25 & 22 & \textbf{65} \\
- & Australia & 10 & 17 & 18 & \textbf{45} \\
-\addlinespace
-E & Germany & 67 & 24 & 8 & \textbf{99} \\
- & Ecuador & 20 & 42 & 26 & \textbf{88} \\
- & Ivory Coast & 13 & 33 & 36 & \textbf{82} \\
- & Curaçao & 0 & 2 & 5 & \textbf{7} \\
-\addlinespace
-F & Netherlands & 53 & 26 & 12 & \textbf{91} \\
- & Japan & 25 & 32 & 19 & \textbf{76} \\
- & Sweden & 15 & 26 & 22 & \textbf{64} \\
- & Tunisia & 7 & 16 & 18 & \textbf{40} \\
-\addlinespace
-\bottomrule
-\end{tabular}
-\end{minipage}\hfill
-\begin{minipage}{0.49\textwidth}\centering
-\begin{tabular}{llcccc}
-\toprule
-Grp & Team & 1st & 2nd & 3rd$^{*}$ & Qual \\
-\midrule
-G & Belgium & 68 & 21 & 7 & \textbf{96} \\
- & Egypt & 18 & 38 & 20 & \textbf{76} \\
- & Iran & 10 & 28 & 24 & \textbf{63} \\
- & New Zealand & 3 & 12 & 15 & \textbf{31} \\
-\addlinespace
-H & Spain & 75 & 21 & 3 & \textbf{99} \\
- & Uruguay & 21 & 54 & 13 & \textbf{88} \\
- & Cape Verde & 2 & 12 & 20 & \textbf{35} \\
- & Saudi Arabia & 2 & 13 & 19 & \textbf{34} \\
-\addlinespace
-I & France & 62 & 26 & 10 & \textbf{98} \\
- & Norway & 24 & 41 & 25 & \textbf{90} \\
- & Senegal & 13 & 31 & 38 & \textbf{82} \\
- & Iraq & 0 & 2 & 5 & \textbf{8} \\
-\addlinespace
-J & Argentina & 82 & 14 & 3 & \textbf{99} \\
- & Austria & 10 & 45 & 21 & \textbf{76} \\
- & Algeria & 7 & 29 & 22 & \textbf{57} \\
- & Jordan & 2 & 12 & 15 & \textbf{29} \\
-\addlinespace
-K & Portugal & 63 & 28 & 6 & \textbf{97} \\
- & Colombia & 32 & 51 & 11 & \textbf{94} \\
- & Uzbekistan & 3 & 12 & 23 & \textbf{39} \\
- & Congo DR & 2 & 8 & 18 & \textbf{29} \\
-\addlinespace
-L & England & 68 & 27 & 4 & \textbf{99} \\
- & Croatia & 29 & 56 & 10 & \textbf{96} \\
- & Panama & 3 & 12 & 21 & \textbf{36} \\
- & Ghana & 0 & 4 & 18 & \textbf{23} \\
-\addlinespace
-\bottomrule
-\end{tabular}
-\end{minipage}}
-    \begin{tablenotes}\notesize
-      \item \textit{Notes}: Qualification probabilities by team (percent), 100{,}000 simulations. Columns report the probability of winning the group, finishing second, advancing as a best third-placed team ($^{*}$), and qualifying in total.
-    \end{tablenotes}
-  \end{threeparttable}
-\end{table}
-
-\begin{table}[!t]
-  \centering
-  \caption{Decisive fixture and primary forecast risk by group}\label{tab:watchrisk}
-  \begin{footnotesize}
-  \begin{threeparttable}
-    {\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} p{0.5cm}p{5.4cm}p{6.6cm}}
-      \toprule
-      Grp & Decisive fixture & Primary risk to the forecast \\
-      \midrule
-      A & South Korea vs.\ Czechia, matchday 1 & Czechia (68\% qual.) takes second ahead of South Korea \\
-      B & Switzerland vs.\ Canada, matchday 3 & Host Canada (88\%) wins the group outright \\
-      C & Scotland vs.\ Morocco, matchday 2 & Scotland (69\%) overtakes Morocco for second \\
-      D & Turkey vs.\ United States, matchday 3 & Turkey tops the group and reroutes the bracket \\
-      E & Ecuador vs.\ Germany, matchday 3 & Ecuador (88\%, Elo 1935) wins the group, not second \\
-      F & Netherlands vs.\ Japan, matchday 1 & Japan (76\%) wins the group ahead of the Netherlands \\
-      G & Egypt vs.\ Iran, matchday 3 & Iran (63\%) edges Egypt for second \\
-      H & Cape Verde vs.\ Saudi Arabia (third-place race) & Neither third-placer qualifies; Uruguay slips to second \\
-      I & Norway vs.\ Senegal, matchday 2 & Senegal (82\%) beats Norway and takes second \\
-      J & Algeria vs.\ Austria, matchday 3 & Algeria (57\%) overtakes Austria for second \\
-      K & Colombia vs.\ Portugal, matchday 3 & The Elo tie holds and Colombia (94\%) tops the group \\
-      L & England vs.\ Croatia, matchday 1 & Croatia (96\%) wins the group instead of England \\
-      \bottomrule
-    \end{tabular*}}
-    \begin{tablenotes}\notesize
-      \item \textit{Notes}: The decisive fixture is the match that, in the simulations, most often determines the second qualification place; the primary risk is the most probable way the submitted group order is wrong.
-    \end{tablenotes}
-  \end{threeparttable}
-  \end{footnotesize}
-\end{table}
 
 The group-by-group rationale follows; each paragraph states the decisive evidence behind the predicted order.
 
@@ -824,79 +707,13 @@ The complete submitted knockout entry is shown in Figure~\ref{fig:bracket}, with
 
 \section{Stage-by-stage outcome distributions}\label{app:survival}
 
-Table~\ref{tab:survival} reports the full survival distribution, the probability of reaching each tournament stage, for all 48 teams, from 200{,}000 simulations of the recalibrated model (the post-deadline-refresh inputs of Section~5.4, with Monte Carlo standard errors at or below 0.11 pp). These distributions carry more information than the champion column alone, and three patterns deserve comment.
+Table~\ref{tab:live_survcomp} reports the full survival distribution, the probability of reaching each tournament stage, for all 48 teams (the Frozen baseline beside the two live tracks), from 200{,}000 simulations of the recalibrated model (the post-deadline-refresh inputs of Section~5.4, with Monte Carlo standard errors at or below 0.11 pp). These distributions carry more information than the champion column alone, and three patterns deserve comment.
 
 First, Spain is the only team whose single most likely final outcome is winning the tournament, because its 26.8 percent champion probability exceeds its probability of exiting at any particular stage. Every other team, including Argentina, most often falls somewhere short.
 
 Second, Portugal's distribution is nearly flat across the middle stages, because a 23.6 percent chance of falling in the Round of 32 sits next to a 21.4 percent chance of falling exactly in the quarter-final. This dispersion is the statistical signature of the Group K sensitivity discussed in Sections 5.2 and 5.4, and it means Portugal's tournament shape depends on a single group outcome more than any comparable team's.
 
 Third, the table separates teams that survive from teams that threaten. The United States advances from its group in 82 percent of simulations and yet wins the tournament in 0.1 percent, and Mexico reaches the Round of 16 in 59 percent but the semi-finals in only 11 percent, so host advantage buys progression rather than contention. Ecuador and Norway, both mid-seeded by reputation, reach the quarter-finals more often than several traditional powers.
-
-\begin{table}[p]
-  \centering
-  \caption{Probability of reaching each stage, all 48 teams}\label{tab:survival}
-  \begin{footnotesize}
-  \begin{threeparttable}
-    {\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} lcccccc}
-      \toprule
-      Team & Knockouts & R16 & QF & SF & Final & Champion \\
-      \midrule
-Spain                  & 98.9\% & 79.1\% & 62.2\% & 51.8\% & 38.9\% & 26.9\% \\
-Argentina              & 98.8\% & 71.4\% & 59.3\% & 42.7\% & 29.8\% & 17.8\% \\
-France                 & 98.4\% & 80.4\% & 59.9\% & 43.7\% & 25.0\% & 14.6\% \\
-Portugal               & 97.2\% & 73.6\% & 50.5\% & 29.1\% & 18.0\% &  9.3\% \\
-England                & 99.0\% & 72.4\% & 47.3\% & 29.4\% & 14.9\% &  7.1\% \\
-Brazil                 & 98.4\% & 65.2\% & 38.0\% & 20.2\% &  8.6\% &  3.6\% \\
-Netherlands            & 91.1\% & 54.5\% & 33.4\% & 15.9\% &  6.2\% &  2.3\% \\
-Germany                & 98.9\% & 63.5\% & 29.0\% & 15.6\% &  5.9\% &  2.1\% \\
-Ecuador                & 87.7\% & 50.4\% & 26.2\% & 12.8\% &  5.1\% &  1.9\% \\
-Croatia                & 95.5\% & 53.0\% & 24.0\% & 12.2\% &  5.0\% &  1.8\% \\
-Norway                 & 89.5\% & 55.1\% & 29.5\% & 14.1\% &  5.2\% &  1.7\% \\
-Colombia               & 94.1\% & 51.1\% & 23.3\% & 10.4\% &  4.4\% &  1.5\% \\
-Switzerland            & 94.0\% & 62.1\% & 28.4\% & 10.4\% &  4.0\% &  1.3\% \\
-Turkey                 & 80.5\% & 51.3\% & 24.6\% &  9.2\% &  3.9\% &  1.3\% \\
-Mexico                 & 91.5\% & 59.4\% & 28.3\% & 11.4\% &  3.7\% &  1.2\% \\
-Uruguay                & 88.1\% & 34.9\% & 18.5\% &  8.6\% &  3.4\% &  1.0\% \\
-Japan                  & 76.0\% & 39.6\% & 20.4\% &  8.7\% &  2.9\% &  1.0\% \\
-Belgium                & 96.5\% & 58.9\% & 28.5\% &  8.2\% &  3.1\% &  0.9\% \\
-Senegal                & 81.5\% & 43.6\% & 20.5\% &  7.8\% &  2.5\% &  0.7\% \\
-Morocco                & 88.8\% & 39.3\% & 17.1\% &  5.8\% &  1.5\% &  0.4\% \\
-Canada                 & 88.4\% & 51.0\% & 20.3\% &  5.7\% &  1.6\% &  0.4\% \\
-Austria                & 76.1\% & 23.4\% &  9.8\% &  3.5\% &  1.1\% &  0.3\% \\
-Paraguay               & 65.2\% & 34.0\% & 12.6\% &  3.9\% &  1.3\% &  0.3\% \\
-United States          & 82.2\% & 39.9\% & 13.1\% &  2.7\% &  0.7\% &  0.1\% \\
-Scotland               & 68.9\% & 25.5\% &  8.8\% &  2.5\% &  0.5\% &  0.1\% \\
-Czechia                & 68.2\% & 28.8\% &  8.5\% &  1.8\% &  0.4\% &  0.1\% \\
-South Korea            & 66.1\% & 29.6\% &  9.5\% &  2.2\% &  0.4\% &  0.1\% \\
-Iran                   & 62.5\% & 25.2\% &  6.7\% &  1.6\% &  0.4\% &  0.1\% \\
-Australia              & 45.5\% & 19.4\% &  5.7\% &  1.5\% &  0.4\% &  0.1\% \\
-Ivory Coast            & 81.7\% & 21.2\% &  4.8\% &  0.9\% &  0.1\% &  0.0\% \\
-Egypt                  & 76.5\% & 25.9\% &  5.5\% &  0.9\% &  0.2\% &  0.0\% \\
-Sweden                 & 63.8\% & 18.2\% &  5.1\% &  1.1\% &  0.2\% &  0.0\% \\
-Bosnia and Herzegovina & 62.5\% & 15.8\% &  2.7\% &  0.3\% &  0.0\% &  0.0\% \\
-Algeria                & 57.4\% & 14.0\% &  4.5\% &  1.1\% &  0.3\% &  0.0\% \\
-South Africa           & 45.4\% &  8.7\% &  1.1\% &  0.1\% &  0.0\% &  0.0\% \\
-Tunisia                & 40.4\% &  8.2\% &  1.6\% &  0.2\% &  0.0\% &  0.0\% \\
-Uzbekistan             & 38.5\% &  9.0\% &  2.5\% &  0.6\% &  0.1\% &  0.0\% \\
-Panama                 & 35.8\% &  9.0\% &  2.6\% &  0.6\% &  0.1\% &  0.0\% \\
-Cape Verde             & 34.8\% &  4.5\% &  0.7\% &  0.1\% &  0.0\% &  0.0\% \\
-Saudi Arabia           & 33.9\% &  4.2\% &  0.7\% &  0.1\% &  0.0\% &  0.0\% \\
-New Zealand            & 30.9\% &  6.2\% &  0.8\% &  0.1\% &  0.0\% &  0.0\% \\
-Jordan                 & 28.7\% &  5.9\% &  1.6\% &  0.3\% &  0.1\% &  0.0\% \\
-Congo DR               & 28.7\% &  4.9\% &  1.1\% &  0.2\% &  0.0\% &  0.0\% \\
-Qatar                  & 24.2\% &  2.8\% &  0.2\% &  0.0\% &  0.0\% &  0.0\% \\
-Ghana                  & 22.7\% &  1.7\% &  0.2\% &  0.0\% &  0.0\% &  0.0\% \\
-Haiti                  & 12.1\% &  1.7\% &  0.2\% &  0.0\% &  0.0\% &  0.0\% \\
-Iraq                   &  7.6\% &  1.7\% &  0.3\% &  0.0\% &  0.0\% &  0.0\% \\
-Curaçao                &  6.8\% &  0.6\% &  0.1\% &  0.0\% &  0.0\% &  0.0\% \\
-      \bottomrule
-    \end{tabular*}}
-    \begin{tablenotes}\notesize
-      \item \textit{Notes}: Cumulative probabilities, recalibrated model, $N$ = 200{,}000.
-    \end{tablenotes}
-  \end{threeparttable}
-  \end{footnotesize}
-\end{table}
 
 The bracket I submit to the pool is a single path through these distributions and not their summary. The entry has England reaching the semi-finals, an event with probability 29.3 percent, and the bracket bets on it not because it is likely in absolute terms but because no alternative occupant of that path is likelier. The distributions are the honest backdrop against which the point forecast should be read.
 

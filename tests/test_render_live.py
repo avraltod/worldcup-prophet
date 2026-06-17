@@ -162,19 +162,20 @@ def _learning():
 
 
 def test_two_track_unit():
-    # The redundant champion table is gone: the unit is the A-vs-B narrative
-    # plus the two-track figure, pointing to Table 3 (champions) and Table 6
-    # (Elo drift).
+    # Narrative only now: champion table is in Table 3, Elo drift in Table 6,
+    # and the realized paths are the trajectory figure (Figure 3). The redundant
+    # standalone two-track path figure (old Figure 12) is removed.
     two = {"frozen": {"Spain": 0.27, "Argentina": 0.18},
            "learning": {"Spain": 0.28, "Argentina": 0.17}}
     tex = rl.two_track_unit(two, _learning(), fig=False)
     assert r"\label{sec:twotracklive}" in tex
-    assert r"Table~\ref{tab:champ}" in tex          # champions live in Table 3
-    assert r"Table~\ref{tab:live_divergence}" in tex  # drift folded into Table 6
-    # no embedded champion/drift tabular here anymore
+    assert r"Table~\ref{tab:champ}" in tex             # champions live in Table 3
+    assert r"Table~\ref{tab:live_divergence}" in tex   # drift folded into Table 6
+    assert r"Figure~\ref{fig:trajectory}" in tex       # paths -> trajectory figure
     assert "tabular" not in tex
-    tex_fig = rl.two_track_unit(two, _learning(), fig=True)
-    assert "fig_two_track_live" in tex_fig          # Figure 12 kept
+    # old Figure 12 gone even when fig=True
+    assert "fig_two_track_live" not in rl.two_track_unit(two, _learning(), fig=True)
+    assert "fig:twotracklive" not in rl.two_track_unit(two, _learning(), fig=True)
 
 
 def test_two_track_unit_no_embedded_tables():

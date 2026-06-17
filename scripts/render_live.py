@@ -287,25 +287,21 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
     )
 
 
-def two_track_unit(two_track, learning, fig, info_snapshot=None, track_a=None,
+def two_track_unit(two_track, learning, fig=False, info_snapshot=None, track_a=None,
                    champion_b=None, frozen_stages=None):
-    """The live A-vs-B narrative + the two-track champion-path figure
-    (Figure~\\ref{fig:twotracklive}). The champion-odds table that used to sit
-    here is a strict subset of the headline Table~\\ref{tab:champ}, so it is
-    dropped; the learning-track Elo drift is folded into the divergence table
-    (Table~\\ref{tab:live_divergence}). track_a / champion_b / frozen_stages /
-    info_snapshot are accepted for caller compatibility but no longer rendered
-    here."""
+    """The live A-vs-B narrative. The champion-odds table is a strict subset of
+    the headline Table~\\ref{tab:champ} (dropped); the learning-track Elo drift
+    is folded into the divergence table (Table~\\ref{tab:live_divergence}); and
+    the realized champion paths are the trajectory, Figure~\\ref{fig:trajectory}
+    (the former standalone two-track path figure was redundant with it). fig /
+    track_a / champion_b / frozen_stages / info_snapshot are accepted for caller
+    compatibility but no longer rendered here."""
     if two_track is None:
         return ("\\textit{Two-track live results begin with the first match "
                 "whose box score is collected.}")
     pend = (f" Stats pending for matches: "
             f"{', '.join(f'M{m:03d}' for m in learning['pending'])}."
             if learning["pending"] else "")
-    fig_block = ("\\begin{figure}[!t]\n  \\caption{Two tracks live: Frozen vs "
-                 "Track~A vs Track~B champion paths}\\label{fig:twotracklive}\n"
-                 "  {\\centering\\includegraphics[width=0.94\\textwidth]"
-                 "{figs/fig_two_track_live.pdf}\\par}\n\\end{figure}\n" if fig else "")
     n = len(learning["processed"])
 
     return (
@@ -317,10 +313,10 @@ def two_track_unit(two_track, learning, fig, info_snapshot=None, track_a=None,
           f"ratings (k=50, locked), while Track~A re-conditions "
           f"on results alone. {n} match(es) processed so far.{pend}\n\n"
           "The three champion tracks are tabulated in "
-          "Table~\\ref{tab:champ} (Frozen / Track~A / Track~B / Market); the "
-          "learning-track Elo drift that distinguishes Track~B is folded into "
-          "the divergence table, Table~\\ref{tab:live_divergence}.\n\n"
-        + fig_block)
+          "Table~\\ref{tab:champ} (Frozen / Track~A / Track~B / Market) and their "
+          "realized paths are Figure~\\ref{fig:trajectory}; the learning-track "
+          "Elo drift that distinguishes Track~B is folded into the divergence "
+          "table, Table~\\ref{tab:live_divergence}.")
 
 
 def _stats_release(match, match_stats, learning):
@@ -673,17 +669,19 @@ def _slot_risk_table(frozen, now, now_b):
                 "$\\triangle$ = 5--20 pp drop; $\\times$ = pick reversed ($>$20 pp).")
     else:
         col_spec, hdr, note = "llrr", "KO Pick & Slot & Frozen~\\% & Track~A~\\% \\\\", ""
-    note_line = (f"\n\\smallskip\\begin{{footnotesize}}{note}\\end{{footnotesize}}"
-                 if note else "")
+    notes_block = (f"\n  \\begin{{tablenotes}}\\notesize\n  \\item \\textit{{Notes:}} "
+                   f"{note}\n  \\end{{tablenotes}}" if note else "")
     return (
         "\\begin{table}[!t]\n  \\centering\n"
         "  \\caption{R32 slot risk: probability each pre-registered pick "
         "advances from the group stage (live edition M\\liveEditionNum{})"
         "}\\label{tab:live_slot_risk}\n"
-        f"  {{\\begin{{footnotesize}}\\begin{{tabular}}{{{col_spec}}}\n"
+        f"  \\begin{{footnotesize}}\\begin{{threeparttable}}\n"
+        f"  \\begin{{tabular}}{{{col_spec}}}\n"
         f"  \\toprule\n  {hdr}\n  \\midrule\n  " + "\n  ".join(rows) + "\n"
-        "  \\bottomrule\\end{tabular}\\end{footnotesize}}"
-        + note_line + "\n\\end{table}")
+        "  \\bottomrule\\end{tabular}"
+        + notes_block +
+        "\n  \\end{threeparttable}\\end{footnotesize}\n\\end{table}")
 
 
 def bracket_live_unit(ctx):
@@ -759,7 +757,7 @@ def survival_colcomp_unit(ctx):
         note = "Each cell shows Frozen\\%{}~/{}Track~A\\%; bold Track~A when $|\\Delta| > 3$ pp."
         title = "Frozen vs.\\ Track~A stage probabilities, all 48 teams"
     return (
-        "\\section*{Appendix B.live\\quad The same distribution, "
+        "\\section*{Appendix B\\quad The same distribution, "
         "all three tracks side by side}\\label{app:survlive}\n"
         + note + "\n\n"
         "\\begin{scriptsize}\n\\begin{longtable}{lrrrrrr}\n"
@@ -956,9 +954,9 @@ def fixture_risk_unit(ctx):
     )
 
 
-# Pre-registered decisive fixture + primary forecast risk per group, copied
-# verbatim from the locked Table~\ref{tab:watchrisk}. These never change; the
-# live tracker (Table 11) scores their status against the results so far.
+# Pre-registered decisive fixture + primary forecast risk per group, registered
+# before kickoff. These never change; the live risk tracker
+# (Table~\ref{tab:live_risk_tracker}) scores their status against the results.
 _PREREG_RISK = {
     "A": ("South Korea v Czechia, MD1", "Czechia (68\\% qual.) takes second ahead of South Korea"),
     "B": ("Switzerland v Canada, MD3", "Host Canada (88\\%) wins the group outright"),
