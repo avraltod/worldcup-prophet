@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-06-17T06:11:31Z",
+ "fetched_at": "2026-06-17T08:16:38Z",
  "mode": "pre",
  "source_freshness": {
   "elo_updated_at": "2026-06-10T00:00:00Z",
@@ -426,6 +426,14 @@
     "drift": 47.5
    },
    {
+    "team": "Austria",
+    "drift": -42.5
+   },
+   {
+    "team": "Jordan",
+    "drift": 42.5
+   },
+   {
     "team": "Canada",
     "drift": -41.22
    },
@@ -527,7 +535,7 @@
    "biggest_odds_mover": {},
    "n_new_injuries": 0,
    "n_lineup_adj": 0,
-   "n_teams_with_drift": 38
+   "n_teams_with_drift": 40
   }
  }
 }
