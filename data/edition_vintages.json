@@ -695,5 +695,40 @@
     0.0705
    ]
   ]
+ },
+ {
+  "edition": 20,
+  "match": 20,
+  "fixture": "Austria v Jordan",
+  "result": [
+   3,
+   1
+  ],
+  "points": 1,
+  "cum_points": 10,
+  "mean_brier": 0.6274,
+  "cum_bits": 0.037,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2545
+   ],
+   [
+    "Argentina",
+    0.1942
+   ],
+   [
+    "France",
+    0.1517
+   ],
+   [
+    "Portugal",
+    0.0934
+   ],
+   [
+    "England",
+    0.0714
+   ]
+  ]
  }
 ]
