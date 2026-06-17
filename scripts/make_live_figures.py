@@ -44,61 +44,37 @@ def group_qual_fig(now, groups, out):
     fig.savefig(out, bbox_inches="tight"); plt.close(fig)
 
 
-def champdist_fig(frozen, track_a, out, track_b=None):
-    """Bar chart: champion probability Frozen/Track A/Track B, top 12 teams."""
+def market_fig(frozen, track_a, track_b, market, out):
+    """Horizontal four-bar chart: Frozen/Track A/Track B/Market champion
+    probability per team, top 12 by Track A. The single consolidated champion
+    instrument: its Frozen bars are the locked 200k baseline distribution and its
+    Market bars the live Polymarket snapshot, so it subsumes the separate baseline
+    distribution and model-vs-market figures. Highest probability at the top, with
+    Frozen on top of each team group, matching the baseline market figure."""
     teams = sorted(track_a, key=lambda t: -track_a[t]["champion"])[:12]
     n = len(teams)
-    has_b = bool(track_b)
-    offsets = [-0.27, 0, 0.27] if has_b else [-0.18, 0.18]
-    width = 0.24 if has_b else 0.35
-    x = range(n)
-    fig, ax = plt.subplots(figsize=(9, 4.5))
-    ax.bar([i + offsets[0] for i in x],
-           [frozen.get(t, {}).get("champion", 0) for t in teams],
-           width=width, color="#888888", alpha=0.85, label="Frozen")
-    ax.bar([i + offsets[1] for i in x],
-           [track_a[t]["champion"] for t in teams],
-           width=width, color="#3b6ea5", alpha=0.85, label="Track A")
-    if has_b:
-        ax.bar([i + offsets[2] for i in x],
-               [track_b.get(t, 0) for t in teams],
-               width=width, color="#3d8c40", alpha=0.85, label="Track B")
-    # value label (champion %) atop each bar
-    for i, t in enumerate(teams):
-        vals = [(offsets[0], frozen.get(t, {}).get("champion", 0)),
-                (offsets[1], track_a[t]["champion"])]
-        if has_b:
-            vals.append((offsets[2], track_b.get(t, 0)))
-        for off, v in vals:
-            ax.text(i + off, v + 0.004, f"{100 * v:.0f}", ha="center",
-                    va="bottom", fontsize=5, rotation=90, color="#333333")
-    ax.set_xticks(list(x)); ax.set_xticklabels(teams, rotation=35, ha="right", fontsize=8)
-    ax.set_ylabel("P(champion)")
-    ax.set_ylim(0, max(track_a[teams[0]]["champion"],
-                       frozen.get(teams[0], {}).get("champion", 0)) * 1.18)
-    ax.legend(fontsize=9)
-    fig.tight_layout(); fig.savefig(out); plt.close(fig)
-
-
-def market_fig(frozen, track_a, track_b, market, out):
-    """Four-bar chart: Frozen/Track A/Track B/Market per team, top 8 by Track A."""
-    teams = sorted(track_a, key=lambda t: -track_a[t]["champion"])[:8]
-    n = len(teams)
-    offsets = [-0.3, -0.1, 0.1, 0.3]
-    width = 0.18
-    x = range(n)
-    fig, ax = plt.subplots(figsize=(9, 4.5))
-    bars = [
+    series = [
         ("Frozen", "#888888", [frozen.get(t, {}).get("champion", 0) for t in teams]),
         ("Track A", "#3b6ea5", [track_a[t]["champion"] for t in teams]),
         ("Track B", "#3d8c40", [track_b.get(t, 0) if track_b else 0 for t in teams]),
         ("Market", "#e06820", [market.get(t, 0) for t in teams]),
     ]
-    for (label, color, vals), off in zip(bars, offsets):
-        ax.bar([i + off for i in x], vals, width=width,
-               color=color, alpha=0.85, label=label)
-    ax.set_xticks(list(x)); ax.set_xticklabels(teams, rotation=35, ha="right", fontsize=8)
-    ax.set_ylabel("P(champion)")
+    height = 0.2
+    offsets = [-1.5 * height, -0.5 * height, 0.5 * height, 1.5 * height]
+    y = range(n)
+    fig, ax = plt.subplots(figsize=(9, 7))
+    for (label, color, vals), off in zip(series, offsets):
+        ypos = [i + off for i in y]
+        ax.barh(ypos, vals, height=height, color=color, alpha=0.85, label=label)
+        for yp, v in zip(ypos, vals):
+            if v > 0:
+                ax.text(v + 0.002, yp, f"{100 * v:.0f}", va="center",
+                        ha="left", fontsize=5, color="#333333")
+    ax.set_yticks(list(y)); ax.set_yticklabels(teams, fontsize=8)
+    ax.invert_yaxis()                        # highest probability at the top
+    ax.set_xlabel("Champion probability")
+    xmax = max((max(vals) for _, _, vals in series if vals), default=0.0)
+    ax.set_xlim(0, (xmax or 0.01) * 1.12)
     ax.legend(fontsize=8, ncol=2)
     fig.tight_layout(); fig.savefig(out); plt.close(fig)
 

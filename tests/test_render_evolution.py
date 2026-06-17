@@ -90,6 +90,39 @@ def test_divergence_empty_is_placeholder():
     assert "longtable" not in tex and "equals the baseline" in tex
 
 
+def test_divergence_folds_in_drift_column():
+    # The learning-track Elo drift table is absorbed into Table 6 as a final
+    # column. A drifter absent from frozen/now is skipped (no KeyError).
+    drift = {"South Korea": 75.0, "Czechia": -65.3, "Spain": 3.2,
+             "NotARealTeam": 40.0}
+    tex = re_.divergence_section(FROZEN, NOW, ENTRIES, GS, drift=drift)
+    assert "Drift (Elo)" in tex            # new column header
+    assert "$+75.0$" in tex                # South Korea drift
+    assert "$-65.3$" in tex                # Czechia drift
+    assert "$+3.2$" in tex                 # Spain drift
+    assert "NotARealTeam" not in tex       # absent from frozen -> skipped safely
+
+
+def test_divergence_track_b_deltas_are_b_minus_frozen():
+    champion_b = {"Spain": 0.271, "Argentina": 0.177, "France": 0.141}
+    now_b = {
+        "Spain":       {"advance_KO": 0.950},
+        "Argentina":   {"advance_KO": 0.989},
+        "France":      {"advance_KO": 0.999},
+    }
+    tex = re_.divergence_section(FROZEN, NOW, ENTRIES, GS,
+                                 champion_b=champion_b, now_b=now_b)
+    # both Δ columns are labelled (B$-$F)
+    assert tex.count("$\\Delta$ (B$-$F)") >= 2
+    assert "A$-$Frozen" not in tex
+    # Champion Δ Spain: 27.1 (B) − 26.9 (Frozen) = +0.2
+    assert "$+0.2$" in tex
+    # Advance Δ Spain: 95.0 (B) − 98.9 (Frozen) = −3.9
+    assert "$-3.9$" in tex
+    # Teams without Track B data (movers South Korea/Czechia) get --- deltas
+    assert "---" in tex
+
+
 def test_champ_table_ranks_by_now_and_keeps_frozen_column():
     tex = re_.champ_table(FROZEN, NOW, 2)
     assert "Champion (Frozen)" in tex and "Champion (Track~A)" in tex
@@ -131,8 +164,36 @@ def test_champ_table_with_champion_b_adds_track_b_columns():
     assert "Track~B" in tex
     assert r"\Delta" in tex
     assert "27.1\\%" in tex   # Spain Track B
+    # Δ column is now Track B − Frozen (B$-$F), not A−Frozen
+    assert "$\\Delta$ (B$-$F)" in tex
+    assert "Track~B champion probability minus Frozen" in tex
+    # Spain: 27.1 (B) − 26.9 (Frozen) = +0.2
+    assert "+0.2" in tex
+    # France: 13.8 (B) − 14.3 (Frozen) = −0.5
+    assert "-0.5" in tex
+    # Teams absent from champion_b (South Korea, Czechia) get --- delta
+    assert "---" in tex
     assert r"\label{tab:champ}" in tex
     assert tex.count(r"\begin{table}") == tex.count(r"\end{table}") == 1
+
+
+def test_champ_table_folds_in_market_column():
+    # The former market-snapshot table's Market column now lives in champ_table.
+    market = {"Spain": 0.130, "Argentina": 0.111, "France": 0.180}
+    tex = re_.champ_table(FROZEN, NOW, 2, champion_b=CHAMPION_B, market=market)
+    assert "Market (\\%)" in tex                 # new column header
+    assert "Market = live Polymarket" in tex     # note explains it
+    assert "13.0\\%" in tex                       # Spain market
+    assert "18.0\\%" in tex                       # France market
+    # Teams with no market value render --- in that cell
+    assert "---" in tex
+
+
+def test_champ_table_market_optional():
+    # Without market data the Market column degrades to --- (no crash).
+    tex = re_.champ_table(FROZEN, NOW, 2, champion_b=CHAMPION_B)
+    assert "Market (\\%)" in tex
+    assert tex.count(r"\begin{table}") == 1
 
 def test_champ_table_without_champion_b_renders_frozen_track_a():
     tex = re_.champ_table(FROZEN, NOW, 2)

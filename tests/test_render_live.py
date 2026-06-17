@@ -162,28 +162,28 @@ def _learning():
 
 
 def test_two_track_unit():
+    # The redundant champion table is gone: the unit is the A-vs-B narrative
+    # plus the two-track figure, pointing to Table 3 (champions) and Table 6
+    # (Elo drift).
     two = {"frozen": {"Spain": 0.27, "Argentina": 0.18},
            "learning": {"Spain": 0.28, "Argentina": 0.17}}
     tex = rl.two_track_unit(two, _learning(), fig=False)
-    assert "Spain" in tex and "27.0" in tex and "28.0" in tex
-    # 3-col without track_a: Frozen | Track~B | Δ
-    assert "Spain & 27.0 & 28.0 & +1.0" in tex
-    assert "Mexico" in tex                    # drift table
+    assert r"\label{sec:twotracklive}" in tex
+    assert r"Table~\ref{tab:champ}" in tex          # champions live in Table 3
+    assert r"Table~\ref{tab:live_divergence}" in tex  # drift folded into Table 6
+    # no embedded champion/drift tabular here anymore
+    assert "tabular" not in tex
     tex_fig = rl.two_track_unit(two, _learning(), fig=True)
-    assert "fig_two_track_live" in tex_fig
+    assert "fig_two_track_live" in tex_fig          # Figure 12 kept
 
 
-def test_two_track_unit_with_track_a_four_cols():
-    two = {"frozen": {"Spain": 0.27, "Argentina": 0.18},
-           "learning": {"Spain": 0.28, "Argentina": 0.17}}
-    track_a = {"Spain": {"champion": 0.272}, "Argentina": {"champion": 0.179}}
-    tex = rl.two_track_unit(two, _learning(), fig=False, track_a=track_a)
-    # 4-col: Frozen | Track A | Track B | Δ(A-Frozen)
-    assert "Track~A" in tex and "Track~B" in tex
-    assert "27.2" in tex   # Track A Spain
-    assert "28.0" in tex   # Track B Spain (learning)
-    # Δ = Track A - Frozen = 27.2 - 27.0 = +0.2
-    assert "+0.2" in tex
+def test_two_track_unit_no_embedded_tables():
+    two = {"frozen": {"Spain": 0.27}, "learning": {"Spain": 0.28}}
+    track_a = {"Spain": {"champion": 0.272}}
+    tex = rl.two_track_unit(two, _learning(), fig=False, track_a=track_a,
+                            champion_b={"Spain": 0.245})
+    assert "tabular" not in tex            # champion table dropped (subset of Table 3)
+    assert "Drift (Elo)" not in tex        # drift table dropped (folded into Table 6)
 
 
 def test_revision_report_unit():
@@ -283,6 +283,38 @@ def test_cumulative_stats_table_shows_track_b_column_when_probs_hda_b_present():
     assert "55.0" in tex    # Track B home prob
 
 
+def test_cumulative_stats_table_orders_by_issue_order_and_pads():
+    # Issue order [1, 8, 7]: match 8 (G02) precedes match 7 (G03) even though
+    # 7 < 8 by schedule number. Shots/on-target are zero-padded 2-digit integers.
+    entries = [
+        {"match": 1, "fixture": "Mexico v South Africa",
+         "pre": {"probs_HDA": [0.6, 0.2, 0.2]}},
+        {"match": 7, "fixture": "Brazil v Morocco",
+         "pre": {"probs_HDA": [0.6, 0.2, 0.2]}},
+        {"match": 8, "fixture": "Qatar v Switzerland",
+         "pre": {"probs_HDA": [0.6, 0.2, 0.2]}},
+    ]
+    match_stats = {
+        1: {"home": {"total_shots": 16.0, "sot": 4.0, "possession": 60.0},
+            "away": {"total_shots": 3.0, "sot": 2.0, "possession": 40.0}},
+        7: {"home": {"total_shots": 13.0, "sot": 5.0, "possession": 51.0},
+            "away": {"total_shots": 14.0, "sot": 3.0, "possession": 49.0}},
+        8: {"home": {"total_shots": 7.0, "sot": 4.0, "possession": 32.0},
+            "away": {"total_shots": 26.0, "sot": 7.0, "possession": 68.0}},
+    }
+    exps = [{"match": m, "probs_HDA": [0.6, 0.2, 0.2]} for m in (1, 7, 8)]
+    tex = rl._cumulative_stats_table(entries, match_stats, exps,
+                                     issue_order=[1, 8, 7])
+    # G02 is match 8, G03 is match 7 (issue order, not schedule order)
+    assert "G02 M08 Qatar v Switzerland" in tex
+    assert "G03 M07 Brazil v Morocco" in tex
+    assert tex.index("G02 M08") < tex.index("G03 M07")
+    # zero-padded 2-digit integer shots/on-target (7 -> 07, 16 -> 16)
+    assert "07--26" in tex        # match 8 shots
+    assert "16--03" in tex        # match 1 shots
+    assert "04--02" in tex        # match 1 on target
+
+
 def test_cumulative_stats_table_no_track_b_column_when_missing():
     entries = [{"match": 3, "fixture": "Canada v BIH",
                 "pre": {"probs_HDA": [0.5, 0.25, 0.25]}}]
@@ -359,10 +391,6 @@ def test_discussion_live_unit():
     tex = rl.discussion_live_unit(_full_ctx())
     assert len(tex) > 20
 
-def test_champdist_live_unit():
-    tex = rl.champdist_live_unit(_full_ctx())
-    assert r"\label{fig:live_champdist}" in tex
-
 def test_groupqual_live_unit():
     tex = rl.groupqual_live_unit(_full_ctx())
     assert r"\label{fig:live_groupqual}" in tex
@@ -416,14 +444,15 @@ def test_two_track_unit_provenance_moved_to_data_revealed():
     assert "2026-06-13" not in out      # date state NOT in two_track anymore
     assert "15.2" not in out            # rms delta NOT in two_track anymore
     assert "Track~B" in out             # section still renders with correct label
-    assert "Drift" in out               # drift table still present
+    # drift now lives in the divergence table (Table 6), referenced here
+    assert r"Table~\ref{tab:live_divergence}" in out
 
 
 def test_two_track_unit_no_provenance_when_snapshot_absent():
     two_track = {"frozen": {"Spain": 0.142}, "learning": {"Spain": 0.158}}
     learning = {"drift": {}, "processed": [], "pending": []}
     out = rl.two_track_unit(two_track, learning, fig=False, info_snapshot=None)
-    assert "frozen" in out.lower() or "Track" in out   # still renders the table
+    assert "Track" in out               # still renders the narrative
 
 
 def test_market_snap_unit_no_market():
@@ -431,8 +460,12 @@ def test_market_snap_unit_no_market():
            "frozen": {"Spain": {"champion": 0.269}, "France": {"champion": 0.143}},
            "champion_b": {}, "market": None}
     out = rl.market_snap_unit(ctx)
-    assert r"\label{tab:live_market_snap}" in out
-    assert "Spain" in out and "not yet available" in out
+    assert "not yet available" in out
+    # The consolidated figure (and its label) is emitted even without market data
+    # so the baseline references to Figure~\ref{fig:live_market} always resolve.
+    assert r"\label{fig:live_market}" in out
+    # The snapshot table is folded into the headline champ table; not here anymore.
+    assert "tab:live_market_snap" not in out
 
 
 def test_market_snap_unit_with_market():
@@ -441,10 +474,11 @@ def test_market_snap_unit_with_market():
            "champion_b": {"Spain": 0.275, "France": 0.135},
            "market": {"Spain": 0.30, "France": 0.12}}
     out = rl.market_snap_unit(ctx)
-    assert r"\label{tab:live_market_snap}" in out
-    assert "27.5" in out    # Track B Spain
-    assert "30.0" in out    # Market Spain
-    assert "Track~B" in out and "Market" in out
+    # Table removed; the consolidated figure + the model-vs-market status remain.
+    assert r"\label{fig:live_market}" in out
+    assert "tab:live_market_snap" not in out
+    assert "Market" in out          # described in the figure note
+    assert "broadly agree" in out   # market-present status line
 
 
 # ---- Table 10: three-panel finishing-position table ----

@@ -39,6 +39,12 @@ GROUP_QUAL_PATH = DATA / "group_qual.json"   # frozen 1st/2nd/3rd*/qual (locked 
 COND_N = 50000   # sims for the per-snapshot conditional forecast
 LIVE_DIR = PAPER / "live"
 SKELETON_SHA = DATA / "skeleton_sha256.txt"
+# Canonical issue order (GXXX): the order editions were issued, locked to the
+# public archive / EDITIONS.md mapping. Seeded for the matches issued so far;
+# any later-documented match is appended in trajectory (documentation) order.
+# This is the single source of truth for Figure 5's x-axis, Tables 7/8 G-labels,
+# and the archive Gxxx filenames, which the trajectory append log does NOT match.
+ISSUE_ORDER_PATH = DATA / "issue_order.json"
 TWO_TRACK_N = 20000   # per-track sims for the live A-vs-B
 
 
@@ -169,6 +175,21 @@ def group_state(results):
         state.append({"group": grp, "played": played,
                       "total": len(cond.GROUPS[grp]), "rows": rows})
     return state
+
+
+def issue_order(trajectory):
+    """Canonical GXXX issue order: the locked seed (public archive / EDITIONS
+    mapping) followed by any later-documented match not yet in the seed, in
+    trajectory (documentation) order. Read-only — never written at runtime, so
+    it can never trip the CI commit allowlist."""
+    seed = _load(ISSUE_ORDER_PATH, [])
+    out, seen = list(seed), set(seed)
+    for r in trajectory:
+        m = r.get("match")
+        if r.get("phase") == "post" and m not in seen:
+            out.append(m)
+            seen.add(m)
+    return out
 
 
 def _assert_skeleton():
@@ -371,11 +392,25 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
             state["history"].append(hist_row)
     lst.save_state(state)
 
-    # vintages
+    # Track B data — champion distribution (live Elo + bookmaker odds); needed by
+    # the vintages table (Table 8), the figures, and ctx.
+    _latest_post = next(
+        (r for r in reversed(trajectory)
+         if r["phase"] == "post" and r["match"] == match), None)
+    champion_b = (_latest_post.get("champion_b") or {}) if _latest_post else {}
+    if champion_b:
+        stats["champ_b_top"] = sorted(champion_b.items(), key=lambda kv: -kv[1])[:3]
+
+    # vintages — Table 8 tracks Track~B champion probabilities by edition (live
+    # Elo + bookmaker odds), falling back to Track~A only when Track~B is
+    # unavailable; the M000 baseline row stays the locked Frozen distribution.
     if not vin.load():
         vin.upsert(vin.m000_row(frozen))
-    top5 = [(t, d["champion"]) for t, d in sorted(
-        now_probs.items(), key=lambda kv: -kv[1]["champion"])[:5]]
+    if champion_b:
+        top5 = sorted(champion_b.items(), key=lambda kv: -kv[1])[:5]
+    else:
+        top5 = [(t, d["champion"]) for t, d in sorted(
+            now_probs.items(), key=lambda kv: -kv[1]["champion"])[:5]]
     rows = vin.upsert(vin.row_for_edition(match, entries, stats, top5))
 
     # revision narrative (grounded pack -> Claude or template)
@@ -392,20 +427,13 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     corrections = CORRECTIONS.read_text() if CORRECTIONS.exists() else ""
     narrative_text, _src = di.draft_revision(pack, corrections, use_api)
 
-    # Track B data — needed by figures and ctx
-    _latest_post = next(
-        (r for r in reversed(trajectory)
-         if r["phase"] == "post" and r["match"] == match), None)
-    champion_b = (_latest_post.get("champion_b") or {}) if _latest_post else {}
-    if champion_b:
-        stats["champ_b_top"] = sorted(champion_b.items(), key=lambda kv: -kv[1])[:3]
-
     # figures (optional, never block)
     live_fig = two_fig = False
     try:
         import plot_trajectory_live
         plot_trajectory_live.build(trajectory, through_match=match,
-                                   out=PAPER / "figs" / "fig_trajectory_live.pdf")
+                                   out=PAPER / "figs" / "fig_trajectory_live.pdf",
+                                   issue_order=issue_order(trajectory))
         live_fig = True
     except Exception as ex:                      # noqa: BLE001
         print(f"trajectory figure skipped ({ex})")
@@ -421,22 +449,20 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
                            PAPER / "figs" / "fig_live_groupqual.pdf")
         mlf.group_qual_fig(now_b_probs or now_probs, groups,
                            PAPER / "figs" / "fig_live_groupqual_b.pdf")
-        # Champdist with Frozen + Track A (+ Track B if available)
+        # Track B champion probs feed the consolidated market figure below.
         track_b_champ = champion_b if champion_b else None
-        mlf.champdist_fig(frozen, now_probs,
-                          PAPER / "figs" / "fig_live_champdist.pdf",
-                          track_b=track_b_champ)
         if state["history"]:
             mlf.two_track_fig(state["history"],
                               PAPER / "figs" / "fig_two_track_live.pdf")
             two_fig = True
-        # Market figure (four bars: Frozen/Track A/Track B/Market)
+        # Consolidated champion figure (four bars: Frozen/Track A/Track B/Market).
+        # Generated every edition so figs/fig_live_market.pdf always exists and
+        # the baseline references to it resolve, even before any market data.
         market = next(
             (r.get("market_champion") for r in reversed(trajectory)
              if r.get("phase") == "post" and r.get("market_champion")), None)
-        if market:
-            mlf.market_fig(frozen, now_probs, track_b_champ, market,
-                           PAPER / "figs" / "fig_live_market.pdf")
+        mlf.market_fig(frozen, now_probs, track_b_champ, market or {},
+                       PAPER / "figs" / "fig_live_market.pdf")
         # Knockout brackets (Track A / Track B): generated every edition so they
         # are ready; bracket_live_unit only displays them once KO results exist.
         ko_done = res.get("ko", {})
@@ -487,6 +513,8 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
            "market": _market,
            "group_state": group_st,
            "track_b_map": track_b_map,
+           # Canonical issue order (GXXX), locked to the public archive mapping.
+           "issue_order": issue_order(trajectory),
            "champion_movers": sorted(
                [[t, round(prev_now.get(t, {}).get("champion", 0.0), 4),
                  round(now_probs[t]["champion"], 4)]
@@ -498,7 +526,7 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     # 2. champ table
     rl.write_unit(LIVE_DIR, "champ_table",
                   rl.champ_table_unit(frozen, now_probs, len(entries),
-                                      champion_b=champion_b))
+                                      champion_b=champion_b, market=_market))
     # 3. trajectory-based units
     rl.write_unit(LIVE_DIR, "trajfig", rl.trajfig_unit(entries, live_fig))
     rl.write_unit(LIVE_DIR, "ledger",
@@ -506,7 +534,7 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
                             upcoming=_upcoming_picks(expectations, res,
                                                      eff_elo_b, live_rates_b)))
     rl.write_unit(LIVE_DIR, "narrative", rl.narrative_unit(entries))
-    rl.write_unit(LIVE_DIR, "divergence", rl.divergence_unit(frozen, now_probs, entries, group_st, champion_b=champion_b, now_b=ctx.get("now_b", {})))
+    rl.write_unit(LIVE_DIR, "divergence", rl.divergence_unit(frozen, now_probs, entries, group_st, champion_b=champion_b, now_b=ctx.get("now_b", {}), drift=state.get("drift", {})))
     # 4. derived units
     rl.write_unit(LIVE_DIR, "revision_report", rl.revision_report(ctx))
     rl.write_unit(LIVE_DIR, "tracker", rl.tracker(group_st, frozen, now_probs))
@@ -528,7 +556,6 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     rl.write_unit(LIVE_DIR, "data_revealed", rl.data_revealed_unit(ctx, use_api))
     rl.write_unit(LIVE_DIR, "simulation_note", rl.simulation_note_unit(ctx, use_api))
     rl.write_unit(LIVE_DIR, "sec36_live", rl.sec36_live_unit(ctx, use_api))
-    rl.write_unit(LIVE_DIR, "champdist_live", rl.champdist_live_unit(ctx))
     # 7. analysis sections
     rl.write_unit(LIVE_DIR, "robustness_live", rl.robustness_live_unit(ctx, use_api))
     rl.write_unit(LIVE_DIR, "failure_analysis", rl.failure_analysis_unit(ctx, use_api))

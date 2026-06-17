@@ -9,6 +9,7 @@ from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 
 ROOT = Path(__file__).resolve().parent.parent
 FIGS = ROOT / "paper" / "figs"
@@ -24,49 +25,71 @@ TEAM_COLORS = {
 GROUP_END = 72
 
 
-def build(trajectory, through_match=None, out=None):
+def build(trajectory, through_match=None, out=None, issue_order=None):
     frozen = json.loads((ROOT / "data" / "frozen_stage_probs.json").read_text())
     base = {t: d["champion"] for t, d in frozen["stages"].items()}
     posts = [r for r in trajectory if r["phase"] == "post"
              and (through_match is None or r["match"] <= through_match)]
-    xs = [0] + [r["match"] for r in posts]
-    xmax = max(8, xs[-1] + 2)
+    # Order by the canonical GXXX issue order (public archive mapping) rather
+    # than the trajectory append order, which disagrees with it; this keeps the
+    # x-axis sequence consistent with the archive Gxxx and Tables 7/8.
+    if issue_order:
+        rank = {m: i for i, m in enumerate(issue_order)}
+        posts = sorted(posts, key=lambda r: rank.get(r["match"], 10 ** 6))
+    # x is the update index (1..n), i.e. matches played in true issue order
+    # (GXXX, the trajectory's append order), NOT the schedule number (MXXX).
+    # Plotting against the schedule number made the lines double back whenever
+    # results were confirmed out of schedule order.
+    n = len(posts)
+    xs = list(range(n + 1))            # 0 = pre-tournament baseline, then 1..n
+    xb = xs[1:]
+    xmax = max(8, n + 2)
 
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(11, 9),
                                    gridspec_kw={"height_ratios": [2.0, 1.0]})
     for team, col in TEAM_COLORS.items():
         y0 = 100 * base.get(team, 0.0)
         # Frozen dot at x=0 (gray, never moves)
-        ax1.plot([0], [y0], color="0.5", marker="o", ms=6, zorder=5,
-                 label="Frozen" if team == "Spain" else None)
+        ax1.plot([0], [y0], color="0.5", marker="o", ms=6, zorder=5)
         # Track A (result-conditioned)
         ys_a = [y0] + [100 * r["champion"].get(team, 0.0) for r in posts]
-        ax1.plot(xs, ys_a, color=col, lw=2.2, label=team, marker="o", ms=4)
-        # Track B (result + Elo, green dashed), when available
+        ax1.plot(xs, ys_a, color=col, lw=2.2, marker="o", ms=4)
+        # Track B (result + Elo, dashed), when available
         ys_b = [100 * r.get("champion_b", {}).get(team, float("nan")) for r in posts]
         if any(v == v for v in ys_b):  # at least one non-nan
-            ax1.plot([r["match"] for r in posts], ys_b,
-                     color=col, lw=1.6, ls="--", alpha=0.7)
+            ax1.plot(xb, ys_b, color=col, lw=1.6, ls="--", alpha=0.7)
         # Market (Polymarket de-vigged, orange dotted), when available
         ys_m = [100 * r.get("market_champion", {}).get(team, float("nan")) for r in posts]
         if any(v == v for v in ys_m):
-            ax1.plot([r["match"] for r in posts], ys_m,
-                     color="#E87020", lw=1.4, ls=":", alpha=0.8,
-                     label="Market" if team == "Spain" else None)
+            ax1.plot(xb, ys_m, color="#E87020", lw=1.4, ls=":", alpha=0.8)
     ax1.axvspan(0, min(GROUP_END, xmax), color="0.93", zorder=0)
-    ax1.set_xlabel("Matches played")
+    ax1.set_xlabel("Matches played (in issue order)")
     ax1.set_ylabel("P(champion), %")
     ax1.set_xlim(0, xmax)
     ax1.set_ylim(0, max(35, 5 + max(100 * base.get(t, 0) for t in TEAM_COLORS)))
-    ax1.legend(ncol=3, frameon=False, loc="upper right", fontsize=10)
+    # Two legends: team colours, and a separate line-style key so every series
+    # (Track A / Track B / Market / Frozen) is explained.
+    team_handles = [Line2D([0], [0], color=c, lw=2.2, label=t)
+                    for t, c in TEAM_COLORS.items()]
+    style_handles = [
+        Line2D([0], [0], color="0.35", lw=2.2, ls="-", marker="o", ms=4,
+               label="Track A (results)"),
+        Line2D([0], [0], color="0.35", lw=1.6, ls="--", label="Track B (+Elo/odds)"),
+        Line2D([0], [0], color="#E87020", lw=1.4, ls=":", label="Market"),
+        Line2D([0], [0], color="0.5", lw=0, marker="o", ms=6, label="Frozen (baseline)"),
+    ]
+    leg_teams = ax1.legend(handles=team_handles, ncol=3, frameon=False,
+                           loc="upper right", fontsize=9)
+    ax1.add_artist(leg_teams)
+    ax1.legend(handles=style_handles, ncol=1, frameon=False,
+               loc="upper left", fontsize=9)
     for s in ("top", "right"):
         ax1.spines[s].set_visible(False)
 
-    bx = [r["match"] for r in posts]
     by = [r["info_bits"] for r in posts]
-    ax2.bar(bx, by, width=0.6, color="#E69500", linewidth=0)
+    ax2.bar(xb, by, width=0.6, color="#E69500", linewidth=0)
     ax2.axvspan(0, min(GROUP_END, xmax), color="0.93", zorder=0)
-    ax2.set_xlabel("Matches played")
+    ax2.set_xlabel("Matches played (in issue order)")
     ax2.set_ylabel("Info gained\n(bits)")
     ax2.set_xlim(0, xmax)
     ax2.set_ylim(0, max(0.05, max(by) * 1.3 if by else 0.05))

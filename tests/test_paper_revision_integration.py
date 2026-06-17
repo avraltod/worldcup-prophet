@@ -130,9 +130,11 @@ def test_rerender_through_all_documented_matches(tmp_path, monkeypatch):
     rev = (live / "revision_report.tex").read_text()
     assert "M000" in rev  # vintages always starts with M000
 
-    # market_snap: label always present regardless of whether market data exists
+    # market_snap: the snapshot table is folded into the headline champ table;
+    # only the consolidated figure (label always present) remains here.
     ms = (live / "market_snap.tex").read_text()
-    assert r"\label{tab:live_market_snap}" in ms
+    assert r"\label{tab:live_market_snap}" not in ms
+    assert r"\label{fig:live_market}" in ms
 
     # No old track terminology in text units (Lock as track name, "learning track")
     text_units = ["abstract_live", "intro_data_note", "sec36_live",
@@ -170,8 +172,14 @@ def test_revision_with_box_score_runs_the_two_track(tmp_path, monkeypatch):
     assert state["drift"]                          # the update actually moved ratings
 
     two = (paper / "live" / "two_track.tex").read_text()
-    assert "Frozen" in two and "Track~B" in two and "Drift" in two
+    # two_track is now narrative + Figure 12, pointing to Table 3 and Table 6
+    assert "Track~B" in two
+    assert r"Table~\ref{tab:champ}" in two and r"Table~\ref{tab:live_divergence}" in two
+    assert "tabular" not in two                    # no embedded tables anymore
+    # the Elo drift table is folded into the divergence table (Table 6)
+    div = (paper / "live" / "divergence.tex").read_text()
+    assert "Drift (Elo)" in div
     rr = (paper / "live" / "revision_report.tex").read_text()
     assert "Shots" in rr                           # cumulative match stats table rendered
     assert r"\label{tab:live_match_stats}" in rr   # Table 7 label present
-    assert "Implications" in rr                    # remaining-fixture odds present
+    assert "Implications" in rr                    # remaining-fixture odds (Panel B) present

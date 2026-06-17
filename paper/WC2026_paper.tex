@@ -182,20 +182,8 @@ These measures are not new, and the contribution here is their application to a 
 Table~\ref{tab:champ} reports champion, finalist, and semi-finalist probabilities; once the tournament is under way, each live edition of this paper re-states the table conditioned on the results revealed so far, beside the locked baseline column. At the lock, Spain is the modal champion at 27.4\%, ahead of Argentina at 18.6\% and France at 14.8\%, and the predicted Spain--Argentina final is the single most likely pairing at 10.8\% of simulations.\footnote{This is the original locked forecast. Two later numbers in the paper differ by about a percentage point: the pre-deadline Group~K recalibration of Section~\ref{sec:postscript} revises Spain to 26.8\%, and Monte Carlo variation across runs is about 0.5~pp (Section~\ref{sec:robust}). I report the original 27.4\% as the headline and the recalibrated 26.8\% wherever the recalibrated model is the explicit subject; the two are the same forecast before and after that single localized update.} The forecast is consistent with the outright betting market, which priced Spain as favorite at decimal odds near 5.5.
 
 \input{live/champ_table}
-\input{live/champdist_live}
 
-\begin{figure}[!t]
-  \caption{Champion probability distribution}\label{fig:champdist}
-  \begin{threeparttable}
-    {\centering
-      \includegraphics[width=0.92\textwidth]{figs/fig_champion_dist.pdf}\par}
-    \begin{tablenotes}\notesize
-      \item \textit{Notes}: Champion probability across 200{,}000 simulated tournaments. Spain (blue) is the modal champion yet fails to win in 72.6\% of simulations; Portugal (orange) is discussed in Section~\ref{sec:portugal}. The 36 teams outside the top twelve jointly retain a 9.7\% champion share.
-    \end{tablenotes}
-  \end{threeparttable}
-\end{figure}
-
-The distribution in Figure~\ref{fig:champdist} is heavy-tailed in a way the headline forecast obscures, because the modal champion is more likely wrong than right, and nearly a tenth of the probability mass sits outside the twelve named contenders. This is a property of tournament football and not of the model, because knockout formats convert small per-match upset probabilities into large aggregate ones.
+The champion distribution (Figure~\ref{fig:live_market}, \emph{Frozen} bars) is heavy-tailed in a way the headline forecast obscures, because the modal champion is more likely wrong than right --- Spain fails to win 72.6\% of simulations --- and nearly a tenth of the probability mass sits outside the twelve named contenders. This is a property of tournament football and not of the model, because knockout formats convert small per-match upset probabilities into large aggregate ones. Portugal is discussed in Section~\ref{sec:portugal}.
 
 \subsection{Simulation-driven bracket revisions}
 
@@ -290,20 +278,9 @@ frozen column never changes, so successive versions are directly comparable).}
 
 The forecast does not revise in a vacuum, because a liquid prediction market revises its own champion odds on the same results, and the market is the natural benchmark for whether the model's revisions are sound. Alongside each conditional update I record the market's champion distribution from Polymarket, normalized to remove the small overround, so the live study produces two probability-revision trajectories rather than one. The comparison is informative precisely because the model and the market are built from different information. The group-stage probabilities of this model are recovered from match odds, so on the group stage the two should agree, but the model's knockout tier is Elo while the market aggregates the views of traders, so any disagreement in the champion odds comes from how the two treat the knockout stage.
 
-At the baseline the two disagree in a specific and interpretable way (Figure~\ref{fig:marketbase}). The model places Spain at 26.9 percent against the market's 15.6 percent and Argentina at 17.9 against 8.6 percent, and it places less weight than the market on England, Brazil, and Germany. The model's champion distribution is therefore more concentrated on the top two teams than the market's, because the Elo win-expectancy of Section~\ref{sec:elo} lets a strong team march through a six-match knockout path with compounding probability, while the market prices in more of the squad-rotation, injury, and single-match variance that can end such a run. This is consistent with the literature in which betting markets are hard to beat \citep{strumbelj2014, hvattum2010} and bookmaker-consensus methods are the standard tournament benchmark \citep{zeileis2018}, and it locates the model's distinctive claim cleanly: the model is a bet that the two strongest teams convert their strength into a title more reliably than the market expects.
+At the baseline the two disagree in a specific and interpretable way (Figure~\ref{fig:live_market}, the \emph{Frozen} and \emph{Market} bars). The model places Spain at 26.9 percent against the market's 15.6 percent and Argentina at 17.9 against 8.6 percent, and it places less weight than the market on England, Brazil, and Germany. The model's champion distribution is therefore more concentrated on the top two teams than the market's, because the Elo win-expectancy of Section~\ref{sec:elo} lets a strong team march through a six-match knockout path with compounding probability, while the market prices in more of the squad-rotation, injury, and single-match variance that can end such a run. This is consistent with the literature in which betting markets are hard to beat \citep{strumbelj2014, hvattum2010} and bookmaker-consensus methods are the standard tournament benchmark \citep{zeileis2018}, and it locates the model's distinctive claim cleanly: the model is a bet that the two strongest teams convert their strength into a title more reliably than the market expects.
 
 I do not resolve this disagreement here, because the tournament resolves it. I pre-register two questions for the live study. First, whether the two trajectories converge as results arrive, and which one moves toward the other, since convergence of the market toward the model would suggest the model's early concentration was justified, while the reverse would suggest it was overconfidence. Second, whether the model or the market revises first at the moment of a major elimination, measured by which trajectory shows the larger one-match move when a likely champion falls. Both trajectories are recorded after every match, and Figure~\ref{fig:trajectory} will carry the market line beside the model line in the final version.
-
-\begin{figure}[!t]
-  \caption{Model and market champion odds at baseline}\label{fig:marketbase}
-  \begin{threeparttable}
-    {\centering
-      \includegraphics[width=0.72\textwidth]{figs/fig_market_baseline.pdf}\par}
-    \begin{tablenotes}\notesize
-      \item \textit{Notes}: Model and market champion odds at the baseline, before any match is played. The model (blue) is more concentrated on Spain and Argentina, while the market (orange) spreads more probability to England, Brazil, and Germany. The disagreement comes entirely from the knockout stage, because the model's group-stage probabilities are themselves recovered from market odds.
-    \end{tablenotes}
-  \end{threeparttable}
-\end{figure}
 
 \input{live/market_snap}
 
@@ -553,7 +530,7 @@ One caveat qualifies the Portugal call. The pivotal Colombia--Portugal fixture i
 A forecast built for a betting pool should state plainly how it expects to fail. I list six failure modes, ordered roughly by expected damage.
 
 \begin{enumerate}
-\item \textbf{The champion call fails (72.6\%).} Spain is the single best pick and still loses most simulated tournaments (Figure~\ref{fig:champdist}). The forecast's defense is that pool points accrue per match: the 72 group scorelines are immune to bracket failure, and they constitute 69\% of scoring opportunities.
+\item \textbf{The champion call fails (72.6\%).} Spain is the single best pick and still loses most simulated tournaments (Figure~\ref{fig:live_market}). The forecast's defense is that pool points accrue per match: the 72 group scorelines are immune to bracket failure, and they constitute 69\% of scoring opportunities.
 \item \textbf{Bracket decay is the norm, not the exception.} The 31 predicted knockout matchups materialize in 2.2--43.9\% of simulations (median 10.4\%). Errors compound multiplicatively down the bracket; the predicted final occurs in 10.8\% of simulations even though it is the most likely one. Late-round predictions are therefore lottery tickets with favorable odds, not expectations.
 \item \textbf{A single group upset cascades.} Bracket cells are correlated through the routing graph: if Germany fails to win Group E (it tops the group in roughly half of simulations), at least three knockout entries are invalidated simultaneously. The slot-emergence optimization mitigates but cannot eliminate this correlation.
 \item \textbf{Matchday-3 rotation breaks the Elo tier.} A third of group fixtures rest on Elo estimates, concentrated on matchday 3, which is exactly where already-qualified teams rest starters. Elo cannot see rotation, and the market can, but its lines were not yet published at submission. Section~\ref{sec:rotation} identifies this as the model's largest source of error but finds that the status-based correction does not generalize across tournaments; the Colombia--Portugal call (Section~\ref{sec:portugal}) is the highest-stakes exposure.

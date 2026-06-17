@@ -110,13 +110,16 @@ def trajfig_unit(entries, live_fig):
     return rev.trajfig(entries, live_fig)
 
 
-def champ_table_unit(frozen, now, n_results, champion_b=None):
-    return rev.champ_table(frozen, now, n_results, champion_b=champion_b)
+def champ_table_unit(frozen, now, n_results, champion_b=None, market=None):
+    return rev.champ_table(frozen, now, n_results, champion_b=champion_b,
+                           market=market)
 
 
-def divergence_unit(frozen, now, entries, group_state, champion_b=None, now_b=None):
+def divergence_unit(frozen, now, entries, group_state, champion_b=None,
+                    now_b=None, drift=None):
     played = [g for g in group_state if g["played"]]
-    return rev.divergence_section(frozen, now, entries, played, champion_b=champion_b, now_b=now_b)
+    return rev.divergence_section(frozen, now, entries, played,
+                                  champion_b=champion_b, now_b=now_b, drift=drift)
 
 
 # ---- new units ----
@@ -286,40 +289,16 @@ def group_box(g_state, results, expectations, frozen, now, now_b=None, track_b=N
 
 def two_track_unit(two_track, learning, fig, info_snapshot=None, track_a=None,
                    champion_b=None, frozen_stages=None):
-    """The live A-vs-B: Frozen / Track A / Track B champion odds and Elo drift.
-    track_a: dict of {team: {champion: prob, ...}} (Track A / now_probs).
-    champion_b: dict of {team: prob} from champion_b post record (preferred Track B source).
-    frozen_stages: dict of {team: {champion: prob, ...}} from frozen_stage_probs (preferred Frozen source).
-    info_snapshot: no longer used here (provenance moved to data_revealed)."""
+    """The live A-vs-B narrative + the two-track champion-path figure
+    (Figure~\\ref{fig:twotracklive}). The champion-odds table that used to sit
+    here is a strict subset of the headline Table~\\ref{tab:champ}, so it is
+    dropped; the learning-track Elo drift is folded into the divergence table
+    (Table~\\ref{tab:live_divergence}). track_a / champion_b / frozen_stages /
+    info_snapshot are accepted for caller compatibility but no longer rendered
+    here."""
     if two_track is None:
         return ("\\textit{Two-track live results begin with the first match "
                 "whose box score is collected.}")
-    # Use frozen_stages (200k-sim baseline) when available; fall back to two_track['frozen']
-    frozen_src = {t: d["champion"] for t, d in frozen_stages.items()} if frozen_stages else two_track["frozen"]
-    teams = sorted(frozen_src, key=lambda t: -frozen_src.get(t, 0.0))[:8]
-    if track_a is not None:
-        # Track B: prefer champion_b (consistent with Table 3); fall back to two_track['learning']
-        b_src = champion_b if champion_b else two_track["learning"]
-        rows = "\n".join(
-            f"{t} & {_pct(frozen_src.get(t, 0.0))} & "
-            f"{_pct(track_a.get(t, {}).get('champion', 0.0))} & "
-            f"{_pct(b_src.get(t, 0.0))} & "
-            f"{100*(track_a.get(t, {}).get('champion', 0.0) - frozen_src.get(t, 0.0)):+.1f} \\\\"
-            for t in teams)
-        header = ("Team & Frozen (\\%) & Track~A (\\%) & Track~B (\\%) & "
-                  "$\\Delta$ (A$-$Frozen, pp) \\\\\n\\midrule\n")
-        col_spec = "lrrrr"
-    else:
-        b_src = champion_b if champion_b else two_track["learning"]
-        rows = "\n".join(
-            f"{t} & {_pct(frozen_src.get(t, 0.0))} & "
-            f"{_pct(b_src.get(t, 0.0))} & "
-            f"{100*(b_src.get(t, 0.0) - frozen_src.get(t, 0.0)):+.1f} \\\\"
-            for t in teams)
-        header = "Team & Frozen (\\%) & Track~B (\\%) & $\\Delta$ (pp) \\\\\n\\midrule\n"
-        col_spec = "lrrr"
-    drifts = sorted(learning["drift"].items(), key=lambda kv: -abs(kv[1]))[:8]
-    drift_rows = "\n".join(f"{t} & {d:+.1f} \\\\" for t, d in drifts)
     pend = (f" Stats pending for matches: "
             f"{', '.join(f'M{m:03d}' for m in learning['pending'])}."
             if learning["pending"] else "")
@@ -337,16 +316,11 @@ def two_track_unit(two_track, learning, fig, info_snapshot=None, track_a=None,
           f"($\\lambda_{{\\mathrm{{obs}}}}$, Appendix~D.2) updates Track~B's "
           f"ratings (k=50, locked), while Track~A re-conditions "
           f"on results alone. {n} match(es) processed so far.{pend}\n\n"
-        + fig_block
-        + "\\begin{footnotesize}\n"
-          f"\\begin{{tabular}}{{{col_spec}}}\n\\toprule\n"
-        + header
-        + rows
-        + "\n\\bottomrule\n\\end{tabular}\\qquad\n"
-          "\\begin{tabular}{lr}\n\\toprule\nTeam & Drift (Elo) \\\\\n\\midrule\n"
-        + drift_rows
-        + "\n\\bottomrule\n\\end{tabular}\n\\end{footnotesize}"
-    )
+          "The three champion tracks are tabulated in "
+          "Table~\\ref{tab:champ} (Frozen / Track~A / Track~B / Market); the "
+          "learning-track Elo drift that distinguishes Track~B is folded into "
+          "the divergence table, Table~\\ref{tab:live_divergence}.\n\n"
+        + fig_block)
 
 
 def _stats_release(match, match_stats, learning):
@@ -381,56 +355,112 @@ def _stats_release(match, match_stats, learning):
             + "\n\\end{table}")
 
 
-def _cumulative_stats_table(entries, match_stats, expectations):
-    """Table 7: one row per played match, grows with each edition.
-    Columns: Game | Shots H–A | On target H–A | Poss H–A | Frozen H/D/A | Track B H/D/A.
-    Track B H/D/A is stored in entry['pre']['probs_HDA_b'] at documentation time
-    (pre-match learn_ratings); '--' for entries documented before this feature."""
+def _pad2(v):
+    """Two-digit zero-padded integer for column alignment (7 -> 07, 16 -> 16).
+    Shots and shots-on-target are whole counts. '--' passes through unchanged."""
+    return f"{int(round(v)):02d}" if isinstance(v, (int, float)) else str(v)
+
+
+def _ppct(x):
+    """Zero-padded percent, integer part to two digits (0.061 -> 06.1, 0.672 ->
+    67.2), so the H/D/A triples line up under one another."""
+    return f"{100 * x:04.1f}"
+
+
+def _cumulative_stats_table(entries, match_stats, expectations, issue_order=None,
+                            implications=None):
+    """Table 7: a two-panel table. Panel A is one row per played match, grows
+    with each edition, ordered by true issue order (GXXX, the order the model
+    conditioned on results) not by schedule number (MXXX); the Game column shows
+    both. Panel B (when ``implications`` is given) folds in the upcoming-fixture
+    implications that used to be a separate unnumbered table.
+    Panel A columns: Game | Shots H–A | On target H–A | Poss H–A | Frozen H/D/A |
+    Track B H/D/A. Track B H/D/A is stored in entry['pre']['probs_HDA_b'] at
+    documentation time (pre-match learn_ratings); '--' before that feature."""
     rows = []
     exp_by_match = {e["match"]: e for e in expectations}
     has_b = any(e.get("pre", {}).get("probs_HDA_b") for e in entries)
-    for e in sorted(entries, key=lambda x: x["match"]):
+    if issue_order:
+        gidx = {m: i + 1 for i, m in enumerate(issue_order)}   # 1-based G index
+        ordered = sorted(entries, key=lambda e: gidx.get(e["match"], 10 ** 6))
+    else:
+        gidx = {}
+        ordered = list(entries)
+    for pos, e in enumerate(ordered, start=1):
         m = e["match"]
         s = match_stats.get(m)
         if s is None:
             continue
-        sh = s["home"].get("total_shots", "--")
-        sa = s["away"].get("total_shots", "--")
-        oh = s["home"].get("sot", "--")
-        oa = s["away"].get("sot", "--")
+        g = gidx.get(m, pos)            # true issue position (matches Table 8)
+        sh = _pad2(s["home"].get("total_shots", "--"))
+        sa = _pad2(s["away"].get("total_shots", "--"))
+        oh = _pad2(s["home"].get("sot", "--"))
+        oa = _pad2(s["away"].get("sot", "--"))
         ph = s["home"].get("possession")
         pa = s["away"].get("possession")
-        poss = f"{ph:.0f}--{pa:.0f}" if ph is not None and pa is not None else "--"
+        poss = f"{ph:02.0f}--{pa:02.0f}" if ph is not None and pa is not None else "--"
         exp = exp_by_match.get(m)
-        hda = "/".join(_pct(p) for p in exp["probs_HDA"]) if exp else "--"
+        hda = "/".join(_ppct(p) for p in exp["probs_HDA"]) if exp else "--"
         hda_b_raw = e.get("pre", {}).get("probs_HDA_b")
-        hda_b = "/".join(_pct(p) for p in hda_b_raw) if hda_b_raw else "--"
+        hda_b = "/".join(_ppct(p) for p in hda_b_raw) if hda_b_raw else "--"
+        game = f"G{g:02d} M{m:02d} {e['fixture']}"
         if has_b:
             rows.append(
-                f"M{m} {e['fixture']} & {sh}--{sa} & {oh}--{oa} & {poss} & {hda} & {hda_b} \\\\"
+                f"{game} & {sh}--{sa} & {oh}--{oa} & {poss} & {hda} & {hda_b} \\\\"
             )
         else:
             rows.append(
-                f"M{m} {e['fixture']} & {sh}--{sa} & {oh}--{oa} & {poss} & {hda} \\\\"
+                f"{game} & {sh}--{sa} & {oh}--{oa} & {poss} & {hda} \\\\"
             )
-    if not rows:
+    if not rows and not implications:
         return r"\textit{Match statistics pending.}"
-    if has_b:
-        col_spec = "lccccc"
-        header = ("Game & Shots (H--A) & On target (H--A) & Poss\\% (H--A) & "
-                  "Frozen H/D/A & Track~B H/D/A \\\\\n")
+    # Panel A: cumulative match statistics
+    if rows:
+        if has_b:
+            col_spec = "lccccc"
+            header = ("Game & Shots (H--A) & On target (H--A) & Poss\\% (H--A) & "
+                      "Frozen H/D/A & Track~B H/D/A \\\\\n")
+        else:
+            col_spec = "lcccc"
+            header = ("Game & Shots (H--A) & On target (H--A) & Poss\\% (H--A) & "
+                      "Frozen H/D/A \\\\\n")
+        panel_a = (
+            "\\textit{Panel A. Cumulative match statistics "
+            "(played matches, in issue order).}\\\\[3pt]\n"
+            f"\\begin{{tabular}}{{{col_spec}}}\\toprule\n"
+            + header + "\\midrule\n"
+            + "\n".join(rows) + "\n"
+            "\\bottomrule\\end{tabular}"
+        )
     else:
-        col_spec = "lcccc"
-        header = "Game & Shots (H--A) & On target (H--A) & Poss\\% (H--A) & Frozen H/D/A \\\\\n"
+        panel_a = "\\textit{Panel A. Match statistics pending.}"
+    # Panel B: implications for upcoming fixtures (folded in from the old table)
+    panel_b = ""
+    if implications:
+        imp_lines = "\n".join(
+            f"{i['fixture']} & {'/'.join(_ppct(p) for p in i['lock_HDA'])} & "
+            f"{'/'.join(_ppct(p) for p in i['learn_HDA'])} \\\\"
+            for i in implications)
+        panel_b = (
+            "\n\n\\medskip\n"
+            "\\textit{Panel B. Implications for upcoming fixtures.} Frozen odds "
+            "are the pre-kickoff baseline (they move only through qualification "
+            "scenarios); Track~B odds incorporate live Elo and bookmaker "
+            "signals.\\\\[3pt]\n"
+            "\\begin{tabular}{p{0.40\\textwidth}p{0.22\\textwidth}"
+            "p{0.22\\textwidth}}\\toprule\n"
+            "Fixture & Frozen H/D/A (\\%) & Track~B H/D/A (\\%) \\\\\n\\midrule\n"
+            + imp_lines + "\n\\bottomrule\\end{tabular}"
+        )
+    caption = ("Cumulative match statistics and upcoming-fixture implications"
+               if implications else "Cumulative match statistics")
     return (
         "\\begin{table}[!h]\\centering\n"
-        "\\caption{Cumulative match statistics (live edition "
+        f"\\caption{{{caption} (live edition "
         "M\\liveEditionNum{})}\\label{tab:live_match_stats}\n"
-        f"\\begin{{footnotesize}}\\begin{{tabular}}{{{col_spec}}}\\toprule\n"
-        + header
-        + "\\midrule\n"
-        + "\n".join(rows) + "\n"
-        "\\bottomrule\\end{tabular}\\end{footnotesize}\n\\end{table}"
+        "\\begin{footnotesize}\n"
+        + panel_a + panel_b + "\n"
+        "\\end{footnotesize}\n\\end{table}"
     )
 
 
@@ -478,18 +508,6 @@ def revision_report(ctx):
         delta_ba = ("; ".join(deltas_ba) if deltas_ba
                     else "no contender diverged by 0.1 pp or more between tracks")
         b_vs_a_line = f"\n\nTrack~B vs.\\ Track~A: {delta_ba}."
-    imp_lines = "\n".join(
-        f"{i['fixture']} & {'/'.join(_pct(p) for p in i['lock_HDA'])} & "
-        f"{'/'.join(_pct(p) for p in i['learn_HDA'])} \\\\"
-        for i in ctx["implications"])
-    imp_block = ("" if not ctx["implications"] else
-        "\\paragraph{Implications for upcoming fixtures.} Frozen odds are the "
-        "pre-kickoff baseline (they move only through qualification scenarios); "
-        "Track~B odds incorporate live Elo and bookmaker signals.\n\n"
-        "\\begin{center}\\begin{footnotesize}\\begin{tabular}"
-        "{p{0.40\\textwidth}p{0.22\\textwidth}p{0.22\\textwidth}}\\toprule\n"
-        "Fixture & Frozen H/D/A (\\%) & Track~B H/D/A (\\%) \\\\\n\\midrule\n"
-        + imp_lines + "\n\\bottomrule\\end{tabular}\\end{footnotesize}\\end{center}\n\n")
     return (
         f"\\subsection{{Revision report: edition M{m:03d}}}\\label{{sec:revreport}}\n"
         f"\\paragraph{{The data release.}} Match {latest['match']}, "
@@ -499,15 +517,17 @@ def revision_report(ctx):
         f"{latest['post']['brier']:.3f}, {latest['post']['info_bits']:.3f} bits.\n\n"
         + _cumulative_stats_table(
             ctx["entries"], ctx["match_stats"],
-            ctx.get("expectations", [])) + "\n\n"
+            ctx.get("expectations", []),
+            issue_order=ctx.get("issue_order"),
+            implications=ctx.get("implications")) + "\n\n"
         f"\\paragraph{{Forecast revision: marginal effect of this result.}} "
         f"Champion-probability movement attributable to match {latest['match']}'s "
         f"result (this edition vs.\\ the same forecast without it): {delta_line}.\n\n"
         f"Track~A vs.\\ Frozen: {delta_af}.{b_vs_a_line}\n\n"
-        + imp_block +
-        "\\paragraph{Forecast vintages.} One column per issued edition; the "
-        "locked M000 column never changes.\n\n"
-        + vin.latex_table(ctx["vintages_rows"]))
+        "\\paragraph{Forecast vintages.} Track~B champion probabilities, one row "
+        "per issued edition, in issue order; the locked M000 (Frozen baseline) "
+        "row never changes.\n\n"
+        + vin.latex_table(ctx["vintages_rows"], issue_order=ctx.get("issue_order")))
 
 
 # ---- new units (design spec 2026-06-13) ----
@@ -553,21 +573,6 @@ def failure_analysis_unit(ctx, use_api=False):
 def discussion_live_unit(ctx, use_api=False):
     text, _ = _ds.draft_discussion_live(ctx, use_api)
     return text
-
-
-def champdist_live_unit(ctx):
-    """Figure block: live champion probability distribution."""
-    return (
-        "\\begin{figure}[!t]\n"
-        "  \\caption{Champion probability distribution, conditioned on "
-        "\\liveDocumented{} results (live edition M\\liveEditionNum{})}"
-        "\\label{fig:live_champdist}\n"
-        "  {\\centering\\includegraphics[width=0.94\\textwidth]"
-        "{figs/fig_live_champdist.pdf}\\par}\n"
-        "  \\small\\textit{Note:} The frozen baseline (Figure~\\ref{fig:champdist}) "
-        "is unchanged; this figure conditions on all played results.\n"
-        "\\end{figure}"
-    )
 
 
 def groupqual_live_unit(ctx):
@@ -769,50 +774,49 @@ def survival_colcomp_unit(ctx):
 
 
 def market_snap_unit(ctx):
-    """§4.7 live market snapshot table + status paragraph.
-    Requires ctx['market'] (dict team→prob) and ctx['champion_b'] (dict team→prob)."""
-    now = ctx.get("now", {})
-    frozen = ctx.get("frozen", {})
-    champion_b = ctx.get("champion_b", {})
+    """§4.7 live model-vs-market status paragraph + the consolidated champion
+    figure. The former champion-probability snapshot table is removed: its
+    Frozen/Track~A/Track~B/Market/Δ columns are folded into the headline
+    Table~\\ref{tab:champ} (champ_table), so only the figure carries the market
+    here. Requires ctx['market'] and ctx['champion_b']."""
     market = ctx.get("market")
-    teams = sorted(now, key=lambda t: -now[t].get("champion", 0))[:8]
-    rows = []
-    for t in teams:
-        frz_pct = _pct(frozen.get(t, {}).get("champion", 0))
-        a_pct = _pct(now[t].get("champion", 0))
-        b_pct = _pct(champion_b.get(t, 0)) if champion_b else "---"
-        mkt_pct = _pct(market[t]) if market and t in market else "---"
-        delta = (f"{100*(now[t].get('champion', 0) - frozen.get(t, {}).get('champion', now[t].get('champion', 0))):+.1f}"
-                 if t in frozen else "---")
-        rows.append(f"{t} & {frz_pct} & {a_pct} & {b_pct} & {mkt_pct} & {delta} \\\\")
-    table = (
-        "\\begin{table}[!h]\\centering\n"
-        "\\caption{Live champion-probability snapshot (live edition "
-        "M\\liveEditionNum{})}\\label{tab:live_market_snap}\n"
-        "\\begin{footnotesize}\\begin{tabular}{lrrrrr}\\toprule\n"
-        "Team & Frozen (\\%) & Track~A (\\%) & Track~B (\\%) & "
-        "Market (\\%) & $\\Delta$ (A$-$Frozen) \\\\\n\\midrule\n"
-        + "\n".join(rows) + "\n"
-        "\\bottomrule\\end{tabular}\\end{footnotesize}\\end{table}"
-    )
     if market:
         status = (
             "Market and Track~A rank orderings broadly agree at this edition; "
             "divergence tracking (who-moves-first) continues through knockout stages."
         )
-        fig_block = (
-            "\n\n"
-            "\\begin{figure}[!t]\n"
-            "  \\caption{Four-bar champion probability: Frozen / Track~A / Track~B / Market, "
-            "top contenders (live edition M\\liveEditionNum{})}\\label{fig:live_market}\n"
-            "  {\\centering\\includegraphics[width=0.94\\textwidth]"
-            "{figs/fig_live_market.pdf}\\par}\n"
-            "\\end{figure}"
+        market_note = (
+            "\\emph{Market} is the live Polymarket champion distribution, "
+            "normalized to remove the overround. "
         )
     else:
         status = "Market-probability data are not yet available for this edition."
-        fig_block = ""
-    return table + "\n\n" + status + fig_block
+        market_note = (
+            "\\emph{Market} bars are omitted until Polymarket data are available "
+            "for this edition. "
+        )
+    # The figure (and its label) is emitted in every edition so the baseline
+    # references to Figure~\\ref{fig:live_market} always resolve, even before any
+    # market data arrive.
+    fig_block = (
+        "\n\n"
+        "\\begin{figure}[!t]\n"
+        "  \\caption{Champion probability, four ways: Frozen / Track~A / "
+        "Track~B / Market, top twelve teams "
+        "(live edition M\\liveEditionNum{})}\\label{fig:live_market}\n"
+        "  {\\centering\\includegraphics[width=0.94\\textwidth]"
+        "{figs/fig_live_market.pdf}\\par}\n"
+        "  \\small\\textit{Note:} The single champion-probability instrument "
+        "for the live edition. \\emph{Frozen} is the locked pre-kickoff "
+        "200{,}000-simulation baseline (unchanged all tournament, the modal "
+        "champion still fails to win most simulations); \\emph{Track~A} and "
+        "\\emph{Track~B} condition on the results revealed so far; "
+        + market_note +
+        "Bars are ordered by Track~A; the 200k baseline keeps roughly a tenth "
+        "of its mass outside the twelve named teams.\n"
+        "\\end{figure}"
+    )
+    return status + fig_block
 
 
 def _abbrev_team(t, n=14):

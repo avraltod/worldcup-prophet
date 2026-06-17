@@ -30,11 +30,23 @@ def test_two_track_fig(tmp_path):
     assert out.exists() and out.stat().st_size > 0
 
 
-def test_champdist_fig_creates_file(tmp_path):
-    frozen = {"Spain": {"champion": 0.269}, "Argentina": {"champion": 0.179},
-              "France": {"champion": 0.143}}
-    now = {"Spain": {"champion": 0.270}, "Argentina": {"champion": 0.180},
-           "France": {"champion": 0.142}}
-    out = tmp_path / "fig_live_champdist.pdf"
-    mlf.champdist_fig(frozen, now, str(out))
-    assert out.exists()
+def test_market_fig_creates_file_with_many_teams(tmp_path):
+    # 14 teams: market_fig caps at the top 12 by Track A without erroring.
+    names = ["Spain", "Argentina", "France", "Portugal", "England", "Brazil",
+             "Netherlands", "Germany", "Norway", "Ecuador", "Croatia",
+             "Colombia", "Belgium", "Uruguay"]
+    track_a = {t: {"champion": 0.27 - 0.018 * i} for i, t in enumerate(names)}
+    frozen = {t: {"champion": 0.27 - 0.018 * i} for i, t in enumerate(names)}
+    track_b = {t: 0.26 - 0.018 * i for i, t in enumerate(names)}
+    market = {t: 0.16 - 0.010 * i for i, t in enumerate(names)}
+    out = tmp_path / "fig_live_market.pdf"
+    mlf.market_fig(frozen, track_a, track_b, market, str(out))
+    assert out.exists() and out.stat().st_size > 0
+
+
+def test_market_fig_handles_missing_track_b_and_market(tmp_path):
+    track_a = {"Spain": {"champion": 0.27}, "France": {"champion": 0.14}}
+    frozen = {"Spain": {"champion": 0.27}, "France": {"champion": 0.14}}
+    out = tmp_path / "fig_live_market.pdf"
+    mlf.market_fig(frozen, track_a, None, {}, str(out))
+    assert out.exists() and out.stat().st_size > 0

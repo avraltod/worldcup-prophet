@@ -68,26 +68,40 @@ def _delta(a, b):
     return f"$+{d:.1f}$" if d >= 0.05 else (f"$-{abs(d):.1f}$" if d <= -0.05 else "0.0")
 
 
-def divergence_section(frozen, now, entries, group_state, champion_b=None, now_b=None):
+def divergence_section(frozen, now, entries, group_state, champion_b=None,
+                       now_b=None, drift=None):
     """Frozen-vs-conditional stage probabilities and revealed group state.
     frozen/now: {team: {advance_KO, R16, QF, SF, final, champion}};
     group_state: [{group, played, total, rows: [{team, P, W, D, L, GF, GA, Pts}]}];
     champion_b: {team: float} Track B champion probability (optional).
-    now_b: {team: {advance_KO, ...}} Track B full stage probs (optional). Pure."""
+    now_b: {team: {advance_KO, ...}} Track B full stage probs (optional).
+    drift: {team: Elo drift} (optional); when given, the learning-track Elo drift
+    is folded in as a final column (absorbing the former standalone drift table),
+    and the largest drifters are added as rows so none are hidden. Pure."""
     if not entries:
         return r"\textit{No matches revealed yet; the conditional forecast equals the baseline.}"
     n_results = len(entries)
     bits = sum(e["post"]["info_bits"] for e in entries)
 
+    drift = drift or {}
+    has_drift = bool(drift)
     top = sorted(frozen, key=lambda t: -frozen[t]["champion"])[:10]
     movers = [t for t in now
               if t in frozen
               and (abs(now[t]["advance_KO"] - frozen[t]["advance_KO"]) >= 0.03
                    or abs(now[t]["champion"] - frozen[t]["champion"]) >= 0.005)]
+    # the largest learning-track drifters, so the folded-in Drift column never
+    # hides a big drift that isn't also a champion/advance mover
+    drift_teams = [t for t in sorted(drift, key=lambda t: -abs(drift[t]))[:8]
+                   if t in frozen]
     # tiebreak on the name: equal champion probs (e.g. two teams at 0 in the
     # MC sample) must not inherit set-iteration order, which varies per process
-    teams = sorted(set(top) | set(movers),
+    teams = sorted(set(top) | set(movers) | set(drift_teams),
                    key=lambda t: (-now.get(t, frozen[t])["champion"], t))
+
+    def _drift_cell(t):
+        d = drift.get(t, 0.0)
+        return f"${d:+.1f}$" if abs(d) >= 0.05 else "---"
 
     has_b_champ = bool(champion_b)
     has_b_adv = bool(now_b)
@@ -98,29 +112,45 @@ def divergence_section(frozen, now, entries, group_state, champion_b=None, now_b
         if has_b_champ:
             b_champ = champion_b.get(t)
             b_champ_str = _pct(b_champ) if b_champ is not None else "---"
+            # Champion Δ is Track B − Frozen ("(B$-$F)"); --- if no Track B value
+            champ_delta = (_delta(f["champion"], b_champ)
+                           if b_champ is not None else "---")
+        else:
+            champ_delta = _delta(f["champion"], c["champion"])   # Track A − Frozen
         if has_b_adv and t in now_b:
             b_adv = now_b[t].get("advance_KO", 0.0)
             b_adv_str = _pct(b_adv)
-        elif has_b_champ:
+            adv_delta = _delta(f["advance_KO"], b_adv)           # Track B − Frozen
+        elif has_b_adv:
+            # Track B advance column present but this team is missing from it
             b_adv_str = "---"
-        if has_b_champ and has_b_adv:
-            rows.append(
-                f"{t} & {_pct(f['champion'])} & {_pct(c['champion'])} & {b_champ_str} & "
-                f"{_delta(f['champion'], c['champion'])}"
-                f" & {_pct(f['advance_KO'])} & {_pct(c['advance_KO'])} & {b_adv_str} & "
-                f"{_delta(f['advance_KO'], c['advance_KO'])} \\\\")
-        elif has_b_champ:
-            rows.append(
-                f"{t} & {_pct(f['champion'])} & {_pct(c['champion'])} & {b_champ_str} & "
-                f"{_delta(f['champion'], c['champion'])}"
-                f" & {_pct(f['advance_KO'])} & {_pct(c['advance_KO'])} & "
-                f"{_delta(f['advance_KO'], c['advance_KO'])} \\\\")
+            adv_delta = "---"
         else:
-            rows.append(
-                f"{t} & {_pct(f['champion'])} & {_pct(c['champion'])} & "
-                f"{_delta(f['champion'], c['champion'])}"
+            # No Track B advance column: Δ remains Track A − Frozen
+            if has_b_champ:
+                b_adv_str = "---"
+            adv_delta = _delta(f["advance_KO"], c["advance_KO"])
+        if has_b_champ and has_b_adv:
+            core = (
+                f"{t} & {_pct(f['champion'])} & {_pct(c['champion'])} & {b_champ_str} & "
+                f"{champ_delta}"
+                f" & {_pct(f['advance_KO'])} & {_pct(c['advance_KO'])} & {b_adv_str} & "
+                f"{adv_delta}")
+        elif has_b_champ:
+            core = (
+                f"{t} & {_pct(f['champion'])} & {_pct(c['champion'])} & {b_champ_str} & "
+                f"{champ_delta}"
                 f" & {_pct(f['advance_KO'])} & {_pct(c['advance_KO'])} & "
-                f"{_delta(f['advance_KO'], c['advance_KO'])} \\\\")
+                f"{adv_delta}")
+        else:
+            core = (
+                f"{t} & {_pct(f['champion'])} & {_pct(c['champion'])} & "
+                f"{champ_delta}"
+                f" & {_pct(f['advance_KO'])} & {_pct(c['advance_KO'])} & "
+                f"{adv_delta}")
+        if has_drift:
+            core += f" & {_drift_cell(t)}"
+        rows.append(core + " \\\\")
     if has_b_champ and has_b_adv:
         col_spec = "lrrrrrrrr"
         champ_span = "\\multicolumn{4}{c}{Champion (\\%)}"
@@ -128,8 +158,8 @@ def divergence_section(frozen, now, entries, group_state, champion_b=None, now_b
         adv_span = "\\multicolumn{4}{c}{Advance (\\%)}"
         adv_rule = "\\cmidrule(lr){6-9}"
         col_header = (
-            "Team & Frozen & Track~A & Track~B & $\\Delta$ (A$-$Frozen) & "
-            "Frozen & Track~A & Track~B & $\\Delta$ \\\\\n"
+            "Team & Frozen & Track~A & Track~B & $\\Delta$ (B$-$F) & "
+            "Frozen & Track~A & Track~B & $\\Delta$ (B$-$F)"
         )
     elif has_b_champ:
         col_spec = "lrrrrrrr"
@@ -138,8 +168,8 @@ def divergence_section(frozen, now, entries, group_state, champion_b=None, now_b
         adv_span = "\\multicolumn{3}{c}{Advance (\\%)}"
         adv_rule = "\\cmidrule(lr){6-8}"
         col_header = (
-            "Team & Frozen & Track~A & Track~B & $\\Delta$ (A$-$Frozen) & "
-            "Frozen & Track~A & $\\Delta$ \\\\\n"
+            "Team & Frozen & Track~A & Track~B & $\\Delta$ (B$-$F) & "
+            "Frozen & Track~A & $\\Delta$"
         )
     else:
         col_spec = "lrrrrrr"
@@ -147,9 +177,14 @@ def divergence_section(frozen, now, entries, group_state, champion_b=None, now_b
         champ_rule = "\\cmidrule(lr){2-4}"
         adv_span = "\\multicolumn{3}{c}{Advance (\\%)}"
         adv_rule = "\\cmidrule(lr){5-7}"
-        col_header = "Team & Frozen & Track~A & $\\Delta$ & Frozen & Track~A & $\\Delta$ \\\\\n"
-    _div_subhdr = (f" & {champ_span} & {adv_span} \\\\\n"
-                  f"{champ_rule}{adv_rule}\n" + col_header + "\\midrule\n")
+        col_header = "Team & Frozen & Track~A & $\\Delta$ & Frozen & Track~A & $\\Delta$"
+    drift_span = ""
+    if has_drift:
+        col_spec += "r"
+        col_header += " & Drift (Elo)"
+        drift_span = " &"          # empty spanning cell above the Drift column
+    _div_subhdr = (f" & {champ_span} & {adv_span}{drift_span} \\\\\n"
+                  f"{champ_rule}{adv_rule}\n" + col_header + " \\\\\n\\midrule\n")
     table = (
         "\\begin{footnotesize}\n"
         f"\\begin{{longtable}}{{{col_spec}}}\n"
@@ -182,9 +217,10 @@ def divergence_section(frozen, now, entries, group_state, champion_b=None, now_b
     return intro + "\n\n" + table + group_par
 
 
-def champ_table(frozen, now, n_results, champion_b=None):
+def champ_table(frozen, now, n_results, champion_b=None, market=None):
     """Headline probability table, top 8 by current champion probability.
-    When champion_b is a non-empty dict, adds Track A / Track B / Δ columns."""
+    When champion_b is a non-empty dict, adds Track~A / Track~B / Market / Δ
+    columns (Market folds in the former live market-snapshot table)."""
     teams = sorted(now, key=lambda t: -now[t]["champion"])[:8]
     has_b = bool(champion_b)
     rows = []
@@ -193,12 +229,15 @@ def champ_table(frozen, now, n_results, champion_b=None):
         c = now[t]
         if has_b:
             b = champion_b.get(t)
-            delta = 100 * (c["champion"] - f["champion"])   # Track A − Frozen
             b_str = f"{100*b:.1f}\\%" if b is not None else "---"
+            m = market.get(t) if market else None
+            m_str = f"{100*m:.1f}\\%" if m is not None else "---"
+            delta_str = (f"{100 * (b - f['champion']):+.1f}"   # Track B − Frozen
+                         if b is not None else "---")
             rows.append(
                 f"      {t:<14} & {100*f['champion']:.1f}\\% & "
-                f"{100*c['champion']:.1f}\\% & {b_str} & "
-                f"{delta:+.1f} & "
+                f"{100*c['champion']:.1f}\\% & {b_str} & {m_str} & "
+                f"{delta_str} & "
                 f"{100*c['final']:.1f}\\% & {100*c['SF']:.1f}\\% & "
                 f"{100*c.get('QF', 0.0):.1f}\\% \\\\"
             )
@@ -209,17 +248,21 @@ def champ_table(frozen, now, n_results, champion_b=None):
                 f"{100*c['SF']:.1f}\\% \\\\"
             )
     if has_b:
-        col_spec = "lccccccc"
+        col_spec = "lcccccccc"
         header = (
             "      Team & Frozen (\\%) & Track~A (\\%) & Track~B (\\%) & "
-            "$\\Delta$ (A$-$Frozen) & Finalist (now) & Semi (now) & QF (now) \\\\"
+            "Market (\\%) & $\\Delta$ (B$-$F) & Finalist (now) & Semi (now) & "
+            "QF (now) \\\\"
         )
         note = (
             f"Frozen = pre-kickoff lock ($N$ = 200{{,}}000, "
             f"\\texttt{{data/frozen\\_stage\\_probs.json}}), never changes; "
             f"Track~A = result-conditioned, June~10 ratings "
             f"($N$ = 50{{,}}000, seed 2026); "
-            f"Track~B = result-conditioned + live Elo + bookmaker odds + lineup adj."
+            f"Track~B = result-conditioned + live Elo + bookmaker odds + lineup adj.; "
+            f"Market = live Polymarket champion distribution, normalized to remove "
+            f"the overround. "
+            f"$\\Delta$ (B$-$F) = Track~B champion probability minus Frozen."
         )
     else:
         col_spec = "lcccc"
