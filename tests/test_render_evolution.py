@@ -22,6 +22,28 @@ def test_ledger_table_has_one_row_per_entry():
     assert "0.001" in tex         # info_bits to 3dp
     assert tex.count(r"\\") >= 2  # header row + at least one data row
 
+def test_ledger_table_g_column_and_issue_order():
+    # Leading G column, ordered by issue order (GXXX) not match number, and the
+    # Info (bits) column (which absorbs the old 'information revealed' table).
+    ents = [
+        {"match": 1, "fixture": "Mexico v South Africa", "failure_mode": None,
+         "pre": {"pick": [1, 0]},
+         "result": [2, 0], "post": {"points": 1, "brier": 0.16, "info_bits": 0.001}},
+        {"match": 7, "fixture": "Brazil v Morocco", "failure_mode": None,
+         "pre": {"pick": [2, 0]},
+         "result": [1, 1], "post": {"points": 0, "brier": 0.96, "info_bits": 0.001}},
+        {"match": 8, "fixture": "Qatar v Switzerland", "failure_mode": None,
+         "pre": {"pick": [0, 1]},
+         "result": [1, 1], "post": {"points": 0, "brier": 1.22, "info_bits": 0.003}},
+    ]
+    tex = re_.ledger_table(ents, issue_order=[1, 8, 7])
+    assert "G & M & Fixture" in tex                 # G column first, before M
+    assert "Info (bits)" in tex                     # absorbed bits column
+    assert "KL divergence contribution" in tex      # folded-in note
+    # issue order: match 8 (G2) precedes match 7 (G3), not by schedule number
+    assert tex.index("Qatar v Switzerland") < tex.index("Brazil v Morocco")
+
+
 def test_ledger_table_empty_is_a_placeholder_not_broken_latex():
     tex = re_.ledger_table([])
     assert "longtable" not in tex

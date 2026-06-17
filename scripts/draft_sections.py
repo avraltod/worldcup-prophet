@@ -153,11 +153,9 @@ def draft_simulation_note(ctx, use_api):
 # ========================================================================
 
 def templated_data_revealed(ctx):
-    rows = []
-    for e in ctx["entries"]:
-        result = f"{e['result'][0]}--{e['result'][1]}"
-        bits = e["post"]["info_bits"]
-        rows.append(f"M{e['match']} & {e['fixture']} & {result} & {bits:.3f} \\\\")
+    # The per-match list (fixture, result, KL bits) is now the match ledger,
+    # Table~\ref{tab:live_ledger} (its Info (bits) column); only the Track~B
+    # state provenance is unique to this section.
     snap = ctx.get("info_snapshot") or {}
     provenance = ""
     if snap:
@@ -166,60 +164,23 @@ def templated_data_revealed(ctx):
         n_rates = snap.get("n_rate_changes", 0)
         n_lineup = snap.get("n_lineup_adj", 0)
         provenance = (
-            f"\n\\medskip\\noindent{{\\small\\textit{{Track~B state:}} "
+            f"\n\n\\noindent{{\\small\\textit{{Track~B state:}} "
             f"Elo fetched {ft}, RMS $\\Delta$ = {elo_rms:.1f}~pts vs.\\ June~10 baseline; "
             f"{n_rates} fixture odds updated; {n_lineup} lineup adjustment(s) active.}}"
         )
     return (
-        "The following matches have been played since the pre-registration lock "
-        "(Table~\\ref{tab:live_data_revealed}).\n\n"
-        "\\begin{table}[!h]\\centering\n"
-        "\\caption{Information revealed since M000 (live edition "
-        "M\\liveEditionNum{})}\\label{tab:live_data_revealed}\n"
-        "\\begin{footnotesize}\\begin{tabular}{rlllr}\\toprule\n"
-        "Match & Fixture & Result & Bits \\\\\n"
-        "\\midrule\n"
-        + "\n".join(rows) + "\n"
-        "\\bottomrule\\end{tabular}\\end{footnotesize}\n"
-        "\\begin{tablenotes}\\small\\item \\textit{Notes:} "
-        "Bits = KL divergence contribution of this result to the champion distribution.\n"
-        "\\end{tablenotes}\\end{table}"
+        "The matches played since the pre-registration lock, with each result's "
+        "information content in bits (its KL contribution to the champion "
+        "distribution), are recorded in the match ledger, "
+        "Table~\\ref{tab:live_ledger}."
         + provenance
     )
 
 
-def _data_revealed_prompt(ctx):
-    entries_summary = [
-        {"match": e["match"], "fixture": e["fixture"], "result": e["result"],
-         "bits": e["post"]["info_bits"]}
-        for e in ctx["entries"]
-    ]
-    return (
-        "Write a short paragraph (2-3 sentences) for a pre-registered football "
-        "forecasting paper introducing the table of revealed match information. "
-        "Author's voice: measured, precise, no adjectives. Then output this "
-        "exact LaTeX table structure with the correct data filled in. "
-        "HARD RULE: use ONLY numbers in the JSON below.\n\n"
-        + _json.dumps({"entries": entries_summary,
-                       "drift": ctx["learning"].get("drift", {})})
-        + "\n\nReturn the paragraph followed by the table LaTeX."
-    )
-
-
 def draft_data_revealed(ctx, use_api):
-    if not use_api or not os.environ.get("ANTHROPIC_API_KEY"):
-        return templated_data_revealed(ctx), "template"
-    try:
-        import anthropic
-        client = anthropic.Anthropic()
-        msg = client.messages.create(model="claude-sonnet-4-6", max_tokens=600,
-            messages=[{"role": "user", "content": _data_revealed_prompt(ctx)}])
-        text = msg.content[0].text.strip()
-        if r"\label{tab:live_data_revealed}" not in text:
-            return templated_data_revealed(ctx), "template"
-        return text, "claude"
-    except Exception:
-        return templated_data_revealed(ctx), "template"
+    # No table to draft anymore (folded into the ledger); the section is a short
+    # pointer plus the Track~B provenance line, so it is always templated.
+    return templated_data_revealed(ctx), "template"
 
 
 # ========================================================================

@@ -71,10 +71,13 @@ def test_templated_simulation_note_contains_remaining():
     assert "100 matches" in text  # 104 - 4 remaining
 
 
-def test_templated_data_revealed_is_valid_latex():
+def test_templated_data_revealed_points_to_ledger_and_keeps_provenance():
+    # The standalone "information revealed" table is folded into the ledger;
+    # this section now just points to it and carries the Track B provenance.
     text = ds.templated_data_revealed(_ctx())
-    assert r"\label{tab:live_data_revealed}" in text
-    assert "Mexico v South Africa" in text
+    assert r"tab:live_data_revealed" not in text   # table removed
+    assert r"Table~\ref{tab:live_ledger}" in text  # points to the ledger instead
+    assert r"\begin{table}" not in text and "tabular" not in text  # no embedded table
 
 
 def test_templated_sec36_live_mentions_bits():

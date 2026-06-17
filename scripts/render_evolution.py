@@ -11,40 +11,52 @@ def _score(result):
     return f"{result[0]}--{result[1]}"
 
 
-def ledger_table(entries, upcoming=None):
-    """Match record. Played rows show the Frozen submitted pick and dashes for
-    the (result-known) track-pick columns; `upcoming` rows — next-matchday
-    fixtures, each {match, fixture, frozen_pick, track_a_pick, track_b_pick} —
-    show the three tracks' predicted scorelines and dashes for the result columns."""
+def ledger_table(entries, upcoming=None, issue_order=None):
+    """Match record. Rows are ordered by issue order (GXXX, the order editions
+    were issued) not schedule number (MXXX); a leading G column shows the issue
+    index and M the schedule number. Played rows show the Frozen submitted pick
+    and dashes for the (result-known) track-pick columns; `upcoming` rows —
+    next-matchday fixtures, each {match, fixture, frozen_pick, track_a_pick,
+    track_b_pick} — show the three tracks' predicted scorelines and dashes for
+    the result columns. The Info (bits) column absorbs the former standalone
+    'information revealed' table (KL contribution per result)."""
     if not entries and not upcoming:
         return r"\textit{No matches documented yet.}"
+    gidx = {m: i + 1 for i, m in enumerate(issue_order)} if issue_order else {}
+    played = (sorted(entries, key=lambda e: gidx.get(e["match"], 10 ** 6))
+              if gidx else list(entries))
     rows = []
-    for e in entries:
+    for e in played:
         fm = (e["failure_mode"] or "--").replace("_", r"\_")
+        g = gidx.get(e["match"], "--")
         rows.append(
-            f"{e['match']} & {e['fixture']} & {e['pre']['pick'][0]}--{e['pre']['pick'][1]} "
+            f"{g} & {e['match']} & {e['fixture']} & {e['pre']['pick'][0]}--{e['pre']['pick'][1]} "
             f"& -- & -- "
             f"& {_score(e['result'])} & {e['post']['points']} & {e['post']['brier']:.3f} "
             f"& {e['post']['info_bits']:.3f} & {fm} \\\\")
     if upcoming:
         def _sc(p):
             return f"{p[0]}--{p[1]}"
-        rows.append("\\midrule\n\\multicolumn{10}{l}{\\itshape Upcoming fixtures "
+        rows.append("\\midrule\n\\multicolumn{11}{l}{\\itshape Upcoming fixtures "
                     "--- predicted scoreline by track} \\\\")
         for u in upcoming:
             rows.append(
-                f"{u['match']} & {u['fixture']} & {_sc(u['frozen_pick'])} "
+                f"-- & {u['match']} & {u['fixture']} & {_sc(u['frozen_pick'])} "
                 f"& {_sc(u['track_a_pick'])} & {_sc(u['track_b_pick'])} "
                 f"& -- & -- & -- & -- & -- \\\\")
-    _hdr = ("M & Fixture & Frozen & Track~A & Track~B & Result & Pts & Brier & Info & Mode \\\\\n")
+    _hdr = ("G & M & Fixture & Frozen & Track~A & Track~B & Result & Pts & Brier "
+            "& Info (bits) & Mode \\\\\n")
+    _note = ("\\multicolumn{11}{l}{\\scriptsize\\textit{G = issue order, M = "
+             "schedule number; Info (bits) = KL divergence contribution of this "
+             "result to the champion distribution.}} \\\\\n")
     head = ("\\begin{scriptsize}\n"
-            "\\begin{longtable}{rlcccccccl}\n"
+            "\\begin{longtable}{rrlcccccccl}\n"
             "\\caption{Match record (live edition)}\\label{tab:live_ledger}\\\\\n"
             "\\toprule\n" + _hdr + "\\midrule\n"
             "\\endfirsthead\n"
             "\\toprule\n" + _hdr + "\\midrule\n"
             "\\endhead\n")
-    foot = "\n\\bottomrule\n\\end{longtable}\n\\end{scriptsize}"
+    foot = "\n" + _note + "\\bottomrule\n\\end{longtable}\n\\end{scriptsize}"
     return head + "\n".join(rows) + foot
 
 

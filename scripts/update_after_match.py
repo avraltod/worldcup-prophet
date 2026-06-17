@@ -532,7 +532,8 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     rl.write_unit(LIVE_DIR, "ledger",
                   rl.ledger(entries,
                             upcoming=_upcoming_picks(expectations, res,
-                                                     eff_elo_b, live_rates_b)))
+                                                     eff_elo_b, live_rates_b),
+                            issue_order=ctx["issue_order"]))
     rl.write_unit(LIVE_DIR, "narrative", rl.narrative_unit(entries))
     rl.write_unit(LIVE_DIR, "divergence", rl.divergence_unit(frozen, now_probs, entries, group_st, champion_b=champion_b, now_b=ctx.get("now_b", {}), drift=state.get("drift", {})))
     # 4. derived units

@@ -372,7 +372,9 @@ def test_simulation_note_unit():
 
 def test_data_revealed_unit():
     tex = rl.data_revealed_unit(_full_ctx())
-    assert r"\label{tab:live_data_revealed}" in tex
+    # table folded into the ledger; section points there now
+    assert r"tab:live_data_revealed" not in tex
+    assert r"Table~\ref{tab:live_ledger}" in tex
 
 def test_sec36_live_unit():
     tex = rl.sec36_live_unit(_full_ctx())

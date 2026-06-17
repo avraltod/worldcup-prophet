@@ -98,8 +98,8 @@ def _flag(team):
 
 # ---- ported units (reuse render_evolution's pure builders) ----
 
-def ledger(entries, upcoming=None):
-    return rev.ledger_table(entries, upcoming=upcoming)
+def ledger(entries, upcoming=None, issue_order=None):
+    return rev.ledger_table(entries, upcoming=upcoming, issue_order=issue_order)
 
 
 def narrative_unit(entries):
@@ -548,8 +548,9 @@ def simulation_note_unit(ctx, use_api=False):
 
 
 def data_revealed_unit(ctx, use_api=False):
+    # The per-match table moved into the ledger (Table~\ref{tab:live_ledger});
+    # this section is now a pointer + Track B provenance, so no label to assert.
     text, _ = _ds.draft_data_revealed(ctx, use_api)
-    validate_labels("data_revealed", text, ["tab:live_data_revealed"])
     return text
 
 

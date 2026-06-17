@@ -145,9 +145,11 @@ def test_simulation_note_uses_n_results():
     assert "2" in text  # n_results = 2
 
 
-def test_data_revealed_has_label():
+def test_data_revealed_points_to_ledger():
+    # The standalone table was folded into the ledger; section points there now.
     text, _ = ds.draft_data_revealed(_ctx(), use_api=False)
-    assert r"\label{tab:live_data_revealed}" in text
+    assert r"tab:live_data_revealed" not in text
+    assert r"Table~\ref{tab:live_ledger}" in text
 
 
 def test_failure_analysis_has_label():
