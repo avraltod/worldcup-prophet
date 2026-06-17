@@ -80,14 +80,15 @@ def test_load_live_inputs_returns_data_when_present(tmp_path, monkeypatch):
     assert result["live_elo"]["Spain"] == 1900.0
 
 
-def test_build_eff_elo_no_live_data_matches_june10_plus_host_plus_drift(tmp_path, monkeypatch):
+def test_build_eff_elo_no_explicit_host_bonus(tmp_path, monkeypatch):
     import condition as cond
     monkeypatch.setattr(lst, "STATE_PATH", tmp_path / "state.json")
     state = lst.load_state()
     state["drift"] = {"Mexico": -49.94}
     eff = lst.build_eff_elo(state, {})
-    # Mexico is a host: ELO + ADJ + host(60) + drift
-    expected = cond.ELO["Mexico"] + cond.ADJ.get("Mexico", 0) + 60 + (-49.94)
+    # Mexico is a host but Track B adds NO explicit host bonus (host is left for
+    # drift, like baseline_2026): ELO + ADJ + drift only.
+    expected = cond.ELO["Mexico"] + cond.ADJ.get("Mexico", 0) + (-49.94)
     assert abs(eff["Mexico"] - expected) < 0.01
     # Non-host non-drift team: ELO + ADJ
     expected_spain = cond.ELO["Spain"] + cond.ADJ.get("Spain", 0)

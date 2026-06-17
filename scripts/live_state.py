@@ -43,13 +43,17 @@ def load_live_inputs():
 
 
 def build_eff_elo(state, live):
-    """Track B effective ratings: live_elo + live_injury_adj + lineup_adj + host_bonus + drift.
+    """Track B effective ratings: live_elo + live_injury_adj + lineup_adj + drift.
 
-    Falls back to raw june10_elo (not state["baseline"]) for teams absent from live_elo,
-    because baseline already includes june10_adj — using baseline + inj would double-count.
-    Drift (proxy xG signal) is added on top; it captures shot quality not in ClubElo.
+    NO explicit host bonus: like baseline_2026, host advantage is left for the
+    learning track to capture through drift (a host out-performing at home shows
+    up as positive xG surprise). Adding an explicit host here would double-count
+    it. Falls back to raw june10_elo (not state["baseline"]) for teams absent from
+    live_elo, because baseline already includes june10_adj — using baseline + inj
+    would double-count. Drift (proxy xG signal) is added on top; it captures shot
+    quality not in ClubElo.
     """
-    from condition import HOSTS, ADJ as june10_adj, ELO as june10_elo
+    from condition import ADJ as june10_adj, ELO as june10_elo
     live_elo = live.get("live_elo", {})
     live_inj = live.get("live_injury_adj")   # None means "key absent" → use june10 fallback
     lineup_adj = live.get("lineup_adj", {})
@@ -61,8 +65,7 @@ def build_eff_elo(state, live):
             inj = june10_adj.get(t, 0)
         else:
             inj = live_inj.get(t, 0)
-        host = 60 if t in HOSTS else 0
-        out[t] = base + inj + lineup_adj.get(t, 0) + host + drift.get(t, 0)
+        out[t] = base + inj + lineup_adj.get(t, 0) + drift.get(t, 0)
     return out
 
 
