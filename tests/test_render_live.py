@@ -209,7 +209,7 @@ def test_revision_report_unit():
     tex = rl.revision_report(ctx)
     assert "Revision report: edition M003" in tex
     assert "M000" in tex                       # vintages table embedded
-    assert "Canada v Qatar" in tex             # implications
+    assert "QAT" in tex and "CAN" in tex       # implications fixture in ISO3 (flag macro splits the literal)
     # revision_narrative dropped per spec §3.10 (duplicated forecast revision para)
 
 
@@ -280,7 +280,7 @@ def test_cumulative_stats_table_shows_track_b_column_when_probs_hda_b_present():
                                 "possession": 42.0}}}
     tex = rl._cumulative_stats_table(entries, match_stats,
                                      [{"match": 3, "probs_HDA": [0.5, 0.25, 0.25]}])
-    assert "Track~B" in tex
+    assert "Track~B H/D/A" in tex
     assert "55.0" in tex    # Track B home prob
 
 
@@ -306,17 +306,20 @@ def test_cumulative_stats_table_orders_by_issue_order_and_pads():
     exps = [{"match": m, "probs_HDA": [0.6, 0.2, 0.2]} for m in (1, 7, 8)]
     tex = rl._cumulative_stats_table(entries, match_stats, exps,
                                      issue_order=[1, 8, 7])
-    # G02 is match 8, G03 is match 7 (issue order, not schedule order)
-    assert "G02 M08 Qatar v Switzerland" in tex
-    assert "G03 M07 Brazil v Morocco" in tex
-    assert tex.index("G02 M08") < tex.index("G03 M07")
+    # separate G | M columns; match 8 is G2, match 7 is G3 (issue order)
+    assert "2 & 8 &" in tex and "3 & 7 &" in tex
+    # fixtures shortened to ISO3 (+flags); issue order: M8 (QAT) before M7 (BRA)
+    assert "QAT" in tex and "CHE" in tex and "BRA" in tex
+    assert tex.index("QAT") < tex.index("BRA")
     # zero-padded 2-digit integer shots/on-target (7 -> 07, 16 -> 16)
     assert "07--26" in tex        # match 8 shots
     assert "16--03" in tex        # match 1 shots
     assert "04--02" in tex        # match 1 on target
 
 
-def test_cumulative_stats_table_no_track_b_column_when_missing():
+def test_cumulative_stats_table_track_b_dashes_when_missing():
+    # Track B H/D/A column is always present now (aligned single tabular); an
+    # entry without probs_HDA_b shows -- in that cell.
     entries = [{"match": 3, "fixture": "Canada v BIH",
                 "pre": {"probs_HDA": [0.5, 0.25, 0.25]}}]
     match_stats = {3: {"home": {"team": "Canada", "total_shots": 11, "sot": 5,
@@ -324,7 +327,7 @@ def test_cumulative_stats_table_no_track_b_column_when_missing():
                        "away": {"team": "BIH", "total_shots": 4, "sot": 2,
                                 "possession": None}}}
     tex = rl._cumulative_stats_table(entries, match_stats, [])
-    assert "Track~B" not in tex
+    assert "Track~B H/D/A" in tex
     assert r"\label{tab:live_match_stats}" in tex
 
 
