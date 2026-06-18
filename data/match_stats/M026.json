@@ -1,0 +1,20 @@
+{
+ "match": 26,
+ "event_id": "760439",
+ "stats": {
+  "home": {
+   "team": "Switzerland",
+   "sot": 7.0,
+   "other_shots": 6.0,
+   "total_shots": 13.0,
+   "possession": 62.3
+  },
+  "away": {
+   "team": "Bosnia-Herzegovina",
+   "sot": 3.0,
+   "other_shots": 2.0,
+   "total_shots": 5.0,
+   "possession": 37.7
+  }
+ }
+}

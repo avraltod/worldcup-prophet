@@ -74,3 +74,5 @@ headline numbers are backfilled into the vintages table.
 **Rev M024 (Uzbekistan v Colombia 1-3).** Cumulative 14 pts, mean Brier 0.61; failure-mode none. Full living layer re-rendered (edition M024); skeleton unchanged.
 
 **Rev M025 (Czechia v South Africa 1-1).** Cumulative 14 pts, mean Brier 0.62; failure-mode none. Full living layer re-rendered (edition M025); skeleton unchanged.
+
+**Rev M026 (Switzerland v Bosnia and Herzegovina 4-1).** Cumulative 15 pts, mean Brier 0.60; failure-mode none. Full living layer re-rendered (edition M026); skeleton unchanged.

@@ -58,9 +58,9 @@
   "South Korea": 25.056750298685802,
   "Czechia": -80.08228793309442,
   "Canada": -41.22162485065709,
-  "Bosnia and Herzegovina": 41.22162485065709,
+  "Bosnia and Herzegovina": 34.04704301075262,
   "Qatar": 46.16487455197128,
-  "Switzerland": -46.16487455197128,
+  "Switzerland": -38.74313022700109,
   "Brazil": -9.943249701314183,
   "Morocco": 9.943249701314183,
   "Haiti": 65.00000000000001,
@@ -551,6 +551,24 @@
    "drift_after": {
     "Czechia": -80.08,
     "South Africa": 103.72
+   }
+  },
+  {
+   "match": 26,
+   "home": "Switzerland",
+   "away": "Bosnia and Herzegovina",
+   "lam_obs": {
+    "home": 2.279,
+    "away": 0.977,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 1.75,
+    "away": 0.55
+   },
+   "drift_after": {
+    "Switzerland": -38.74,
+    "Bosnia and Herzegovina": 34.05
    }
   }
  ],
@@ -1318,6 +1336,47 @@
    },
    "info_snapshot": {
     "fetched_at": "2026-06-18T19:01:38Z",
+    "elo_updated_at": "2026-06-10T00:00:00Z",
+    "odds_fetched_at": null,
+    "elo_rms_delta": 0.0,
+    "n_rate_changes": 0,
+    "max_odds_shift_ph": 0.0,
+    "biggest_elo_mover": {
+     "team": "Mexico",
+     "june10": 1868,
+     "current": 1868,
+     "delta": 0
+    },
+    "biggest_odds_mover": {},
+    "n_new_injuries": 0,
+    "n_lineup_adj": 0,
+    "n_teams_with_drift": 48
+   }
+  },
+  {
+   "match": 26,
+   "frozen_top": {
+    "Spain": 0.268,
+    "Argentina": 0.1948,
+    "France": 0.1424,
+    "Portugal": 0.0878,
+    "England": 0.08,
+    "Brazil": 0.0311,
+    "Netherlands": 0.0233,
+    "Germany": 0.0224
+   },
+   "learning_top": {
+    "Spain": 0.2576,
+    "Argentina": 0.1777,
+    "France": 0.1773,
+    "Portugal": 0.0337,
+    "England": 0.1506,
+    "Brazil": 0.0248,
+    "Netherlands": 0.0335,
+    "Germany": 0.0461
+   },
+   "info_snapshot": {
+    "fetched_at": "2026-06-18T21:01:20Z",
     "elo_updated_at": "2026-06-10T00:00:00Z",
     "odds_fetched_at": null,
     "elo_rms_delta": 0.0,

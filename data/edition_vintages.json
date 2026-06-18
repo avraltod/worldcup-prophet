@@ -905,5 +905,40 @@
     0.0443
    ]
   ]
+ },
+ {
+  "edition": 26,
+  "match": 26,
+  "fixture": "Switzerland v Bosnia and Herzegovina",
+  "result": [
+   4,
+   1
+  ],
+  "points": 1,
+  "cum_points": 15,
+  "mean_brier": 0.6024,
+  "cum_bits": 0.048,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2545
+   ],
+   [
+    "France",
+    0.1806
+   ],
+   [
+    "Argentina",
+    0.1762
+   ],
+   [
+    "England",
+    0.1518
+   ],
+   [
+    "Germany",
+    0.0446
+   ]
+  ]
  }
 ]
