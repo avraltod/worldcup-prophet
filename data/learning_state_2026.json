@@ -95,6 +95,8 @@
   "Jordan": 42.49999999999999,
   "Portugal": -75.0,
   "Congo DR": 75.0,
+  "Uzbekistan": 22.443249701314194,
+  "Colombia": -22.443249701314194,
   "England": 67.67025089605741,
   "Croatia": -67.67025089605741,
   "Ghana": 29.943249701314194,
@@ -513,6 +515,24 @@
    "drift_after": {
     "Ghana": 29.94,
     "Panama": -29.94
+   }
+  },
+  {
+   "match": 24,
+   "home": "Uzbekistan",
+   "away": "Colombia",
+   "lam_obs": {
+    "home": 0.651,
+    "away": 1.302,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 0.65,
+    "away": 1.75
+   },
+   "drift_after": {
+    "Uzbekistan": 22.44,
+    "Colombia": -22.44
    }
   }
  ],
@@ -1213,6 +1233,47 @@
     "n_new_injuries": 0,
     "n_lineup_adj": 0,
     "n_teams_with_drift": 42
+   }
+  },
+  {
+   "match": 24,
+   "frozen_top": {
+    "Spain": 0.2691,
+    "Argentina": 0.1918,
+    "France": 0.1525,
+    "Portugal": 0.0871,
+    "England": 0.0806,
+    "Brazil": 0.0315,
+    "Netherlands": 0.0223,
+    "Germany": 0.0216
+   },
+   "learning_top": {
+    "Spain": 0.2584,
+    "Argentina": 0.1767,
+    "France": 0.1837,
+    "Portugal": 0.0319,
+    "England": 0.1495,
+    "Brazil": 0.0234,
+    "Netherlands": 0.0335,
+    "Germany": 0.0467
+   },
+   "info_snapshot": {
+    "fetched_at": "2026-06-18T04:14:57Z",
+    "elo_updated_at": "2026-06-10T00:00:00Z",
+    "odds_fetched_at": null,
+    "elo_rms_delta": 0.0,
+    "n_rate_changes": 0,
+    "max_odds_shift_ph": 0.0,
+    "biggest_elo_mover": {
+     "team": "Mexico",
+     "june10": 1868,
+     "current": 1868,
+     "delta": 0
+    },
+    "biggest_odds_mover": {},
+    "n_new_injuries": 0,
+    "n_lineup_adj": 0,
+    "n_teams_with_drift": 46
    }
   }
  ]

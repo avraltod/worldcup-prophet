@@ -70,3 +70,5 @@ headline numbers are backfilled into the vintages table.
 **Rev M022 (England v Croatia 4-2).** Cumulative 11 pts, mean Brier 0.61; failure-mode none. Full living layer re-rendered (edition M022); skeleton unchanged.
 
 **Rev M021 (Ghana v Panama 1-0).** Cumulative 12 pts, mean Brier 0.62; failure-mode none. Full living layer re-rendered (edition M021); skeleton unchanged.
+
+**Rev M024 (Uzbekistan v Colombia 1-3).** Cumulative 14 pts, mean Brier 0.61; failure-mode none. Full living layer re-rendered (edition M024); skeleton unchanged.

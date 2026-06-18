@@ -835,5 +835,40 @@
     0.0696
    ]
   ]
+ },
+ {
+  "edition": 24,
+  "match": 24,
+  "fixture": "Uzbekistan v Colombia",
+  "result": [
+   1,
+   3
+  ],
+  "points": 1,
+  "cum_points": 14,
+  "mean_brier": 0.6097,
+  "cum_bits": 0.0445,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2562
+   ],
+   [
+    "France",
+    0.1834
+   ],
+   [
+    "Argentina",
+    0.1741
+   ],
+   [
+    "England",
+    0.1503
+   ],
+   [
+    "Germany",
+    0.0457
+   ]
+  ]
  }
 ]
