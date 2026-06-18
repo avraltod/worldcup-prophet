@@ -51,24 +51,24 @@ Poisson goal model, and optimizes picks under the pool's 3/2/1 scoring rule.
 ## Results tracking
 
 <!-- LIVE-RESULTS:START -->
-_Last updated: 2026-06-17 — 20/104 matches played._
+_Last updated: 2026-06-18 — 24/104 matches played._
 
-**Information gain in this update:** 0.002 bits
+**Information gain in this update:** 0.003 bits
 
 **Champion probability — model vs market (top 8):**
 
 | Team | Model | Market |
 |---|---|---|
-| Spain | 25.4% | 13.0% |
-| Argentina | 19.4% | 11.3% |
-| France | 15.2% | 18.0% |
-| Portugal | 9.3% | 10.0% |
-| England | 7.1% | 10.2% |
-| Brazil | 3.6% | 6.5% |
-| Netherlands | 2.2% | 4.3% |
-| Germany | 2.2% | 5.5% |
+| Spain | 25.4% | 13.4% |
+| Argentina | 19.5% | 11.4% |
+| France | 15.4% | 17.9% |
+| Portugal | 9.0% | 7.8% |
+| England | 7.8% | 12.5% |
+| Brazil | 3.4% | 6.5% |
+| Germany | 2.3% | 5.5% |
+| Netherlands | 2.1% | 3.8% |
 
-**Biggest moves:** Argentina +0.7pp, France +0.6pp, Spain -0.5pp
+**Biggest moves:** England +0.6pp
 
 **Recorded group results:**
 
@@ -92,4 +92,8 @@ _Last updated: 2026-06-17 — 20/104 matches played._
 - M18: Iraq 1–4 Norway
 - M19: Argentina 3–0 Algeria
 - M20: Austria 3–1 Jordan
+- M21: Ghana 1–0 Panama
+- M22: England 4–2 Croatia
+- M23: Portugal 1–1 Congo DR
+- M24: Uzbekistan 1–3 Colombia
 <!-- LIVE-RESULTS:END -->
