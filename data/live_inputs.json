@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-06-18T19:01:38Z",
+ "fetched_at": "2026-06-18T19:53:24Z",
  "mode": "pre",
  "source_freshness": {
   "elo_updated_at": "2026-06-10T00:00:00Z",
@@ -362,6 +362,14 @@
   "lineup": [],
   "drift": [
    {
+    "team": "South Africa",
+    "drift": 103.72
+   },
+   {
+    "team": "Czechia",
+    "drift": -80.08
+   },
+   {
     "team": "United States",
     "drift": 75.0
    },
@@ -428,10 +436,6 @@
    {
     "team": "Mexico",
     "drift": -49.94
-   },
-   {
-    "team": "South Africa",
-    "drift": 49.94
    },
    {
     "team": "Belgium",
@@ -508,10 +512,6 @@
    {
     "team": "South Korea",
     "drift": 25.06
-   },
-   {
-    "team": "Czechia",
-    "drift": -25.06
    },
    {
     "team": "Uzbekistan",
