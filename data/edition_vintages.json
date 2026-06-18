@@ -870,5 +870,40 @@
     0.0457
    ]
   ]
+ },
+ {
+  "edition": 25,
+  "match": 25,
+  "fixture": "Czechia v South Africa",
+  "result": [
+   1,
+   1
+  ],
+  "points": 0,
+  "cum_points": 14,
+  "mean_brier": 0.6175,
+  "cum_bits": 0.0467,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2527
+   ],
+   [
+    "France",
+    0.185
+   ],
+   [
+    "Argentina",
+    0.1801
+   ],
+   [
+    "England",
+    0.15
+   ],
+   [
+    "Germany",
+    0.0443
+   ]
+  ]
  }
 ]
