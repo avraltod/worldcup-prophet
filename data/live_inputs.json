@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-06-17T23:41:34Z",
+ "fetched_at": "2026-06-18T00:14:00Z",
  "mode": "pre",
  "source_freshness": {
   "elo_updated_at": "2026-06-10T00:00:00Z",
@@ -394,6 +394,14 @@
     "drift": 75.0
    },
    {
+    "team": "England",
+    "drift": 67.67
+   },
+   {
+    "team": "Croatia",
+    "drift": -67.67
+   },
+   {
     "team": "Germany",
     "drift": 65.28
    },
@@ -543,7 +551,7 @@
    "biggest_odds_mover": {},
    "n_new_injuries": 0,
    "n_lineup_adj": 0,
-   "n_teams_with_drift": 42
+   "n_teams_with_drift": 44
   }
  }
 }
