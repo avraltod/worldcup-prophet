@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-06-18T21:01:20Z",
+ "fetched_at": "2026-06-18T21:50:49Z",
  "mode": "pre",
  "source_freshness": {
   "elo_updated_at": "2026-06-10T00:00:00Z",
@@ -450,10 +450,6 @@
     "drift": 46.16
    },
    {
-    "team": "Switzerland",
-    "drift": -46.16
-   },
-   {
     "team": "Austria",
     "drift": -42.5
    },
@@ -466,8 +462,8 @@
     "drift": -41.22
    },
    {
-    "team": "Bosnia and Herzegovina",
-    "drift": 41.22
+    "team": "Switzerland",
+    "drift": -38.74
    },
    {
     "team": "France",
@@ -484,6 +480,10 @@
    {
     "team": "Japan",
     "drift": -36.34
+   },
+   {
+    "team": "Bosnia and Herzegovina",
+    "drift": 34.05
    },
    {
     "team": "Saudi Arabia",
