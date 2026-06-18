@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-06-18T04:14:57Z",
+ "fetched_at": "2026-06-18T06:07:17Z",
  "mode": "pre",
  "source_freshness": {
   "elo_updated_at": "2026-06-10T00:00:00Z",
@@ -514,6 +514,14 @@
     "drift": -25.06
    },
    {
+    "team": "Uzbekistan",
+    "drift": 22.44
+   },
+   {
+    "team": "Colombia",
+    "drift": -22.44
+   },
+   {
     "team": "Iraq",
     "drift": 12.39
    },
@@ -559,7 +567,7 @@
    "biggest_odds_mover": {},
    "n_new_injuries": 0,
    "n_lineup_adj": 0,
-   "n_teams_with_drift": 46
+   "n_teams_with_drift": 48
   }
  }
 }
