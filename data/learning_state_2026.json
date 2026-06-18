@@ -96,7 +96,9 @@
   "Portugal": -75.0,
   "Congo DR": 75.0,
   "England": 67.67025089605741,
-  "Croatia": -67.67025089605741
+  "Croatia": -67.67025089605741,
+  "Ghana": 29.943249701314194,
+  "Panama": -29.943249701314194
  },
  "processed": [
   {
@@ -493,6 +495,24 @@
    "drift_after": {
     "England": 67.67,
     "Croatia": -67.67
+   }
+  },
+  {
+   "match": 21,
+   "home": "Ghana",
+   "away": "Panama",
+   "lam_obs": {
+    "home": 0.651,
+    "away": 1.302,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 0.5,
+    "away": 1.75
+   },
+   "drift_after": {
+    "Ghana": 29.94,
+    "Panama": -29.94
    }
   }
  ],

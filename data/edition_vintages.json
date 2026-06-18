@@ -732,6 +732,41 @@
   ]
  },
  {
+  "edition": 21,
+  "match": 21,
+  "fixture": "Ghana v Panama",
+  "result": [
+   1,
+   0
+  ],
+  "points": 2,
+  "cum_points": 12,
+  "mean_brier": 0.6172,
+  "cum_bits": 0.0378,
+  "champ_top5": [
+   [
+    "Spain",
+    0.252
+   ],
+   [
+    "France",
+    0.1871
+   ],
+   [
+    "Argentina",
+    0.1761
+   ],
+   [
+    "England",
+    0.1495
+   ],
+   [
+    "Germany",
+    0.0436
+   ]
+  ]
+ },
+ {
   "edition": 22,
   "match": 22,
   "fixture": "England v Croatia",
@@ -775,9 +810,9 @@
    1
   ],
   "points": 0,
-  "cum_points": 10,
-  "mean_brier": 0.6546,
-  "cum_bits": 0.0387,
+  "cum_points": 13,
+  "mean_brier": 0.6289,
+  "cum_bits": 0.0426,
   "champ_top5": [
    [
     "Spain",
