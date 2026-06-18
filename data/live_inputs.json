@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-06-18T01:30:43Z",
+ "fetched_at": "2026-06-18T02:42:53Z",
  "mode": "pre",
  "source_freshness": {
   "elo_updated_at": "2026-06-10T00:00:00Z",
@@ -490,6 +490,14 @@
     "drift": 33.95
    },
    {
+    "team": "Ghana",
+    "drift": 29.94
+   },
+   {
+    "team": "Panama",
+    "drift": -29.94
+   },
+   {
     "team": "Australia",
     "drift": -27.61
    },
@@ -551,7 +559,7 @@
    "biggest_odds_mover": {},
    "n_new_injuries": 0,
    "n_lineup_adj": 0,
-   "n_teams_with_drift": 44
+   "n_teams_with_drift": 46
   }
  }
 }
