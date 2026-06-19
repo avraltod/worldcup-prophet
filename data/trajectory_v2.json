@@ -9850,7 +9850,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760444",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Alisson Becker",
+    "Marquinhos",
+    "Gabriel Magalhães",
+    "Douglas Santos",
+    "Danilo",
+    "Lucas Paquetá",
+    "Raphinha ",
+    "Vinícius Júnior",
+    "Casemiro",
+    "Bruno Guimarães",
+    "Matheus Cunha"
+   ],
+   "away": [
+    "Johny Placide",
+    "Martin Expérience",
+    "Hannes Delcroix",
+    "Ricardo Adé",
+    "Carlens Arcus",
+    "Jean-Kévin Duverne",
+    "Josué Casimir",
+    "Jean-Ricner Bellegarde",
+    "Danley Jean Jacques",
+    "Ruben Providence",
+    "Frantzdy Pierrot"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
