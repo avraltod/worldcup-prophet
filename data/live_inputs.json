@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-06-19T04:16:24Z",
+ "fetched_at": "2026-06-19T06:12:26Z",
  "mode": "pre",
  "source_freshness": {
   "elo_updated_at": "2026-06-10T00:00:00Z",
@@ -434,10 +434,6 @@
     "drift": -56.39
    },
    {
-    "team": "Mexico",
-    "drift": -49.94
-   },
-   {
     "team": "Belgium",
     "drift": -47.5
    },
@@ -510,8 +506,8 @@
     "drift": 27.61
    },
    {
-    "team": "South Korea",
-    "drift": 25.06
+    "team": "Mexico",
+    "drift": -24.89
    },
    {
     "team": "Uzbekistan",
@@ -552,6 +548,10 @@
    {
     "team": "Algeria",
     "drift": 3.61
+   },
+   {
+    "team": "South Korea",
+    "drift": 1.25
    }
   ],
   "summary": {
