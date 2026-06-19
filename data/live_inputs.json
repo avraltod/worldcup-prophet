@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-06-19T00:16:39Z",
+ "fetched_at": "2026-06-19T01:36:44Z",
  "mode": "pre",
  "source_freshness": {
   "elo_updated_at": "2026-06-10T00:00:00Z",
@@ -446,20 +446,12 @@
     "drift": 47.5
    },
    {
-    "team": "Qatar",
-    "drift": 46.16
-   },
-   {
     "team": "Austria",
     "drift": -42.5
    },
    {
     "team": "Jordan",
     "drift": 42.5
-   },
-   {
-    "team": "Canada",
-    "drift": -41.22
    },
    {
     "team": "Switzerland",
@@ -482,6 +474,10 @@
     "drift": -36.34
    },
    {
+    "team": "Canada",
+    "drift": 35.84
+   },
+   {
     "team": "Bosnia and Herzegovina",
     "drift": 34.05
    },
@@ -492,6 +488,10 @@
    {
     "team": "Uruguay",
     "drift": 33.95
+   },
+   {
+    "team": "Qatar",
+    "drift": -31.14
    },
    {
     "team": "Ghana",
