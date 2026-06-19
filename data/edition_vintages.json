@@ -975,5 +975,40 @@
     0.0463
    ]
   ]
+ },
+ {
+  "edition": 28,
+  "match": 28,
+  "fixture": "Mexico v South Korea",
+  "result": [
+   1,
+   0
+  ],
+  "points": 2,
+  "cum_points": 18,
+  "mean_brier": 0.5758,
+  "cum_bits": 0.0511,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2557
+   ],
+   [
+    "France",
+    0.1841
+   ],
+   [
+    "Argentina",
+    0.1773
+   ],
+   [
+    "England",
+    0.1479
+   ],
+   [
+    "Germany",
+    0.0462
+   ]
+  ]
  }
 ]
