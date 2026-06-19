@@ -940,5 +940,40 @@
     0.0446
    ]
   ]
+ },
+ {
+  "edition": 27,
+  "match": 27,
+  "fixture": "Canada v Qatar",
+  "result": [
+   6,
+   0
+  ],
+  "points": 1,
+  "cum_points": 16,
+  "mean_brier": 0.5845,
+  "cum_bits": 0.0494,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2579
+   ],
+   [
+    "France",
+    0.1798
+   ],
+   [
+    "Argentina",
+    0.176
+   ],
+   [
+    "England",
+    0.1501
+   ],
+   [
+    "Germany",
+    0.0463
+   ]
+  ]
  }
 ]

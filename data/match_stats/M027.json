@@ -1,0 +1,20 @@
+{
+ "match": 27,
+ "event_id": "760440",
+ "stats": {
+  "home": {
+   "team": "Canada",
+   "sot": 10.0,
+   "other_shots": 22.0,
+   "total_shots": 32.0,
+   "possession": 78.8
+  },
+  "away": {
+   "team": "Qatar",
+   "sot": 0.0,
+   "other_shots": 2.0,
+   "total_shots": 2.0,
+   "possession": 21.2
+  }
+ }
+}
