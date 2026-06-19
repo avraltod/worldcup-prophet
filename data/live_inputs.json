@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-06-19T21:14:24Z",
+ "fetched_at": "2026-06-19T21:49:15Z",
  "mode": "pre",
  "source_freshness": {
   "elo_updated_at": "2026-06-10T00:00:00Z",
@@ -370,10 +370,6 @@
     "drift": -80.08
    },
    {
-    "team": "United States",
-    "drift": 75.0
-   },
-   {
     "team": "Paraguay",
     "drift": -75.0
    },
@@ -432,6 +428,10 @@
    {
     "team": "Tunisia",
     "drift": -56.39
+   },
+   {
+    "team": "United States",
+    "drift": 53.75
    },
    {
     "team": "Belgium",
@@ -498,10 +498,6 @@
     "drift": -29.94
    },
    {
-    "team": "Australia",
-    "drift": -27.61
-   },
-   {
     "team": "Turkey",
     "drift": 27.61
    },
@@ -532,6 +528,10 @@
    {
     "team": "Morocco",
     "drift": 9.94
+   },
+   {
+    "team": "Australia",
+    "drift": -8.73
    },
    {
     "team": "Spain",
