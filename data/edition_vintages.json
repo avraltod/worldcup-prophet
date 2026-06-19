@@ -1010,5 +1010,40 @@
     0.0462
    ]
   ]
+ },
+ {
+  "edition": 32,
+  "match": 32,
+  "fixture": "United States v Australia",
+  "result": [
+   2,
+   0
+  ],
+  "points": 1,
+  "cum_points": 19,
+  "mean_brier": 0.5671,
+  "cum_bits": 0.0522,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2548
+   ],
+   [
+    "France",
+    0.1817
+   ],
+   [
+    "Argentina",
+    0.1804
+   ],
+   [
+    "England",
+    0.147
+   ],
+   [
+    "Germany",
+    0.0459
+   ]
+  ]
  }
 ]

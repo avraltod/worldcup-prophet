@@ -1,0 +1,20 @@
+{
+ "match": 32,
+ "event_id": "760442",
+ "stats": {
+  "home": {
+   "team": "United States",
+   "sot": 2.0,
+   "other_shots": 8.0,
+   "total_shots": 10.0,
+   "possession": 62.0
+  },
+  "away": {
+   "team": "Australia",
+   "sot": 2.0,
+   "other_shots": 3.0,
+   "total_shots": 5.0,
+   "possession": 38.0
+  }
+ }
+}

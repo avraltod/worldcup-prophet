@@ -47,3 +47,4 @@ date,match,home,away,pred,actual,pts,ev,p_outcome_real,p_score_real,brier,code
 2026-06-19,26,Switzerland,Bosnia and Herzegovina,2-1,4-1,1,0.9721,0.614,0.0221,0.2268,S
 2026-06-19,27,Canada,Qatar,2-1,6-0,1,1.0633,0.724,0.008,0.1185,S
 2026-06-19,28,Mexico,South Korea,2-1,1-0,2,0.8751,0.524,0.1631,0.3419,P?
+2026-06-19,32,United States,Australia,2-1,2-0,1,0.889,0.5381,0.1128,0.3219,S
