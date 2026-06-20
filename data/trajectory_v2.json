@@ -11396,7 +11396,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760446",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Hernán Galíndez",
+    "Alan Franco",
+    "Piero Hincapié",
+    "Willian Pacho",
+    "Moisés Caicedo",
+    "Jordy Alcívar",
+    "Pedro Vite",
+    "John Yeboah",
+    "Pervis Estupiñán",
+    "Gonzalo Plata",
+    "Enner Valencia"
+   ],
+   "away": [
+    "Eloy Room",
+    "Armando Obispo",
+    "Joshua Brenet",
+    "Juriën Gaari",
+    "Deveron Fonville",
+    "Sherel Floranus",
+    "Livano Comenencia",
+    "Juninho Bacuna",
+    "Leandro Bacuna",
+    "Tahith Chong",
+    "Jürgen Locadia"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
