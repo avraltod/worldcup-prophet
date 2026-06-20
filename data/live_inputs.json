@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-06-20T03:41:10Z",
+ "fetched_at": "2026-06-20T05:12:53Z",
  "mode": "pre",
  "source_freshness": {
   "elo_updated_at": "2026-06-10T00:00:00Z",
@@ -362,6 +362,10 @@
   "lineup": [],
   "drift": [
    {
+    "team": "Haiti",
+    "drift": 114.19
+   },
+   {
     "team": "South Africa",
     "drift": 103.72
    },
@@ -414,8 +418,8 @@
     "drift": -65.28
    },
    {
-    "team": "Haiti",
-    "drift": 65.0
+    "team": "Brazil",
+    "drift": -61.89
    },
    {
     "team": "Scotland",
@@ -520,10 +524,6 @@
    {
     "team": "Norway",
     "drift": -12.39
-   },
-   {
-    "team": "Brazil",
-    "drift": -9.94
    },
    {
     "team": "Australia",
