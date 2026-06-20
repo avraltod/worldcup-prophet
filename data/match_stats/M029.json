@@ -1,0 +1,20 @@
+{
+ "match": 29,
+ "event_id": "760444",
+ "stats": {
+  "home": {
+   "team": "Brazil",
+   "sot": 5.0,
+   "other_shots": 3.0,
+   "total_shots": 8.0,
+   "possession": 56.7
+  },
+  "away": {
+   "team": "Haiti",
+   "sot": 3.0,
+   "other_shots": 4.0,
+   "total_shots": 7.0,
+   "possession": 43.3
+  }
+ }
+}

@@ -84,3 +84,5 @@ headline numbers are backfilled into the vintages table.
 **Rev M032 (United States v Australia 2-0).** Cumulative 19 pts, mean Brier 0.57; failure-mode none. Full living layer re-rendered (edition M032); skeleton unchanged.
 
 **Rev M030 (Scotland v Morocco 0-1).** Cumulative 20 pts, mean Brier 0.57; failure-mode none. Full living layer re-rendered (edition M030); skeleton unchanged.
+
+**Rev M029 (Brazil v Haiti 3-0).** Cumulative 19 pts, mean Brier 0.56; failure-mode none. Full living layer re-rendered (edition M029); skeleton unchanged.

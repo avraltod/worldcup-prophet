@@ -1012,6 +1012,41 @@
   ]
  },
  {
+  "edition": 29,
+  "match": 29,
+  "fixture": "Brazil v Haiti",
+  "result": [
+   3,
+   0
+  ],
+  "points": 1,
+  "cum_points": 19,
+  "mean_brier": 0.5572,
+  "cum_bits": 0.0528,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2572
+   ],
+   [
+    "France",
+    0.1828
+   ],
+   [
+    "Argentina",
+    0.1745
+   ],
+   [
+    "England",
+    0.1475
+   ],
+   [
+    "Germany",
+    0.0459
+   ]
+  ]
+ },
+ {
   "edition": 30,
   "match": 30,
   "fixture": "Scotland v Morocco",
@@ -1055,9 +1090,9 @@
    0
   ],
   "points": 1,
-  "cum_points": 21,
-  "mean_brier": 0.5608,
-  "cum_bits": 0.0549,
+  "cum_points": 22,
+  "mean_brier": 0.5438,
+  "cum_bits": 0.0566,
   "champ_top5": [
    [
     "Spain",
