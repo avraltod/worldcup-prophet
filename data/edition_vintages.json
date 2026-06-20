@@ -1152,6 +1152,41 @@
   ]
  },
  {
+  "edition": 33,
+  "match": 33,
+  "fixture": "Germany v Ivory Coast",
+  "result": [
+   2,
+   1
+  ],
+  "points": 3,
+  "cum_points": 25,
+  "mean_brier": 0.5414,
+  "cum_bits": 0.0632,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2604
+   ],
+   [
+    "Argentina",
+    0.1893
+   ],
+   [
+    "France",
+    0.1878
+   ],
+   [
+    "England",
+    0.151
+   ],
+   [
+    "Germany",
+    0.0515
+   ]
+  ]
+ },
+ {
   "edition": 35,
   "match": 35,
   "fixture": "Netherlands v Sweden",
@@ -1160,9 +1195,9 @@
    1
   ],
   "points": 1,
-  "cum_points": 23,
-  "mean_brier": 0.5419,
-  "cum_bits": 0.0642,
+  "cum_points": 26,
+  "mean_brier": 0.5323,
+  "cum_bits": 0.0652,
   "champ_top5": [
    [
     "Spain",

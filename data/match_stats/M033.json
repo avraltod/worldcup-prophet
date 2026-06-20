@@ -1,0 +1,20 @@
+{
+ "match": 33,
+ "event_id": "760448",
+ "stats": {
+  "home": {
+   "team": "Germany",
+   "sot": 7.0,
+   "other_shots": 9.0,
+   "total_shots": 16.0,
+   "possession": 59.4
+  },
+  "away": {
+   "team": "Ivory Coast",
+   "sot": 2.0,
+   "other_shots": 7.0,
+   "total_shots": 9.0,
+   "possession": 40.6
+  }
+ }
+}

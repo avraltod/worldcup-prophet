@@ -56,3 +56,4 @@ date,match,home,away,pred,actual,pts,ev,p_outcome_real,p_score_real,brier,code
 2026-06-20,29,Brazil,Haiti,2-0,3-0,1,1.3678,0.864,0.1779,0.0339,S
 2026-06-20,31,Turkey,Paraguay,2-1,0-1,0,0.7505,0.276,0.1102,0.7957,P?
 2026-06-20,35,Netherlands,Sweden,2-1,5-1,1,0.9588,0.6097,0.0103,0.23,S
+2026-06-20,33,Germany,Ivory Coast,2-1,2-1,3,0.9828,0.6259,0.0925,0.2134,HIT
