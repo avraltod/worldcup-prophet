@@ -1,0 +1,20 @@
+{
+ "match": 31,
+ "event_id": "760443",
+ "stats": {
+  "home": {
+   "team": "Türkiye",
+   "sot": 5.0,
+   "other_shots": 27.0,
+   "total_shots": 32.0,
+   "possession": 78.5
+  },
+  "away": {
+   "team": "Paraguay",
+   "sot": 2.0,
+   "other_shots": 5.0,
+   "total_shots": 7.0,
+   "possession": 21.5
+  }
+ }
+}

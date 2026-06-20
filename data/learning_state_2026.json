@@ -66,9 +66,9 @@
   "Haiti": 114.19324970131422,
   "Scotland": -56.806750298685806,
   "United States": 53.75,
-  "Paraguay": -75.0,
+  "Paraguay": -70.0851254480287,
   "Australia": -8.73282556750302,
-  "Turkey": 27.613500597371605,
+  "Turkey": 25.067951015531733,
   "Germany": 65.28375149342902,
   "Curaçao": -65.28375149342902,
   "Ivory Coast": 75.0,
@@ -659,6 +659,24 @@
    "drift_after": {
     "Brazil": -61.89,
     "Haiti": 114.19
+   }
+  },
+  {
+   "match": 31,
+   "home": "Turkey",
+   "away": "Paraguay",
+   "lam_obs": {
+    "home": 1.628,
+    "away": 0.651,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 1.7,
+    "away": 0.7
+   },
+   "drift_after": {
+    "Turkey": 25.07,
+    "Paraguay": -70.09
    }
   }
  ],
