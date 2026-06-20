@@ -1012,6 +1012,41 @@
   ]
  },
  {
+  "edition": 30,
+  "match": 30,
+  "fixture": "Scotland v Morocco",
+  "result": [
+   0,
+   1
+  ],
+  "points": 2,
+  "cum_points": 20,
+  "mean_brier": 0.569,
+  "cum_bits": 0.0538,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2549
+   ],
+   [
+    "France",
+    0.1833
+   ],
+   [
+    "Argentina",
+    0.1766
+   ],
+   [
+    "England",
+    0.148
+   ],
+   [
+    "Germany",
+    0.0459
+   ]
+  ]
+ },
+ {
   "edition": 32,
   "match": 32,
   "fixture": "United States v Australia",
@@ -1020,9 +1055,9 @@
    0
   ],
   "points": 1,
-  "cum_points": 19,
-  "mean_brier": 0.5671,
-  "cum_bits": 0.0522,
+  "cum_points": 21,
+  "mean_brier": 0.5608,
+  "cum_bits": 0.0549,
   "champ_top5": [
    [
     "Spain",

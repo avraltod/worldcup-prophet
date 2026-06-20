@@ -62,9 +62,9 @@
   "Qatar": -31.143369175627285,
   "Switzerland": -38.74313022700109,
   "Brazil": -9.943249701314183,
-  "Morocco": 9.943249701314183,
+  "Morocco": 4.5028375149342725,
   "Haiti": 65.00000000000001,
-  "Scotland": -65.00000000000001,
+  "Scotland": -56.806750298685806,
   "United States": 53.75,
   "Paraguay": -75.0,
   "Australia": -8.73282556750302,
@@ -623,6 +623,24 @@
    "drift_after": {
     "United States": 53.75,
     "Australia": -8.73
+   }
+  },
+  {
+   "match": 30,
+   "home": "Scotland",
+   "away": "Morocco",
+   "lam_obs": {
+    "home": 0.0,
+    "away": 0.651,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 0.85,
+    "away": 1.6
+   },
+   "drift_after": {
+    "Scotland": -56.81,
+    "Morocco": 4.5
    }
   }
  ],
