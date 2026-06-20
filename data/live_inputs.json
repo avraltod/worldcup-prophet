@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-06-20T01:18:17Z",
+ "fetched_at": "2026-06-20T02:13:09Z",
  "mode": "pre",
  "source_freshness": {
   "elo_updated_at": "2026-06-10T00:00:00Z",
@@ -419,7 +419,7 @@
    },
    {
     "team": "Scotland",
-    "drift": -65.0
+    "drift": -56.81
    },
    {
     "team": "Sweden",
@@ -526,10 +526,6 @@
     "drift": -9.94
    },
    {
-    "team": "Morocco",
-    "drift": 9.94
-   },
-   {
     "team": "Australia",
     "drift": -8.73
    },
@@ -540,6 +536,10 @@
    {
     "team": "Cape Verde",
     "drift": 7.33
+   },
+   {
+    "team": "Morocco",
+    "drift": 4.5
    },
    {
     "team": "Argentina",
