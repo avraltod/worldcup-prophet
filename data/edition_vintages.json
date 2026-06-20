@@ -1150,5 +1150,40 @@
     0.0459
    ]
   ]
+ },
+ {
+  "edition": 35,
+  "match": 35,
+  "fixture": "Netherlands v Sweden",
+  "result": [
+   5,
+   1
+  ],
+  "points": 1,
+  "cum_points": 23,
+  "mean_brier": 0.5419,
+  "cum_bits": 0.0642,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2583
+   ],
+   [
+    "Argentina",
+    0.1859
+   ],
+   [
+    "France",
+    0.1822
+   ],
+   [
+    "England",
+    0.1521
+   ],
+   [
+    "Germany",
+    0.0445
+   ]
+  ]
  }
 ]

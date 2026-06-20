@@ -1,0 +1,20 @@
+{
+ "match": 35,
+ "event_id": "760447",
+ "stats": {
+  "home": {
+   "team": "Netherlands",
+   "sot": 7.0,
+   "other_shots": 3.0,
+   "total_shots": 10.0,
+   "possession": 50.9
+  },
+  "away": {
+   "team": "Sweden",
+   "sot": 8.0,
+   "other_shots": 8.0,
+   "total_shots": 16.0,
+   "possession": 49.1
+  }
+ }
+}
