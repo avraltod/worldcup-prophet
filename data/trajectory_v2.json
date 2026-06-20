@@ -10708,7 +10708,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760447",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Bart Verbruggen",
+    "Denzel Dumfries",
+    "Jan Paul van Hecke",
+    "Virgil van Dijk",
+    "Micky van de Ven",
+    "Frenkie de Jong",
+    "Ryan Gravenberch",
+    "Tijjani Reijnders",
+    "Brian Brobbey",
+    "Donyell Malen",
+    "Cody Gakpo"
+   ],
+   "away": [
+    "Kristoffer Nordfeldt",
+    "Isak Hien",
+    "Gustaf Lagerbielke",
+    "Victor Lindelöf",
+    "Benjamin Nygren",
+    "Alexander Bernhardsson",
+    "Jesper Karlström",
+    "Gabriel Gudmundsson",
+    "Yasin Ayari",
+    "Viktor Gyökeres",
+    "Alexander Isak"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
