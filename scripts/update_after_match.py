@@ -470,6 +470,26 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
         mlf.bracket_fig(now_b_probs or now_probs,
                         PAPER / "figs" / "fig_live_bracket_b.pdf",
                         "Track B", eliminated=elim)
+        # Most-likely brackets (Track A / Track B): the submitted layout re-filled
+        # with the most-likely occupant of each R32 slot (box = P reach slot);
+        # rounds past R32 follow the Elo most-likely path (box = P champion).
+        # Companion to the re-valued brackets above (spec 2026-06-21).
+        import ml_bracket as mlb
+        rosters = mlb.group_rosters(expectations)
+        ml_a = mlb.build(now_probs, rosters,
+                         mlb.rating_winner(lambda t, late: cond.rating(t, late)))
+        mlf.mostlikely_bracket_fig(
+            ml_a, now_probs, PAPER / "figs" / "fig_mostlikely_bracket_a.pdf",
+            "Track A", eliminated=elim)
+        if learn_ratings:
+            b_probs = now_b_probs or now_probs
+            ml_b = mlb.build(b_probs, rosters, mlb.rating_winner(
+                lambda t, late: learn_ratings.get(t, 1500.0)))
+        else:                                    # no learning yet -> mirror Track A
+            b_probs, ml_b = now_probs, ml_a
+        mlf.mostlikely_bracket_fig(
+            ml_b, b_probs, PAPER / "figs" / "fig_mostlikely_bracket_b.pdf",
+            "Track B", eliminated=elim)
     except Exception as ex:                      # noqa: BLE001
         print(f"live figures skipped ({ex})")
 

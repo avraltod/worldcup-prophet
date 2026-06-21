@@ -699,7 +699,25 @@ def bracket_live_unit(ctx):
         "{figs/fig_live_bracket_b.pdf}\\par}\n"
         "\\end{figure}")
 
-    return discussion + slot_table + figs
+    ml_figs = (
+        "\\begin{figure}[!t]\n"
+        "  \\caption{The \\emph{most-likely} bracket: the same submitted layout, "
+        "but each Round-of-32 slot is re-filled with the team most likely to "
+        "occupy it (rather than the locked pick) under Track~A (top) and Track~B "
+        "(bottom) at live edition M\\liveEditionNum{}. Round-of-32 boxes show the "
+        "probability that team reaches the slot; rounds past the Round of 32 trace "
+        "the Elo most-likely path with boxes showing champion probability, and "
+        "upgrade to exact per-slot occupancy once the knockout draw is realised. "
+        "Read against Figure~\\ref{fig:live_bracket}, it shows where the live "
+        "forecast would re-cast the bracket the entry locked in.}"
+        "\\label{fig:mostlikely_bracket}\n"
+        "  {\\centering\\includegraphics[width=0.92\\textwidth]"
+        "{figs/fig_mostlikely_bracket_a.pdf}\\par\\smallskip\n"
+        "  \\includegraphics[width=0.92\\textwidth]"
+        "{figs/fig_mostlikely_bracket_b.pdf}\\par}\n"
+        "\\end{figure}")
+
+    return discussion + slot_table + figs + "\n\n" + ml_figs
 
 
 def survival_colcomp_unit(ctx):
