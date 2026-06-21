@@ -1255,5 +1255,40 @@
     0.0445
    ]
   ]
+ },
+ {
+  "edition": 36,
+  "match": 36,
+  "fixture": "Tunisia v Japan",
+  "result": [
+   0,
+   4
+  ],
+  "points": 1,
+  "cum_points": 27,
+  "mean_brier": 0.549,
+  "cum_bits": 0.0813,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2541
+   ],
+   [
+    "Argentina",
+    0.191
+   ],
+   [
+    "France",
+    0.1813
+   ],
+   [
+    "England",
+    0.1525
+   ],
+   [
+    "Germany",
+    0.0591
+   ]
+  ]
  }
 ]
