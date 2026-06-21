@@ -11744,7 +11744,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760449",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Aymen Dahmen",
+    "Montassar Talbi",
+    "Omar Rekik",
+    "Dylan Bronn",
+    "Ellyes Skhiri",
+    "Anis Slimane",
+    "Ali Abdi",
+    "Yan Valery",
+    "Sebastian Tounekti",
+    "Hannibal Mejbri",
+    "Elias Saad"
+   ],
+   "away": [
+    "Zion Suzuki",
+    "Kou Itakura",
+    "Hiroki Ito",
+    "Takehiro Tomiyasu",
+    "Ao Tanaka",
+    "Kaishu Sano",
+    "Keito Nakamura",
+    "Ritsu Doan",
+    "Ayase Ueda",
+    "Daichi Kamada",
+    "Junya Ito"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {

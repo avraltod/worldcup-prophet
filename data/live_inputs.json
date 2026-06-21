@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-06-21T02:43:00Z",
+ "fetched_at": "2026-06-21T04:15:32Z",
  "mode": "pre",
  "source_freshness": {
   "elo_updated_at": "2026-06-10T00:00:00Z",
@@ -362,6 +362,10 @@
   "lineup": [],
   "drift": [
    {
+    "team": "Curaçao",
+    "drift": -137.02
+   },
+   {
     "team": "Sweden",
     "drift": 127.35
    },
@@ -380,10 +384,6 @@
    {
     "team": "Germany",
     "drift": 78.41
-   },
-   {
-    "team": "Ecuador",
-    "drift": -75.0
    },
    {
     "team": "Iran",
@@ -412,10 +412,6 @@
    {
     "team": "Croatia",
     "drift": -67.67
-   },
-   {
-    "team": "Curaçao",
-    "drift": -65.28
    },
    {
     "team": "Brazil",
@@ -540,6 +536,10 @@
    {
     "team": "Morocco",
     "drift": 4.5
+   },
+   {
+    "team": "Ecuador",
+    "drift": 3.75
    },
    {
     "team": "Argentina",
