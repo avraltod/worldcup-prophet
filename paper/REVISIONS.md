@@ -96,3 +96,5 @@ headline numbers are backfilled into the vintages table.
 **Rev M034 (Ecuador v Curaçao 0-0).** Cumulative 25 pts, mean Brier 0.56; failure-mode systematic_rating_error. Full living layer re-rendered (edition M034); skeleton unchanged.
 
 **Rev M036 (Tunisia v Japan 0-4).** Cumulative 27 pts, mean Brier 0.55; failure-mode none. Full living layer re-rendered (edition M036); skeleton unchanged.
+
+**Rev M038 (Spain v Saudi Arabia 4-0).** Cumulative 28 pts, mean Brier 0.54; failure-mode none. Full living layer re-rendered (edition M038); skeleton unchanged.

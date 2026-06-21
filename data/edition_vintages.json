@@ -1290,5 +1290,40 @@
     0.0591
    ]
   ]
+ },
+ {
+  "edition": 38,
+  "match": 38,
+  "fixture": "Spain v Saudi Arabia",
+  "result": [
+   4,
+   0
+  ],
+  "points": 1,
+  "cum_points": 28,
+  "mean_brier": 0.5355,
+  "cum_bits": 0.0849,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2681
+   ],
+   [
+    "Argentina",
+    0.1848
+   ],
+   [
+    "France",
+    0.1797
+   ],
+   [
+    "England",
+    0.1512
+   ],
+   [
+    "Germany",
+    0.057
+   ]
+  ]
  }
 ]

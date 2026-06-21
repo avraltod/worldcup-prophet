@@ -1,0 +1,20 @@
+{
+ "match": 38,
+ "event_id": "760453",
+ "stats": {
+  "home": {
+   "team": "Spain",
+   "sot": 8.0,
+   "other_shots": 14.0,
+   "total_shots": 22.0,
+   "possession": 67.1
+  },
+  "away": {
+   "team": "Saudi Arabia",
+   "sot": 1.0,
+   "other_shots": 2.0,
+   "total_shots": 3.0,
+   "possession": 32.9
+  }
+ }
+}
