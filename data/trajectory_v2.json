@@ -12090,7 +12090,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760453",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Unai Simón",
+    "Pau Cubarsí",
+    "Marc Cucurella",
+    "Pedro Porro",
+    "Aymeric Laporte",
+    "Álex Baena",
+    "Rodri ",
+    "Lamine Yamal",
+    "Dani Olmo",
+    "Pedri ",
+    "Mikel Oyarzabal"
+   ],
+   "away": [
+    "Mohammed Al-Owais",
+    "Saud Abdulhamid",
+    "Abdulelah Al-Amri",
+    "Moteb Al-Harbi",
+    "Hassan Al-Tambakti",
+    "Ali Lajami",
+    "Abdullah Al-Khaibari",
+    "Nasser Al-Dawsari",
+    "Musab Al-Juwayr",
+    "Feras Al-Brikan",
+    "Salem Al-Dawsari"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
