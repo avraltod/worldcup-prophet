@@ -1,0 +1,20 @@
+{
+ "match": 39,
+ "event_id": "760451",
+ "stats": {
+  "home": {
+   "team": "Belgium",
+   "sot": 7.0,
+   "other_shots": 16.0,
+   "total_shots": 23.0,
+   "possession": 70.3
+  },
+  "away": {
+   "team": "Iran",
+   "sot": 3.0,
+   "other_shots": 4.0,
+   "total_shots": 7.0,
+   "possession": 29.7
+  }
+ }
+}

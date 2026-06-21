@@ -1325,5 +1325,40 @@
     0.057
    ]
   ]
+ },
+ {
+  "edition": 39,
+  "match": 39,
+  "fixture": "Belgium v Iran",
+  "result": [
+   0,
+   0
+  ],
+  "points": 0,
+  "cum_points": 28,
+  "mean_brier": 0.5502,
+  "cum_bits": 0.0875,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2786
+   ],
+   [
+    "Argentina",
+    0.1814
+   ],
+   [
+    "France",
+    0.1767
+   ],
+   [
+    "England",
+    0.1507
+   ],
+   [
+    "Germany",
+    0.0554
+   ]
+  ]
  }
 ]
