@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-06-21T06:10:04Z",
+ "fetched_at": "2026-06-21T08:07:06Z",
  "mode": "pre",
  "source_freshness": {
   "elo_updated_at": "2026-06-10T00:00:00Z",
@@ -414,16 +414,16 @@
     "drift": -67.67
    },
    {
+    "team": "Tunisia",
+    "drift": -62.46
+   },
+   {
     "team": "Brazil",
     "drift": -61.89
    },
    {
     "team": "Scotland",
     "drift": -56.81
-   },
-   {
-    "team": "Tunisia",
-    "drift": -56.39
    },
    {
     "team": "Ivory Coast",
@@ -466,10 +466,6 @@
     "drift": -37.67
    },
    {
-    "team": "Japan",
-    "drift": -36.34
-   },
-   {
     "team": "Canada",
     "drift": 35.84
    },
@@ -496,6 +492,10 @@
    {
     "team": "Panama",
     "drift": -29.94
+   },
+   {
+    "team": "Japan",
+    "drift": -25.63
    },
    {
     "team": "Turkey",
