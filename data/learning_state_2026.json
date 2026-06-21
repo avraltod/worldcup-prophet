@@ -70,9 +70,9 @@
   "Australia": -8.73282556750302,
   "Turkey": 25.067951015531733,
   "Germany": 78.41143966547209,
-  "Curaçao": -65.28375149342902,
+  "Curaçao": -137.01956391875757,
   "Ivory Coast": 54.85812425328548,
-  "Ecuador": -75.0,
+  "Ecuador": 3.75,
   "Netherlands": -39.26000597371562,
   "Japan": -36.335125448028705,
   "Sweden": 127.35065710872169,
@@ -713,6 +713,24 @@
    "drift_after": {
     "Germany": 78.41,
     "Ivory Coast": 54.86
+   }
+  },
+  {
+   "match": 34,
+   "home": "Ecuador",
+   "away": "Curaçao",
+   "lam_obs": {
+    "home": 4.884,
+    "away": 0.977,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 2.05,
+    "away": 0.1
+   },
+   "drift_after": {
+    "Ecuador": 3.75,
+    "Curaçao": -137.02
    }
   }
  ],

@@ -1187,6 +1187,41 @@
   ]
  },
  {
+  "edition": 34,
+  "match": 34,
+  "fixture": "Ecuador v Curaçao",
+  "result": [
+   0,
+   0
+  ],
+  "points": 0,
+  "cum_points": 25,
+  "mean_brier": 0.5639,
+  "cum_bits": 0.0768,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2577
+   ],
+   [
+    "Argentina",
+    0.1861
+   ],
+   [
+    "France",
+    0.1833
+   ],
+   [
+    "England",
+    0.1535
+   ],
+   [
+    "Germany",
+    0.058
+   ]
+  ]
+ },
+ {
   "edition": 35,
   "match": 35,
   "fixture": "Netherlands v Sweden",
@@ -1196,8 +1231,8 @@
   ],
   "points": 1,
   "cum_points": 26,
-  "mean_brier": 0.5323,
-  "cum_bits": 0.0652,
+  "mean_brier": 0.5544,
+  "cum_bits": 0.0788,
   "champ_top5": [
    [
     "Spain",

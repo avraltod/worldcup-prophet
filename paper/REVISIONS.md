@@ -92,3 +92,5 @@ headline numbers are backfilled into the vintages table.
 **Rev M035 (Netherlands v Sweden 5-1).** Cumulative 23 pts, mean Brier 0.54; failure-mode none. Full living layer re-rendered (edition M035); skeleton unchanged.
 
 **Rev M033 (Germany v Ivory Coast 2-1).** Cumulative 25 pts, mean Brier 0.54; failure-mode none. Full living layer re-rendered (edition M033); skeleton unchanged.
+
+**Rev M034 (Ecuador v Curaçao 0-0).** Cumulative 25 pts, mean Brier 0.56; failure-mode systematic_rating_error. Full living layer re-rendered (edition M034); skeleton unchanged.
