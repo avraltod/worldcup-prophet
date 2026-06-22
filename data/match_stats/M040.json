@@ -1,0 +1,20 @@
+{
+ "match": 40,
+ "event_id": "760452",
+ "stats": {
+  "home": {
+   "team": "New Zealand",
+   "sot": 5.0,
+   "other_shots": 6.0,
+   "total_shots": 11.0,
+   "possession": 44.3
+  },
+  "away": {
+   "team": "Egypt",
+   "sot": 7.0,
+   "other_shots": 12.0,
+   "total_shots": 19.0,
+   "possession": 55.7
+  }
+ }
+}

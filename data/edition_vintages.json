@@ -1395,5 +1395,40 @@
     0.0554
    ]
   ]
+ },
+ {
+  "edition": 40,
+  "match": 40,
+  "fixture": "New Zealand v Egypt",
+  "result": [
+   1,
+   3
+  ],
+  "points": 1,
+  "cum_points": 29,
+  "mean_brier": 0.5566,
+  "cum_bits": 0.0929,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2777
+   ],
+   [
+    "Argentina",
+    0.2087
+   ],
+   [
+    "France",
+    0.17
+   ],
+   [
+    "England",
+    0.1495
+   ],
+   [
+    "Germany",
+    0.0552
+   ]
+  ]
  }
 ]
