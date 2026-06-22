@@ -82,9 +82,9 @@
   "Iran": -98.86350059737161,
   "New Zealand": 75.0,
   "Spain": -0.5146356033451385,
-  "Cape Verde": 7.329749103942586,
+  "Cape Verde": 81.96326164874546,
   "Saudi Arabia": -38.699820788530616,
-  "Uruguay": 33.94862604540032,
+  "Uruguay": -42.7488052568697,
   "France": 37.67025089605741,
   "Senegal": -37.67025089605741,
   "Iraq": 12.38649940262839,
@@ -785,6 +785,24 @@
    "drift_after": {
     "Belgium": -17.51,
     "Iran": -98.86
+   }
+  },
+  {
+   "match": 37,
+   "home": "Uruguay",
+   "away": "Cape Verde",
+   "lam_obs": {
+    "home": 0.651,
+    "away": 1.302,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 1.85,
+    "away": 0.2
+   },
+   "drift_after": {
+    "Uruguay": -42.75,
+    "Cape Verde": 81.96
    }
   }
  ],

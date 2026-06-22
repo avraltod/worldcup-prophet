@@ -1292,6 +1292,41 @@
   ]
  },
  {
+  "edition": 37,
+  "match": 37,
+  "fixture": "Uruguay v Cape Verde",
+  "result": [
+   2,
+   2
+  ],
+  "points": 0,
+  "cum_points": 27,
+  "mean_brier": 0.5631,
+  "cum_bits": 0.0852,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2767
+   ],
+   [
+    "Argentina",
+    0.2112
+   ],
+   [
+    "France",
+    0.1715
+   ],
+   [
+    "England",
+    0.1462
+   ],
+   [
+    "Germany",
+    0.0538
+   ]
+  ]
+ },
+ {
   "edition": 38,
   "match": 38,
   "fixture": "Spain v Saudi Arabia",
@@ -1336,8 +1371,8 @@
   ],
   "points": 0,
   "cum_points": 28,
-  "mean_brier": 0.5502,
-  "cum_bits": 0.0875,
+  "mean_brier": 0.5635,
+  "cum_bits": 0.0914,
   "champ_top5": [
    [
     "Spain",
