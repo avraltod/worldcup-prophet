@@ -1430,5 +1430,40 @@
     0.0552
    ]
   ]
+ },
+ {
+  "edition": 43,
+  "match": 43,
+  "fixture": "Argentina v Austria",
+  "result": [
+   2,
+   0
+  ],
+  "points": 2,
+  "cum_points": 31,
+  "mean_brier": 0.5446,
+  "cum_bits": 0.0946,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2843
+   ],
+   [
+    "Argentina",
+    0.2179
+   ],
+   [
+    "France",
+    0.1689
+   ],
+   [
+    "England",
+    0.1436
+   ],
+   [
+    "Germany",
+    0.0528
+   ]
+  ]
  }
 ]

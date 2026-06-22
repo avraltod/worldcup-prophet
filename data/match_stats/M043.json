@@ -1,0 +1,20 @@
+{
+ "match": 43,
+ "event_id": "760456",
+ "stats": {
+  "home": {
+   "team": "Argentina",
+   "sot": 5.0,
+   "other_shots": 7.0,
+   "total_shots": 12.0,
+   "possession": 53.6
+  },
+  "away": {
+   "team": "Austria",
+   "sot": 1.0,
+   "other_shots": 5.0,
+   "total_shots": 6.0,
+   "possession": 46.4
+  }
+ }
+}
