@@ -1535,5 +1535,40 @@
     0.0528
    ]
   ]
+ },
+ {
+  "edition": 44,
+  "match": 44,
+  "fixture": "Jordan v Algeria",
+  "result": [
+   1,
+   2
+  ],
+  "points": 3,
+  "cum_points": 39,
+  "mean_brier": 0.5293,
+  "cum_bits": 0.0986,
+  "champ_top5": [
+   [
+    "Spain",
+    0.3005
+   ],
+   [
+    "Argentina",
+    0.1994
+   ],
+   [
+    "England",
+    0.1519
+   ],
+   [
+    "France",
+    0.1456
+   ],
+   [
+    "Germany",
+    0.0546
+   ]
+  ]
  }
 ]

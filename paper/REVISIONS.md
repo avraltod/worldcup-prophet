@@ -110,3 +110,5 @@ headline numbers are backfilled into the vintages table.
 **Rev M042 (France v Iraq 3-0).** Cumulative 32 pts, mean Brier 0.54; failure-mode none. Full living layer re-rendered (edition M042); skeleton unchanged.
 
 **Rev M041 (Norway v Senegal 3-2).** Cumulative 31 pts, mean Brier 0.55; failure-mode none. Full living layer re-rendered (edition M041); skeleton unchanged.
+
+**Rev M044 (Jordan v Algeria 1-2).** Cumulative 39 pts, mean Brier 0.53; failure-mode none. Full living layer re-rendered (edition M044); skeleton unchanged.
