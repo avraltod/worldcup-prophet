@@ -1432,6 +1432,41 @@
   ]
  },
  {
+  "edition": 41,
+  "match": 41,
+  "fixture": "Norway v Senegal",
+  "result": [
+   3,
+   2
+  ],
+  "points": 2,
+  "cum_points": 31,
+  "mean_brier": 0.5527,
+  "cum_bits": 0.0952,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2975
+   ],
+   [
+    "Argentina",
+    0.1988
+   ],
+   [
+    "England",
+    0.1525
+   ],
+   [
+    "France",
+    0.1485
+   ],
+   [
+    "Germany",
+    0.0557
+   ]
+  ]
+ },
+ {
   "edition": 42,
   "match": 42,
   "fixture": "France v Iraq",
@@ -1475,9 +1510,9 @@
    0
   ],
   "points": 2,
-  "cum_points": 34,
-  "mean_brier": 0.532,
-  "cum_bits": 0.095,
+  "cum_points": 36,
+  "mean_brier": 0.5288,
+  "cum_bits": 0.0973,
   "champ_top5": [
    [
     "Spain",

@@ -1,0 +1,20 @@
+{
+ "match": 41,
+ "event_id": "760454",
+ "stats": {
+  "home": {
+   "team": "Norway",
+   "sot": 7.0,
+   "other_shots": 6.0,
+   "total_shots": 13.0,
+   "possession": 41.7
+  },
+  "away": {
+   "team": "Senegal",
+   "sot": 4.0,
+   "other_shots": 12.0,
+   "total_shots": 16.0,
+   "possession": 58.3
+  }
+ }
+}

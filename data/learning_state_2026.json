@@ -86,9 +86,9 @@
   "Saudi Arabia": -38.699820788530616,
   "Uruguay": -42.7488052568697,
   "France": 19.678614097969064,
-  "Senegal": -37.67025089605741,
+  "Senegal": -62.12186379928326,
   "Iraq": 27.875298685782447,
-  "Norway": -12.38649940262839,
+  "Norway": 14.567951015531749,
   "Argentina": -18.31421744324961,
   "Algeria": 3.6081242532854954,
   "Austria": -25.4885005973716,
@@ -857,6 +857,24 @@
    "drift_after": {
     "France": 19.68,
     "Iraq": 27.88
+   }
+  },
+  {
+   "match": 41,
+   "home": "Norway",
+   "away": "Senegal",
+   "lam_obs": {
+    "home": 2.279,
+    "away": 1.302,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 1.4,
+    "away": 0.95
+   },
+   "drift_after": {
+    "Norway": 14.57,
+    "Senegal": -62.12
    }
   }
  ],

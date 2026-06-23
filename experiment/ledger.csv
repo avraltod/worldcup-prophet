@@ -73,3 +73,4 @@ date,match,home,away,pred,actual,pts,ev,p_outcome_real,p_score_real,brier,code
 2026-06-22,40,New Zealand,Egypt,1-2,1-3,1,0.9221,0.565,0.0436,0.2881,S
 2026-06-22,43,Argentina,Austria,3-1,2-0,2,1.0931,0.7969,0.1295,0.0637,P?
 2026-06-23,42,France,Iraq,3-0,3-0,3,1.3145,0.9105,0.1915,0.014,HIT
+2026-06-23,41,Norway,Senegal,2-1,3-2,2,0.8238,0.4859,0.0186,0.3969,P?
