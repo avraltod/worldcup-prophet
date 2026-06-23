@@ -1,0 +1,20 @@
+{
+ "match": 45,
+ "event_id": "760458",
+ "stats": {
+  "home": {
+   "team": "England",
+   "sot": 3.0,
+   "other_shots": 16.0,
+   "total_shots": 19.0,
+   "possession": 78.8
+  },
+  "away": {
+   "team": "Ghana",
+   "sot": 1.0,
+   "other_shots": 1.0,
+   "total_shots": 2.0,
+   "possession": 21.2
+  }
+ }
+}

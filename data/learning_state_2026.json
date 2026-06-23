@@ -97,9 +97,9 @@
   "Congo DR": 75.0,
   "Uzbekistan": -27.62753882915182,
   "Colombia": -22.443249701314194,
-  "England": 67.67025089605741,
+  "England": -5.656511350059645,
   "Croatia": -67.67025089605741,
-  "Ghana": 29.943249701314194,
+  "Ghana": 98.38933691756267,
   "Panama": -29.943249701314194
  },
  "processed": [
@@ -911,6 +911,24 @@
    "drift_after": {
     "Portugal": -22.3,
     "Uzbekistan": -27.63
+   }
+  },
+  {
+   "match": 45,
+   "home": "England",
+   "away": "Ghana",
+   "lam_obs": {
+    "home": 0.977,
+    "away": 0.326,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 2.15,
+    "away": 0.1
+   },
+   "drift_after": {
+    "England": -5.66,
+    "Ghana": 98.39
    }
   }
  ],
