@@ -1,0 +1,20 @@
+{
+ "match": 47,
+ "event_id": "760461",
+ "stats": {
+  "home": {
+   "team": "Portugal",
+   "sot": 9.0,
+   "other_shots": 8.0,
+   "total_shots": 17.0,
+   "possession": 66.0
+  },
+  "away": {
+   "team": "Uzbekistan",
+   "sot": 2.0,
+   "other_shots": 5.0,
+   "total_shots": 7.0,
+   "possession": 34.0
+  }
+ }
+}

@@ -1570,5 +1570,40 @@
     0.0546
    ]
   ]
+ },
+ {
+  "edition": 47,
+  "match": 47,
+  "fixture": "Portugal v Uzbekistan",
+  "result": [
+   5,
+   0
+  ],
+  "points": 1,
+  "cum_points": 40,
+  "mean_brier": 0.5192,
+  "cum_bits": 0.1011,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2913
+   ],
+   [
+    "Argentina",
+    0.1962
+   ],
+   [
+    "England",
+    0.1542
+   ],
+   [
+    "France",
+    0.1499
+   ],
+   [
+    "Germany",
+    0.0563
+   ]
+  ]
  }
 ]
