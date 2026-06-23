@@ -1,0 +1,20 @@
+{
+ "match": 42,
+ "event_id": "760457",
+ "stats": {
+  "home": {
+   "team": "France",
+   "sot": 5.0,
+   "other_shots": 14.0,
+   "total_shots": 19.0,
+   "possession": 55.5
+  },
+  "away": {
+   "team": "Iraq",
+   "sot": 0.0,
+   "other_shots": 4.0,
+   "total_shots": 4.0,
+   "possession": 44.5
+  }
+ }
+}

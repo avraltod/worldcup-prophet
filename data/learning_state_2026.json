@@ -85,9 +85,9 @@
   "Cape Verde": 81.96326164874546,
   "Saudi Arabia": -38.699820788530616,
   "Uruguay": -42.7488052568697,
-  "France": 37.67025089605741,
+  "France": 19.678614097969064,
   "Senegal": -37.67025089605741,
-  "Iraq": 12.38649940262839,
+  "Iraq": 27.875298685782447,
   "Norway": -12.38649940262839,
   "Argentina": -18.31421744324961,
   "Algeria": 3.6081242532854954,
@@ -839,6 +839,24 @@
    "drift_after": {
     "Argentina": -18.31,
     "Austria": -25.49
+   }
+  },
+  {
+   "match": 42,
+   "home": "France",
+   "away": "Iraq",
+   "lam_obs": {
+    "home": 1.628,
+    "away": 0.0,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 2.05,
+    "away": 0.1
+   },
+   "drift_after": {
+    "France": 19.68,
+    "Iraq": 27.88
    }
   }
  ],

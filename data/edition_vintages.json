@@ -1432,6 +1432,41 @@
   ]
  },
  {
+  "edition": 42,
+  "match": 42,
+  "fixture": "France v Iraq",
+  "result": [
+   3,
+   0
+  ],
+  "points": 3,
+  "cum_points": 32,
+  "mean_brier": 0.5434,
+  "cum_bits": 0.0933,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2893
+   ],
+   [
+    "Argentina",
+    0.1951
+   ],
+   [
+    "France",
+    0.1711
+   ],
+   [
+    "England",
+    0.1527
+   ],
+   [
+    "Germany",
+    0.0517
+   ]
+  ]
+ },
+ {
   "edition": 43,
   "match": 43,
   "fixture": "Argentina v Austria",
@@ -1440,9 +1475,9 @@
    0
   ],
   "points": 2,
-  "cum_points": 31,
-  "mean_brier": 0.5446,
-  "cum_bits": 0.0946,
+  "cum_points": 34,
+  "mean_brier": 0.532,
+  "cum_bits": 0.095,
   "champ_top5": [
    [
     "Spain",

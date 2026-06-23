@@ -106,3 +106,5 @@ headline numbers are backfilled into the vintages table.
 **Rev M040 (New Zealand v Egypt 1-3).** Cumulative 29 pts, mean Brier 0.56; failure-mode none. Full living layer re-rendered (edition M040); skeleton unchanged.
 
 **Rev M043 (Argentina v Austria 2-0).** Cumulative 31 pts, mean Brier 0.54; failure-mode none. Full living layer re-rendered (edition M043); skeleton unchanged.
+
+**Rev M042 (France v Iraq 3-0).** Cumulative 32 pts, mean Brier 0.54; failure-mode none. Full living layer re-rendered (edition M042); skeleton unchanged.
