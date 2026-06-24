@@ -116,3 +116,5 @@ headline numbers are backfilled into the vintages table.
 **Rev M047 (Portugal v Uzbekistan 5-0).** Cumulative 40 pts, mean Brier 0.52; failure-mode none. Full living layer re-rendered (edition M047); skeleton unchanged.
 
 **Rev M045 (England v Ghana 0-0).** Cumulative 39 pts, mean Brier 0.56; failure-mode systematic_rating_error. Full living layer re-rendered (edition M045); skeleton unchanged.
+
+**Rev M046 (Panama v Croatia 0-1).** Cumulative 41 pts, mean Brier 0.55; failure-mode none. Full living layer re-rendered (edition M046); skeleton unchanged.

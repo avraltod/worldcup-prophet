@@ -1,0 +1,20 @@
+{
+ "match": 46,
+ "event_id": "760460",
+ "stats": {
+  "home": {
+   "team": "Panama",
+   "sot": 1.0,
+   "other_shots": 7.0,
+   "total_shots": 8.0,
+   "possession": 42.1
+  },
+  "away": {
+   "team": "Croatia",
+   "sot": 2.0,
+   "other_shots": 4.0,
+   "total_shots": 6.0,
+   "possession": 57.9
+  }
+ }
+}

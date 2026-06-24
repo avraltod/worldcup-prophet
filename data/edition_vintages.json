@@ -1607,6 +1607,41 @@
   ]
  },
  {
+  "edition": 46,
+  "match": 46,
+  "fixture": "Panama v Croatia",
+  "result": [
+   0,
+   1
+  ],
+  "points": 2,
+  "cum_points": 41,
+  "mean_brier": 0.5487,
+  "cum_bits": 0.1014,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2926
+   ],
+   [
+    "Argentina",
+    0.2065
+   ],
+   [
+    "France",
+    0.1561
+   ],
+   [
+    "Portugal",
+    0.0804
+   ],
+   [
+    "England",
+    0.0727
+   ]
+  ]
+ },
+ {
   "edition": 47,
   "match": 47,
   "fixture": "Portugal v Uzbekistan",
@@ -1615,9 +1650,9 @@
    0
   ],
   "points": 1,
-  "cum_points": 40,
-  "mean_brier": 0.5451,
-  "cum_bits": 0.1026,
+  "cum_points": 42,
+  "mean_brier": 0.5386,
+  "cum_bits": 0.1039,
   "champ_top5": [
    [
     "Spain",

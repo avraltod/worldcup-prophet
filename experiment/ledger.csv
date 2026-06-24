@@ -81,3 +81,4 @@ date,match,home,away,pred,actual,pts,ev,p_outcome_real,p_score_real,brier,code
 2026-06-23,44,Jordan,Algeria,1-2,1-2,3,0.6986,0.394,0.0797,0.551,HIT
 2026-06-23,47,Portugal,Uzbekistan,3-1,5-0,1,1.075,0.7796,0.0365,0.0746,S
 2026-06-23,45,England,Ghana,3-0,0-0,0,1.3365,0.0715,0.055,1.7075,L?
+2026-06-24,46,Panama,Croatia,1-2,0-1,2,0.9528,0.5998,0.1366,0.2423,P?

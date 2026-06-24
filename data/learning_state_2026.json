@@ -98,9 +98,9 @@
   "Uzbekistan": -27.62753882915182,
   "Colombia": -22.443249701314194,
   "England": -5.656511350059645,
-  "Croatia": -67.67025089605741,
+  "Croatia": -90.50836320191164,
   "Ghana": 98.38933691756267,
-  "Panama": -29.943249701314194
+  "Panama": -2.224462365591396
  },
  "processed": [
   {
@@ -929,6 +929,24 @@
    "drift_after": {
     "England": -5.66,
     "Ghana": 98.39
+   }
+  },
+  {
+   "match": 46,
+   "home": "Panama",
+   "away": "Croatia",
+   "lam_obs": {
+    "home": 0.326,
+    "away": 0.651,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 0.8,
+    "away": 1.65
+   },
+   "drift_after": {
+    "Panama": -2.22,
+    "Croatia": -90.51
    }
   }
  ],
