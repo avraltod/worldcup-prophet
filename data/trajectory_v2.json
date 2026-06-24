@@ -16596,7 +16596,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760465",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Angus Gunn",
+    "Nathan Patterson",
+    "Jack Hendry",
+    "Andy Robertson",
+    "Scott McKenna",
+    "Scott McTominay",
+    "Kenny McLean",
+    "Ben Gannon-Doak",
+    "John McGinn",
+    "Lewis Ferguson",
+    "Lawrence Shankland"
+   ],
+   "away": [
+    "Alisson Becker",
+    "Gabriel Magalhães",
+    "Danilo",
+    "Marquinhos",
+    "Douglas Santos",
+    "Bruno Guimarães",
+    "Casemiro",
+    "Lucas Paquetá",
+    "Vinícius Júnior",
+    "Rayan",
+    "Matheus Cunha"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
@@ -16748,7 +16775,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760464",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Yassine Bounou",
+    "Redouane Halhal",
+    "Achraf Hakimi",
+    "Anass Salah-Eddine",
+    "Chadi Riad",
+    "Bilal El Khannouss",
+    "Neil El Aynaoui",
+    "Sofyan Amrabat",
+    "Ismael Saibari",
+    "Brahim Díaz",
+    "Ayoub El Kaabi"
+   ],
+   "away": [
+    "Johny Placide",
+    "Hannes Delcroix",
+    "Martin Expérience",
+    "Jean-Kévin Duverne",
+    "Ricardo Adé",
+    "Jean-Ricner Bellegarde",
+    "Danley Jean Jacques",
+    "Josué Casimir",
+    "Ruben Providence",
+    "Wilson Isidor",
+    "Lenny Joseph"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
