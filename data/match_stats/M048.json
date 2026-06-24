@@ -1,0 +1,20 @@
+{
+ "match": 48,
+ "event_id": "760459",
+ "stats": {
+  "home": {
+   "team": "Colombia",
+   "sot": 9.0,
+   "other_shots": 11.0,
+   "total_shots": 20.0,
+   "possession": 63.5
+  },
+  "away": {
+   "team": "Congo DR",
+   "sot": 1.0,
+   "other_shots": 6.0,
+   "total_shots": 7.0,
+   "possession": 36.5
+  }
+ }
+}

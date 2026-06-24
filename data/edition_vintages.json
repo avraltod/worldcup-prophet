@@ -1675,5 +1675,40 @@
     0.0563
    ]
   ]
+ },
+ {
+  "edition": 48,
+  "match": 48,
+  "fixture": "Colombia v Congo DR",
+  "result": [
+   1,
+   0
+  ],
+  "points": 1,
+  "cum_points": 43,
+  "mean_brier": 0.5284,
+  "cum_bits": 0.1059,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2842
+   ],
+   [
+    "Argentina",
+    0.2137
+   ],
+   [
+    "France",
+    0.1594
+   ],
+   [
+    "Portugal",
+    0.0787
+   ],
+   [
+    "England",
+    0.0742
+   ]
+  ]
  }
 ]

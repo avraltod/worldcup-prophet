@@ -94,9 +94,9 @@
   "Austria": -25.4885005973716,
   "Jordan": -19.738500597371626,
   "Portugal": -22.301373954599697,
-  "Congo DR": 75.0,
+  "Congo DR": -3.75,
   "Uzbekistan": -27.62753882915182,
-  "Colombia": -22.443249701314194,
+  "Colombia": 53.678912783751514,
   "England": -5.656511350059645,
   "Croatia": -90.50836320191164,
   "Ghana": 98.38933691756267,
@@ -947,6 +947,24 @@
    "drift_after": {
     "Panama": -2.22,
     "Croatia": -90.51
+   }
+  },
+  {
+   "match": 48,
+   "home": "Colombia",
+   "away": "Congo DR",
+   "lam_obs": {
+    "home": 2.93,
+    "away": 0.326,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 1.65,
+    "away": 0.75
+   },
+   "drift_after": {
+    "Colombia": 53.68,
+    "Congo DR": -3.75
    }
   }
  ],
@@ -2206,6 +2224,47 @@
    },
    "info_snapshot": {
     "fetched_at": "2026-06-23T19:14:46Z",
+    "elo_updated_at": "2026-06-10T00:00:00Z",
+    "odds_fetched_at": null,
+    "elo_rms_delta": 0.0,
+    "n_rate_changes": 0,
+    "max_odds_shift_ph": 0.0,
+    "biggest_elo_mover": {
+     "team": "Mexico",
+     "june10": 1868,
+     "current": 1868,
+     "delta": 0
+    },
+    "biggest_odds_mover": {},
+    "n_new_injuries": 0,
+    "n_lineup_adj": 0,
+    "n_teams_with_drift": 48
+   }
+  },
+  {
+   "match": 48,
+   "frozen_top": {
+    "Spain": 0.2782,
+    "Argentina": 0.2293,
+    "France": 0.1348,
+    "Portugal": 0.0922,
+    "England": 0.0727,
+    "Brazil": 0.0297,
+    "Germany": 0.0217,
+    "Netherlands": 0.0202
+   },
+   "learning_top": {
+    "Spain": 0.2705,
+    "Argentina": 0.2117,
+    "France": 0.155,
+    "Portugal": 0.078,
+    "England": 0.0741,
+    "Brazil": 0.0129,
+    "Germany": 0.0583,
+    "Netherlands": 0.0125
+   },
+   "info_snapshot": {
+    "fetched_at": "2026-06-24T05:09:09Z",
     "elo_updated_at": "2026-06-10T00:00:00Z",
     "odds_fetched_at": null,
     "elo_rms_delta": 0.0,
