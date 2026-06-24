@@ -120,3 +120,7 @@ headline numbers are backfilled into the vintages table.
 **Rev M046 (Panama v Croatia 0-1).** Cumulative 41 pts, mean Brier 0.55; failure-mode none. Full living layer re-rendered (edition M046); skeleton unchanged.
 
 **Rev M048 (Colombia v Congo DR 1-0).** Cumulative 43 pts, mean Brier 0.53; failure-mode none. Full living layer re-rendered (edition M048); skeleton unchanged.
+
+**Rev M051 (Switzerland v Canada 2-1).** Cumulative 46 pts, mean Brier 0.53; failure-mode none. Full living layer re-rendered (edition M051); skeleton unchanged.
+
+**Rev M052 (Bosnia and Herzegovina v Qatar 3-1).** Cumulative 47 pts, mean Brier 0.52; failure-mode none. Full living layer re-rendered (edition M052); skeleton unchanged.

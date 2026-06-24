@@ -1,0 +1,20 @@
+{
+ "match": 52,
+ "event_id": "760462",
+ "stats": {
+  "home": {
+   "team": "Bosnia-Herzegovina",
+   "sot": 5.0,
+   "other_shots": 9.0,
+   "total_shots": 14.0,
+   "possession": 54.5
+  },
+  "away": {
+   "team": "Qatar",
+   "sot": 3.0,
+   "other_shots": 6.0,
+   "total_shots": 9.0,
+   "possession": 45.5
+  }
+ }
+}

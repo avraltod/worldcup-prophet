@@ -1710,5 +1710,75 @@
     0.0742
    ]
   ]
+ },
+ {
+  "edition": 51,
+  "match": 51,
+  "fixture": "Switzerland v Canada",
+  "result": [
+   2,
+   1
+  ],
+  "points": 3,
+  "cum_points": 46,
+  "mean_brier": 0.5255,
+  "cum_bits": 0.1072,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2756
+   ],
+   [
+    "Argentina",
+    0.2076
+   ],
+   [
+    "France",
+    0.1577
+   ],
+   [
+    "Portugal",
+    0.0734
+   ],
+   [
+    "England",
+    0.0716
+   ]
+  ]
+ },
+ {
+  "edition": 52,
+  "match": 52,
+  "fixture": "Bosnia and Herzegovina v Qatar",
+  "result": [
+   3,
+   1
+  ],
+  "points": 1,
+  "cum_points": 47,
+  "mean_brier": 0.5215,
+  "cum_bits": 0.1085,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2765
+   ],
+   [
+    "Argentina",
+    0.2064
+   ],
+   [
+    "France",
+    0.1574
+   ],
+   [
+    "Portugal",
+    0.0746
+   ],
+   [
+    "England",
+    0.0711
+   ]
+  ]
  }
 ]
