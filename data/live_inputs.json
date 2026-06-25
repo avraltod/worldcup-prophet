@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-06-25T22:39:35Z",
+ "fetched_at": "2026-06-25T23:12:01Z",
  "mode": "pre",
  "source_freshness": {
   "elo_updated_at": "2026-06-10T00:00:00Z",
@@ -366,10 +366,6 @@
     "drift": 154.82
    },
    {
-    "team": "Curaçao",
-    "drift": -137.02
-   },
-   {
     "team": "Sweden",
     "drift": 127.35
    },
@@ -406,10 +402,6 @@
     "drift": 79.28
    },
    {
-    "team": "Germany",
-    "drift": 78.41
-   },
-   {
     "team": "Paraguay",
     "drift": -70.09
    },
@@ -434,12 +426,16 @@
     "drift": -62.12
    },
    {
+    "team": "Curaçao",
+    "drift": -55.17
+   },
+   {
     "team": "South Korea",
     "drift": -55.09
    },
    {
-    "team": "Ivory Coast",
-    "drift": 54.86
+    "team": "Germany",
+    "drift": 54.49
    },
    {
     "team": "United States",
@@ -494,6 +490,14 @@
     "drift": 25.07
    },
    {
+    "team": "Ecuador",
+    "drift": 23.56
+   },
+   {
+    "team": "Ivory Coast",
+    "drift": -22.88
+   },
+   {
     "team": "Portugal",
     "drift": -22.3
    },
@@ -528,10 +532,6 @@
    {
     "team": "England",
     "drift": -5.66
-   },
-   {
-    "team": "Ecuador",
-    "drift": 3.75
    },
    {
     "team": "Congo DR",
