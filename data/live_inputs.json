@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-06-25T03:40:55Z",
+ "fetched_at": "2026-06-25T05:10:44Z",
  "mode": "pre",
  "source_freshness": {
   "elo_updated_at": "2026-06-10T00:00:00Z",
@@ -362,16 +362,16 @@
   "lineup": [],
   "drift": [
    {
+    "team": "South Africa",
+    "drift": 154.82
+   },
+   {
     "team": "Curaçao",
     "drift": -137.02
    },
    {
     "team": "Sweden",
     "drift": 127.35
-   },
-   {
-    "team": "South Africa",
-    "drift": 103.72
    },
    {
     "team": "Iran",
@@ -394,12 +394,12 @@
     "drift": 90.38
    },
    {
-    "team": "Cape Verde",
-    "drift": 81.96
+    "team": "Czechia",
+    "drift": -86.19
    },
    {
-    "team": "Czechia",
-    "drift": -80.08
+    "team": "Cape Verde",
+    "drift": 81.96
    },
    {
     "team": "Morocco",
@@ -432,6 +432,10 @@
    {
     "team": "Senegal",
     "drift": -62.12
+   },
+   {
+    "team": "South Korea",
+    "drift": -55.09
    },
    {
     "team": "Ivory Coast",
@@ -490,10 +494,6 @@
     "drift": 25.07
    },
    {
-    "team": "Mexico",
-    "drift": -24.89
-   },
-   {
     "team": "Portugal",
     "drift": -22.3
    },
@@ -518,6 +518,10 @@
     "drift": 14.57
    },
    {
+    "team": "Mexico",
+    "drift": -13.53
+   },
+   {
     "team": "Australia",
     "drift": -8.73
    },
@@ -540,10 +544,6 @@
    {
     "team": "Panama",
     "drift": -2.22
-   },
-   {
-    "team": "South Korea",
-    "drift": 1.25
    },
    {
     "team": "Spain",
