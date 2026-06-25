@@ -1,0 +1,20 @@
+{
+ "match": 55,
+ "event_id": "760473",
+ "stats": {
+  "home": {
+   "team": "Curaçao",
+   "sot": 2.0,
+   "other_shots": 9.0,
+   "total_shots": 11.0,
+   "possession": 36.6
+  },
+  "away": {
+   "team": "Ivory Coast",
+   "sot": 3.0,
+   "other_shots": 4.0,
+   "total_shots": 7.0,
+   "possession": 63.4
+  }
+ }
+}

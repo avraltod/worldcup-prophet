@@ -1,0 +1,20 @@
+{
+ "match": 56,
+ "event_id": "760468",
+ "stats": {
+  "home": {
+   "team": "Ecuador",
+   "sot": 3.0,
+   "other_shots": 4.0,
+   "total_shots": 7.0,
+   "possession": 38.9
+  },
+  "away": {
+   "team": "Germany",
+   "sot": 3.0,
+   "other_shots": 8.0,
+   "total_shots": 11.0,
+   "possession": 61.1
+  }
+ }
+}

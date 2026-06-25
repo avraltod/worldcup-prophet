@@ -99,3 +99,5 @@ date,match,home,away,pred,actual,pts,ev,p_outcome_real,p_score_real,brier,code
 2026-06-25,49,Scotland,Brazil,1-2,0-3,1,1.0209,0.677,0.0873,0.1593,S
 2026-06-25,53,Czechia,Mexico,1-2,0-3,1,0.8409,0.498,0.0482,0.3783,S
 2026-06-25,54,South Africa,South Korea,1-2,1-0,0,0.733,0.29,0.1107,0.7629,P?
+2026-06-25,55,Curaçao,Ivory Coast,1-2,0-2,1,1.0905,0.7695,0.153,0.0832,S
+2026-06-25,56,Ecuador,Germany,1-2,2-1,0,0.9135,0.1923,0.0489,1.0293,L?

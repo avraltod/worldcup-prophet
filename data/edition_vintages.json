@@ -1920,5 +1920,75 @@
     0.0688
    ]
   ]
+ },
+ {
+  "edition": 55,
+  "match": 55,
+  "fixture": "Curaçao v Ivory Coast",
+  "result": [
+   0,
+   2
+  ],
+  "points": 1,
+  "cum_points": 52,
+  "mean_brier": 0.5008,
+  "cum_bits": 0.1165,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2804
+   ],
+   [
+    "Argentina",
+    0.2054
+   ],
+   [
+    "France",
+    0.1527
+   ],
+   [
+    "Portugal",
+    0.0747
+   ],
+   [
+    "England",
+    0.0681
+   ]
+  ]
+ },
+ {
+  "edition": 56,
+  "match": 56,
+  "fixture": "Ecuador v Germany",
+  "result": [
+   2,
+   1
+  ],
+  "points": 0,
+  "cum_points": 52,
+  "mean_brier": 0.5103,
+  "cum_bits": 0.1597,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2658
+   ],
+   [
+    "Argentina",
+    0.2068
+   ],
+   [
+    "France",
+    0.1535
+   ],
+   [
+    "Portugal",
+    0.0736
+   ],
+   [
+    "England",
+    0.0666
+   ]
+  ]
  }
 ]
