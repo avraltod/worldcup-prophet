@@ -1850,5 +1850,75 @@
     0.0711
    ]
   ]
+ },
+ {
+  "edition": 53,
+  "match": 53,
+  "fixture": "Czechia v Mexico",
+  "result": [
+   0,
+   3
+  ],
+  "points": 1,
+  "cum_points": 51,
+  "mean_brier": 0.5038,
+  "cum_bits": 0.1127,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2748
+   ],
+   [
+    "Argentina",
+    0.2065
+   ],
+   [
+    "France",
+    0.1513
+   ],
+   [
+    "Portugal",
+    0.0765
+   ],
+   [
+    "England",
+    0.0731
+   ]
+  ]
+ },
+ {
+  "edition": 54,
+  "match": 54,
+  "fixture": "South Africa v South Korea",
+  "result": [
+   1,
+   0
+  ],
+  "points": 0,
+  "cum_points": 51,
+  "mean_brier": 0.5086,
+  "cum_bits": 0.1158,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2793
+   ],
+   [
+    "Argentina",
+    0.2084
+   ],
+   [
+    "France",
+    0.152
+   ],
+   [
+    "Portugal",
+    0.0755
+   ],
+   [
+    "England",
+    0.0688
+   ]
+  ]
  }
 ]

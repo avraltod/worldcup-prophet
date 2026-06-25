@@ -1,0 +1,20 @@
+{
+ "match": 53,
+ "event_id": "760467",
+ "stats": {
+  "home": {
+   "team": "Czechia",
+   "sot": 1.0,
+   "other_shots": 12.0,
+   "total_shots": 13.0,
+   "possession": 51.6
+  },
+  "away": {
+   "team": "Mexico",
+   "sot": 5.0,
+   "other_shots": 6.0,
+   "total_shots": 11.0,
+   "possession": 48.4
+  }
+ }
+}
