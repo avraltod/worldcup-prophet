@@ -51,24 +51,24 @@ Poisson goal model, and optimizes picks under the pool's 3/2/1 scoring rule.
 ## Results tracking
 
 <!-- LIVE-RESULTS:START -->
-_Last updated: 2026-06-24 — 48/104 matches played._
+_Last updated: 2026-06-25 — 54/104 matches played._
 
-**Information gain in this update:** 0.003 bits
+**Information gain in this update:** 0.004 bits
 
 **Champion probability — model vs market (top 8):**
 
 | Team | Model | Market |
 |---|---|---|
-| Spain | 27.4% | 13.7% |
-| Argentina | 21.7% | 14.5% |
-| France | 14.3% | 19.1% |
-| Portugal | 9.4% | 7.2% |
-| England | 6.9% | 10.7% |
-| Brazil | 3.0% | 5.1% |
-| Germany | 2.3% | 5.3% |
-| Netherlands | 2.2% | 5.3% |
+| Spain | 28.0% | 13.7% |
+| Argentina | 21.4% | 14.6% |
+| France | 14.5% | 19.1% |
+| Portugal | 9.3% | 7.5% |
+| England | 6.7% | 10.4% |
+| Brazil | 2.9% | 5.4% |
+| Netherlands | 2.3% | 5.6% |
+| Germany | 2.3% | 5.2% |
 
-**Biggest moves:** Spain -1.6pp, Portugal +1.0pp
+**Biggest moves:** Spain +0.6pp
 
 **Recorded group results:**
 
@@ -120,4 +120,10 @@ _Last updated: 2026-06-24 — 48/104 matches played._
 - M46: Panama 0–1 Croatia
 - M47: Portugal 5–0 Uzbekistan
 - M48: Colombia 1–0 Congo DR
+- M49: Scotland 0–3 Brazil
+- M50: Morocco 4–2 Haiti
+- M51: Switzerland 2–1 Canada
+- M52: Bosnia and Herzegovina 3–1 Qatar
+- M53: Czechia 0–3 Mexico
+- M54: South Africa 1–0 South Korea
 <!-- LIVE-RESULTS:END -->
