@@ -124,3 +124,7 @@ headline numbers are backfilled into the vintages table.
 **Rev M051 (Switzerland v Canada 2-1).** Cumulative 46 pts, mean Brier 0.53; failure-mode none. Full living layer re-rendered (edition M051); skeleton unchanged.
 
 **Rev M052 (Bosnia and Herzegovina v Qatar 3-1).** Cumulative 47 pts, mean Brier 0.52; failure-mode none. Full living layer re-rendered (edition M052); skeleton unchanged.
+
+**Rev M049 (Scotland v Brazil 0-3).** Cumulative 44 pts, mean Brier 0.52; failure-mode none. Full living layer re-rendered (edition M049); skeleton unchanged.
+
+**Rev M050 (Morocco v Haiti 4-2).** Cumulative 46 pts, mean Brier 0.51; failure-mode none. Full living layer re-rendered (edition M050); skeleton unchanged.

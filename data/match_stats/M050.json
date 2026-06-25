@@ -1,0 +1,20 @@
+{
+ "match": 50,
+ "event_id": "760464",
+ "stats": {
+  "home": {
+   "team": "Morocco",
+   "sot": 11.0,
+   "other_shots": 11.0,
+   "total_shots": 22.0,
+   "possession": 69.0
+  },
+  "away": {
+   "team": "Haiti",
+   "sot": 2.0,
+   "other_shots": 7.0,
+   "total_shots": 9.0,
+   "possession": 31.0
+  }
+ }
+}

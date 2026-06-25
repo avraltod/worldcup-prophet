@@ -1,0 +1,20 @@
+{
+ "match": 49,
+ "event_id": "760465",
+ "stats": {
+  "home": {
+   "team": "Scotland",
+   "sot": 5.0,
+   "other_shots": 9.0,
+   "total_shots": 14.0,
+   "possession": 45.9
+  },
+  "away": {
+   "team": "Brazil",
+   "sot": 9.0,
+   "other_shots": 12.0,
+   "total_shots": 21.0,
+   "possession": 54.1
+  }
+ }
+}
