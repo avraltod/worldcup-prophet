@@ -2165,5 +2165,40 @@
     0.0673
    ]
   ]
+ },
+ {
+  "edition": 62,
+  "match": 62,
+  "fixture": "Senegal v Iraq",
+  "result": [
+   5,
+   0
+  ],
+  "points": 1,
+  "cum_points": 55,
+  "mean_brier": 0.5046,
+  "cum_bits": 0.175,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2461
+   ],
+   [
+    "France",
+    0.2143
+   ],
+   [
+    "Argentina",
+    0.2024
+   ],
+   [
+    "Portugal",
+    0.0686
+   ],
+   [
+    "England",
+    0.0654
+   ]
+  ]
  }
 ]

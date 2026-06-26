@@ -146,3 +146,5 @@ headline numbers are backfilled into the vintages table.
 **Rev M060 (Paraguay v Australia 0-0).** Cumulative 53 pts, mean Brier 0.52; failure-mode none. Full living layer re-rendered (edition M060); skeleton unchanged.
 
 **Rev M061 (Norway v France 1-4).** Cumulative 54 pts, mean Brier 0.51; failure-mode none. Full living layer re-rendered (edition M061); skeleton unchanged.
+
+**Rev M062 (Senegal v Iraq 5-0).** Cumulative 55 pts, mean Brier 0.50; failure-mode none. Full living layer re-rendered (edition M062); skeleton unchanged.
