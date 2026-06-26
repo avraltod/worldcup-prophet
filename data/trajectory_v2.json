@@ -20263,7 +20263,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760475",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Egil Selvik",
+    "Henrik Falchener",
+    "Fredrik André Bjørkan",
+    "Fredrik Aursnes",
+    "Leo Østigard",
+    "Andreas Schjelderup",
+    "Kristian Thorstvedt",
+    "Patrick Berg",
+    "Thelo Aasgaard",
+    "Oscar Bobb",
+    "Jørgen Strand Larsen"
+   ],
+   "away": [
+    "Mike Maignan",
+    "Jules Koundé",
+    "Maxence Lacroix",
+    "Theo Hernández",
+    "Dayot Upamecano",
+    "Manu Koné",
+    "Ousmane Dembélé",
+    "Michael Olise",
+    "Désiré Doué",
+    "Aurélien Tchouaméni",
+    "Kylian Mbappé"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
