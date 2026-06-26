@@ -2130,5 +2130,40 @@
     0.0645
    ]
   ]
+ },
+ {
+  "edition": 61,
+  "match": 61,
+  "fixture": "Norway v France",
+  "result": [
+   1,
+   4
+  ],
+  "points": 1,
+  "cum_points": 54,
+  "mean_brier": 0.5116,
+  "cum_bits": 0.1715,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2542
+   ],
+   [
+    "Argentina",
+    0.2087
+   ],
+   [
+    "France",
+    0.1719
+   ],
+   [
+    "Portugal",
+    0.0743
+   ],
+   [
+    "England",
+    0.0673
+   ]
+  ]
  }
 ]
