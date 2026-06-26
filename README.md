@@ -51,24 +51,24 @@ Poisson goal model, and optimizes picks under the pool's 3/2/1 scoring rule.
 ## Results tracking
 
 <!-- LIVE-RESULTS:START -->
-_Last updated: 2026-06-25 — 54/104 matches played._
+_Last updated: 2026-06-26 — 60/104 matches played._
 
-**Information gain in this update:** 0.004 bits
+**Information gain in this update:** 0.042 bits
 
 **Champion probability — model vs market (top 8):**
 
 | Team | Model | Market |
 |---|---|---|
-| Spain | 28.0% | 13.7% |
-| Argentina | 21.4% | 14.6% |
-| France | 14.5% | 19.1% |
-| Portugal | 9.3% | 7.5% |
-| England | 6.7% | 10.4% |
-| Brazil | 2.9% | 5.4% |
-| Netherlands | 2.3% | 5.6% |
-| Germany | 2.3% | 5.2% |
+| Spain | 26.5% | 13.7% |
+| Argentina | 21.8% | 15.1% |
+| France | 14.1% | 18.9% |
+| Portugal | 9.0% | 8.3% |
+| England | 6.5% | 10.1% |
+| Brazil | 2.9% | 5.5% |
+| Ecuador | 2.9% | 0.5% |
+| Netherlands | 2.8% | 5.7% |
 
-**Biggest moves:** Spain +0.6pp
+**Biggest moves:** Ecuador +2.4pp, Spain -1.5pp
 
 **Recorded group results:**
 
@@ -126,4 +126,10 @@ _Last updated: 2026-06-25 — 54/104 matches played._
 - M52: Bosnia and Herzegovina 3–1 Qatar
 - M53: Czechia 0–3 Mexico
 - M54: South Africa 1–0 South Korea
+- M55: Curaçao 0–2 Ivory Coast
+- M56: Ecuador 2–1 Germany
+- M57: Japan 1–1 Sweden
+- M58: Tunisia 1–3 Netherlands
+- M59: Turkey 3–2 United States
+- M60: Paraguay 0–0 Australia
 <!-- LIVE-RESULTS:END -->
