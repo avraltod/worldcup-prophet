@@ -65,10 +65,10 @@
   "Morocco": 79.27769563918756,
   "Haiti": 33.483587216248495,
   "Scotland": -64.07991338112312,
-  "United States": 53.75,
-  "Paraguay": -70.0851254480287,
-  "Australia": -8.73282556750302,
-  "Turkey": 25.067951015531733,
+  "United States": 126.0625,
+  "Paraguay": -115.41599462365599,
+  "Australia": 40.53894115890084,
+  "Turkey": -51.18544653524485,
   "Germany": 54.490867682198484,
   "Curaçao": -55.16858572281967,
   "Ivory Coast": -22.884781959378792,
@@ -1145,6 +1145,42 @@
    "drift_after": {
     "Tunisia": -28.18,
     "Netherlands": -68.46
+   }
+  },
+  {
+   "match": 59,
+   "home": "Turkey",
+   "away": "United States",
+   "lam_obs": {
+    "home": 0.977,
+    "away": 2.279,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 1.65,
+    "away": 0.8
+   },
+   "drift_after": {
+    "Turkey": -51.19,
+    "United States": 126.06
+   }
+  },
+  {
+   "match": 60,
+   "home": "Paraguay",
+   "away": "Australia",
+   "lam_obs": {
+    "home": 0.651,
+    "away": 1.628,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 1.05,
+    "away": 1.05
+   },
+   "drift_after": {
+    "Paraguay": -115.42,
+    "Australia": 40.54
    }
   }
  ],
@@ -2773,6 +2809,88 @@
    },
    "info_snapshot": {
     "fetched_at": "2026-06-26T01:17:19Z",
+    "elo_updated_at": "2026-06-10T00:00:00Z",
+    "odds_fetched_at": null,
+    "elo_rms_delta": 0.0,
+    "n_rate_changes": 0,
+    "max_odds_shift_ph": 0.0,
+    "biggest_elo_mover": {
+     "team": "Mexico",
+     "june10": 1868,
+     "current": 1868,
+     "delta": 0
+    },
+    "biggest_odds_mover": {},
+    "n_new_injuries": 0,
+    "n_lineup_adj": 0,
+    "n_teams_with_drift": 48
+   }
+  },
+  {
+   "match": 59,
+   "frozen_top": {
+    "Spain": 0.2681,
+    "Argentina": 0.2225,
+    "France": 0.1424,
+    "Portugal": 0.0904,
+    "England": 0.0662,
+    "Brazil": 0.0303,
+    "Ecuador": 0.0283,
+    "Netherlands": 0.0277
+   },
+   "learning_top": {
+    "Spain": 0.2612,
+    "Argentina": 0.2074,
+    "France": 0.1655,
+    "Portugal": 0.0741,
+    "England": 0.0663,
+    "Brazil": 0.0183,
+    "Ecuador": 0.0305,
+    "Netherlands": 0.0059
+   },
+   "info_snapshot": {
+    "fetched_at": "2026-06-26T05:11:59Z",
+    "elo_updated_at": "2026-06-10T00:00:00Z",
+    "odds_fetched_at": null,
+    "elo_rms_delta": 0.0,
+    "n_rate_changes": 0,
+    "max_odds_shift_ph": 0.0,
+    "biggest_elo_mover": {
+     "team": "Mexico",
+     "june10": 1868,
+     "current": 1868,
+     "delta": 0
+    },
+    "biggest_odds_mover": {},
+    "n_new_injuries": 0,
+    "n_lineup_adj": 0,
+    "n_teams_with_drift": 48
+   }
+  },
+  {
+   "match": 60,
+   "frozen_top": {
+    "Spain": 0.2656,
+    "Argentina": 0.2265,
+    "France": 0.1431,
+    "Portugal": 0.0861,
+    "England": 0.0712,
+    "Brazil": 0.0289,
+    "Netherlands": 0.0288,
+    "Ecuador": 0.0278
+   },
+   "learning_top": {
+    "Spain": 0.2516,
+    "Argentina": 0.2056,
+    "France": 0.1788,
+    "Portugal": 0.0707,
+    "England": 0.067,
+    "Brazil": 0.0171,
+    "Netherlands": 0.0062,
+    "Ecuador": 0.031
+   },
+   "info_snapshot": {
+    "fetched_at": "2026-06-26T05:11:59Z",
     "elo_updated_at": "2026-06-10T00:00:00Z",
     "odds_fetched_at": null,
     "elo_rms_delta": 0.0,

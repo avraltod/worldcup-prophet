@@ -2060,5 +2060,75 @@
     0.065
    ]
   ]
+ },
+ {
+  "edition": 59,
+  "match": 59,
+  "fixture": "Turkey v United States",
+  "result": [
+   3,
+   2
+  ],
+  "points": 0,
+  "cum_points": 53,
+  "mean_brier": 0.5113,
+  "cum_bits": 0.1644,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2634
+   ],
+   [
+    "Argentina",
+    0.2072
+   ],
+   [
+    "France",
+    0.1593
+   ],
+   [
+    "Portugal",
+    0.0731
+   ],
+   [
+    "England",
+    0.0661
+   ]
+  ]
+ },
+ {
+  "edition": 60,
+  "match": 60,
+  "fixture": "Paraguay v Australia",
+  "result": [
+   0,
+   0
+  ],
+  "points": 0,
+  "cum_points": 53,
+  "mean_brier": 0.5151,
+  "cum_bits": 0.1699,
+  "champ_top5": [
+   [
+    "Spain",
+    0.2585
+   ],
+   [
+    "Argentina",
+    0.2079
+   ],
+   [
+    "France",
+    0.1685
+   ],
+   [
+    "Portugal",
+    0.0721
+   ],
+   [
+    "England",
+    0.0645
+   ]
+  ]
  }
 ]

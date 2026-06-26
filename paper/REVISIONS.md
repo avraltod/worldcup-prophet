@@ -140,3 +140,7 @@ headline numbers are backfilled into the vintages table.
 **Rev M057 (Japan v Sweden 1-1).** Cumulative 52 pts, mean Brier 0.51; failure-mode none. Full living layer re-rendered (edition M057); skeleton unchanged.
 
 **Rev M058 (Tunisia v Netherlands 1-3).** Cumulative 53 pts, mean Brier 0.51; failure-mode none. Full living layer re-rendered (edition M058); skeleton unchanged.
+
+**Rev M059 (Turkey v United States 3-2).** Cumulative 53 pts, mean Brier 0.51; failure-mode none. Full living layer re-rendered (edition M059); skeleton unchanged.
+
+**Rev M060 (Paraguay v Australia 0-0).** Cumulative 53 pts, mean Brier 0.52; failure-mode none. Full living layer re-rendered (edition M060); skeleton unchanged.
