@@ -20922,7 +20922,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760478",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Vozinha",
+    "Diney Borges",
+    "Wagner Pina",
+    "Pico Lopes",
+    "João Paulo",
+    "Deroy Duarte",
+    "Jamiro Monteiro",
+    "Ryan Mendes",
+    "Kevin Pina",
+    "Willy Semedo",
+    "Dailon Livramento"
+   ],
+   "away": [
+    "Mohammed Al-Owais",
+    "Nawaf Boushal",
+    "Hassan Al-Tambakti",
+    "Abdulelah Al-Amri",
+    "Saud Abdulhamid",
+    "Nasser Al-Dawsari",
+    "Sultan Mandash",
+    "Salem Al-Dawsari",
+    "Abdullah Al-Khaibari",
+    "Mohamed Kanno",
+    "Feras Al-Brikan"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
@@ -21070,7 +21097,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760479",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Fernando Muslera",
+    "Sebastián Cáceres",
+    "Juan Manuel Sanabria",
+    "Mathías Olivera",
+    "Guillermo Varela",
+    "Maxi Araújo",
+    "Rodrigo Bentancur",
+    "Federico Valverde",
+    "Agustín Canobbio",
+    "Manuel Ugarte",
+    "Darwin Núñez"
+   ],
+   "away": [
+    "Unai Simón",
+    "Aymeric Laporte",
+    "Pau Cubarsí",
+    "Marc Cucurella",
+    "Marcos Llorente",
+    "Pedri ",
+    "Rodri",
+    "Mikel Merino",
+    "Álex Baena",
+    "Lamine Yamal",
+    "Mikel Oyarzabal"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
