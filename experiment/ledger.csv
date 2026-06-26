@@ -101,3 +101,5 @@ date,match,home,away,pred,actual,pts,ev,p_outcome_real,p_score_real,brier,code
 2026-06-25,54,South Africa,South Korea,1-2,1-0,0,0.733,0.29,0.1107,0.7629,P?
 2026-06-25,55,Curaçao,Ivory Coast,1-2,0-2,1,1.0905,0.7695,0.153,0.0832,S
 2026-06-25,56,Ecuador,Germany,1-2,2-1,0,0.9135,0.1923,0.0489,1.0293,L?
+2026-06-26,57,Japan,Sweden,2-1,1-1,0,0.7157,0.2894,0.133,0.7625,P?
+2026-06-26,58,Tunisia,Netherlands,1-2,1-3,1,0.9828,0.6259,0.054,0.2134,S

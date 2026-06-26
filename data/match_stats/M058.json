@@ -1,0 +1,20 @@
+{
+ "match": 58,
+ "event_id": "760472",
+ "stats": {
+  "home": {
+   "team": "Tunisia",
+   "sot": 4.0,
+   "other_shots": 6.0,
+   "total_shots": 10.0,
+   "possession": 28.4
+  },
+  "away": {
+   "team": "Netherlands",
+   "sot": 7.0,
+   "other_shots": 13.0,
+   "total_shots": 20.0,
+   "possession": 71.6
+  }
+ }
+}
