@@ -22222,7 +22222,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760485",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Orlando Mosquera",
+    "José Córdoba",
+    "Andrés Andrade",
+    "Fidel Escobar",
+    "Jorge Gutiérrez",
+    "Amir Murillo",
+    "Carlos Harvey",
+    "Édgar Yoel Bárcenas",
+    "José Luis Rodríguez",
+    "Cristian Martínez",
+    "Tomás Rodríguez"
+   ],
+   "away": [
+    "Jordan Pickford",
+    "Marc Guéhi",
+    "Ezri Konsa",
+    "Nico O'Reilly",
+    "Jarell Quansah",
+    "Morgan Rogers",
+    "Jude Bellingham",
+    "Elliot Anderson",
+    "Harry Kane",
+    "Marcus Rashford",
+    "Bukayo Saka"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
@@ -22365,7 +22392,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760480",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Dominik Livakovic",
+    "Marin Pongracic",
+    "Josip Sutalo",
+    "Ivan Perisic",
+    "Josip Stanisic",
+    "Petar Sucic",
+    "Mateo Kovacic",
+    "Luka Modric",
+    "Ante Budimir",
+    "Martin Baturina",
+    "Nikola Vlasic"
+   ],
+   "away": [
+    "Benjamin Asare",
+    "Derrick Luckassen",
+    "Jonas Adjetey",
+    "Gideon Mensah",
+    "Marvin Senaya",
+    "Elisha Owusu",
+    "Kwasi Sibo",
+    "Thomas Partey",
+    "Jordan Ayew",
+    "Antoine Semenyo",
+    "Kamaldeen Sulemana"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
