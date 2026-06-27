@@ -21,6 +21,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import condition as C
 import ko_match_ev as kme
+from realistic_scores import ko_realistic
 
 _ADV_CACHE = {}      # (home, away) -> P(home advances), cascade model
 _EV_CACHE = {}       # (home, away, advancer_side) -> (ev, score)
@@ -64,6 +65,29 @@ def _pick(home, away, eff):
             "advancer": adv, "loser": loser, "ev": best["ev"]}
 
 
+def realistic_pick_score(lh, la, advancer_side):
+    """Realistic rounded-expected-goals 90' readout for a pick whose advancer is
+    on `advancer_side` ('home'/'away'). The advancer takes the higher score; a
+    genuine toss-up stays level in regulation and is decided on penalties.
+    Returns (hg, ag, pen). This is the same readout Frozen 1 publishes
+    (realistic_scores.ko_realistic) — points-neutral, it only changes the
+    displayed scoreline, not the optimizer's advancer/EV."""
+    win, home = ("H", "H") if advancer_side == "home" else ("A", "H")
+    return ko_realistic(lh, la, win, home)
+
+
+def _attach_realistic(picks, eff):
+    """Add the realistic 90' readout (`disp` = (hg, ag), `pen` = decided on
+    penalties) to every pick, leaving the optimizer's `score`/`advancer`/`ev`
+    untouched. `disp` is what the entry actually submits and the report shows."""
+    for p in picks.values():
+        lh, la = kme.matchup_lambdas(p["home"], p["away"], eff)
+        side = "home" if p["advancer"] == p["home"] else "away"
+        hg, ag, pen = realistic_pick_score(lh, la, side)
+        p["disp"], p["pen"] = (hg, ag), pen
+    return picks
+
+
 def build_entry(results, eff=None):
     if eff is None:
         eff = kme.load_live_eff()      # Track B: all post-group-stage information
@@ -76,6 +100,7 @@ def build_entry(results, eff=None):
         winners[m] = picks[m]["advancer"]
     picks[FINAL] = _pick(winners[101], winners[102], eff)
     picks[THIRD] = _pick(picks[101]["loser"], picks[102]["loser"], eff)
+    _attach_realistic(picks, eff)
     return {"champion": picks[FINAL]["advancer"], "picks": picks, "eff": eff}
 
 
@@ -263,6 +288,7 @@ def optimize_entry(results, eff=None, N=20000, seed=2026):
     adv = th if side == "home" else ta
     picks[THIRD] = {"home": th, "away": ta, "score": score, "advancer": adv,
                     "loser": ta if adv == th else th, "ev": ev}
+    _attach_realistic(picks, eff)
     return {"champion": champion, "picks": picks, "eff": eff, "winp": winp}
 
 
@@ -300,8 +326,9 @@ def render_report(entry, weights, results):
         lines.append("|---|---|---|---|---|")
         for m in ms:
             p = picks[m]
-            h, a = p["score"]
-            lines.append(f"| {m} {p['home']} v {p['away']} | {h}-{a} | "
+            h, a = p["disp"]
+            score = f"{h}-{a}" + (" (pens)" if p["pen"] else "")
+            lines.append(f"| {m} {p['home']} v {p['away']} | {score} | "
                          f"{p['advancer']} | {weights[m]:.2f} | {p['ev']:.2f} |")
         lines.append("")
     return "\n".join(lines)

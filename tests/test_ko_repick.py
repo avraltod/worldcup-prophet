@@ -76,3 +76,57 @@ def test_render_report_mentions_champion_and_matches():
     text = kr.render_report(entry, weights, results)
     assert entry["champion"] in text
     assert "Expected points" in text
+
+
+# --- realistic scoreline readout (let real scores + penalty draws happen) -------
+
+def test_realistic_pick_score_decisive_home_favorite():
+    hg, ag, pen = kr.realistic_pick_score(2.1, 0.4, "home")
+    assert not pen and hg > ag            # clear favorite wins decisively in 90'
+
+
+def test_realistic_pick_score_even_match_is_a_draw_to_penalties():
+    hg, ag, pen = kr.realistic_pick_score(1.2, 1.2, "home")
+    assert pen and hg == ag               # genuine toss-up: level 90', decided on pens
+
+
+def test_realistic_pick_score_away_favorite():
+    hg, ag, pen = kr.realistic_pick_score(0.4, 2.1, "away")
+    assert not pen and ag > hg            # away advancer takes the higher score
+
+
+def test_entry_picks_carry_realistic_readout():
+    entry = kr.build_entry(_predicted_results())
+    for m, p in entry["picks"].items():
+        assert "disp" in p and "pen" in p
+        hg, ag = p["disp"]
+        assert 0 <= hg <= 8 and 0 <= ag <= 8
+        if p["pen"]:
+            assert hg == ag              # a penalty draw is level in regulation
+        else:
+            wg = hg if p["advancer"] == p["home"] else ag
+            lg = ag if p["advancer"] == p["home"] else hg
+            assert wg > lg               # the displayed winner is the optimizer's advancer
+
+
+def test_readout_does_not_change_the_optimizer():
+    # attaching the realistic readout must not move any advancer, champion, or EV
+    results = _predicted_results()
+    eff = kme.load_live_eff()
+    entry = kr.build_entry(results, eff=eff)
+    for m, p in entry["picks"].items():
+        ev_yardstick = kme.match_ev(*kme.matchup_lambdas(p["home"], p["away"], eff))["ev"]
+        assert abs(p["ev"] - ev_yardstick) < 1e-9   # ev is still the EV-optimal yardstick
+
+
+def test_render_report_shows_realistic_score_and_penalty_draws():
+    results = _predicted_results()
+    entry = kr.build_entry(results)
+    weights = kr.reach_weights(results, entry, N=500, seed=1)
+    text = kr.render_report(entry, weights, results)
+    # the Final's rendered scoreline is the realistic readout, not the EV pick
+    hg, ag = entry["picks"][104]["disp"]
+    assert f"{hg}-{ag}" in text
+    # any penalty-decided pick is flagged as such
+    if any(p["pen"] for p in entry["picks"].values()):
+        assert "pens" in text.lower()
