@@ -1,0 +1,20 @@
+{
+ "match": 65,
+ "event_id": "760478",
+ "stats": {
+  "home": {
+   "team": "Cape Verde",
+   "sot": 2.0,
+   "other_shots": 13.0,
+   "total_shots": 15.0,
+   "possession": 51.2
+  },
+  "away": {
+   "team": "Saudi Arabia",
+   "sot": 3.0,
+   "other_shots": 4.0,
+   "total_shots": 7.0,
+   "possession": 48.8
+  }
+ }
+}

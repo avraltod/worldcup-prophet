@@ -148,3 +148,7 @@ headline numbers are backfilled into the vintages table.
 **Rev M061 (Norway v France 1-4).** Cumulative 54 pts, mean Brier 0.51; failure-mode none. Full living layer re-rendered (edition M061); skeleton unchanged.
 
 **Rev M062 (Senegal v Iraq 5-0).** Cumulative 55 pts, mean Brier 0.50; failure-mode none. Full living layer re-rendered (edition M062); skeleton unchanged.
+
+**Rev M065 (Cape Verde v Saudi Arabia 0-0).** Cumulative 55 pts, mean Brier 0.51; failure-mode none. Full living layer re-rendered (edition M065); skeleton unchanged.
+
+**Rev M066 (Uruguay v Spain 0-1).** Cumulative 57 pts, mean Brier 0.51; failure-mode none. Full living layer re-rendered (edition M066); skeleton unchanged.

@@ -1,0 +1,20 @@
+{
+ "match": 66,
+ "event_id": "760479",
+ "stats": {
+  "home": {
+   "team": "Uruguay",
+   "sot": 1.0,
+   "other_shots": 4.0,
+   "total_shots": 5.0,
+   "possession": 33.0
+  },
+  "away": {
+   "team": "Spain",
+   "sot": 1.0,
+   "other_shots": 5.0,
+   "total_shots": 6.0,
+   "possession": 67.0
+  }
+ }
+}
