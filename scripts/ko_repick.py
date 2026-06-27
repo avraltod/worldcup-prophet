@@ -7,6 +7,7 @@ Final, and the third-place playoff, producing one internally-consistent entry.
 the 'scored only if the projected matchup occurs' rule: advancing the stronger
 team maximizes the chance later picks stay live. Run AFTER the group stage, once
 REALIZED_THIRDS is pinned."""
+import random
 import sys
 from pathlib import Path
 
@@ -53,9 +54,6 @@ def build_entry(results, eff=None):
     picks[FINAL] = _pick(winners[101], winners[102], eff)
     picks[THIRD] = _pick(picks[101]["loser"], picks[102]["loser"], eff)
     return {"champion": picks[FINAL]["advancer"], "picks": picks, "eff": eff}
-
-
-import random
 
 
 def _kw(home, away, eff, rng):
@@ -111,9 +109,9 @@ def expected_points(entry, weights):
     return sum(weights[m] * entry["picks"][m]["ev"] for m in entry["picks"])
 
 
-def render_report(entry, weights, results, original=None):
-    """Markdown re-pick report. `original` (optional) is {match_no: 'desc'} of the
-    locked picks, to flag now-void (eliminated) slots."""
+def render_report(entry, weights, results):
+    """Markdown re-pick report: champion, reachability-weighted expected points,
+    and every knockout pick (90' scoreline + advancer + reach weight + EV)."""
     picks = entry["picks"]
     rounds = [("Round of 32", sorted(C.R32)), ("Round of 16", sorted(C.R16)),
               ("Quarter-finals", sorted(C.QF)), ("Semi-finals", sorted(C.SF)),
