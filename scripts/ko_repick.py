@@ -53,3 +53,83 @@ def build_entry(results, eff=None):
     picks[FINAL] = _pick(winners[101], winners[102], eff)
     picks[THIRD] = _pick(picks[101]["loser"], picks[102]["loser"], eff)
     return {"champion": picks[FINAL]["advancer"], "picks": picks, "eff": eff}
+
+
+import random
+
+
+def _kw(home, away, eff, rng):
+    """Sample a knockout winner from Track B effective Elo (Elo win-expectancy)."""
+    e = 1.0 / (1.0 + 10 ** (-(eff[home] - eff[away]) / 400.0))
+    return home if rng.random() < e else away
+
+
+def _simulate_bracket_winners(slots, eff, rng):
+    """One Monte-Carlo play-through of the real KO bracket; returns {match: (home,
+    away, winner)}, winners sampled from Track B effective Elo `eff`."""
+    out, winners = {}, {}
+    for m in sorted(C.R32) + sorted(C.R16) + sorted(C.QF) + sorted(C.SF):
+        if m in C.R32:
+            x, y = C.R32[m]
+            home, away = slots[x], slots[y]
+        else:
+            table = C.R16 if m in C.R16 else (C.QF if m in C.QF else C.SF)
+            a, b = table[m]
+            home, away = winners[a], winners[b]
+        w = _kw(home, away, eff, rng)
+        out[m], winners[m] = (home, away, w), w
+    out[FINAL] = (winners[101], winners[102], _kw(winners[101], winners[102], eff, rng))
+    return out
+
+
+def reach_weights(results, entry, N=20000, seed=2026):
+    """For each KO match m, P(the entry's projected pair occupies m), from N
+    winner-only simulations of the real bracket (Track B `eff`). R32 pairs are
+    fixed (1.0); the third-place pair is gated on both projected semifinal losers
+    reaching it."""
+    slots = real_r32_slots(results)
+    picks, eff = entry["picks"], entry["eff"]
+    rng = random.Random(seed)
+    hits = {m: 0 for m in picks}
+    for _ in range(N):
+        sim = _simulate_bracket_winners(slots, eff, rng)
+        sim_pairs = {m: {sim[m][0], sim[m][1]} for m in sim}
+        for m in picks:
+            if m == THIRD:
+                losers = set()
+                for s in C.SF:
+                    h, a, w = sim[s]
+                    losers.add(a if w == h else h)
+                if {picks[m]["home"], picks[m]["away"]} == losers:
+                    hits[m] += 1
+            elif m in sim_pairs and sim_pairs[m] == {picks[m]["home"], picks[m]["away"]}:
+                hits[m] += 1
+    return {m: (1.0 if m in C.R32 else hits[m] / N) for m in picks}
+
+
+def expected_points(entry, weights):
+    return sum(weights[m] * entry["picks"][m]["ev"] for m in entry["picks"])
+
+
+def render_report(entry, weights, results, original=None):
+    """Markdown re-pick report. `original` (optional) is {match_no: 'desc'} of the
+    locked picks, to flag now-void (eliminated) slots."""
+    picks = entry["picks"]
+    rounds = [("Round of 32", sorted(C.R32)), ("Round of 16", sorted(C.R16)),
+              ("Quarter-finals", sorted(C.QF)), ("Semi-finals", sorted(C.SF)),
+              ("Third place", [THIRD]), ("Final", [FINAL])]
+    lines = ["# KO pool re-pick - proposed entry", "",
+             f"**Champion:** {entry['champion']}",
+             f"**Expected points (reachability-weighted):** "
+             f"{expected_points(entry, weights):.2f}", ""]
+    for name, ms in rounds:
+        lines.append(f"## {name}")
+        lines.append("| Match | Pick (90') | Advances | Reach wt | EV |")
+        lines.append("|---|---|---|---|---|")
+        for m in ms:
+            p = picks[m]
+            h, a = p["score"]
+            lines.append(f"| {m} {p['home']} v {p['away']} | {h}-{a} | "
+                         f"{p['advancer']} | {weights[m]:.2f} | {p['ev']:.2f} |")
+        lines.append("")
+    return "\n".join(lines)

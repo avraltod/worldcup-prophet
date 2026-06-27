@@ -36,3 +36,24 @@ def test_third_place_uses_semifinal_losers():
         loser = picks[m]["away"] if picks[m]["advancer"] == picks[m]["home"] else picks[m]["home"]
         sf_losers.add(loser)
     assert {picks[103]["home"], picks[103]["away"]} == sf_losers
+
+
+def test_reach_weights_and_expected_points():
+    results = _predicted_results()
+    entry = kr.build_entry(results)
+    weights = kr.reach_weights(results, entry, N=2000, seed=1)
+    for m in C.R32:
+        assert weights[m] == 1.0
+    assert all(0.0 <= w <= 1.0 for w in weights.values())
+    assert weights[101] <= 1.0 and weights[104] <= weights[101] + 1e-9
+    ep = kr.expected_points(entry, weights)
+    assert 0.0 < ep < 4.0 * 32
+
+
+def test_render_report_mentions_champion_and_matches():
+    results = _predicted_results()
+    entry = kr.build_entry(results)
+    weights = kr.reach_weights(results, entry, N=500, seed=1)
+    text = kr.render_report(entry, weights, results)
+    assert entry["champion"] in text
+    assert "Expected points" in text
