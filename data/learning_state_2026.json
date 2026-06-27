@@ -77,10 +77,10 @@
   "Japan": -64.40191905615293,
   "Sweden": 161.0398745519714,
   "Tunisia": -28.17607526881735,
-  "Belgium": -17.511499402628385,
-  "Egypt": 52.68175029868581,
-  "Iran": -98.86350059737161,
-  "New Zealand": 63.69324970131419,
+  "Belgium": 56.09107676224626,
+  "Egypt": 8.769287634408613,
+  "Iran": -52.64195041816012,
+  "New Zealand": -12.218413978494752,
   "Spain": -75.48890382317788,
   "Cape Verde": 24.08672341696527,
   "Saudi Arabia": 17.013545400238826,
@@ -1253,6 +1253,42 @@
    "drift_after": {
     "Uruguay": 34.39,
     "Spain": -75.49
+   }
+  },
+  {
+   "match": 63,
+   "home": "Egypt",
+   "away": "Iran",
+   "lam_obs": {
+    "home": 0.977,
+    "away": 1.302,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 1.45,
+    "away": 0.95
+   },
+   "drift_after": {
+    "Egypt": 8.77,
+    "Iran": -52.64
+   }
+  },
+  {
+   "match": 64,
+   "home": "New Zealand",
+   "away": "Belgium",
+   "lam_obs": {
+    "home": 0.651,
+    "away": 3.256,
+    "source": "proxy"
+   },
+   "lam_exp": {
+    "home": 0.65,
+    "away": 1.8
+   },
+   "drift_after": {
+    "New Zealand": -12.22,
+    "Belgium": 56.09
    }
   }
  ],

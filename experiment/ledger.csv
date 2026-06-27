@@ -115,3 +115,5 @@ date,match,home,away,pred,actual,pts,ev,p_outcome_real,p_score_real,brier,code
 2026-06-26,62,Senegal,Iraq,3-1,5-0,1,1.0704,0.7758,0.0363,0.0768,S
 2026-06-27,65,Cape Verde,Saudi Arabia,2-1,0-0,0,0.6986,0.2864,0.1054,0.7666,P?
 2026-06-27,66,Uruguay,Spain,1-2,0-1,2,0.9196,0.5642,0.1554,0.2877,P?
+2026-06-27,63,Egypt,Iran,2-1,1-1,0,0.7476,0.3037,0.1323,0.7395,P?
+2026-06-27,64,New Zealand,Belgium,1-2,1-5,1,1.0789,0.7616,0.0204,0.0878,S

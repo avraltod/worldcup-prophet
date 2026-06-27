@@ -1,0 +1,20 @@
+{
+ "match": 64,
+ "event_id": "760477",
+ "stats": {
+  "home": {
+   "team": "New Zealand",
+   "sot": 2.0,
+   "other_shots": 4.0,
+   "total_shots": 6.0,
+   "possession": 45.4
+  },
+  "away": {
+   "team": "Belgium",
+   "sot": 10.0,
+   "other_shots": 25.0,
+   "total_shots": 35.0,
+   "possession": 54.6
+  }
+ }
+}
