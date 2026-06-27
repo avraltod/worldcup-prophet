@@ -133,3 +133,38 @@ def render_report(entry, weights, results, original=None):
                          f"{p['advancer']} | {weights[m]:.2f} | {p['ev']:.2f} |")
         lines.append("")
     return "\n".join(lines)
+
+
+def _load_results(path):
+    import json
+    if path:
+        return json.loads(Path(path).read_text())
+    # default: live results log (use AFTER the group stage + REALIZED_THIRDS pin)
+    return json.loads((C.DATA / "results_log.json").read_text())
+
+
+if __name__ == "__main__":
+    import argparse, json
+    ap = argparse.ArgumentParser(description="EV-optimal KO pool re-pick")
+    ap.add_argument("--results", default=None,
+                    help="results JSON (default data/results_log.json)")
+    ap.add_argument("--predicted", action="store_true",
+                    help="dry-run on the model's predicted full-group results")
+    ap.add_argument("-N", type=int, default=20000, help="reachability sims")
+    ap.add_argument("--out", default=None, help="write the report to this path")
+    a = ap.parse_args()
+    if a.predicted:
+        pr = json.loads((C.DATA / "predictions_realistic.json").read_text())
+        results = {"group": {str(p["num"]): [p["hg"], p["ag"]]
+                             for p in pr if str(p["stage"]).startswith("Group")},
+                   "ko": {}}
+    else:
+        results = _load_results(a.results)
+    entry = build_entry(results)
+    weights = reach_weights(results, entry, N=a.N)
+    report = render_report(entry, weights, results)
+    if a.out:
+        Path(a.out).write_text(report)
+        print(f"wrote {a.out}")
+    else:
+        print(report)
