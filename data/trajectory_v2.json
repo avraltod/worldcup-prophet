@@ -22562,7 +22562,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760481",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Camilo Vargas",
+    "Santiago Arias",
+    "Deiver Machado",
+    "Davinson Sánchez",
+    "Jhon Lucumí",
+    "Gustavo Puerta",
+    "Jhon Arias",
+    "Jefferson Lerma",
+    "Luis Díaz",
+    "James Rodríguez",
+    "Jhon Córdoba"
+   ],
+   "away": [
+    "Diogo Costa",
+    "Nuno Mendes",
+    "Rúben Dias",
+    "Renato Veiga",
+    "João Cancelo",
+    "Vitinha ",
+    "Rúben Neves",
+    "Pedro Neto",
+    "Bruno Fernandes",
+    "João Félix",
+    "Cristiano Ronaldo"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
@@ -22705,7 +22732,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760482",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Lionel Mpasi",
+    "Chancel Mbemba",
+    "Arthur Masuaku",
+    "Aaron Wan-Bissaka",
+    "Axel Tuanzebe",
+    "Noah Sadiki",
+    "Brian Cipenga",
+    "Nathanaël Mbuku",
+    "Samuel Moutoussamy",
+    "Cédric Bakambu",
+    "Yoane Wissa"
+   ],
+   "away": [
+    "Abduvohid Nematov",
+    "Abdukodir Khusanov",
+    "Jakhongir Urozov",
+    "Rustam Ashurmatov",
+    "Otabek Shukurov",
+    "Khojiakbar Alijonov",
+    "Sherzod Nasrullaev",
+    "Dostonbek Khamdamov",
+    "Abbosbek Fayzullaev",
+    "Akmal Mozgovoy",
+    "Eldor Shomurodov"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
