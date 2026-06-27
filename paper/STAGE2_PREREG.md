@@ -49,12 +49,23 @@ forward and a later pick scores **only if the projected matchup actually occurs*
 6. **Realized bracket input:** the official FIFA Round-of-32 slotting
    (`condition.REALIZED_THIRDS`, pinned at the group→KO cutover); Track B Elo
    computed from data available at the boundary.
+7. **Scoreline readout (display):** the published 90' scoreline is the realistic
+   rounded-expected-goals readout that Frozen 1 also uses
+   (`realistic_scores.ko_realistic`): the advancer takes the higher rounded score,
+   and a genuine toss-up stays level in regulation and is decided on penalties, so
+   the entry shows real scorelines and penalty draws rather than the monotone
+   points-optimal 1-0. This is **points-neutral** and does **not** change the
+   optimization — the EV-optimal pick of item 4 remains the yardstick, and the
+   advancer, the dynamic program, the champion, and every per-match EV are
+   unchanged. *Amended 2026-06-27, before any 2026 knockout match.*
 
 ## Code provenance (pins the implementation)
 
-- branch `ko-pool-repick` @ commit `6beb5ca3825a1f04a780ed07989e8c75ebef3c3a`
+- branch `ko-pool-repick` @ commit `572321777a6beb3f371edfbffb4c92290c782a81` (pushed to origin)
 - SHA-256 `scripts/ko_match_ev.py` = `478529b93acd8d90f9fc8af188175149b60ada45caabb8fd3753a46a2895fe18`
-- SHA-256 `scripts/ko_repick.py`  = `ee1dcf6990dc0db2241d9985271f77388e1838dd0a20350f90d612a204c977db`
+- SHA-256 `scripts/ko_repick.py`  = `01139e63b579393bd74e91b1879808df12397d3878cff11477ec3dc73f25a4e3`
+- *Readout amendment (item 7) supersedes the original freeze at commit `6beb5ca`
+  / `ko_repick.py` `ee1dcf69…`; optimizer and all EVs unchanged.*
 
 ## Pre-specified analyses (reported after the knockout phase)
 
