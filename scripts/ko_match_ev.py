@@ -67,6 +67,29 @@ def match_ev(lh, la, q_home=0.5):
     return best
 
 
+def ev_given_advancer(lh, la, advancer, q_home=0.5):
+    """Best {score, ev, score_ev, adv_prob} for a matchup with 90' means (lh, la)
+    when the advancing team is FORCED to `advancer` ('home' or 'away'). The 90'
+    score must be consistent with that advancer: a forced 'home' advancer allows
+    a home-win or a draw scoreline; 'away' allows an away-win or a draw. Used by
+    the bracket optimizer, where bracket consistency fixes which team a match
+    must project upward. (match_ev == the better of the two ev_given_advancer.)"""
+    p_home, p_away = advance_probs(lh, la, q_home)
+    adv_p = p_home if advancer == "home" else p_away
+    best = None
+    for h in range(MAX_G + 1):
+        for a in range(MAX_G + 1):
+            ok = (h == a) or (h > a and advancer == "home") or (h < a and advancer == "away")
+            if not ok:
+                continue
+            score_ev = ev_321(h, a, lh, la)
+            ev = score_ev + adv_p
+            if best is None or ev > best["ev"]:
+                best = {"score": (h, a), "ev": ev, "score_ev": score_ev,
+                        "adv_prob": adv_p}
+    return best
+
+
 def load_live_eff():
     """Track B effective Elo for every team: live Elo + injuries + lineups +
     learned drift (all information available after the group games). No frozen

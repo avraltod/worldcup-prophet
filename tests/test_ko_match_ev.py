@@ -35,3 +35,17 @@ def test_matchup_lambdas_from_eff():
     eff = {"Strong": 2100.0, "Weak": 1500.0}
     lh, la = kme.matchup_lambdas("Strong", "Weak", eff)
     assert lh > la
+
+
+def test_ev_given_advancer_consistency_and_matches_free_optimum():
+    lh, la = 1.6, 1.0
+    bh = kme.ev_given_advancer(lh, la, "home")
+    ba = kme.ev_given_advancer(lh, la, "away")
+    # a forced-home score is a home win or a draw; forced-away is an away win or draw
+    h, a = bh["score"]
+    assert h >= a
+    h, a = ba["score"]
+    assert h <= a
+    # the free optimum equals the better of the two forced advancers
+    free = kme.match_ev(lh, la)
+    assert abs(free["ev"] - max(bh["ev"], ba["ev"])) < 1e-9

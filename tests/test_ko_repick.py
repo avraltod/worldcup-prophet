@@ -4,6 +4,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 import ko_repick as kr
+import ko_match_ev as kme
 import condition as C
 
 
@@ -12,6 +13,24 @@ def _predicted_results():
     groups = {str(p["num"]): [p["hg"], p["ag"]]
               for p in pr if str(p["stage"]).startswith("Group")}
     return {"group": groups, "ko": {}}
+
+
+def test_optimizer_complete_consistent_and_dominates_greedy():
+    results = _predicted_results()
+    eff = kme.load_live_eff()
+    opt = kr.optimize_entry(results, eff=eff, N=4000, seed=1)
+    picks = opt["picks"]
+    # same structural invariants as the greedy entry
+    assert set(picks) == set(C.R32) | set(C.R16) | set(C.QF) | set(C.SF) | {103, 104}
+    for m, (fa, fb) in C.R16.items():
+        assert {picks[m]["home"], picks[m]["away"]} == \
+               {picks[fa]["advancer"], picks[fb]["advancer"]}
+    assert opt["champion"] == picks[104]["advancer"]
+    # exact dominance: under the optimizer's own occupancy, the DP bracket scores
+    # at least as high as greedy (no Monte-Carlo noise in this comparison)
+    greedy = kr.build_entry(results, eff=eff)
+    winp = opt["winp"]
+    assert kr._value_under(opt, winp) + 1e-9 >= kr._value_under(greedy, winp)
 
 
 def test_entry_is_complete_and_consistent():
