@@ -24,6 +24,18 @@ import ko_match_ev as kme
 
 _ADV_CACHE = {}      # (home, away) -> P(home advances), cascade model
 _EV_CACHE = {}       # (home, away, advancer_side) -> (ev, score)
+_CACHE_EFF = None    # the eff vintage the caches were built for
+
+
+def _ensure_cache(eff):
+    """Invalidate the team-keyed caches when the ratings vintage (`eff`) changes,
+    so evaluating two vintages (e.g. Frozen 1 vs Frozen 2) in one process never
+    returns stale values. Identity check is safe: `eff` is held for the call."""
+    global _CACHE_EFF
+    if eff is not _CACHE_EFF:
+        _ADV_CACHE.clear()
+        _EV_CACHE.clear()
+        _CACHE_EFF = eff
 
 FINAL, THIRD = 104, 103
 
@@ -55,6 +67,7 @@ def _pick(home, away, eff):
 def build_entry(results, eff=None):
     if eff is None:
         eff = kme.load_live_eff()      # Track B: all post-group-stage information
+    _ensure_cache(eff)
     slots = real_r32_slots(results)
     winners, picks = {}, {}
     for m in sorted(C.R32) + sorted(C.R16) + sorted(C.QF) + sorted(C.SF):
@@ -119,6 +132,7 @@ def reach_weights(results, entry, N=20000, seed=2026):
     reaching it."""
     slots = real_r32_slots(results)
     picks, eff = entry["picks"], entry["eff"]
+    _ensure_cache(eff)
     rng = random.Random(seed)
     hits = {m: 0 for m in picks}
     for _ in range(N):
@@ -234,6 +248,7 @@ def optimize_entry(results, eff=None, N=20000, seed=2026):
     Same return shape as build_entry; dominates the greedy build_entry."""
     if eff is None:
         eff = kme.load_live_eff()
+    _ensure_cache(eff)
     slots = real_r32_slots(results)
     winp = _winner_probs(slots, eff, N=N, seed=seed)
     memo = {}
