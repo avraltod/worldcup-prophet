@@ -51,24 +51,24 @@ Poisson goal model, and optimizes picks under the pool's 3/2/1 scoring rule.
 ## Results tracking
 
 <!-- LIVE-RESULTS:START -->
-_Last updated: 2026-06-26 — 60/104 matches played._
+_Last updated: 2026-06-27 — 66/104 matches played._
 
-**Information gain in this update:** 0.042 bits
+**Information gain in this update:** 0.016 bits
 
 **Champion probability — model vs market (top 8):**
 
 | Team | Model | Market |
 |---|---|---|
-| Spain | 26.5% | 13.7% |
-| Argentina | 21.8% | 15.1% |
-| France | 14.1% | 18.9% |
-| Portugal | 9.0% | 8.3% |
-| England | 6.5% | 10.1% |
-| Brazil | 2.9% | 5.5% |
-| Ecuador | 2.9% | 0.5% |
-| Netherlands | 2.8% | 5.7% |
+| Spain | 26.4% | 11.8% |
+| Argentina | 24.9% | 18.5% |
+| France | 13.9% | 21.6% |
+| Portugal | 8.6% | 8.0% |
+| England | 6.5% | 10.2% |
+| Brazil | 3.2% | 5.6% |
+| Netherlands | 2.4% | 4.6% |
+| Ecuador | 2.0% | 0.5% |
 
-**Biggest moves:** Ecuador +2.4pp, Spain -1.5pp
+**Biggest moves:** Argentina +3.2pp, Ecuador -0.9pp
 
 **Recorded group results:**
 
@@ -132,4 +132,10 @@ _Last updated: 2026-06-26 — 60/104 matches played._
 - M58: Tunisia 1–3 Netherlands
 - M59: Turkey 3–2 United States
 - M60: Paraguay 0–0 Australia
+- M61: Norway 1–4 France
+- M62: Senegal 5–0 Iraq
+- M63: Egypt 1–1 Iran
+- M64: New Zealand 1–5 Belgium
+- M65: Cape Verde 0–0 Saudi Arabia
+- M66: Uruguay 0–1 Spain
 <!-- LIVE-RESULTS:END -->
