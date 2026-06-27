@@ -1,0 +1,155 @@
+% =====================================================================
+% Stage-2 conditional re-forecast ("Frozen 2"). Frozen methods section.
+% The method is pre-registered (paper/STAGE2_PREREG.md); the empirical
+% tables in sec:stage2-results are filled after the 2026 knockout phase.
+% Code is hash-pinned in the pre-registration (branch ko-pool-repick).
+% =====================================================================
+
+\section{A second freeze: the Stage-2 conditional re-forecast}\label{sec:stage2}
+
+The pre-registered forecast of Section~\ref{sec:evolution} (``Frozen~1'') commits to
+a full bracket before the tournament and never changes. The pool, however,
+permits each entrant to re-pick the entire knockout bracket once the group stage
+concludes, and so it offers a second decision point that the pre-tournament entry
+cannot use: the realized group results, the teams that actually advanced, and the
+draw they actually face. We leverage this second decision point to issue a
+\emph{Stage-2 conditional re-forecast} (``Frozen~2''), a knockout entry that
+conditions on everything known at the group$\rightarrow$knockout boundary and is
+optimized for expected pool points on the bracket that actually formed. Frozen~2
+is a distinct object from Frozen~1. It uses look-ahead relative to the
+pre-tournament entry by construction, so it is not pre-tournament
+pre-registration; it is a second freeze, of the \emph{method}, fixed before any
+knockout result is observed (Section~\ref{sec:stage2-prereg}). Frozen~1 and the
+paper's pre-registered forecast are unchanged.
+
+\subsection{The scoring rule and the re-pick problem}\label{sec:stage2-rule}
+
+The pool scores a knockout match in two parts. The first is the
+\emph{90-minute regulation} scoreline, graded on the same three-tier rule as the
+group stage: three points for the exact score, two for the correct result and
+goal difference, and one for the correct result alone. The second is a separate
+point for naming the team that advances. Extra-time and penalty \emph{scores} are
+not graded; they enter only through the advancing team. A bracket is submitted
+forward, from the Round of~32 to the final, and a later-round pick is graded only
+if the projected matchup actually occurs, because the entry commits to specific
+teams meeting in a specific slot. The objective is to maximize the expected total
+of these per-match points over the realized bracket.
+
+This structure makes the re-pick a coupled problem rather than a sequence of
+independent guesses. The advancer named in one match determines which teams
+populate the next slot, and a later pick earns nothing unless both of its
+projected teams arrive there, so the value of a deep pick is the product of its
+per-match value and the probability that its matchup materializes. We treat the
+two pieces separately: a per-match forecast (Section~\ref{sec:stage2-match}) and
+the bracket that assembles them (Section~\ref{sec:stage2-dp}).
+
+\subsection{Ratings and the per-match forecast}\label{sec:stage2-match}
+
+The Stage-2 forecast conditions on post-group information through the ratings.
+We rate each team by its Track~B effective Elo, which combines the live Elo, the
+current injury and lineup adjustments, and the learned in-tournament drift of
+Appendix~\ref{app:prophet}, and carries no separate host bonus because the host
+advantage is already absorbed into the live ratings. For a matchup we map the
+rating difference to a pair of expected goals through the same logistic
+win-expectancy used throughout the paper, and model the 90-minute score as
+independent Poisson draws on those means.
+
+Two quantities follow from this match model. The first is the expected-value
+scoreline under the three-tier rule, which is the group-stage object of
+Equation~\eqref{eq:ev} applied to the 90-minute distribution. The second is the
+probability that a team advances, which the 90-minute distribution alone does not
+give, because a drawn regulation is decided later. We compute it as a cascade:
+the team advances if it wins in 90 minutes, or the match is level after 90 and it
+wins in extra time, or the match is level after extra time and it wins the
+shootout. We model extra time as a Poisson period with the means scaled to a
+third of the regulation rate, the 30 added minutes against 90, and we set the
+shootout win probability to one half. The coin flip is deliberate: in
+Section~\ref{sec:audit} we find that a team's prior shootout record does not
+predict the next shootout, so there is no signal to exploit and a tilt would only
+add noise.
+
+The per-match pick maximizes the sum of the two pieces, the scoreline's
+expected three-tier points plus the probability that the named advancer
+advances. The two choices are coupled by the rule itself, because a decisive
+90-minute prediction forces the advancer to the predicted winner while a
+predicted draw leaves the advancer free. The optimizer therefore weighs a
+decisive scoreline against a draw that banks the advancing point on the
+likelier team, and on the most even matchups it prefers the draw, consistent
+with the group-stage result that draws become competitive when the result is
+close.
+
+\subsection{The bracket as a dynamic program}\label{sec:stage2-dp}
+
+Because a deep pick is graded only if its matchup occurs, the expected value of
+the whole entry is a sum over slots of the per-match value weighted by the
+probability that the projected pair occupies the slot. That occupancy
+probability has a useful structure. The two matches feeding a slot draw on
+disjoint halves of the bracket, so the team emerging from one feed is
+independent of the team emerging from the other, and the occupancy weight
+factors into the product of two one-sided reaching probabilities. Those
+probabilities are properties of the realized bracket alone and not of the
+entry, so we estimate them once by Monte~Carlo and then solve for the entry
+exactly.
+
+We compute the globally optimal internally-consistent bracket by dynamic
+programming over the bracket tree. Working from the round of~32 upward, for each
+match and each team the entry could project out of it, we store the best total
+expected points obtainable in that match's subtree, and we combine subtrees at
+their parent. The greedy alternative, which simply advances the stronger team in
+each match, is not optimal, because advancing the stronger team maximizes the
+local advancing point but ignores how that choice changes both the reachability
+and the matchup value of later rounds. On the realized 2026 bracket we report the
+dynamic program's improvement over the greedy entry, and the handful of
+coin-flip slots that drive it, with the post-knockout results
+(Section~\ref{sec:stage2-results}).\footnote{On the predicted pre-knockout
+bracket the improvement is small, on the order of a tenth of a point, and
+changes a single advancer. We read this as a located refinement rather than a
+large gain, because most knockout matchups are lopsided enough that the greedy
+and optimal advancers coincide; the value of the re-pick is in re-conditioning on
+the realized draw, not in the optimizer's last increment.}
+
+\subsection{Independence and robustness}\label{sec:stage2-robust}
+
+We keep the independent-Poisson match model rather than adding a Dixon--Coles
+low-score correlation, and we verify that this does not bind on the choice we
+care about. Across the bracket's 32 knockout matchups the correction changes the
+expected-value scoreline in none of them for correlation parameters in
+$\{0.05, 0.10, 0.15\}$, because the optimal picks sit at scorelines the
+correction reweights too little to overturn, consistent with the group-stage
+audit of Section~\ref{sec:audit}. The extra-time scaling and the shootout coin
+flip enter only the residual draw-decided mass and move no advancer, so the entry
+is robust to those assumptions as well.
+
+\subsection{Pre-registration}\label{sec:stage2-prereg}
+
+We froze the Stage-2 method before the first knockout match, and recorded the
+freeze publicly so that the re-pick reads as a second forecast and not a
+hindsight fit. The record fixes the scoring rule, the cascade, the dynamic
+program, the Track~B ratings, and the hyperparameters that were tuned on the
+2018 and 2022 tournaments and not on any 2026 knockout outcome, and it pins the
+implementation by hash. It does not change Frozen~1, the pre-registered living
+forecast, or the locked group-stage picks. Holding the method fixed across the
+boundary is what lets the post-knockout comparison in
+Section~\ref{sec:stage2-results} be read as the value of re-conditioning rather
+than the value of re-optimizing the method with the answers in hand.
+
+\subsection{What we report after the knockout phase}\label{sec:stage2-results}
+
+% STUB --- the empirical tables below are filled after the 2026 knockout phase.
+The Stage-2 forecast is evaluated only after the knockout phase, on three
+questions. First, whether the realized pool points of the Frozen~2 entry exceed
+those of the greedy, naive-favorite, and Frozen~1 knockout brackets. Second, the
+value of re-conditioning, the Frozen~2 minus Frozen~1 realized knockout points,
+which isolates the gain from conditioning on the group stage holding the method
+fixed. Third, calibration, whether the entry's realized points track its expected
+points. We also report a full 2018 and 2022 backtest with a 32-team bracket
+adapter, post-group learned Elo, and true 90-minute scores; a lean version,
+holding the favorite-advancing bracket fixed and varying only the scoreline rule,
+scores the expected-value entry at 33 points against 32 for naive favorite-1-0
+picks across the two tournaments, which is positive but small and consistent with
+the group-stage finding that the expected-value scoreline narrowly beats the
+naive baseline. The lean check is superseded by the full backtest here.
+
+% \input{tables/stage2_points}    % EV-optimal vs greedy / naive / Frozen 1
+% \input{tables/stage2_recond}    % value of re-conditioning (F2 - F1)
+% \input{tables/stage2_dp}        % DP vs greedy gain, by slot
