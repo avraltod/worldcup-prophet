@@ -133,6 +133,65 @@ boundary is what lets the post-knockout comparison in
 Section~\ref{sec:stage2-results} be read as the value of re-conditioning rather
 than the value of re-optimizing the method with the answers in hand.
 
+\subsection{The issued entry on the realized bracket}\label{sec:stage2-entry}
+
+The group stage concluded with all 72 matches played, and the Round-of-32 field
+is now fixed. The eight best third-placed teams, from Groups B, D, E, F, I, J, K,
+and~L, slot into the bracket by FIFA's official third-place combination table,
+which we read off the announced matchups and verified team by team before
+pinning; the verified slotting differs from the optimizer's deterministic
+fallback in four of the eight third-place slots, so the cross-check is
+load-bearing rather than a formality. With the bracket fixed we issue the
+Frozen~2 entry, optimized on the realized draw, before the first knockout match
+is played.
+
+The entry names France champion over Argentina in the final, for an expected 39
+pool points conditional on the realized bracket. Its value over Frozen~1 is
+visible directly in the field it predicts. Ten of the sixteen Round-of-32 slots
+name a different team than Frozen~1. Five of Frozen~1's named sides did not
+survive their groups at all, South Korea, Czechia, Iran, Uruguay, and Turkey, and
+a knockout pick on an eliminated team scores nothing; the remaining differences
+are qualifiers the realized group finish placed in a slot other than the one
+Frozen~1 predicted. Frozen~2 conditions on the teams that actually advanced and
+the draw they actually face, so every pick names two teams that genuinely meet.
+\autoref{tab:stage2-r32} reports the issued Round-of-32 entry under the realistic
+readout: ordinary scorelines for the decisive matchups and a level regulation
+score, decided on penalties, for the closest ties. Beyond the Round of~32 the
+entry advances France, Spain, England, and Argentina to the semi-finals, with
+Norway the notable upset, eliminating Brazil in the Round of~16.
+
+\begin{table}[t]
+  \centering
+  \small
+  \caption{The issued Stage-2 (Frozen~2) Round-of-32 entry on the realized
+    bracket. Scorelines are the 90-minute realistic readout; ``(pen)'' marks a
+    level regulation score the entry sends to penalties. Issued before the first
+    knockout match.}
+  \label{tab:stage2-r32}
+  \begin{tabular}{llc}
+    \toprule
+    Matchup & Pick (90$'$) & Advances \\
+    \midrule
+    South Africa v Canada       & 1--2       & Canada \\
+    Germany v Paraguay          & 2--0       & Germany \\
+    Netherlands v Morocco       & 1--1 (pen) & Morocco \\
+    Brazil v Japan              & 2--1       & Brazil \\
+    France v Sweden             & 2--0       & France \\
+    Ivory Coast v Norway        & 0--2       & Norway \\
+    Mexico v Ecuador            & 1--2       & Ecuador \\
+    England v Congo~DR          & 2--0       & England \\
+    United States v Bosnia      & 2--0       & United States \\
+    Belgium v Senegal           & 2--1       & Belgium \\
+    Portugal v Croatia          & 2--1       & Portugal \\
+    Spain v Austria             & 2--0       & Spain \\
+    Switzerland v Algeria       & 1--1 (pen) & Algeria \\
+    Argentina v Cape Verde      & 2--0       & Argentina \\
+    Colombia v Ghana            & 2--0       & Colombia \\
+    Australia v Egypt           & 2--1       & Australia \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
 \subsection{What we report after the knockout phase}\label{sec:stage2-results}
 
 % STUB --- the empirical tables below are filled after the 2026 knockout phase.
