@@ -62,7 +62,10 @@ SO = list(TS)
 # baseline forecast is robust to (measured: champion/advance probs unchanged within
 # Monte-Carlo noise). Read the realized slotting off observed groups, and cross-check
 # it against FIFA's announced bracket, with realized_bracket(<group results>).
-REALIZED_THIRDS = {}
+# Pinned 2026-06-28 from FIFA's official Round-of-32 bracket, verified against the
+# actual resolved matchups (e.g. m74 Germany v Paraguay -> 3rd D; m85 Switzerland
+# v Algeria -> 3rd J). The 8 qualifying thirds came from groups B,D,E,F,I,J,K,L.
+REALIZED_THIRDS = {74: "D", 77: "F", 79: "E", 80: "K", 81: "B", 82: "I", 85: "J", 87: "L"}
 R32 = {74: ("E1", "T74"), 77: ("I1", "T77"), 73: ("A2", "B2"), 75: ("F1", "C2"),
        76: ("C1", "F2"), 78: ("E2", "I2"), 79: ("A1", "T79"), 80: ("L1", "T80"),
        83: ("K2", "L2"), 84: ("H1", "J2"), 81: ("D1", "T81"), 82: ("G1", "T82"),
