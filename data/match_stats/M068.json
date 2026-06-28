@@ -1,0 +1,20 @@
+{
+ "match": 68,
+ "event_id": "760480",
+ "stats": {
+  "home": {
+   "team": "Croatia",
+   "sot": 4.0,
+   "other_shots": 4.0,
+   "total_shots": 8.0,
+   "possession": 53.3
+  },
+  "away": {
+   "team": "Ghana",
+   "sot": 1.0,
+   "other_shots": 5.0,
+   "total_shots": 6.0,
+   "possession": 46.7
+  }
+ }
+}

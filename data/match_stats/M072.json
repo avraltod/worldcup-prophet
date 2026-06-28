@@ -1,0 +1,20 @@
+{
+ "match": 72,
+ "event_id": "760482",
+ "stats": {
+  "home": {
+   "team": "Congo DR",
+   "sot": 4.0,
+   "other_shots": 15.0,
+   "total_shots": 19.0,
+   "possession": 57.6
+  },
+  "away": {
+   "team": "Uzbekistan",
+   "sot": 1.0,
+   "other_shots": 2.0,
+   "total_shots": 3.0,
+   "possession": 42.4
+  }
+ }
+}

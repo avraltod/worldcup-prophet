@@ -2340,5 +2340,215 @@
     0.0627
    ]
   ]
+ },
+ {
+  "edition": 67,
+  "match": 67,
+  "fixture": "Panama v England",
+  "result": [
+   0,
+   2
+  ],
+  "points": 1,
+  "cum_points": 59,
+  "mean_brier": 0.4967,
+  "cum_bits": 0.1957,
+  "champ_top5": [
+   [
+    "France",
+    0.2384
+   ],
+   [
+    "Argentina",
+    0.2303
+   ],
+   [
+    "Spain",
+    0.1371
+   ],
+   [
+    "Portugal",
+    0.0835
+   ],
+   [
+    "England",
+    0.0804
+   ]
+  ]
+ },
+ {
+  "edition": 68,
+  "match": 68,
+  "fixture": "Croatia v Ghana",
+  "result": [
+   2,
+   1
+  ],
+  "points": 1,
+  "cum_points": 60,
+  "mean_brier": 0.4897,
+  "cum_bits": 0.1974,
+  "champ_top5": [
+   [
+    "France",
+    0.2421
+   ],
+   [
+    "Argentina",
+    0.2293
+   ],
+   [
+    "Spain",
+    0.1374
+   ],
+   [
+    "Portugal",
+    0.0808
+   ],
+   [
+    "England",
+    0.0792
+   ]
+  ]
+ },
+ {
+  "edition": 69,
+  "match": 69,
+  "fixture": "Algeria v Austria",
+  "result": [
+   3,
+   3
+  ],
+  "points": 0,
+  "cum_points": 60,
+  "mean_brier": 0.494,
+  "cum_bits": 0.1991,
+  "champ_top5": [
+   [
+    "France",
+    0.2396
+   ],
+   [
+    "Argentina",
+    0.2366
+   ],
+   [
+    "Spain",
+    0.129
+   ],
+   [
+    "England",
+    0.094
+   ],
+   [
+    "Portugal",
+    0.0617
+   ]
+  ]
+ },
+ {
+  "edition": 70,
+  "match": 70,
+  "fixture": "Jordan v Argentina",
+  "result": [
+   1,
+   3
+  ],
+  "points": 1,
+  "cum_points": 61,
+  "mean_brier": 0.4874,
+  "cum_bits": 0.2007,
+  "champ_top5": [
+   [
+    "Argentina",
+    0.2388
+   ],
+   [
+    "France",
+    0.2373
+   ],
+   [
+    "Spain",
+    0.1279
+   ],
+   [
+    "England",
+    0.094
+   ],
+   [
+    "Portugal",
+    0.062
+   ]
+  ]
+ },
+ {
+  "edition": 71,
+  "match": 71,
+  "fixture": "Colombia v Portugal",
+  "result": [
+   0,
+   0
+  ],
+  "points": 0,
+  "cum_points": 61,
+  "mean_brier": 0.494,
+  "cum_bits": 0.2146,
+  "champ_top5": [
+   [
+    "Argentina",
+    0.2419
+   ],
+   [
+    "France",
+    0.2413
+   ],
+   [
+    "Spain",
+    0.1278
+   ],
+   [
+    "England",
+    0.08
+   ],
+   [
+    "Portugal",
+    0.0614
+   ]
+  ]
+ },
+ {
+  "edition": 72,
+  "match": 72,
+  "fixture": "Congo DR v Uzbekistan",
+  "result": [
+   3,
+   1
+  ],
+  "points": 0,
+  "cum_points": 61,
+  "mean_brier": 0.4969,
+  "cum_bits": 0.2169,
+  "champ_top5": [
+   [
+    "Argentina",
+    0.2393
+   ],
+   [
+    "France",
+    0.2362
+   ],
+   [
+    "Spain",
+    0.1276
+   ],
+   [
+    "England",
+    0.0948
+   ],
+   [
+    "Portugal",
+    0.0621
+   ]
+  ]
  }
 ]
