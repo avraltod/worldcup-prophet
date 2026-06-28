@@ -53,9 +53,57 @@ def _load(p, default):
 
 
 def pending_matches(trajectory, index_path):
-    posts = {r["match"] for r in trajectory if r["phase"] == "post"}
+    """Group-stage matches (<=72) with a post record but no edition yet. Knockout
+    matches are excluded on purpose: the per-match edition machinery (expectations,
+    per-group sections, the before/after entry) is group-only, and knockout games
+    have no prediction record to build an edition from. Knockout results instead
+    flow into the living layer via results_all() + rerender(include_ko=True)."""
+    posts = {r["match"] for r in trajectory
+             if r["phase"] == "post" and r["match"] <= 72}
     done = set(mb.documented_matches(index_path))
     return sorted(posts - done)
+
+
+def results_all(trajectory):
+    """Every recorded result: group scorelines (<=72) and knockout advancers
+    (>72). Unlike results_through(_, match), it is not capped at a match number,
+    so the living layer can condition on the knockouts after the group stage."""
+    out = {"group": {}, "ko": {}}
+    for r in trajectory:
+        if r["phase"] != "post":
+            continue
+        if r["match"] <= 72 and r.get("result"):
+            out["group"][str(r["match"])] = r["result"]
+        elif r["match"] > 72 and r.get("winner"):
+            out["ko"][str(r["match"])] = r["winner"]
+    return out
+
+
+KO_RENDERED = DATA / "ko_rendered.json"   # KO matches already folded into the living layer
+
+
+def _ko_posts(trajectory):
+    return {r["match"] for r in trajectory
+            if r["phase"] == "post" and r["match"] > 72 and r.get("winner")}
+
+
+def ko_to_incorporate(trajectory):
+    """Recorded knockout results not yet reflected in the living layer."""
+    return sorted(_ko_posts(trajectory) - set(_load(KO_RENDERED, [])))
+
+
+def mark_ko_incorporated(trajectory):
+    """Record that every current knockout result is now in the living layer, so the
+    next run does not rebuild until a new knockout result arrives."""
+    KO_RENDERED.write_text(json.dumps(sorted(_ko_posts(trajectory))))
+
+
+def work_pending(trajectory, index_path):
+    """How much the revision job has to do: group editions still to build, plus any
+    knockout results not yet folded into the living layer. Lets the workflow fire on
+    a fresh knockout result even when no group edition is outstanding, and stay
+    idle once everything is incorporated."""
+    return len(pending_matches(trajectory, index_path)) + len(ko_to_incorporate(trajectory))
 
 
 def re_ev_delta_for(exp, result, realistic_points):
@@ -323,8 +371,14 @@ def _implications(latest_entry, expectations, results, eff_elo, live_rates):
     return out
 
 
-def _write_living_layer(trajectory, entries, match, expectations, use_api=False):
-    """Build one context and render every living unit to paper/live/."""
+def _write_living_layer(trajectory, entries, match, expectations, use_api=False,
+                        cond_results=None):
+    """Build one context and render every living unit to paper/live/. When
+    cond_results is given (the post-group knockout re-render), the forecast is
+    conditioned on it -- group scorelines plus knockout advancers -- instead of
+    results_through(trajectory, match), so the champion tracks, the bracket
+    figures, and the survival tables reflect the knockouts while the edition
+    framing (entries, stats, vintages) stays at the latest group edition."""
     _assert_skeleton()
     latest_champ = next((r["champion"] for r in reversed(trajectory)
                          if r["phase"] == "post" and r["match"] <= match), None)
@@ -344,7 +398,7 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     frozen = _load(FROZEN_PATH, {}).get("stages")
     if not frozen:
         raise SystemExit("frozen_stage_probs.json missing — cannot render")
-    res = results_through(trajectory, match)
+    res = cond_results if cond_results is not None else results_through(trajectory, match)
     now_probs = cond.conditional_probs(res, N=COND_N, seed=2026)
     # prev_now conditions on this edition's matches EXCEPT the one just released
     # (results_through stops at match-1), so the movement now_probs - prev_now is
@@ -592,10 +646,13 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False)
     return stats
 
 
-def rerender(match=None):
-    """Regenerate the full living layer from already-documented entries,
-    without creating a new match-book entry. `match` defaults to the latest
-    documented; ledger, scorecard, and conditioning all run through it."""
+def rerender(match=None, include_ko=False):
+    """Regenerate the full living layer from already-documented entries, without
+    creating a new match-book entry. `match` defaults to the latest documented;
+    ledger, scorecard, and conditioning all run through it. With include_ko, the
+    forecast is additionally conditioned on every recorded knockout result
+    (results_all), so the post-group living layer tracks the knockouts even though
+    the per-match editions stop at the group stage."""
     trajectory = _load(TRAJ_PATH, [])
     entries = _entries_for_stats(INDEX)
     if not entries:
@@ -603,9 +660,12 @@ def rerender(match=None):
     if match is None:
         match = max(e["match"] for e in entries)
     entries = [e for e in entries if e["match"] <= match]   # historical re-issue
-    stats = _write_living_layer(trajectory, entries, match, _load(EXP_PATH, []))
+    cond = results_all(trajectory) if include_ko else None
+    stats = _write_living_layer(trajectory, entries, match, _load(EXP_PATH, []),
+                                cond_results=cond)
+    n_ko = len(cond["ko"]) if cond else 0
     print(f"Living layer re-rendered through Match {match} "
-          f"({stats['documented']} documented)")
+          f"({stats['documented']} documented{f', +{n_ko} KO results' if n_ko else ''})")
     return stats
 
 
