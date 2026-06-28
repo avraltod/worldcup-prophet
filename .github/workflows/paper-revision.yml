@@ -119,5 +119,9 @@ jobs:
             esac
           done
           git commit -m "paper: revise live study through pending matches"
-          git pull --rebase origin "$GITHUB_REF_NAME" || true
+          # --autostash: the build leaves unstaged, non-allowlisted changes (the
+          # regenerated figure PDFs), which otherwise make 'pull --rebase' refuse
+          # ("cannot pull with rebase: You have unstaged changes") and the push fail
+          # whenever the v2-records cron has pushed concurrently.
+          git pull --rebase --autostash origin "$GITHUB_REF_NAME" || true
           git push
