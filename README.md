@@ -51,24 +51,24 @@ Poisson goal model, and optimizes picks under the pool's 3/2/1 scoring rule.
 ## Results tracking
 
 <!-- LIVE-RESULTS:START -->
-_Last updated: 2026-06-27 — 66/104 matches played._
+_Last updated: 2026-06-28 — 72/104 matches played._
 
-**Information gain in this update:** 0.016 bits
+**Information gain in this update:** 0.019 bits
 
 **Champion probability — model vs market (top 8):**
 
 | Team | Model | Market |
 |---|---|---|
-| Spain | 26.4% | 11.8% |
-| Argentina | 24.9% | 18.5% |
-| France | 13.9% | 21.6% |
-| Portugal | 8.6% | 8.0% |
-| England | 6.5% | 10.2% |
-| Brazil | 3.2% | 5.6% |
-| Netherlands | 2.4% | 4.6% |
-| Ecuador | 2.0% | 0.5% |
+| Argentina | 26.9% | 20.4% |
+| Spain | 24.3% | 10.6% |
+| France | 13.7% | 23.1% |
+| England | 8.5% | 10.3% |
+| Portugal | 6.3% | 5.8% |
+| Brazil | 2.9% | 5.4% |
+| Netherlands | 2.4% | 5.1% |
+| Germany | 2.2% | 3.7% |
 
-**Biggest moves:** Argentina +3.2pp, Ecuador -0.9pp
+**Biggest moves:** Portugal -2.3pp, Spain -2.1pp, England +1.9pp, Argentina +1.9pp, Colombia +0.8pp, Croatia -0.5pp
 
 **Recorded group results:**
 
@@ -138,4 +138,10 @@ _Last updated: 2026-06-27 — 66/104 matches played._
 - M64: New Zealand 1–5 Belgium
 - M65: Cape Verde 0–0 Saudi Arabia
 - M66: Uruguay 0–1 Spain
+- M67: Panama 0–2 England
+- M68: Croatia 2–1 Ghana
+- M69: Algeria 3–3 Austria
+- M70: Jordan 1–3 Argentina
+- M71: Colombia 0–0 Portugal
+- M72: Congo DR 3–1 Uzbekistan
 <!-- LIVE-RESULTS:END -->
