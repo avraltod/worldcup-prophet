@@ -10,6 +10,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from fixtures import GROUP_FIXTURES, canon, ROW_MATCH
+import ko_bracket
 
 ESPN_URL = "https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard"
 
@@ -65,6 +66,13 @@ def parse_scoreboard(payload):
             "ag": _score(sides["away"]),
             "kickoff": dt.datetime.fromisoformat(ev["date"].replace("Z", "+00:00")),
             "final": final,
+            # `completed` is broader than `final`: it is also true for knockout
+            # games decided after extra time or penalties (detail "AET"/"Pens"),
+            # where `final` (detail == "FT") is deliberately false.
+            "completed": st.get("state") == "post" and st.get("completed") is True,
+            # the team ESPN flags as the winner (the advancer, including ET/pens).
+            "winner": next((s["team"]["displayName"] for s in comp["competitors"]
+                            if s.get("winner") is True), None),
             "event_id": ev.get("id"),
         })
     return out
@@ -79,6 +87,21 @@ def map_to_fixture(home, away):
         return (_FIX_MATCHNO[(ch, ca)], *_FIX_NAMES[(ch, ca)], False)
     if (ca, ch) in _FIX_MATCHNO:
         return (_FIX_MATCHNO[(ca, ch)], *_FIX_NAMES[(ca, ch)], True)
+    return None
+
+
+def ko_fixture(home, away, results_log):
+    """Knockout analogue of map_to_fixture, returning (matchno, home, away,
+    reversed=False) for a knockout matchup (73-104) or None. The matchup is
+    resolved from the realized bracket (ko_bracket.resolve_ko_pairings), which
+    derives the R32 field from the completed group standings and propagates
+    recorded winners into later rounds. Orientation is not tracked: knockout
+    results are recorded as the advancing team, not an oriented scoreline."""
+    ch, ca = canon(_espn_name(home)), canon(_espn_name(away))
+    pair = frozenset({ch, ca})
+    for m, teams in ko_bracket.resolve_ko_pairings(results_log).items():
+        if frozenset(canon(t) for t in teams) == pair:
+            return (m, ch, ca, False)
     return None
 
 
