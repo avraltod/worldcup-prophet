@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-06-28T12:14:56Z",
+ "fetched_at": "2026-06-28T12:55:44Z",
  "mode": "pre",
  "source_freshness": {
   "elo_updated_at": "2026-06-10T00:00:00Z",
@@ -374,24 +374,40 @@
     "drift": 126.06
    },
    {
+    "team": "Colombia",
+    "drift": 125.99
+   },
+   {
     "team": "Paraguay",
     "drift": -115.42
    },
    {
     "team": "Ghana",
-    "drift": 98.39
+    "drift": 107.13
+   },
+   {
+    "team": "Croatia",
+    "drift": -99.65
+   },
+   {
+    "team": "Portugal",
+    "drift": -96.19
    },
    {
     "team": "Switzerland",
     "drift": -93.14
    },
    {
-    "team": "Croatia",
-    "drift": -90.51
+    "team": "Algeria",
+    "drift": 92.92
    },
    {
     "team": "Canada",
     "drift": 90.38
+   },
+   {
+    "team": "Uzbekistan",
+    "drift": -87.58
    },
    {
     "team": "Czechia",
@@ -418,8 +434,16 @@
     "drift": -64.08
    },
    {
-    "team": "Algeria",
-    "drift": 63.54
+    "team": "Argentina",
+    "drift": -58.56
+   },
+   {
+    "team": "Congo DR",
+    "drift": 57.77
+   },
+   {
+    "team": "Austria",
+    "drift": -56.77
    },
    {
     "team": "Belgium",
@@ -436,10 +460,6 @@
    {
     "team": "Germany",
     "drift": 54.49
-   },
-   {
-    "team": "Colombia",
-    "drift": 53.68
    },
    {
     "team": "Iran",
@@ -478,14 +498,6 @@
     "drift": -28.18
    },
    {
-    "team": "Uzbekistan",
-    "drift": -27.63
-   },
-   {
-    "team": "Austria",
-    "drift": -25.49
-   },
-   {
     "team": "Cape Verde",
     "drift": 24.09
    },
@@ -498,16 +510,8 @@
     "drift": -22.88
    },
    {
-    "team": "Portugal",
-    "drift": -22.3
-   },
-   {
     "team": "Jordan",
-    "drift": -19.74
-   },
-   {
-    "team": "Argentina",
-    "drift": -18.31
+    "drift": 22.41
    },
    {
     "team": "Norway",
@@ -526,6 +530,10 @@
     "drift": -13.53
    },
    {
+    "team": "England",
+    "drift": -12.76
+   },
+   {
     "team": "New Zealand",
     "drift": -12.22
    },
@@ -534,20 +542,12 @@
     "drift": 8.77
    },
    {
-    "team": "England",
-    "drift": -5.66
-   },
-   {
-    "team": "Congo DR",
-    "drift": -3.75
+    "team": "Panama",
+    "drift": 5.27
    },
    {
     "team": "Qatar",
     "drift": 2.86
-   },
-   {
-    "team": "Panama",
-    "drift": -2.22
    },
    {
     "team": "Bosnia and Herzegovina",
