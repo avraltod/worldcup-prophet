@@ -128,10 +128,23 @@ def make_pre_record(e, now):
     _mark(e["match"], "pre")
 
 
+def _apply_result(log, e):
+    """Write one finalized result into the results log. A knockout match (>72)
+    records the advancing team in log['ko'] (what the conditioning needs); a
+    group match records the fixture-oriented 90' scoreline in log['group']."""
+    if e["match"] > 72:
+        log.setdefault("ko", {})[str(e["match"])] = e["winner"]
+    else:
+        hg, ag = (e["ag"], e["hg"]) if e["rev"] else (e["hg"], e["ag"])
+        log.setdefault("group", {})[str(e["match"])] = [hg, ag]
+    return log
+
+
 def make_post_record(e, now):
     log = _load(RESULTS, {"group": {}, "ko": {}})
     hg, ag = (e["ag"], e["hg"]) if e["rev"] else (e["hg"], e["ag"])  # fixture-oriented
-    log.setdefault("group", {})[str(e["match"])] = [hg, ag]
+    is_ko = e["match"] > 72
+    _apply_result(log, e)
     RESULTS.write_text(json.dumps(log, ensure_ascii=False, indent=1))
     champ = _champion_dist(log)
     rec = {"phase": "post", "match": e["match"],
@@ -140,25 +153,33 @@ def make_post_record(e, now):
            "n_recorded": len(log["group"]) + len(log.get("ko", {})),
            "champion": champ, "market_champion": market_snapshot.fetch_market_champion(),
            "info_bits": _kl_bits(champ, _prev_champion()),
-           "lineup": None, "result": [hg, ag],
-           "performance": scoring.score_match(e["fh"], e["fa"], hg, ag)}
+           "lineup": None, "result": [hg, ag], "winner": e.get("winner"),
+           "performance": None if is_ko else scoring.score_match(e["fh"], e["fa"], hg, ag)}
     rec["champion_b"] = _champion_dist_b(log)
     rec["info_snapshot"] = _info_snapshot()
     _append(rec)
     _mark(e["match"], "post")
 
 
-def _normalize(parsed):
+def _normalize(parsed, results_log=None):
     out = []
     for p in parsed:
         fx = fr.map_to_fixture(p["home"], p["away"])
+        is_ko = False
+        if fx is None and results_log is not None:        # not a group fixture: try the KO bracket
+            fx = fr.ko_fixture(p["home"], p["away"], results_log)
+            is_ko = fx is not None
         if fx is None:
             continue
         m, fh, fa, rev = fx
+        # group: final when ESPN reports full time. knockout: final once the game
+        # is completed (FT/AET/penalties) and ESPN has flagged the advancer.
+        final = (p["completed"] and p.get("winner") is not None) if is_ko else p["final"]
         out.append({"match": m, "fh": fh, "fa": fa, "rev": rev,
-                    "kickoff": p["kickoff"], "final": p["final"],
+                    "kickoff": p["kickoff"], "final": final,
                     "has_scores": p["hg"] is not None and p["ag"] is not None,
-                    "hg": p["hg"], "ag": p["ag"], "event_id": p.get("event_id")})
+                    "hg": p["hg"], "ag": p["ag"], "event_id": p.get("event_id"),
+                    "is_ko": is_ko, "winner": p.get("winner")})
     return out
 
 
@@ -192,7 +213,7 @@ def main(argv):
     dry = "--dry-run" in argv
     now = dt.datetime.now(dt.timezone.utc)
     parsed = fr.fetch_dates(_date_window(now))
-    events = _normalize(parsed)
+    events = _normalize(parsed, _load(RESULTS, {"group": {}, "ko": {}}))
     actions = plan_records(events, _load(INDEX, {"pre": [], "post": []}), now)
     if not actions:
         print("v2: nothing due.")
