@@ -26,7 +26,7 @@ jobs:
       - name: Detect pending matches
         id: detect
         run: |
-          PENDING=$(python3 -c "import sys, os, json; sys.path.insert(0, 'scripts'); import update_after_match as u; t = json.load(open('data/trajectory_v2.json')) if os.path.exists('data/trajectory_v2.json') else []; print(len(u.pending_matches(t, u.INDEX)))")
+          PENDING=$(python3 -c "import sys, os, json; sys.path.insert(0, 'scripts'); import update_after_match as u; t = json.load(open('data/trajectory_v2.json')) if os.path.exists('data/trajectory_v2.json') else []; print(u.work_pending(t, u.INDEX))")
           echo "pending=$PENDING" >> "$GITHUB_OUTPUT"
           echo "pending matches: $PENDING"
       - name: Install Python deps (anthropic optional, matplotlib for the live figure)
@@ -63,29 +63,37 @@ jobs:
               # use the match-book index, which is the true order editions issued.
               g = 0 if m == 0 else len(mb.documented_matches(uam.INDEX))
               return f"archive/paper_versions/WC2026_paper_G{g:03d}_M{m:03d}.pdf"
-          pending = uam.pending_matches(traj, uam.INDEX)
+          pending = uam.pending_matches(traj, uam.INDEX)   # group-stage editions only
           for m in pending:
               print("revising match", m)
               uam.revise(m, use_api=bool(os.environ.get("ANTHROPIC_API_KEY")))
               # _latexmk(out_path) compiles to WC2026_paper_live.pdf and copies
               # directly to archive — paper/WC2026_paper.pdf is never touched.
               uam._latexmk(out_path=archive_path(m))
-          # After catch-up, restore living layer to the latest documented state
-          # so paper/live/ reflects all known results, not just the last pending one.
-          if pending:
+          # Knockout results have no per-match edition; fold any new ones into the
+          # living layer (champion tracks, bracket, survival) and mark them done.
+          ko_new = uam.ko_to_incorporate(traj)
+          if ko_new:
+              print(f"folding knockout results into the living layer: {ko_new}")
+              uam.rerender(include_ko=True)
+              uam._latexmk()
+              uam.mark_ko_incorporated(traj)
+          elif pending:
+              # After catch-up, restore living layer to the latest documented state
+              # so paper/live/ reflects all known results, not just the last pending one.
               latest = max(mb.documented_matches(uam.INDEX))
               if latest > max(pending):
                   print(f"restoring living layer to M{latest:03d} after catch-up")
                   uam.rerender(latest)
                   uam._latexmk()  # rebuild live PDF; no archive copy needed here
-          if not pending:  # manual dispatch with nothing new: re-render
+          if not pending and not ko_new:  # manual dispatch with nothing new: re-render
               want = os.environ.get("REBUILD_MATCH") or ""
               target = int(want) if want.strip() else None
-              uam.rerender(target)
+              uam.rerender(target, include_ko=True)
               m = target or max(mb.documented_matches(uam.INDEX))
               uam._latexmk(out_path=archive_path(m))
               if target is not None:  # restore the latest state before the commit step
-                  uam.rerender()
+                  uam.rerender(include_ko=True)
           PY
       - name: Auto-score experiment ledger
         run: python3 scripts/auto_score.py
@@ -96,17 +104,17 @@ jobs:
           CHANGED=$(git status --porcelain \
             paper/live paper/REVISIONS.md paper/match_book \
             data/edition_vintages.json data/learning_state_2026.json data/match_stats \
-            archive/paper_versions experiment/ledger.csv)
+            data/ko_rendered.json archive/paper_versions experiment/ledger.csv)
           if [ -z "$CHANGED" ]; then echo "no changes."; exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add paper/live paper/match_book data/match_stats archive/paper_versions 2>/dev/null || true
-          for f in paper/REVISIONS.md data/edition_vintages.json data/learning_state_2026.json experiment/ledger.csv; do
+          for f in paper/REVISIONS.md data/edition_vintages.json data/learning_state_2026.json data/ko_rendered.json experiment/ledger.csv; do
             [ -f "$f" ] && git add "$f"
           done
           for f in $(git diff --cached --name-only); do
             case "$f" in
-              paper/live/*|paper/REVISIONS.md|paper/match_book/*|data/edition_vintages.json|data/learning_state_2026.json|data/match_stats/*|archive/paper_versions/*|experiment/ledger.csv) ;;
+              paper/live/*|paper/REVISIONS.md|paper/match_book/*|data/edition_vintages.json|data/learning_state_2026.json|data/match_stats/*|data/ko_rendered.json|archive/paper_versions/*|experiment/ledger.csv) ;;
               *) echo "REFUSING: non-allowlisted file staged: $f"; exit 1 ;;
             esac
           done
