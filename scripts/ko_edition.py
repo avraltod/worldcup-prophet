@@ -48,3 +48,43 @@ def build_ko_entry(match, records, frozen2_picks, actual_home, actual_away):
             "champion": pre.get("champion"), "champion_b": pre.get("champion_b"),
             "market": pre.get("market_champion")},
         "post_only": pre is None}
+
+
+def scorecard(entries):
+    return {"games": len(entries),
+            "frozen2_total": sum(e["frozen2_points"] for e in entries),
+            "frozen1_total": sum(e["frozen1_points"] for e in entries),
+            "recond_total": sum(e["recond_delta"] for e in entries)}
+
+
+def _round_name(m):
+    if m <= 88: return "Round of 32"
+    if m <= 96: return "Round of 16"
+    if m <= 100: return "Quarter-final"
+    if m in (101, 102): return "Semi-final"
+    return "Third-place play-off" if m == 103 else "Final"
+
+
+def render_unit(entries):
+    """LaTeX for the knockout edition unit: the latest game in focus + the running
+    Frozen-2 scorecard with the Frozen-2 - Frozen-1 re-conditioning column."""
+    sc = scorecard(entries)
+    latest = entries[-1]
+    L = [r"\subsection*{Latest knockout edition: %s, %s v %s}" % (
+            _round_name(latest["match"]), latest["home"], latest["away"]),
+         r"\noindent Result %d--%d, %s advanced. Frozen~2 scored %d pool point%s here "
+         r"(re-conditioning %+d vs Frozen~1). The result carried %.3f bits." % (
+            latest["result"][0], latest["result"][1], latest["advancer"],
+            latest["frozen2_points"], "" if latest["frozen2_points"] == 1 else "s",
+            latest["recond_delta"], latest.get("info_bits") or 0.0),
+         r"", r"\begin{center}\small",
+         r"\begin{tabular}{llccc}",
+         r"\toprule Match & Tie & F2 pts & F1 pts & F2$-$F1 \\ \midrule"]
+    for e in entries:
+        L.append(r"%d & %s v %s & %d & %d & %+d \\" % (
+            e["match"], e["home"], e["away"], e["frozen2_points"],
+            e["frozen1_points"], e["recond_delta"]))
+    L += [r"\midrule \textbf{Total} & & \textbf{%d} & \textbf{%d} & \textbf{%+d} \\" % (
+            sc["frozen2_total"], sc["frozen1_total"], sc["recond_total"]),
+          r"\bottomrule\end{tabular}\end{center}"]
+    return "\n".join(L)

@@ -30,3 +30,22 @@ def test_post_only_when_no_pre_record():
     e = ke.build_ko_entry(73, _records(73, pre=False), f2,
                           actual_home="South Africa", actual_away="Canada")
     assert e["pre"] is None and e["post_only"] is True
+
+
+def test_scorecard_accumulates_frozen2_and_recond():
+    e1 = {"match": 73, "frozen2_points": 3, "frozen1_points": 0, "recond_delta": 3}
+    e2 = {"match": 74, "frozen2_points": 4, "frozen1_points": 4, "recond_delta": 0}
+    sc = ke.scorecard([e1, e2])
+    assert sc["frozen2_total"] == 7 and sc["frozen1_total"] == 4
+    assert sc["recond_total"] == 3 and sc["games"] == 2
+
+def test_render_unit_mentions_teams_and_scorecard():
+    e = {"match": 73, "home": "South Africa", "away": "Canada", "result": [0, 1],
+         "advancer": "Canada", "frozen2_points": 3, "frozen1_points": 0,
+         "recond_delta": 3, "frozen2_hit": True, "frozen2_pick": {"disp": [1, 2]},
+         "frozen1_pick": {"advancer": "Canada"}, "info_bits": 0.01,
+         "champion_after": {"France": 0.27}, "pre": None, "post_only": True}
+    tex = ke.render_unit([e])
+    assert "Canada" in tex and "Frozen" in tex and "knockout" in tex.lower()
+    assert r"\textbf{Total}" in tex
+    assert r"\bottomrule" in tex

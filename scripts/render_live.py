@@ -505,6 +505,11 @@ def revision_report(ctx):
 
 # ---- new units (design spec 2026-06-13) ----
 
+def ko_edition_unit(ctx):
+    import ko_edition as ke
+    return ke.render_unit(ctx["ko_entries"]) if ctx.get("ko_entries") else "% no KO editions yet"
+
+
 def abstract_live_unit(ctx, use_api=False):
     text, _ = _ds.draft_abstract_live(ctx, use_api)
     return text
