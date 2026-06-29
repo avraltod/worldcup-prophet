@@ -70,13 +70,13 @@ jobs:
               # _latexmk(out_path) compiles to WC2026_paper_live.pdf and copies
               # directly to archive — paper/WC2026_paper.pdf is never touched.
               uam._latexmk(out_path=archive_path(m))
-          # Knockout results have no per-match edition; fold any new ones into the
-          # living layer (champion tracks, bracket, survival) and mark them done.
-          ko_new = uam.ko_to_incorporate(traj)
+          # Knockout results each get their own edition via ko_edition.issue(m).
+          ko_new = uam.ko_to_incorporate(traj)   # KO results not yet editioned
+          import ko_edition as ke
+          for m in ko_new:
+              print("issuing knockout edition", m)
+              ke.issue(m)                          # builds entry + KO-conditioned living layer + archive PDF
           if ko_new:
-              print(f"folding knockout results into the living layer: {ko_new}")
-              uam.rerender(include_ko=True)
-              uam._latexmk()
               uam.mark_ko_incorporated(traj)
           elif pending:
               # After catch-up, restore living layer to the latest documented state
@@ -104,17 +104,18 @@ jobs:
           CHANGED=$(git status --porcelain \
             paper/live paper/REVISIONS.md paper/match_book \
             data/edition_vintages.json data/learning_state_2026.json data/match_stats \
-            data/ko_rendered.json archive/paper_versions experiment/ledger.csv)
+            data/ko_rendered.json data/frozen2_entry.json data/ko_edition_log.json \
+            archive/paper_versions experiment/ledger.csv)
           if [ -z "$CHANGED" ]; then echo "no changes."; exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add paper/live paper/match_book data/match_stats archive/paper_versions 2>/dev/null || true
-          for f in paper/REVISIONS.md data/edition_vintages.json data/learning_state_2026.json data/ko_rendered.json experiment/ledger.csv; do
+          for f in paper/REVISIONS.md data/edition_vintages.json data/learning_state_2026.json data/ko_rendered.json data/frozen2_entry.json data/ko_edition_log.json experiment/ledger.csv; do
             [ -f "$f" ] && git add "$f"
           done
           for f in $(git diff --cached --name-only); do
             case "$f" in
-              paper/live/*|paper/REVISIONS.md|paper/match_book/*|data/edition_vintages.json|data/learning_state_2026.json|data/match_stats/*|data/ko_rendered.json|archive/paper_versions/*|experiment/ledger.csv) ;;
+              paper/live/*|paper/REVISIONS.md|paper/match_book/*|data/edition_vintages.json|data/learning_state_2026.json|data/match_stats/*|data/ko_rendered.json|data/frozen2_entry.json|data/ko_edition_log.json|archive/paper_versions/*|experiment/ledger.csv) ;;
               *) echo "REFUSING: non-allowlisted file staged: $f"; exit 1 ;;
             esac
           done
