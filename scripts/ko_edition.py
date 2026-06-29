@@ -11,9 +11,13 @@ import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import ko_score as ks
+import update_after_match as uam
+import ko_bracket
 from realistic_scores import KO_TIES
 
 DATA = Path(__file__).resolve().parent.parent / "data"
+PAPER = Path(__file__).resolve().parent.parent / "paper"
+ENTRY_LOG = DATA / "ko_edition_log.json"
 _KO_SCORES = json.loads((DATA / "ko_scores_321.json").read_text())
 
 _F1 = {n: {"home": h, "away": a,
@@ -88,3 +92,43 @@ def render_unit(entries):
             sc["frozen2_total"], sc["frozen1_total"], sc["recond_total"]),
           r"\bottomrule\end{tabular}\end{center}"]
     return "\n".join(L)
+
+
+def _trajectory():
+    return json.loads((DATA / "trajectory_v2.json").read_text())
+
+
+def _frozen2():
+    return json.loads((DATA / "frozen2_entry.json").read_text())["picks"]
+
+
+def _load_entries():
+    return json.loads(ENTRY_LOG.read_text()) if ENTRY_LOG.exists() else []
+
+
+def _realized_pair(match):
+    log = json.loads((DATA / "results_log_v2.json").read_text())
+    pair = ko_bracket.resolve_ko_pairings(log).get(match)
+    if pair is None:
+        raise SystemExit(f"M{match}: realized pair not resolvable yet")
+    f2 = _frozen2().get(str(match), {})
+    teams = sorted(pair)
+    home = f2.get("home") if f2.get("home") in teams else teams[0]
+    away = next(t for t in teams if t != home)
+    return home, away
+
+
+def _render_and_archive(match):
+    uam.rerender(include_ko=True)               # KO-condition the living layer (writes ko_edition unit)
+    dst = DATA.parent / "archive" / "paper_versions" / f"WC2026_paper_KO_M{match:03d}.pdf"
+    uam._latexmk(out_path=dst)                   # builds, copies to dst, raises if not produced
+
+
+def issue(match):
+    home, away = _realized_pair(match)
+    entry = build_ko_entry(match, _trajectory(), _frozen2(), home, away)
+    entries = [e for e in _load_entries() if e["match"] != match] + [entry]
+    entries.sort(key=lambda e: e["match"])
+    ENTRY_LOG.write_text(json.dumps(entries, ensure_ascii=False, indent=1))
+    _render_and_archive(match)
+    return entry

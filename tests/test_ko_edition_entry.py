@@ -49,3 +49,21 @@ def test_render_unit_mentions_teams_and_scorecard():
     assert "Canada" in tex and "Frozen" in tex and "knockout" in tex.lower()
     assert r"\textbf{Total}" in tex
     assert r"\bottomrule" in tex
+
+
+def test_issue_appends_entry_and_marks(tmp_path, monkeypatch):
+    monkeypatch.setattr(ke, "ENTRY_LOG", tmp_path / "ko_edition_log.json")
+    monkeypatch.setattr(ke, "_render_and_archive", lambda m: None)  # skip TeX
+    traj = [{"phase": "post", "match": 73, "result": [0, 1], "winner": "Canada",
+             "champion": {"France": 0.27}, "champion_b": {}, "info_bits": 0.01,
+             "kickoff": "2026-06-28T19:00:00Z"}]
+    monkeypatch.setattr(ke, "_trajectory", lambda: traj)
+    monkeypatch.setattr(ke, "_realized_pair", lambda m: ("South Africa", "Canada"))
+    e = ke.issue(73)
+    assert e["match"] == 73 and e["advancer"] == "Canada"
+    import json
+    assert json.loads((tmp_path / "ko_edition_log.json").read_text())[0]["match"] == 73
+    ke.issue(73)  # issuing again must not duplicate
+    import json as _json
+    log = _json.loads((tmp_path / "ko_edition_log.json").read_text())
+    assert [e["match"] for e in log] == [73]
