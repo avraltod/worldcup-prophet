@@ -24441,7 +24441,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760489",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Manuel Neuer",
+    "Antonio Rüdiger",
+    "Nathaniel Brown",
+    "Joshua Kimmich",
+    "Jonathan Tah",
+    "Aleksandar Pavlovic",
+    "Deniz Undav",
+    "Florian Wirtz",
+    "Felix Nmecha",
+    "Leroy Sané",
+    "Kai Havertz"
+   ],
+   "away": [
+    "Orlando Gil",
+    "Juan Jose Cáceres",
+    "José Canale",
+    "Júnior Alonso",
+    "Gustavo Gómez",
+    "Matías Galarza",
+    "Julio Enciso",
+    "Miguel Almirón",
+    "Andrés Cubas",
+    "Damián Bobadilla",
+    "Gabriel Ávalos"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
