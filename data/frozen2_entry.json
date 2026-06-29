@@ -1,0 +1,517 @@
+{
+ "champion": "France",
+ "picks": {
+  "104": {
+   "home": "France",
+   "away": "Argentina",
+   "advancer": "France",
+   "score": [
+    1,
+    0
+   ],
+   "disp": [
+    2,
+    1
+   ],
+   "pen": false,
+   "ev": 1.4752,
+   "adv_prob": 0.6238
+  },
+  "101": {
+   "home": "France",
+   "away": "Spain",
+   "advancer": "France",
+   "score": [
+    1,
+    0
+   ],
+   "disp": [
+    2,
+    1
+   ],
+   "pen": false,
+   "ev": 1.3556,
+   "adv_prob": 0.5708
+  },
+  "97": {
+   "home": "France",
+   "away": "Canada",
+   "advancer": "France",
+   "score": [
+    1,
+    0
+   ],
+   "disp": [
+    2,
+    0
+   ],
+   "pen": false,
+   "ev": 2.0158,
+   "adv_prob": 0.8437
+  },
+  "89": {
+   "home": "Germany",
+   "away": "France",
+   "advancer": "France",
+   "score": [
+    0,
+    1
+   ],
+   "disp": [
+    1,
+    2
+   ],
+   "pen": false,
+   "ev": 1.7184,
+   "adv_prob": 0.7323
+  },
+  "74": {
+   "home": "Germany",
+   "away": "Paraguay",
+   "advancer": "Germany",
+   "score": [
+    1,
+    0
+   ],
+   "disp": [
+    2,
+    0
+   ],
+   "pen": false,
+   "ev": 2.0552,
+   "adv_prob": 0.8567
+  },
+  "77": {
+   "home": "France",
+   "away": "Sweden",
+   "advancer": "France",
+   "score": [
+    1,
+    0
+   ],
+   "disp": [
+    2,
+    0
+   ],
+   "pen": false,
+   "ev": 2.0158,
+   "adv_prob": 0.8437
+  },
+  "90": {
+   "home": "Canada",
+   "away": "Morocco",
+   "advancer": "Canada",
+   "score": [
+    1,
+    1
+   ],
+   "disp": [
+    1,
+    1
+   ],
+   "pen": true,
+   "ev": 1.1867,
+   "adv_prob": 0.4713
+  },
+  "73": {
+   "home": "South Africa",
+   "away": "Canada",
+   "advancer": "Canada",
+   "score": [
+    0,
+    1
+   ],
+   "disp": [
+    1,
+    2
+   ],
+   "pen": false,
+   "ev": 1.9,
+   "adv_prob": 0.8042
+  },
+  "75": {
+   "home": "Netherlands",
+   "away": "Morocco",
+   "advancer": "Morocco",
+   "score": [
+    0,
+    1
+   ],
+   "disp": [
+    1,
+    1
+   ],
+   "pen": true,
+   "ev": 1.3262,
+   "adv_prob": 0.5573
+  },
+  "98": {
+   "home": "Spain",
+   "away": "Belgium",
+   "advancer": "Spain",
+   "score": [
+    1,
+    0
+   ],
+   "disp": [
+    2,
+    1
+   ],
+   "pen": false,
+   "ev": 1.7562,
+   "adv_prob": 0.7461
+  },
+  "93": {
+   "home": "Portugal",
+   "away": "Spain",
+   "advancer": "Spain",
+   "score": [
+    0,
+    1
+   ],
+   "disp": [
+    1,
+    2
+   ],
+   "pen": false,
+   "ev": 1.6428,
+   "adv_prob": 0.6981
+  },
+  "83": {
+   "home": "Portugal",
+   "away": "Croatia",
+   "advancer": "Portugal",
+   "score": [
+    1,
+    0
+   ],
+   "disp": [
+    2,
+    1
+   ],
+   "pen": false,
+   "ev": 1.6625,
+   "adv_prob": 0.7085
+  },
+  "84": {
+   "home": "Spain",
+   "away": "Austria",
+   "advancer": "Spain",
+   "score": [
+    1,
+    0
+   ],
+   "disp": [
+    2,
+    0
+   ],
+   "pen": false,
+   "ev": 2.1759,
+   "adv_prob": 0.8949
+  },
+  "94": {
+   "home": "United States",
+   "away": "Belgium",
+   "advancer": "Belgium",
+   "score": [
+    0,
+    1
+   ],
+   "disp": [
+    1,
+    2
+   ],
+   "pen": false,
+   "ev": 1.4109,
+   "adv_prob": 0.5968
+  },
+  "81": {
+   "home": "United States",
+   "away": "Bosnia and Herzegovina",
+   "advancer": "United States",
+   "score": [
+    1,
+    0
+   ],
+   "disp": [
+    2,
+    0
+   ],
+   "pen": false,
+   "ev": 2.0552,
+   "adv_prob": 0.8567
+  },
+  "82": {
+   "home": "Belgium",
+   "away": "Senegal",
+   "advancer": "Belgium",
+   "score": [
+    1,
+    0
+   ],
+   "disp": [
+    2,
+    1
+   ],
+   "pen": false,
+   "ev": 1.3556,
+   "adv_prob": 0.5708
+  },
+  "102": {
+   "home": "England",
+   "away": "Argentina",
+   "advancer": "Argentina",
+   "score": [
+    0,
+    1
+   ],
+   "disp": [
+    1,
+    2
+   ],
+   "pen": false,
+   "ev": 1.3556,
+   "adv_prob": 0.5708
+  },
+  "99": {
+   "home": "Norway",
+   "away": "England",
+   "advancer": "England",
+   "score": [
+    0,
+    1
+   ],
+   "disp": [
+    1,
+    2
+   ],
+   "pen": false,
+   "ev": 1.5838,
+   "adv_prob": 0.6731
+  },
+  "91": {
+   "home": "Brazil",
+   "away": "Norway",
+   "advancer": "Norway",
+   "score": [
+    1,
+    1
+   ],
+   "disp": [
+    1,
+    1
+   ],
+   "pen": true,
+   "ev": 1.1867,
+   "adv_prob": 0.4713
+  },
+  "76": {
+   "home": "Brazil",
+   "away": "Japan",
+   "advancer": "Brazil",
+   "score": [
+    1,
+    0
+   ],
+   "disp": [
+    2,
+    1
+   ],
+   "pen": false,
+   "ev": 1.4998,
+   "adv_prob": 0.6358
+  },
+  "78": {
+   "home": "Ivory Coast",
+   "away": "Norway",
+   "advancer": "Norway",
+   "score": [
+    0,
+    1
+   ],
+   "disp": [
+    0,
+    2
+   ],
+   "pen": false,
+   "ev": 1.9871,
+   "adv_prob": 0.8377
+  },
+  "92": {
+   "home": "Ecuador",
+   "away": "England",
+   "advancer": "England",
+   "score": [
+    0,
+    1
+   ],
+   "disp": [
+    1,
+    2
+   ],
+   "pen": false,
+   "ev": 1.3838,
+   "adv_prob": 0.584
+  },
+  "79": {
+   "home": "Mexico",
+   "away": "Ecuador",
+   "advancer": "Ecuador",
+   "score": [
+    0,
+    1
+   ],
+   "disp": [
+    1,
+    2
+   ],
+   "pen": false,
+   "ev": 1.5617,
+   "adv_prob": 0.6619
+  },
+  "80": {
+   "home": "England",
+   "away": "Congo DR",
+   "advancer": "England",
+   "score": [
+    1,
+    0
+   ],
+   "disp": [
+    2,
+    0
+   ],
+   "pen": false,
+   "ev": 2.1353,
+   "adv_prob": 0.8823
+  },
+  "100": {
+   "home": "Argentina",
+   "away": "Colombia",
+   "advancer": "Argentina",
+   "score": [
+    1,
+    0
+   ],
+   "disp": [
+    1,
+    1
+   ],
+   "pen": true,
+   "ev": 1.2574,
+   "adv_prob": 0.5287
+  },
+  "95": {
+   "home": "Argentina",
+   "away": "Australia",
+   "advancer": "Argentina",
+   "score": [
+    1,
+    0
+   ],
+   "disp": [
+    2,
+    0
+   ],
+   "pen": false,
+   "ev": 1.9768,
+   "adv_prob": 0.8306
+  },
+  "86": {
+   "home": "Argentina",
+   "away": "Cape Verde",
+   "advancer": "Argentina",
+   "score": [
+    1,
+    0
+   ],
+   "disp": [
+    2,
+    0
+   ],
+   "pen": false,
+   "ev": 2.2982,
+   "adv_prob": 0.9457
+  },
+  "88": {
+   "home": "Australia",
+   "away": "Egypt",
+   "advancer": "Australia",
+   "score": [
+    1,
+    0
+   ],
+   "disp": [
+    2,
+    1
+   ],
+   "pen": false,
+   "ev": 1.5838,
+   "adv_prob": 0.6731
+  },
+  "96": {
+   "home": "Algeria",
+   "away": "Colombia",
+   "advancer": "Colombia",
+   "score": [
+    0,
+    1
+   ],
+   "disp": [
+    1,
+    2
+   ],
+   "pen": false,
+   "ev": 1.8623,
+   "adv_prob": 0.7909
+  },
+  "85": {
+   "home": "Switzerland",
+   "away": "Algeria",
+   "advancer": "Algeria",
+   "score": [
+    0,
+    1
+   ],
+   "disp": [
+    1,
+    1
+   ],
+   "pen": true,
+   "ev": 1.3175,
+   "adv_prob": 0.5561
+  },
+  "87": {
+   "home": "Colombia",
+   "away": "Ghana",
+   "advancer": "Colombia",
+   "score": [
+    1,
+    0
+   ],
+   "disp": [
+    2,
+    0
+   ],
+   "pen": false,
+   "ev": 2.2996,
+   "adv_prob": 0.9424
+  },
+  "103": {
+   "home": "Spain",
+   "away": "England",
+   "advancer": "Spain",
+   "score": [
+    1,
+    0
+   ],
+   "disp": [
+    2,
+    1
+   ],
+   "pen": false,
+   "ev": 1.4752,
+   "adv_prob": 0.6238
+  }
+ }
+}
