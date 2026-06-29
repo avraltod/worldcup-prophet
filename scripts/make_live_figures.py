@@ -203,10 +203,10 @@ def bracket_fig(probs, out, title, eliminated=None):
         # schematic flag at the left of the box
         _draw_flag(ax, bt.TEAM[t][1], left + 0.07, y - 0.10, left + 0.40, y + 0.10)
         ax.text(left + 0.48, y, bt.TEAM[t][0], va="center", ha="left",
-                fontsize=7.5, color=tc,
+                fontsize=7.5, color=ec,
                 fontweight="bold" if champ else "normal", zorder=3)
         ax.text(left + BW - 0.08, y, f"{100 * cp(t):.0f}", va="center",
-                ha="right", fontsize=6.5, color="#666666", zorder=3)
+                ha="right", fontsize=6.5, color=ec, zorder=3)
 
     def line(x1, y1, x2, y2):
         ax.plot([x1, x2], [y1, y2], color="#c2c2c2", lw=0.7, zorder=1)
@@ -315,10 +315,10 @@ def mostlikely_bracket_fig(ml, probs, out, title, eliminated=None):
                          boxstyle="square,pad=0", fc="#dddddd", ec="#bbbbbb",
                          lw=0.4, zorder=3))
         ax.text(left + 0.48, y, code(t), va="center", ha="left",
-                fontsize=7.5, color=tc,
+                fontsize=7.5, color=ec,
                 fontweight="bold" if champ else "normal", zorder=3)
         ax.text(left + BW - 0.08, y, f"{100 * value:.0f}", va="center",
-                ha="right", fontsize=6.5, color="#666666", zorder=3)
+                ha="right", fontsize=6.5, color=ec, zorder=3)
 
     def line(x1, y1, x2, y2):
         ax.plot([x1, x2], [y1, y2], color="#c2c2c2", lw=0.7, zorder=1)
