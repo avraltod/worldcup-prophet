@@ -593,6 +593,7 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False,
                 for t in now_probs if t in prev_now],
                key=lambda x: -abs(x[2] - x[1])),
            }
+    ctx["ko_entries"] = _load(DATA / "ko_edition_log.json", [])
     # 1. stats first — every other unit can reference these macros
     rl.write_unit(LIVE_DIR, "stats", ls.render_macros(stats))
     # 2. champ table
@@ -619,6 +620,7 @@ def _write_living_layer(trajectory, entries, match, expectations, use_api=False,
                                     frozen_stages=frozen))
     rl.write_unit(LIVE_DIR, "market_snap", rl.market_snap_unit(ctx))
     rl.write_unit(LIVE_DIR, "survival_colcomp", rl.survival_colcomp_unit(ctx))
+    rl.write_unit(LIVE_DIR, "ko_edition", rl.ko_edition_unit(ctx))
     # 5. per-group sections
     for g in group_st:
         rl.write_unit(LIVE_DIR, f"group_{g['group']}",

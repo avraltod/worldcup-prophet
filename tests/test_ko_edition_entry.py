@@ -1,0 +1,69 @@
+import json, sys
+from pathlib import Path
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+import ko_edition as ke
+
+def _records(match, pre=True):
+    post = {"phase": "post", "match": match, "result": [0, 1], "winner": "Canada",
+            "champion": {"France": 0.27}, "champion_b": {"France": 0.3},
+            "info_bits": 0.012, "kickoff": "2026-06-28T19:00:00Z"}
+    recs = [post]
+    if pre:
+        recs.insert(0, {"phase": "pre", "match": match, "champion": {"France": 0.26},
+                        "champion_b": {"France": 0.29}, "market_champion": {"France": 0.25},
+                        "kickoff": "2026-06-28T19:00:00Z"})
+    return recs
+
+def test_entry_scores_frozen2_and_contrasts_frozen1():
+    f2 = json.loads((ROOT / "data" / "frozen2_entry.json").read_text())["picks"]
+    e = ke.build_ko_entry(73, _records(73), f2, actual_home="South Africa",
+                          actual_away="Canada")
+    assert e["match"] == 73
+    assert e["advancer"] == "Canada" and e["frozen2_hit"] is True  # F2 picked Canada
+    assert isinstance(e["frozen2_points"], int)
+    assert "frozen1_points" in e and "recond_delta" in e  # F2 - F1
+    assert e["info_bits"] == 0.012
+
+def test_post_only_when_no_pre_record():
+    f2 = json.loads((ROOT / "data" / "frozen2_entry.json").read_text())["picks"]
+    e = ke.build_ko_entry(73, _records(73, pre=False), f2,
+                          actual_home="South Africa", actual_away="Canada")
+    assert e["pre"] is None and e["post_only"] is True
+
+
+def test_scorecard_accumulates_frozen2_and_recond():
+    e1 = {"match": 73, "frozen2_points": 3, "frozen1_points": 0, "recond_delta": 3}
+    e2 = {"match": 74, "frozen2_points": 4, "frozen1_points": 4, "recond_delta": 0}
+    sc = ke.scorecard([e1, e2])
+    assert sc["frozen2_total"] == 7 and sc["frozen1_total"] == 4
+    assert sc["recond_total"] == 3 and sc["games"] == 2
+
+def test_render_unit_mentions_teams_and_scorecard():
+    e = {"match": 73, "home": "South Africa", "away": "Canada", "result": [0, 1],
+         "advancer": "Canada", "frozen2_points": 3, "frozen1_points": 0,
+         "recond_delta": 3, "frozen2_hit": True, "frozen2_pick": {"disp": [1, 2]},
+         "frozen1_pick": {"advancer": "Canada"}, "info_bits": 0.01,
+         "champion_after": {"France": 0.27}, "pre": None, "post_only": True}
+    tex = ke.render_unit([e])
+    assert "Canada" in tex and "Frozen" in tex and "knockout" in tex.lower()
+    assert r"\textbf{Total}" in tex
+    assert r"\bottomrule" in tex
+
+
+def test_issue_appends_entry_and_marks(tmp_path, monkeypatch):
+    monkeypatch.setattr(ke, "ENTRY_LOG", tmp_path / "ko_edition_log.json")
+    monkeypatch.setattr(ke, "_render_and_archive", lambda m: None)  # skip TeX
+    traj = [{"phase": "post", "match": 73, "result": [0, 1], "winner": "Canada",
+             "champion": {"France": 0.27}, "champion_b": {}, "info_bits": 0.01,
+             "kickoff": "2026-06-28T19:00:00Z"}]
+    monkeypatch.setattr(ke, "_trajectory", lambda: traj)
+    monkeypatch.setattr(ke, "_realized_pair", lambda m: ("South Africa", "Canada"))
+    e = ke.issue(73)
+    assert e["match"] == 73 and e["advancer"] == "Canada"
+    import json
+    assert json.loads((tmp_path / "ko_edition_log.json").read_text())[0]["match"] == 73
+    ke.issue(73)  # issuing again must not duplicate
+    import json as _json
+    log = _json.loads((tmp_path / "ko_edition_log.json").read_text())
+    assert [e["match"] for e in log] == [73]
