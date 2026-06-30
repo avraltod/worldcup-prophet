@@ -25476,7 +25476,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760492",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Mike Maignan",
+    "Lucas Digne",
+    "William Saliba",
+    "Dayot Upamecano",
+    "Jules Koundé",
+    "Bradley Barcola",
+    "Aurélien Tchouaméni",
+    "Ousmane Dembélé",
+    "Michael Olise",
+    "Adrien Rabiot",
+    "Kylian Mbappé"
+   ],
+   "away": [
+    "Jacob Widell Zetterström",
+    "Gustaf Lagerbielke",
+    "Victor Lindelöf",
+    "Gabriel Gudmundsson",
+    "Daniel Svensson",
+    "Elliot Stroud",
+    "Lucas Bergvall",
+    "Anthony Elanga",
+    "Alexander Isak",
+    "Yasin Ayari",
+    "Viktor Gyökeres"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
