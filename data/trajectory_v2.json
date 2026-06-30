@@ -24881,7 +24881,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760488",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Bart Verbruggen",
+    "Virgil van Dijk",
+    "Nathan Aké",
+    "Jan Paul van Hecke",
+    "Frenkie de Jong",
+    "Ryan Gravenberch",
+    "Micky van de Ven",
+    "Denzel Dumfries",
+    "Brian Brobbey",
+    "Cody Gakpo",
+    "Crysencio Summerville"
+   ],
+   "away": [
+    "Yassine Bounou",
+    "Chadi Riad",
+    "Issa Diop",
+    "Noussair Mazraoui",
+    "Achraf Hakimi",
+    "Azzedine Ounahi",
+    "Neil El Aynaoui",
+    "Ayyoub Bouaddi",
+    "Ismael Saibari",
+    "Bilal El Khannouss",
+    "Brahim Díaz"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
