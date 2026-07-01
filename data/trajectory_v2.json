@@ -25767,7 +25767,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760491",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Raúl Rangel",
+    "Jesús Gallardo",
+    "César Montes",
+    "Jorge Sánchez",
+    "Johan Vásquez",
+    "Érik Lira",
+    "Luis Romo",
+    "Gilberto Mora",
+    "Raúl Jiménez",
+    "Roberto Alvarado",
+    "Julián Quiñones"
+   ],
+   "away": [
+    "Hernán Galíndez",
+    "Willian Pacho",
+    "Joel Ordóñez",
+    "Piero Hincapié",
+    "Alan Franco",
+    "Moisés Caicedo",
+    "Pedro Vite",
+    "Nilson Angulo",
+    "John Yeboah",
+    "Enner Valencia",
+    "Gonzalo Plata"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
