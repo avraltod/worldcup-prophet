@@ -26341,7 +26341,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760493",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Thibaut Courtois",
+    "Arthur Theate",
+    "Brandon Mechele",
+    "Maxim De Cuyper",
+    "Timothy Castagne",
+    "Kevin De Bruyne",
+    "Youri Tielemans",
+    "Hans Vanaken",
+    "Charles De Ketelaere",
+    "Jérémy Doku",
+    "Leandro Trossard"
+   ],
+   "away": [
+    "Mory Diaw",
+    "Moussa Niakhaté",
+    "Pathé Ciss",
+    "Ismail Jakobs",
+    "Krépin Diatta",
+    "Idrissa Gueye",
+    "Pape Gueye",
+    "Habib Diarra",
+    "Ismaïla Sarr",
+    "Sadio Mané",
+    "Iliman Ndiaye"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
