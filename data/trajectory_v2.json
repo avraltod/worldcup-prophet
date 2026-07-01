@@ -26495,7 +26495,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760494",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Matt Freese",
+    "Tim Ream",
+    "Chris Richards",
+    "Antonee Robinson",
+    "Alex Freeman",
+    "Weston McKennie",
+    "Tyler Adams",
+    "Malik Tillman",
+    "Folarin Balogun",
+    "Christian Pulisic",
+    "Sergiño Dest"
+   ],
+   "away": [
+    "Nikola Vasilj",
+    "Stjepan Radeljic",
+    "Tarik Muharemovic",
+    "Nikola Katic",
+    "Ivan Sunjic",
+    "Armin Gigovic",
+    "Kerim Alajbegovic",
+    "Sead Kolasinac",
+    "Amar Dedic",
+    "Ermedin Demirovic",
+    "Edin Dzeko"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
