@@ -32,6 +32,76 @@ def test_post_only_when_no_pre_record():
     assert e["pre"] is None and e["post_only"] is True
 
 
+def _pending_records(match, winner="Canada"):
+    return [{"phase": "post", "match": match, "result": None,
+             "reg_score_pending": True, "decided": "et", "winner": winner,
+             "champion": {"France": 0.27}, "champion_b": {}, "info_bits": 0.01,
+             "kickoff": "2026-06-28T19:00:00Z"}]
+
+
+def test_entry_scores_advancer_only_when_pending():
+    f2 = json.loads((ROOT / "data" / "frozen2_entry.json").read_text())["picks"]
+    e = ke.build_ko_entry(73, _pending_records(73), f2,
+                          actual_home="South Africa", actual_away="Canada")
+    assert e["reg_score_pending"] is True
+    assert e["result"] is None
+    # F2 picked Canada to advance -> advancer-only score is 1 (tier 0 + advancer 1)
+    assert e["frozen2_hit"] is True and e["frozen2_points"] == 1
+    assert e["frozen2_points"] == (1 if e["frozen2_hit"] else 0)
+
+
+def test_entry_advancer_only_miss_scores_zero():
+    f2 = json.loads((ROOT / "data" / "frozen2_entry.json").read_text())["picks"]
+    # advancer is South Africa (F2 picked Canada) -> advancer-only miss -> 0
+    e = ke.build_ko_entry(73, _pending_records(73, winner="South Africa"), f2,
+                          actual_home="South Africa", actual_away="Canada")
+    assert e["reg_score_pending"] is True
+    assert e["frozen2_hit"] is False and e["frozen2_points"] == 0
+
+
+def test_entry_normal_post_record_unchanged():
+    f2 = json.loads((ROOT / "data" / "frozen2_entry.json").read_text())["picks"]
+    e = ke.build_ko_entry(73, _records(73), f2, actual_home="South Africa",
+                          actual_away="Canada")
+    assert e.get("reg_score_pending") in (None, False)
+    assert e["result"] == [0, 1]
+
+
+def test_render_unit_notes_pending_reg_score():
+    e = {"match": 82, "home": "Belgium", "away": "Senegal", "result": None,
+         "advancer": "Belgium", "frozen2_points": 1, "frozen1_points": 0,
+         "recond_delta": 1, "frozen2_hit": True, "frozen2_pick": {"disp": [2, 1]},
+         "frozen1_pick": {"advancer": "Belgium"}, "info_bits": 0.01,
+         "champion_after": {}, "pre": None, "post_only": True,
+         "reg_score_pending": True}
+    tex = ke.render_unit([e])
+    assert "pending" in tex.lower() and "90" in tex
+    assert "Belgium" in tex and r"\textbf{Total}" in tex
+
+
+def test_confirm_reg_score_sets_result_and_clears_pending(tmp_path, monkeypatch):
+    traj = [{"phase": "post", "match": 82, "result": None, "reg_score_pending": True,
+             "decided": "et", "winner": "Belgium", "champion": {"Spain": 0.2},
+             "champion_b": {}, "info_bits": 0.01, "kickoff": "2026-07-01T19:00:00Z"}]
+    tf = tmp_path / "trajectory_v2.json"
+    tf.write_text(json.dumps(traj))
+    monkeypatch.setattr(ke, "TRAJ", tf)
+    monkeypatch.setattr(ke, "ENTRY_LOG", tmp_path / "ko_edition_log.json")
+    monkeypatch.setattr(ke, "_render_and_archive", lambda m: None)
+    monkeypatch.setattr(ke, "_realized_pair", lambda m: ("Belgium", "Senegal"))
+    f2 = json.loads((ROOT / "data" / "frozen2_entry.json").read_text())["picks"]
+    monkeypatch.setattr(ke, "_frozen2", lambda: f2)
+    e = ke.confirm_reg_score(82, 2, 2)
+    post = [r for r in json.loads(tf.read_text()) if r["phase"] == "post"][0]
+    assert post["result"] == [2, 2]
+    assert "reg_score_pending" not in post
+    assert post["decided"] == "et"                    # decided preserved
+    assert e["result"] == [2, 2]
+    assert e.get("reg_score_pending") in (None, False)
+    # 90' was a 2-2 draw, Belgium won in ET -> tier 0 + advancer 1 = 1
+    assert e["frozen2_points"] == 1
+
+
 def test_scorecard_accumulates_frozen2_and_recond():
     e1 = {"match": 73, "frozen2_points": 3, "frozen1_points": 0, "recond_delta": 3}
     e2 = {"match": 74, "frozen2_points": 4, "frozen1_points": 4, "recond_delta": 0}

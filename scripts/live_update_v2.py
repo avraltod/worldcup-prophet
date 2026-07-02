@@ -23,6 +23,11 @@ INDEX = ROOT / "data" / "records_index_v2.json"
 PRE_WINDOW = dt.timedelta(minutes=90)
 N_SIM = 50000
 
+# ESPN status detail -> how the game was decided. FT (and anything unexpected)
+# means the result stood at 90'; AET/Pens mean it went beyond regulation, so the
+# stored final score is NOT the 90' scoreline.
+_DECIDED = {"FT": "reg", "AET": "et", "Pens": "pens"}
+
 
 def plan_records(events, index, now, pre_window=PRE_WINDOW):
     """Pure: events = [{match, kickoff(aware UTC), final, has_scores}], index =
@@ -144,17 +149,27 @@ def make_post_record(e, now):
     log = _load(RESULTS, {"group": {}, "ko": {}})
     hg, ag = (e["ag"], e["hg"]) if e["rev"] else (e["hg"], e["ag"])  # fixture-oriented
     is_ko = e["match"] > 72
+    decided = e.get("decided", "reg")
     _apply_result(log, e)
     RESULTS.write_text(json.dumps(log, ensure_ascii=False, indent=1))
     champ = _champion_dist(log)
+    # A knockout game that reached extra time or penalties was level at 90'; ESPN
+    # gives only the ET-inclusive final score, NOT the 90' scoreline the pool grades.
+    # Hold the regulation score (record only the advancer) until it is confirmed.
+    reg_pending = is_ko and decided != "reg"
     rec = {"phase": "post", "match": e["match"],
            "label": f"POST M{e['match']} {e['fh']} v {e['fa']}",
            "time": _iso(now), "kickoff": _iso(e["kickoff"]),
            "n_recorded": len(log["group"]) + len(log.get("ko", {})),
            "champion": champ, "market_champion": market_snapshot.fetch_market_champion(),
            "info_bits": _kl_bits(champ, _prev_champion()),
-           "lineup": None, "result": [hg, ag], "winner": e.get("winner"),
+           "lineup": None, "result": None if reg_pending else [hg, ag],
+           "winner": e.get("winner"),
            "performance": None if is_ko else scoring.score_match(e["fh"], e["fa"], hg, ag)}
+    if is_ko:
+        rec["decided"] = decided
+    if reg_pending:
+        rec["reg_score_pending"] = True
     rec["champion_b"] = _champion_dist_b(log)
     rec["info_snapshot"] = _info_snapshot()
     _append(rec)
@@ -179,7 +194,8 @@ def _normalize(parsed, results_log=None):
                     "kickoff": p["kickoff"], "final": final,
                     "has_scores": p["hg"] is not None and p["ag"] is not None,
                     "hg": p["hg"], "ag": p["ag"], "event_id": p.get("event_id"),
-                    "is_ko": is_ko, "winner": p.get("winner")})
+                    "is_ko": is_ko, "winner": p.get("winner"),
+                    "decided": _DECIDED.get(p.get("detail"), "reg")})
     return out
 
 

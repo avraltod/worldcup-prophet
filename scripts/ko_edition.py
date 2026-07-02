@@ -18,6 +18,7 @@ from realistic_scores import KO_TIES
 DATA = Path(__file__).resolve().parent.parent / "data"
 PAPER = Path(__file__).resolve().parent.parent / "paper"
 ENTRY_LOG = DATA / "ko_edition_log.json"
+TRAJ = DATA / "trajectory_v2.json"
 _KO_SCORES = json.loads((DATA / "ko_scores_321.json").read_text())
 
 _F1 = {n: {"home": h, "away": a,
@@ -32,6 +33,16 @@ def _pts(pick, actual_home, actual_away, actual_90, advancer):
     return ks.score_pick(pick, actual_90, advancer), pick["advancer"] == advancer
 
 
+def _pts_advancer_only(pick, actual_home, actual_away, advancer):
+    """Score a pick when the 90' scoreline is unknown/pending: the three-tier
+    line contributes 0, so points reduce to +1 iff the advancer matches (gated
+    on the projected matchup, like _pts)."""
+    if pick is None or not ks.applies(pick, actual_home, actual_away):
+        return 0, False
+    hit = pick["advancer"] == advancer
+    return (1 if hit else 0), hit
+
+
 def build_ko_entry(match, records, frozen2_picks, actual_home, actual_away):
     pre = next((r for r in records if r["phase"] == "pre" and r["match"] == match), None)
     post = next((r for r in records if r["phase"] == "post" and r["match"] == match), None)
@@ -39,9 +50,16 @@ def build_ko_entry(match, records, frozen2_picks, actual_home, actual_away):
         raise ValueError(f"no post record for match {match}")
     f2 = frozen2_picks.get(str(match))
     actual_90, adv = post["result"], post["winner"]
-    f2_pts, f2_hit = _pts(f2, actual_home, actual_away, actual_90, adv)
-    f1_pts, _ = _pts(_F1.get(match), actual_home, actual_away, actual_90, adv)
-    return {
+    # If the 90' scoreline is still pending (game decided after ET/pens and not
+    # yet confirmed), grade advancer-only: the scoreline tier cannot be scored.
+    pending = actual_90 is None or bool(post.get("reg_score_pending"))
+    if pending:
+        f2_pts, f2_hit = _pts_advancer_only(f2, actual_home, actual_away, adv)
+        f1_pts, _ = _pts_advancer_only(_F1.get(match), actual_home, actual_away, adv)
+    else:
+        f2_pts, f2_hit = _pts(f2, actual_home, actual_away, actual_90, adv)
+        f1_pts, _ = _pts(_F1.get(match), actual_home, actual_away, actual_90, adv)
+    entry = {
         "match": match, "home": actual_home, "away": actual_away,
         "result": actual_90, "advancer": adv, "info_bits": post.get("info_bits"),
         "frozen2_pick": f2, "frozen2_points": f2_pts, "frozen2_hit": f2_hit,
@@ -52,6 +70,9 @@ def build_ko_entry(match, records, frozen2_picks, actual_home, actual_away):
             "champion": pre.get("champion"), "champion_b": pre.get("champion_b"),
             "market": pre.get("market_champion")},
         "post_only": pre is None}
+    if pending:
+        entry["reg_score_pending"] = True
+    return entry
 
 
 def scorecard(entries):
@@ -74,13 +95,23 @@ def render_unit(entries):
     Frozen-2 scorecard with the Frozen-2 - Frozen-1 re-conditioning column."""
     sc = scorecard(entries)
     latest = entries[-1]
+    if latest.get("reg_score_pending") or latest.get("result") is None:
+        prose = (r"\noindent %s advanced (decided after regulation); the 90' "
+                 r"scoreline is pending confirmation, so Frozen~2 is graded "
+                 r"advancer-only and scored %d pool point%s here "
+                 r"(re-conditioning %+d vs Frozen~1). The result carried %.3f bits." % (
+                    latest["advancer"], latest["frozen2_points"],
+                    "" if latest["frozen2_points"] == 1 else "s",
+                    latest["recond_delta"], latest.get("info_bits") or 0.0))
+    else:
+        prose = (r"\noindent Result %d--%d, %s advanced. Frozen~2 scored %d pool point%s "
+                 r"here (re-conditioning %+d vs Frozen~1). The result carried %.3f bits." % (
+                    latest["result"][0], latest["result"][1], latest["advancer"],
+                    latest["frozen2_points"], "" if latest["frozen2_points"] == 1 else "s",
+                    latest["recond_delta"], latest.get("info_bits") or 0.0))
     L = [r"\subsection*{Latest knockout edition: %s, %s v %s}" % (
             _round_name(latest["match"]), latest["home"], latest["away"]),
-         r"\noindent Result %d--%d, %s advanced. Frozen~2 scored %d pool point%s here "
-         r"(re-conditioning %+d vs Frozen~1). The result carried %.3f bits." % (
-            latest["result"][0], latest["result"][1], latest["advancer"],
-            latest["frozen2_points"], "" if latest["frozen2_points"] == 1 else "s",
-            latest["recond_delta"], latest.get("info_bits") or 0.0),
+         prose,
          r"", r"\begin{center}\small",
          r"\begin{tabular}{llccc}",
          r"\toprule Match & Tie & F2 pts & F1 pts & F2$-$F1 \\ \midrule"]
@@ -95,7 +126,24 @@ def render_unit(entries):
 
 
 def _trajectory():
-    return json.loads((DATA / "trajectory_v2.json").read_text())
+    return json.loads(TRAJ.read_text())
+
+
+def confirm_reg_score(match, home_goals, away_goals):
+    """Manually confirm the 90' scoreline for a knockout game that was held
+    pending after extra time / penalties. Sets the post record's `result`,
+    clears `reg_score_pending` (keeping `decided`), and re-issues the edition so
+    it rebuilds, re-scores against the now-known regulation scoreline, and
+    re-archives."""
+    traj = _trajectory()
+    post = next((r for r in traj if r.get("phase") == "post" and r.get("match") == match),
+                None)
+    if post is None:
+        raise ValueError(f"no post record for match {match}")
+    post["result"] = [home_goals, away_goals]
+    post.pop("reg_score_pending", None)
+    TRAJ.write_text(json.dumps(traj, ensure_ascii=False, indent=1))
+    return issue(match)
 
 
 def _frozen2():
