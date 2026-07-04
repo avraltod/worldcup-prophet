@@ -28517,7 +28517,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760503",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Orlando Gill",
+    "Júnior Alonso",
+    "Gustavo Gómez",
+    "Juan Jose Cáceres",
+    "Omar Alderete",
+    "Gustavo Velázquez",
+    "Andrés Cubas",
+    "Miguel Almirón",
+    "Diego Gómez",
+    "Matías Galarza",
+    "Julio Enciso"
+   ],
+   "away": [
+    "Mike Maignan",
+    "William Saliba",
+    "Dayot Upamecano",
+    "Lucas Digne",
+    "Jules Koundé",
+    "Bradley Barcola",
+    "Manu Koné",
+    "Ousmane Dembélé",
+    "Michael Olise",
+    "Adrien Rabiot",
+    "Kylian Mbappé"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
