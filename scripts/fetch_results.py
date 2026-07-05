@@ -73,6 +73,10 @@ def parse_scoreboard(payload):
             # the team ESPN flags as the winner (the advancer, including ET/pens).
             "winner": next((s["team"]["displayName"] for s in comp["competitors"]
                             if s.get("winner") is True), None),
+            # ESPN status detail: "FT" (decided in 90'), "AET" (extra time),
+            # or "Pens" (penalties). Used downstream to hold the 90' scoreline
+            # for KO games that went beyond regulation.
+            "detail": st.get("detail"),
             "event_id": ev.get("id"),
         })
     return out

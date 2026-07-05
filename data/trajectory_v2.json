@@ -26649,10 +26649,11 @@
   "info_bits": 0.0145,
   "lineup": null,
   "result": [
-   3,
+   2,
    2
   ],
   "winner": "Belgium",
+  "decided": "et",
   "performance": null,
   "champion_b": {
    "Mexico": 0.0097,

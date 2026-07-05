@@ -1668,7 +1668,7 @@
   "home": "Belgium",
   "away": "Senegal",
   "result": [
-   3,
+   2,
    2
   ],
   "advancer": "Belgium",
@@ -1689,7 +1689,7 @@
    "ev": 1.3556,
    "adv_prob": 0.5708
   },
-  "frozen2_points": 3,
+  "frozen2_points": 1,
   "frozen2_hit": true,
   "frozen1_pick": {
    "home": "Belgium",
@@ -1701,7 +1701,7 @@
    "advancer": "Belgium"
   },
   "frozen1_points": 0,
-  "recond_delta": 3,
+  "recond_delta": 1,
   "champion_after": {
    "Mexico": 0.0129,
    "Canada": 0.0061,
