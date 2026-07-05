@@ -137,3 +137,31 @@ def test_issue_appends_entry_and_marks(tmp_path, monkeypatch):
     import json as _json
     log = _json.loads((tmp_path / "ko_edition_log.json").read_text())
     assert [e["match"] for e in log] == [73]
+
+
+def test_build_ko_entry_reorients_flipped_scoreline():
+    # France won 1-0 but the recorder stored the scoreline flipped as [0,1]
+    # (ESPN orientation); winner=France is authoritative.
+    records = [{"phase": "post", "match": 95, "result": [0, 1], "winner": "France"}]
+    picks = {"95": {"home": "France", "away": "Paraguay", "disp": [2, 0],
+                    "advancer": "France"}}
+    e = ke.build_ko_entry(95, records, picks, "France", "Paraguay")
+    assert e["result"] == [1, 0]            # oriented to (home=France, away)
+    # France won by 1 vs predicted win by 2: result tier (1) + advancer (1) = 2
+    assert e["frozen2_points"] == 2
+
+
+def test_build_ko_entry_orientation_noop_when_already_correct():
+    records = [{"phase": "post", "match": 95, "result": [1, 0], "winner": "France"}]
+    picks = {"95": {"home": "France", "away": "Paraguay", "disp": [2, 0],
+                    "advancer": "France"}}
+    e = ke.build_ko_entry(95, records, picks, "France", "Paraguay")
+    assert e["result"] == [1, 0] and e["frozen2_points"] == 2
+
+
+def test_build_ko_entry_draw_is_orientation_immune():
+    records = [{"phase": "post", "match": 95, "result": [1, 1], "winner": "France"}]
+    picks = {"95": {"home": "France", "away": "Paraguay", "disp": [1, 1],
+                    "advancer": "France"}}
+    e = ke.build_ko_entry(95, records, picks, "France", "Paraguay")
+    assert e["result"] == [1, 1]
