@@ -29148,7 +29148,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760505",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Raúl Rangel",
+    "Johan Vásquez",
+    "César Montes",
+    "Jesús Gallardo",
+    "Jorge Sánchez",
+    "Érik Lira",
+    "Luis Romo",
+    "Gilberto Mora",
+    "Raúl Jiménez",
+    "Julián Quiñones",
+    "Roberto Alvarado"
+   ],
+   "away": [
+    "Jordan Pickford",
+    "Marc Guéhi",
+    "Ezri Konsa",
+    "Nico O'Reilly",
+    "Jarell Quansah",
+    "Jude Bellingham",
+    "Declan Rice",
+    "Elliot Anderson",
+    "Harry Kane",
+    "Anthony Gordon",
+    "Bukayo Saka"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
