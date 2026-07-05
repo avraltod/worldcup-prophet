@@ -28894,7 +28894,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760504",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Alisson Becker",
+    "Gabriel Magalhães",
+    "Marquinhos",
+    "Douglas Santos",
+    "Danilo",
+    "Casemiro",
+    "Bruno Guimarães",
+    "Gabriel Martinelli",
+    "Rayan",
+    "Vinícius Júnior",
+    "Matheus Cunha"
+   ],
+   "away": [
+    "Ørjan Nyland",
+    "Torbjørn Heggem",
+    "Kristoffer Ajer",
+    "David Møller Wolfe",
+    "Julian Ryerson",
+    "Sander Berge",
+    "Patrick Berg",
+    "Martin Ødegaard",
+    "Erling Haaland",
+    "Antonio Nusa",
+    "Alexander Sørloth"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
