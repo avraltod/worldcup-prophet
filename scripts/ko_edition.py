@@ -43,13 +43,32 @@ def _pts_advancer_only(pick, actual_home, actual_away, advancer):
     return (1 if hit else 0), hit
 
 
+def _orient(result, winner, home):
+    """Orient a decisive 90' knockout scoreline to (home, away) order using the
+    known winner. The live pipeline does not track KO scoreline orientation (it
+    records the advancer, not an oriented line), so a stored [hg, ag] may be in
+    the data source's arbitrary order. A game decided in regulation is won by
+    whoever scored more (= the advancer), so the higher score belongs to
+    `winner`; that lets us reconstruct the (home, away) orientation the pick's
+    scoreline is graded against. A 90' draw (ET/penalties) is orientation-immune;
+    a pending (None) result is returned unchanged."""
+    if result is None:
+        return None
+    x, y = result
+    if x == y:
+        return [x, y]
+    hi, lo = max(x, y), min(x, y)
+    return [hi, lo] if winner == home else [lo, hi]
+
+
 def build_ko_entry(match, records, frozen2_picks, actual_home, actual_away):
     pre = next((r for r in records if r["phase"] == "pre" and r["match"] == match), None)
     post = next((r for r in records if r["phase"] == "post" and r["match"] == match), None)
     if post is None:
         raise ValueError(f"no post record for match {match}")
     f2 = frozen2_picks.get(str(match))
-    actual_90, adv = post["result"], post["winner"]
+    adv = post["winner"]
+    actual_90 = _orient(post["result"], adv, actual_home)
     # If the 90' scoreline is still pending (game decided after ET/pens and not
     # yet confirmed), grade advancer-only: the scoreline tier cannot be scored.
     pending = actual_90 is None or bool(post.get("reg_score_pending"))
