@@ -28,16 +28,19 @@ _F1 = {n: {"home": h, "away": a,
 
 
 def _pts(pick, actual_home, actual_away, actual_90, advancer):
-    if pick is None or not ks.applies(pick, actual_home, actual_away):
+    """Pool points for `pick`, oriented to the picked team and NOT gated on the
+    projected opponent (see ko_score.score_pick)."""
+    if pick is None:
         return 0, False
-    return ks.score_pick(pick, actual_90, advancer), pick["advancer"] == advancer
+    return (ks.score_pick(pick, actual_home, actual_away, actual_90, advancer),
+            pick["advancer"] == advancer)
 
 
 def _pts_advancer_only(pick, actual_home, actual_away, advancer):
     """Score a pick when the 90' scoreline is unknown/pending: the three-tier
-    line contributes 0, so points reduce to +1 iff the advancer matches (gated
-    on the projected matchup, like _pts)."""
-    if pick is None or not ks.applies(pick, actual_home, actual_away):
+    line contributes 0, so points reduce to +1 iff the advancer matches (NOT
+    gated on the projected matchup)."""
+    if pick is None:
         return 0, False
     hit = pick["advancer"] == advancer
     return (1 if hit else 0), hit

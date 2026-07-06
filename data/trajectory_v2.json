@@ -27991,8 +27991,8 @@
   "info_bits": 0.0011,
   "lineup": null,
   "result": [
-   3,
-   2
+   1,
+   1
   ],
   "winner": "Argentina",
   "performance": null,
@@ -28031,7 +28031,8 @@
    "n_new_injuries": 0,
    "n_lineup_adj": 0,
    "n_teams_with_drift": 48
-  }
+  },
+  "decided": "et"
  },
  {
   "phase": "pre",
