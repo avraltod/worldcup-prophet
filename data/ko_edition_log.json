@@ -36,8 +36,8 @@
    ],
    "advancer": "Canada"
   },
-  "frozen1_points": 0,
-  "recond_delta": 3,
+  "frozen1_points": 1,
+  "recond_delta": 2,
   "champion_after": {
    "Mexico": 0.0077,
    "Canada": 0.0056,
@@ -942,8 +942,8 @@
    ],
    "advancer": "Norway"
   },
-  "frozen1_points": 0,
-  "recond_delta": 2,
+  "frozen1_points": 1,
+  "recond_delta": 1,
   "champion_after": {
    "Mexico": 0.007,
    "Canada": 0.0074,
@@ -1140,8 +1140,8 @@
    ],
    "advancer": "Mexico"
   },
-  "frozen1_points": 0,
-  "recond_delta": 0,
+  "frozen1_points": 4,
+  "recond_delta": -4,
   "champion_after": {
    "Mexico": 0.0139,
    "Canada": 0.0065,
@@ -1330,8 +1330,8 @@
    ],
    "advancer": "England"
   },
-  "frozen1_points": 0,
-  "recond_delta": 2,
+  "frozen1_points": 2,
+  "recond_delta": 0,
   "champion_after": {
    "Mexico": 0.0131,
    "Canada": 0.0059,
@@ -1700,8 +1700,8 @@
    ],
    "advancer": "Belgium"
   },
-  "frozen1_points": 0,
-  "recond_delta": 1,
+  "frozen1_points": 1,
+  "recond_delta": 0,
   "champion_after": {
    "Mexico": 0.0129,
    "Canada": 0.0061,
@@ -2237,8 +2237,8 @@
    ],
    "advancer": "Switzerland"
   },
-  "frozen1_points": 0,
-  "recond_delta": 0,
+  "frozen1_points": 2,
+  "recond_delta": -2,
   "champion_after": {
    "Mexico": 0.0121,
    "Canada": 0.0055,
@@ -2286,8 +2286,8 @@
   "home": "Argentina",
   "away": "Cape Verde",
   "result": [
-   3,
-   2
+   1,
+   1
   ],
   "advancer": "Argentina",
   "info_bits": 0.0011,
@@ -2307,7 +2307,7 @@
    "ev": 2.2982,
    "adv_prob": 0.9457
   },
-  "frozen2_points": 2,
+  "frozen2_points": 1,
   "frozen2_hit": true,
   "frozen1_pick": {
    "home": "Argentina",
@@ -2318,8 +2318,8 @@
    ],
    "advancer": "Argentina"
   },
-  "frozen1_points": 0,
-  "recond_delta": 2,
+  "frozen1_points": 1,
+  "recond_delta": 0,
   "champion_after": {
    "Mexico": 0.0111,
    "Canada": 0.0056,
@@ -2808,8 +2808,8 @@
    "ev": 1.7184,
    "adv_prob": 0.7323
   },
-  "frozen2_points": 0,
-  "frozen2_hit": false,
+  "frozen2_points": 3,
+  "frozen2_hit": true,
   "frozen1_pick": {
    "home": "Germany",
    "away": "France",
@@ -2819,7 +2819,7 @@
    ],
    "advancer": "France"
   },
-  "frozen1_points": 0,
+  "frozen1_points": 3,
   "recond_delta": 0,
   "champion_after": {
    "Mexico": 0.0107,
@@ -3287,8 +3287,8 @@
    "ev": 1.3838,
    "adv_prob": 0.584
   },
-  "frozen2_points": 0,
-  "frozen2_hit": false,
+  "frozen2_points": 3,
+  "frozen2_hit": true,
   "frozen1_pick": {
    "home": "Mexico",
    "away": "England",
@@ -3298,8 +3298,8 @@
    ],
    "advancer": "England"
   },
-  "frozen1_points": 1,
-  "recond_delta": -1,
+  "frozen1_points": 3,
+  "recond_delta": 0,
   "champion_after": {
    "Switzerland": 0.0126,
    "Morocco": 0.0086,
@@ -3449,8 +3449,8 @@
    ],
    "advancer": "Spain"
   },
-  "frozen1_points": 0,
-  "recond_delta": 3,
+  "frozen1_points": 2,
+  "recond_delta": 1,
   "champion_after": {
    "Switzerland": 0.0112,
    "Morocco": 0.0077,

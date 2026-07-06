@@ -159,6 +159,17 @@ def test_build_ko_entry_orientation_noop_when_already_correct():
     assert e["result"] == [1, 0] and e["frozen2_points"] == 2
 
 
+def test_build_ko_entry_scores_when_opponent_swapped(m89_style=True):
+    # M89-style: picked France to beat Germany 2-0, but France actually faced (and
+    # beat) Paraguay 1-0. Scoring is NOT opponent-gated -> winner tier 1 + adv 1 = 2.
+    records = [{"phase": "post", "match": 89, "result": [1, 0], "winner": "France"}]
+    picks = {"89": {"home": "France", "away": "Germany", "disp": [2, 0],
+                    "advancer": "France"}}
+    e = ke.build_ko_entry(89, records, picks, "France", "Paraguay")
+    assert e["frozen2_points"] == 2
+    assert e["frozen2_hit"] is True
+
+
 def test_build_ko_entry_draw_is_orientation_immune():
     records = [{"phase": "post", "match": 95, "result": [1, 1], "winner": "France"}]
     picks = {"95": {"home": "France", "away": "Paraguay", "disp": [1, 1],
