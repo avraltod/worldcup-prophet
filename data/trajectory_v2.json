@@ -30589,7 +30589,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760511",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Unai Simón",
+    "Aymeric Laporte",
+    "Pau Cubarsí",
+    "Marc Cucurella",
+    "Pedro Porro",
+    "Dani Olmo",
+    "Fabián Ruiz",
+    "Rodri",
+    "Mikel Oyarzabal",
+    "Álex Baena",
+    "Lamine Yamal"
+   ],
+   "away": [
+    "Thibaut Courtois",
+    "Brandon Mechele",
+    "Nathan Ngoy",
+    "Maxim De Cuyper",
+    "Timothy Castagne",
+    "Kevin De Bruyne",
+    "Nicolas Raskin",
+    "Hans Vanaken",
+    "Charles De Ketelaere",
+    "Jérémy Doku",
+    "Leandro Trossard"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
