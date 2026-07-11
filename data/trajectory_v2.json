@@ -30815,7 +30815,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760512",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Ørjan Nyland",
+    "Julian Ryerson",
+    "Kristoffer Ajer",
+    "Torbjørn Heggem",
+    "David Møller Wolfe",
+    "Sander Berge",
+    "Martin Ødegaard",
+    "Patrick Berg",
+    "Andreas Schjelderup",
+    "Alexander Sørloth",
+    "Erling Haaland"
+   ],
+   "away": [
+    "Jordan Pickford",
+    "John Stones",
+    "Ezri Konsa",
+    "Nico O'Reilly",
+    "Marc Guéhi",
+    "Noni Madueke",
+    "Anthony Gordon",
+    "Declan Rice",
+    "Elliot Anderson",
+    "Jude Bellingham",
+    "Harry Kane"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
