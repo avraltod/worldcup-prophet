@@ -4471,5 +4471,120 @@
   },
   "post_only": false,
   "reg_score_pending": true
+ },
+ {
+  "match": 101,
+  "home": "France",
+  "away": "Spain",
+  "result": [
+   0,
+   2
+  ],
+  "advancer": "Spain",
+  "info_bits": 0.3747,
+  "frozen2_pick": {
+   "home": "France",
+   "away": "Spain",
+   "advancer": "France",
+   "score": [
+    1,
+    0
+   ],
+   "disp": [
+    2,
+    1
+   ],
+   "pen": false,
+   "ev": 1.3556,
+   "adv_prob": 0.5708
+  },
+  "frozen2_points": 0,
+  "frozen2_hit": false,
+  "frozen1_pick": {
+   "home": "France",
+   "away": "Spain",
+   "disp": [
+    1,
+    2
+   ],
+   "advancer": "Spain"
+  },
+  "frozen1_points": 2,
+  "recond_delta": -2,
+  "champion_after": {
+   "Spain": 0.6133,
+   "Argentina": 0.2722,
+   "England": 0.1146
+  },
+  "champion_b_after": {
+   "Spain": 0.573,
+   "Argentina": 0.2565,
+   "England": 0.1704
+  },
+  "pre": {
+   "champion": {
+    "Spain": 0.3762,
+    "France": 0.1948,
+    "Argentina": 0.2991,
+    "England": 0.1299
+   },
+   "champion_b": {
+    "Spain": 0.2497,
+    "France": 0.3591,
+    "Argentina": 0.2361,
+    "England": 0.155
+   },
+   "market": {
+    "Spain": 0.2339,
+    "England": 0.2158,
+    "France": 0.3747,
+    "Brazil": 0.0,
+    "Argentina": 0.1756,
+    "Germany": 0.0,
+    "Portugal": 0.0,
+    "Netherlands": 0.0,
+    "United States": 0.0,
+    "Uruguay": 0.0,
+    "Mexico": 0.0,
+    "Belgium": 0.0,
+    "Colombia": 0.0,
+    "Japan": 0.0,
+    "Norway": 0.0,
+    "Canada": 0.0,
+    "Tunisia": 0.0,
+    "Ecuador": 0.0,
+    "Paraguay": 0.0,
+    "New Zealand": 0.0,
+    "Australia": 0.0,
+    "Iran": 0.0,
+    "Uzbekistan": 0.0,
+    "South Korea": 0.0,
+    "Jordan": 0.0,
+    "Morocco": 0.0,
+    "South Africa": 0.0,
+    "Senegal": 0.0,
+    "Ivory Coast": 0.0,
+    "Ghana": 0.0,
+    "Egypt": 0.0,
+    "Algeria": 0.0,
+    "Cape Verde": 0.0,
+    "Qatar": 0.0,
+    "Saudi Arabia": 0.0,
+    "Scotland": 0.0,
+    "Switzerland": 0.0,
+    "Austria": 0.0,
+    "Croatia": 0.0,
+    "Haiti": 0.0,
+    "Curaçao": 0.0,
+    "Panama": 0.0,
+    "Sweden": 0.0,
+    "Congo DR": 0.0,
+    "Iraq": 0.0,
+    "Bosnia and Herzegovina": 0.0,
+    "Czechia": 0.0,
+    "Turkey": 0.0
+   }
+  },
+  "post_only": false
  }
 ]
