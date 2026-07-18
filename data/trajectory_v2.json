@@ -31675,7 +31675,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760516",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Mike Maignan",
+    "Maxence Lacroix",
+    "Ibrahima Konaté",
+    "Theo Hernández",
+    "Malo Gusto",
+    "Rayan Cherki",
+    "Adrien Rabiot",
+    "Warren Zaïre-Emery",
+    "Kylian Mbappé",
+    "Désiré Doué",
+    "Michael Olise"
+   ],
+   "away": [
+    "Dean Henderson",
+    "Marc Guéhi",
+    "Ezri Konsa",
+    "Declan Rice",
+    "Djed Spence",
+    "Jarell Quansah",
+    "Morgan Rogers",
+    "Eberechi Eze",
+    "Marcus Rashford",
+    "Bukayo Saka",
+    "Ivan Toney"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
