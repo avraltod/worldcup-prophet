@@ -31884,7 +31884,34 @@
   },
   "info_bits": 0.0,
   "event_id": "760517",
-  "lineup": null,
+  "lineup": {
+   "home": [
+    "Unai Simón",
+    "Pedro Porro",
+    "Aymeric Laporte",
+    "Pau Cubarsí",
+    "Marc Cucurella",
+    "Lamine Yamal",
+    "Rodri",
+    "Álex Baena",
+    "Dani Olmo",
+    "Fabián Ruiz",
+    "Mikel Oyarzabal"
+   ],
+   "away": [
+    "Emiliano Martínez",
+    "Gonzalo Montiel",
+    "Lisandro Martínez",
+    "Nicolás Tagliafico",
+    "Cristian Romero",
+    "Alexis Mac Allister",
+    "Nico González",
+    "Enzo Fernández",
+    "Rodrigo De Paul",
+    "Julián Álvarez",
+    "Lionel Messi"
+   ]
+  },
   "result": null,
   "performance": null,
   "champion_b": {
